@@ -41,7 +41,7 @@ class LabController extends Controller
      * @param $labId
      * @throws $labException
      * @return array | null
-     * @author Baskar
+     * @author Baskaran Subbaraman
      */
 
     public function getProfile($labId)
