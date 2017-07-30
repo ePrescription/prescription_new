@@ -10,6 +10,10 @@ namespace App\prescription\mapper;
 
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientFamilyIllnessViewModel;
+use App\Http\ViewModels\PatientGeneralExaminationViewModel;
+use App\Http\ViewModels\PatientPastIllnessViewModel;
+use App\Http\ViewModels\PatientPersonalHistoryViewModel;
 use App\Http\ViewModels\PatientProfileViewModel;
 use Illuminate\Http\Request;
 use App\Http\Requests\FeeReceiptRequest;
@@ -43,6 +47,9 @@ class PatientProfileMapper
         $profileVM->setMaritalStatus(property_exists($profile, 'maritalStatus') ? $profile->maritalStatus : null);
         $profileVM->setHospitalId(property_exists($profile, 'hospitalId') ? $profile->hospitalId : null);
         $profileVM->setDoctorId(property_exists($profile, 'doctorId') ? $profile->doctorId : null);
+        $profileVM->setMainSymptomId(property_exists($profile, 'mainSymptomId') ? $profile->mainSymptomId : null);
+        $profileVM->setSubSymptomId(property_exists($profile, 'subSymptomId') ? $profile->subSymptomId : null);
+        $profileVM->setSymptomId(property_exists($profile, 'symptomId') ? $profile->symptomId : null);
 
         $profileVM->setCreatedBy($userName);
         $profileVM->setUpdatedBy($userName);
@@ -95,6 +102,112 @@ class PatientProfileMapper
         $feeReceiptVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $feeReceiptVM;
+    }
+
+    public static function setPersonalHistory(Request $personalHistoryRequest)
+    {
+        $patientHistoryVM = new PatientPersonalHistoryViewModel();
+
+        $patientHistory = (object) $personalHistoryRequest->all();
+
+        $patientHistoryVM->setPatientId($patientHistory->patientId);
+        //$patientHistoryVM->setHospitalId($patientHistory->hospitalId);
+        //$patientHistoryVM->setDoctorId($patientHistory->doctorId);
+
+        $medicalHistory = $patientHistory->personalHistory;
+        //dd($candidateEmployments);
+
+        foreach($medicalHistory as $history)
+        {
+            $patientHistoryVM->setPatientPersonalHistory($history);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientHistoryVM->setCreatedBy($userName);
+        $patientHistoryVM->setUpdatedBy($userName);
+        $patientHistoryVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientHistoryVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientHistoryVM;
+    }
+
+    public static function setGeneralExamination(Request $personalExaminationRequest)
+    {
+        $patientGenExaminationVM = new PatientGeneralExaminationViewModel();
+
+        $generalExaminationObj = (object) $personalExaminationRequest->all();
+
+        $patientGenExaminationVM->setPatientId($generalExaminationObj->patientId);
+
+        $generalExamination = $generalExaminationObj->generalExamination;
+        //dd($candidateEmployments);
+
+        foreach($generalExamination as $examination)
+        {
+            $patientGenExaminationVM->setPatientGeneralExamination($examination);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientGenExaminationVM->setCreatedBy($userName);
+        $patientGenExaminationVM->setUpdatedBy($userName);
+        $patientGenExaminationVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientGenExaminationVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientGenExaminationVM;
+    }
+
+    public static function setPatientPastIllness(Request $pastIllnessRequest)
+    {
+        $patientPastIllnessVM = new PatientPastIllnessViewModel();
+
+        $pastIllnessObj = (object) $pastIllnessRequest->all();
+        $patientPastIllnessVM->setPatientId($pastIllnessObj->patientId);
+        $pastIllness = $pastIllnessObj->pastIllness;
+        //dd($candidateEmployments);
+
+        foreach($pastIllness as $illness)
+        {
+            $patientPastIllnessVM->setPatientPastIllness($illness);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientPastIllnessVM->setCreatedBy($userName);
+        $patientPastIllnessVM->setUpdatedBy($userName);
+        $patientPastIllnessVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientPastIllnessVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientPastIllnessVM;
+    }
+
+    public static function setPatientFamilyIllness(Request $familyIllnessRequest)
+    {
+        $patientFamilyIllnessVM = new PatientFamilyIllnessViewModel();
+
+        $familyIllnessObj = (object) $familyIllnessRequest->all();
+        $patientFamilyIllnessVM->setPatientId($familyIllnessObj->patientId);
+        $familyIllness = $familyIllnessObj->familyIllness;
+        //dd($candidateEmployments);
+
+        foreach($familyIllness as $illness)
+        {
+            $patientFamilyIllnessVM->setPatientFamilyIllness($illness);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientFamilyIllnessVM->setCreatedBy($userName);
+        $patientFamilyIllnessVM->setUpdatedBy($userName);
+        $patientFamilyIllnessVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientFamilyIllnessVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientFamilyIllnessVM;
     }
 
 }

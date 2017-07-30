@@ -10,7 +10,11 @@ namespace App\prescription\repositories\repoimpl;
 
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientFamilyIllnessViewModel;
+use App\Http\ViewModels\PatientGeneralExaminationViewModel;
 use App\Http\ViewModels\PatientLabTestViewModel;
+use App\Http\ViewModels\PatientPastIllnessViewModel;
+use App\Http\ViewModels\PatientPersonalHistoryViewModel;
 use App\Http\ViewModels\PatientProfileViewModel;
 use App\prescription\model\entities\Doctor;
 use App\prescription\model\entities\DoctorAppointments;
@@ -414,7 +418,7 @@ class HospitalImpl implements HospitalInterface{
         {
             $query = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name as name', 'p.address','p.pid', 'c.city_name',
                             'co.name as country','p.telephone', 'p.email', 'p.relationship', 'p.patient_spouse_name as spouseName',
-                            'p.dob', 'p.age', 'p.place_of_birth', 'p.nationality', 'p.gender'
+                            'p.dob', 'p.age', 'p.place_of_birth', 'p.nationality', 'p.gender', 'p.main_symptoms_id', 'p.sub_symptoms_id', 'p.symptoms_id'
                             ,'da.appointment_date', 'da.appointment_time', 'da.brief_history');
             $query->leftJoin('doctor_appointment as da', 'da.patient_id', '=', 'p.patient_id');
             $query->leftJoin('cities as c', 'c.id', '=', 'p.city');
@@ -456,7 +460,7 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $query = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.age',
-                'p.gender', 'p.email', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.telephone');
+                'p.gender', 'p.email', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.telephone', 'p.main_symptoms_id', 'p.sub_symptoms_id', 'p.symptoms_id');
             $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
             $query->where('p.patient_id', $patientId);
             $query->where('usr.delete_status', '=', 1);
@@ -597,9 +601,12 @@ class HospitalImpl implements HospitalInterface{
             $hospitalQuery->where('pp.id', '=', $prescriptionId);
             $hospitalDetails = $hospitalQuery->get();
 
-            $query = DB::table('prescription_details as pd')->select('b.id as trade_id', DB::raw('TRIM(UPPER(b.brand_name)) as trade_name'),
-                        'd.id as formulation_id',
-                        DB::raw('TRIM(UPPER(d.drug_name)) as formulation_name'),
+            $query = DB::table('prescription_details as pd')->select('b.id as trade_id',
+                        DB::raw('TRIM(UPPER(b.brand_name)) as trade_name'),
+                        //'d.id as formulation_id',
+                        //DB::raw('TRIM(UPPER(d.drug_name)) as formulation_name'),
+                        'b.id as formulation_id',
+                        DB::raw('TRIM(UPPER(b.brand_name)) as formulation_name'),
                         'pd.dosage', 'pd.no_of_days', 'pd.intake_form',
                         'pd.morning', 'pd.afternoon', 'pd.night', 'pd.drug_status');
             $query->join('patient_prescription as pp', 'pp.id', '=', 'pd.patient_prescription_id');
@@ -982,13 +989,20 @@ class HospitalImpl implements HospitalInterface{
 
         try
         {
-            $query = DB::table('brands as b')->select('b.id as tradeId',
+            /*$query = DB::table('brands as b')->select('b.id as tradeId',
                 DB::raw('TRIM(UPPER(b.brand_name)) as tradeName'),
                 'b.dosage_amount', 'b.dosage as quantity', 'b.dispensing_form',
                 'd.id as formulationId',
                 //'b.brand_name as tradeName', 'd.id as formulationId',
-                DB::raw('TRIM(UPPER(d.drug_name)) as formulationName'));
-            $query->join('drugs as d', 'd.id', '=', 'b.drug_id');
+                DB::raw('TRIM(UPPER(d.drug_name)) as formulationName'));*/
+            $query = DB::table('brands as b')->select('b.id as tradeId',
+                DB::raw('TRIM(UPPER(b.brand_name)) as tradeName'),
+                'b.dosage_amount', 'b.dosage as quantity', 'b.dispensing_form',
+                'b.id as formulationId',
+                //'b.brand_name as tradeName', 'd.id as formulationId',
+                DB::raw('TRIM(UPPER(b.brand_name)) as formulationName'));
+            $query->leftjoin('drugs as d', 'd.id', '=', 'b.drug_id');
+            //$query->join('drugs as d', 'd.id', '=', 'b.drug_id');
             $query->where('b.brand_name', 'LIKE', $keyword.'%');
             $query->where('b.brand_status', '=', 1);
             //dd($query->toSql());
@@ -1086,7 +1100,8 @@ class HospitalImpl implements HospitalInterface{
         {
             //dd('Before query');
             $query = DB::table('labtest as lt')->select('lt.id',
-                DB::raw('TRIM(UPPER(lt.test_category)) as test_category'),
+                //DB::raw('TRIM(UPPER(lt.test_category)) as test_category'),
+                DB::raw('TRIM(UPPER(lt.test_name)) as test_category'),
                 DB::raw('TRIM(UPPER(lt.test_name)) as test_name'));
             $query->where('lt.test_status', '=', 1);
             $query->where('lt.test_name', 'LIKE', $keyword.'%');
@@ -1237,7 +1252,8 @@ class HospitalImpl implements HospitalInterface{
 
             $query = DB::table('labtest_details as ld')->select('ld.id as ltid',
                 'l.id', DB::raw('TRIM(UPPER(l.test_name)) as test_name'),
-                'l.test_category',
+                DB::raw('TRIM(UPPER(l.test_name)) as test_category'),
+                //'l.test_category',
                 'ld.brief_description', 'pl.labtest_date', 'ld.labtest_report');
             $query->join('patient_labtest as pl', 'pl.id', '=', 'ld.patient_labtest_id');
             $query->join('labtest as l', 'l.id', '=', 'ld.labtest_id');
@@ -1493,6 +1509,9 @@ class HospitalImpl implements HospitalInterface{
             $patient->nationality = $patientProfileVM->getNationality();
             $patient->gender = $patientProfileVM->getGender();
             $patient->married = $patientProfileVM->getMaritalStatus();
+            $patient->main_symptoms_id = $patientProfileVM->getMainSymptomId();
+            $patient->sub_symptoms_id = $patientProfileVM->getSubSymptomId();
+            $patient->symptoms_id = $patientProfileVM->getSymptomId();
 
             $patient->created_by = $patientProfileVM->getCreatedBy();
             $patient->created_at = $patientProfileVM->getCreatedAt();
@@ -2166,4 +2185,854 @@ class HospitalImpl implements HospitalInterface{
 
         return $status;
     }
+
+    /*Symptom section -- Begin */
+
+    /**
+     * Get all the symptoms
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getMainSymptoms()
+    {
+        $mainSymptoms = null;
+
+        try
+        {
+            $query = DB::table('main_symptoms as ms')->where('ms.status', '=', 1);
+            $query->select('ms.id', 'ms.main_symptom_name', 'ms.main_symptom_code');
+            $mainSymptoms = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::MAIN_SYMPTOMS_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::MAIN_SYMPTOMS_LIST_ERROR, $exc);
+        }
+
+        return $mainSymptoms;
+    }
+
+    /**
+     * Get all the sub symptoms for main symptom
+     * @param $mainSymptomsId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getSubSymptomsForMainSymptoms($mainSymptomsId)
+    {
+        $subSymptoms = null;
+
+        try
+        {
+            $query = DB::table('sub_symptoms as ss')->where('ss.status', '=', 1);
+            $query->where('ss.main_symptom_id', $mainSymptomsId);
+            $query->select('ss.id', 'ss.sub_symptom_name', 'ss.sub_symptom_code');
+            $subSymptoms = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::SUB_SYMPTOMS_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::SUB_SYMPTOMS_LIST_ERROR, $exc);
+        }
+
+        return $subSymptoms;
+    }
+
+    /**
+     * Get all the symptoms for sub symptom
+     * @param $subSymptomId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getSymptomsForSubSymptoms($subSymptomId)
+    {
+        $symptoms = null;
+
+        try
+        {
+            $query = DB::table('symptoms as s')->where('s.status', '=', 1);
+            $query->where('s.sub_symptom_id', $subSymptomId);
+            $query->select('s.id', 's.symptom_name', 's.symptom_code');
+            $symptoms = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::SYMPTOMS_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::SYMPTOMS_LIST_ERROR, $exc);
+        }
+
+        return $symptoms;
+    }
+
+    /**
+     * Get personal history for the patient
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPersonalHistory($patientId, $personalHistoryDate)
+    {
+        $feeInfo = null;
+        $doctorId = null;
+
+        $personalHistory = null;
+        $patientHistory = null;
+        $personalHistoryDetails = null;
+
+        //$personalHistoryQuery
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            /*$patientHistoryQuery = DB::table('personal_history as ph')->where('pph.patient_id', '=', $patientId);
+            $patientHistoryQuery->join('personal_history_item as phi', 'phi.personal_history_id', '=', 'ph.id');
+            $patientHistoryQuery->join('patient_personal_history as pph', function($join){
+                $join->on('pph.personal_history_id', '=', 'ph.id');
+                $join->on('pph.personal_history_id', '=', 'ph.id');
+            });*/
+            $patientHistoryQuery = DB::table('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId)->where('pph.personal_history_date', '=', $personalHistoryDate);
+            $patientHistoryQuery->join('personal_history as ph', 'ph.id', '=', 'pph.personal_history_id');
+            $patientHistoryQuery->join('personal_history_item as phi', 'phi.id', '=', 'pph.personal_history_item_id');
+
+            $patientHistoryQuery->select('pph.id', 'pph.patient_id as patientId', 'ph.id as personalHistoryId',
+                'ph.personal_history_name as personalHistoryName', 'phi.id as personalHistoryItemId',
+                'phi.personal_history_item_name as personalHistoryItemName');
+
+            //dd($patientHistoryQuery->toSql());
+            $patientHistory = $patientHistoryQuery->get();
+            //dd($patientHistory);
+
+            $personalHistoryQuery = DB::table('personal_history as ph')->join('personal_history_item as phi', 'phi.personal_history_id', '=', 'ph.id');
+            $personalHistoryQuery->select('ph.id as personalHistoryId', 'ph.personal_history_name as personalHistoryName',
+                'phi.id as personalHistoryItemId', 'phi.personal_history_item_name as personalHistoryItemName');
+            $personalHistory = $personalHistoryQuery->get();
+
+            /*if(!is_null($patientFeedback) && !empty($patientFeedback))
+            {
+
+            }*/
+
+            $personalHistoryDetails["patientHistory"] = $patientHistory;
+            $personalHistoryDetails["personalHistory"] = $personalHistory;
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_ERROR, $exc);
+        }
+
+        //dd($feeReceiptDetails);
+        return $personalHistoryDetails;
+    }
+
+    /**
+     * Get patient past illness
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientPastIllness($patientId, $pastIllnessDate)
+    {
+        $pastIllness = null;
+
+        //dd($patientId);
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $query = DB::table('past_illness as pii')->select('ppi.id as patientPastIllnessId', 'pii.id as patientIllnessId', 'pii.illness_name as illnessName',
+                'ppi.past_illness_name as otherIllnessName', 'ppi.relation');
+            $query->leftJoin('patient_past_illness as ppi', function($join){
+                $join->on('ppi.past_illness_id', '=', 'pii.id');
+                $join->on('ppi.patient_id', '=', DB::raw('?'));
+                $join->on('ppi.past_illness_date', '=', DB::raw('?'));
+            })->setBindings(array_merge($query->getBindings(), array($patientId, $pastIllnessDate)));
+            $query->where('pii.status', '=', 1);
+            //dd($query->toSql());
+
+            $pastIllness = $query->get();
+            //dd($pastIllness);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR, $exc);
+        }
+
+        return $pastIllness;
+    }
+
+    /**
+     * Get patient family illness
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientFamilyIllness($patientId, $familyIllnessDate)
+    {
+        $familyIllness = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $query = DB::table('family_illness as fi')->select('fi.id as familyIllnessId', 'fi.illness_name as familyIllnessName',
+                'pfi.id as patientIllnessId', 'pfi.family_illness_name as otherIllnessName', 'pfi.relation');
+            $query->leftJoin('patient_family_illness as pfi', function($join){
+                $join->on('pfi.family_illness_id', '=', 'fi.id');
+                $join->on('pfi.patient_id', '=', DB::raw('?'));
+                $join->on('pfi.family_illness_date', '=', DB::raw('?'));
+            })->setBindings(array_merge($query->getBindings(), array($patientId, $familyIllnessDate)));
+            $query->where('fi.status', '=', 1);
+
+            $familyIllness = $query->get();
+            //dd($pastIllness);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_FAMILY_ILLNESS_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_FAMILY_ILLNESS_DETAILS_ERROR, $exc);
+        }
+
+        return $familyIllness;
+    }
+
+    /**
+     * Get patient general examination
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientGeneralExamination($patientId, $generalExaminationDate)
+    {
+        $generalExamination = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $query = DB::table('patient_general_examination as pge')->select('ge.id', 'ge.general_examination_name as generalExaminationName',
+                'pge.id as patientExaminationId', 'pge.general_examination_value as generalExaminationValue');
+            $query->rightJoin('general_examination as ge', function($join){
+                $join->on('ge.id', '=', 'pge.general_examination_id');
+                $join->on('pge.patient_id', '=', DB::raw('?'));
+                $join->on('pge.general_examination_date', '=', DB::raw('?'));
+            })->setBindings(array_merge($query->getBindings(), array($patientId, $generalExaminationDate)));
+            $query->where('ge.status', '=', 1);
+
+            $generalExamination = $query->get();
+            //dd($pastIllness);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_GENERAL_EXAMINATION_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_GENERAL_EXAMINATION_DETAILS_ERROR, $exc);
+        }
+
+        return $generalExamination;
+    }
+
+    /**
+     * Get patient examination dates
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getExaminationDates($patientId)
+    {
+        $examinationDates = null;
+        $generalExaminationDates = null;
+        $pastIllnessDates = null;
+        $familyIllnessDates = null;
+        $personalHistoryDates = null;
+
+        $patientLabTests = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $examinationQuery = DB::table('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
+            $examinationQuery->select('pge.patient_id', 'pge.general_examination_date')->orderBy('pge.general_examination_date', 'DESC');
+            $generalExaminationDates = $examinationQuery->get();
+
+            $pastIllnessQuery = DB::table('patient_past_illness as ppi')->where('ppi.patient_id', '=', $patientId);
+            $pastIllnessQuery->select('ppi.patient_id', 'ppi.past_illness_date')->orderBy('ppi.past_illness_date', 'DESC');
+            $pastIllnessDates = $pastIllnessQuery->get();
+
+            $familyIllnessQuery = DB::table('patient_family_illness as pfi')->where('pfi.patient_id', '=', $patientId);
+            $familyIllnessQuery->select('pfi.patient_id', 'pfi.family_illness_date')->orderBy('pfi.family_illness_date', 'DESC');
+            $familyIllnessDates = $familyIllnessQuery->get();
+
+            $personalHistoryQuery = DB::table('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
+            $personalHistoryQuery->select('pph.patient_id', 'pph.personal_history_date')->orderBy('pph.personal_history_date', 'DESC');
+            $personalHistoryDates = $personalHistoryQuery->get();
+
+            $examinationDates["generalExaminationDates"] = $generalExaminationDates;
+            $examinationDates["pastIllnessDates"] = $pastIllnessDates;
+            $examinationDates["familyIllnessDates"] = $familyIllnessDates;
+            $examinationDates["personalHistoryDates"] = $personalHistoryDates;
+
+            //dd($examinationDates);
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
+        }
+
+        //dd($patientLabTests);
+        return $examinationDates;
+    }
+
+    /**
+     * Save patient personal history
+     * @param $patientHistoryVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePersonalHistory(PatientPersonalHistoryViewModel $patientHistoryVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $patientHistoryVM->getPatientId();
+            $patientUser = User::find($patientId);
+
+            //dd($patientId);
+
+            $patientPersonalHistory = $patientHistoryVM->getPatientPersonalHistory();
+            //dd($patientPersonalHistory);
+
+            if (!is_null($patientUser))
+            {
+                //DB::table('patient_personal_history')->where('patient_id', $patientId)->delete();
+
+                foreach($patientPersonalHistory as $patientHistory)
+                {
+                    //dd($patientHistory);
+                    $personalHistoryId = $patientHistory->personalHistoryId;
+                    $personalHistoryItemId = $patientHistory->personalHistoryItemId;
+                    //$personalHistoryDate = \DateTime::createFromFormat('Y-m-d', $patientHistory->personalHistoryDate);
+                    //$historyDate = $patientHistory->personalHistoryDate;
+
+                    $historyDate = property_exists($patientHistory, 'personalHistoryDate') ? $patientHistory->personalHistoryDate : null;
+
+                    if(!is_null($historyDate))
+                    {
+                        $personalHistoryDate = date('Y-m-d', strtotime($historyDate));
+                    }
+                    else
+                    {
+                        $personalHistoryDate = null;
+                    }
+                    //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+
+
+                    $patientUser->personalhistory()->attach($personalHistoryId,
+                        array('personal_history_item_id' => $personalHistoryItemId,
+                            'personal_history_date' => $personalHistoryDate,
+                            'created_by' => 'Admin',
+                            'modified_by' => 'Admin',
+                            'created_at' => date("Y-m-d H:i:s"),
+                            'updated_at' => date("Y-m-d H:i:s"),
+                        ));
+
+                    /*$count = DB::table('patient_personal_history as pph')
+                        ->where('pph.personal_history_id', '=', $personalHistoryId)
+                        ->where('pph.patient_id', '=', $patientId)->count();
+
+                    if($count == 0)
+                    {
+                        $patientUser->personalhistory()->attach($personalHistoryId,
+                            array('personal_history_item_id' => $personalHistoryItemId,
+                                'created_by' => 'Admin',
+                                'modified_by' => 'Admin',
+                                'created_at' => date("Y-m-d H:i:s"),
+                                'updated_at' => date("Y-m-d H:i:s"),
+                            ));
+                    }
+                    else
+                    {
+                        $patientUser->personalhistory()->updateExistingPivot($personalHistoryId,
+                            array('personal_history_item_id' => $personalHistoryItemId,
+                                'created_by' => 'Admin',
+                                'modified_by' => 'Admin',
+                                'created_at' => date("Y-m-d H:i:s"),
+                                'updated_at' => date("Y-m-d H:i:s"),
+                            ));
+                    }*/
+                }
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PERSONAL_HISTORY_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PERSONAL_HISTORY_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save patient general examination details
+     * @param $patientExaminationVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientGeneralExamination(PatientGeneralExaminationViewModel $patientExaminationVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $patientExaminationVM->getPatientId();
+            $patientUser = User::find($patientId);
+
+            $patientGeneralExamination = $patientExaminationVM->getPatientGeneralExamination();
+
+            if (!is_null($patientUser))
+            {
+
+                //DB::table('patient_general_history')->where('patient_id', $patientId)->delete();
+
+                foreach($patientGeneralExamination as $examination)
+                {
+                    //dd($patientHistory);
+                    $generalExaminationId = $examination->generalExaminationId;
+                    $generalExaminationValue = $examination->generalExaminationValue;
+                    //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examination->generalExaminationDate);
+                    //$examinationDate = $examination->examinationDate;
+
+                    $examinationDate = property_exists($examination, 'examinationDate') ? $examination->examinationDate : null;
+
+                    if(!is_null($examinationDate))
+                    {
+                        $generalExaminationDate = date('Y-m-d', strtotime($examinationDate));
+                    }
+                    else
+                    {
+                        $generalExaminationDate = null;
+                    }
+
+                    //dd($examinationDate);
+                    //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+                    //$generalExaminationDate = date('Y-m-d', strtotime($examinationDate));
+
+                    $patientUser->patientgeneralexaminations()->attach($generalExaminationId,
+                        array('general_examination_value' => $generalExaminationValue,
+                            'general_examination_date' => $generalExaminationDate,
+                            'created_by' => 'Admin',
+                            'modified_by' => 'Admin',
+                            'created_at' => date("Y-m-d H:i:s"),
+                            'updated_at' => date("Y-m-d H:i:s"),
+                        ));
+
+
+                    /*$count = DB::table('patient_general_examination as pge')
+                        ->where('pge.general_examination_id', '=', $generalExaminationId)
+                        ->where('pge.patient_id', '=', $patientId)->count();
+
+                    if($count == 0)
+                    {
+                        $patientUser->patientgeneralexaminations()->attach($generalExaminationId,
+                            array('general_examination_value' => $generalExaminationValue,
+                                'created_by' => 'Admin',
+                                'modified_by' => 'Admin',
+                                'created_at' => date("Y-m-d H:i:s"),
+                                'updated_at' => date("Y-m-d H:i:s"),
+                            ));
+                    }
+                    else
+                    {
+                        $patientUser->patientgeneralexaminations()->updateExistingPivot($generalExaminationId,
+                            array('general_examination_value' => $generalExaminationValue,
+                                'created_by' => 'Admin',
+                                'modified_by' => 'Admin',
+                                'created_at' => date("Y-m-d H:i:s"),
+                                'updated_at' => date("Y-m-d H:i:s"),
+                            ));
+                    }*/
+                }
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_GENERAL_EXAMINATION_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_GENERAL_EXAMINATION_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+
+    }
+
+    /**
+     * Save patient past illness details
+     * @param $patientPastIllnessVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientPastIllness(PatientPastIllnessViewModel $patientPastIllnessVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $patientPastIllnessVM->getPatientId();
+            $patientUser = User::find($patientId);
+
+            $patientPastIllness = $patientPastIllnessVM->getPatientPastIllness();
+
+            //$pivotData = array();
+
+            if (!is_null($patientUser))
+            {
+                //DB::table('patient_past_illness')->where('patient_id', $patientId)->delete();
+
+                foreach($patientPastIllness as $illness)
+                {
+                    //dd($patientHistory);
+                    $pastIllnessId = $illness->pastIllnessId;
+                    $pastIllnessName = $illness->pastIllnessName;
+                    //$pastIllnessDate = \DateTime::createFromFormat('Y-m-d', $illness->pastIllnessDate);
+                    //$relation = $illness->relation;
+                    //$illnessDate = $illness->pastIllnessDate;
+                    //dd($examinationDate);
+                    //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+                    //$pastIllnessDate = date('Y-m-d', strtotime($illnessDate));
+
+                    $illnessDate = property_exists($illness, 'pastIllnessDate') ? $illness->pastIllnessDate : null;
+
+                    if(!is_null($illnessDate))
+                    {
+                        $pastIllnessDate = date('Y-m-d', strtotime($illnessDate));
+                    }
+                    else
+                    {
+                        $pastIllnessDate = null;
+                    }
+
+                    $patientUser->patientpastillness()->attach($pastIllnessId,
+                        array('past_illness_name' => $pastIllnessName,
+                            'past_illness_date' => $pastIllnessDate,
+                            //'relation' => $relation,
+                            'created_by' => 'Admin',
+                            'modified_by' => 'Admin',
+                            'created_at' => date("Y-m-d H:i:s"),
+                            'updated_at' => date("Y-m-d H:i:s"),
+                        ));
+
+                    /*$count = DB::table('patient_past_illness as ppi')
+                        ->where('ppi.past_illness_id', '=', $pastIllnessId)
+                        ->where('ppi.patient_id', '=', $patientId)->count();
+
+                    if($count == 0)
+                    {
+                        $patientUser->patientpastillness()->attach($pastIllnessId,
+                            array('past_illness_name' => $pastIllnessName,
+                                //'relation' => $relation,
+                                'created_by' => 'Admin',
+                                'modified_by' => 'Admin',
+                                'created_at' => date("Y-m-d H:i:s"),
+                                'updated_at' => date("Y-m-d H:i:s"),
+                            ));
+                    }
+                    else
+                    {
+                        $patientUser->patientpastillness()->updateExistingPivot($pastIllnessId,
+                            array('general_examination_value' => $pastIllnessName,
+                                //'relation' => $relation,
+                                'created_by' => 'Admin',
+                                'modified_by' => 'Admin',
+                                'created_at' => date("Y-m-d H:i:s"),
+                                'updated_at' => date("Y-m-d H:i:s"),
+                            ));
+                    }*/
+                }
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PAST_ILLNESS_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PAST_ILLNESS_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save patient family illness details
+     * @param $patientFamilyIllnessVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientFamilyIllness(PatientFamilyIllnessViewModel $patientFamilyIllnessVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $patientFamilyIllnessVM->getPatientId();
+            $patientUser = User::find($patientId);
+
+            $patientFamilyIllness = $patientFamilyIllnessVM->getPatientFamilyIllness();
+
+            if (!is_null($patientUser))
+            {
+                //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+
+                foreach($patientFamilyIllness as $illness)
+                {
+                    //dd($patientHistory);
+                    $familyIllnessId = $illness->familyIllnessId;
+                    $familyIllnessName = $illness->familyIllnessName;
+                    $relation = $illness->relation;
+                    //$familyIllnessDate = \DateTime::createFromFormat('Y-m-d', $illness->familyIllnessDate);
+                    //$illnessDate = $illness->familyIllnessDate;
+                    //dd($examinationDate);
+                    //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+                    //$familyIllnessDate = date('Y-m-d', strtotime($illnessDate));
+
+                    $illnessDate = property_exists($illness, 'familyIllnessDate') ? $illness->familyIllnessDate : null;
+
+                    if(!is_null($illnessDate))
+                    {
+                        $familyIllnessDate = date('Y-m-d', strtotime($illnessDate));
+                    }
+                    else
+                    {
+                        $familyIllnessDate = null;
+                    }
+
+                    $patientUser->patientfamilyillness()->attach($familyIllnessId,
+                        array('family_illness_name' => $familyIllnessName,
+                            'family_illness_date' => $familyIllnessDate,
+                            'relation' => $relation,
+                            'created_by' => 'Admin',
+                            'modified_by' => 'Admin',
+                            'created_at' => date("Y-m-d H:i:s"),
+                            'updated_at' => date("Y-m-d H:i:s"),
+                        ));
+
+
+                    /*$count = DB::table('patient_family_illness as pfi')
+                        ->where('pfi.family_illness_id', '=', $familyIllnessId)
+                        ->where('pfi.patient_id', '=', $patientId)->count();
+
+                    if($count == 0)
+                    {
+                        $patientUser->patientfamilyillness()->attach($familyIllnessId,
+                            array('family_illness_name' => $familyIllnessName,
+                                'relation' => $relation,
+                                'created_by' => 'Admin',
+                                'modified_by' => 'Admin',
+                                'created_at' => date("Y-m-d H:i:s"),
+                                'updated_at' => date("Y-m-d H:i:s"),
+                            ));
+                    }
+                    else
+                    {
+                        $patientUser->patientfamilyillness()->updateExistingPivot($familyIllnessId,
+                            array('family_illness_name' => $familyIllnessName,
+                                'relation' => $relation,
+                                'created_by' => 'Admin',
+                                'modified_by' => 'Admin',
+                                'created_at' => date("Y-m-d H:i:s"),
+                                'updated_at' => date("Y-m-d H:i:s"),
+                            ));
+                    }*/
+                }
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_FAMILY_ILLNESS_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_FAMILY_ILLNESS_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /*Symptom section -- End */
 }

@@ -8,6 +8,7 @@
 
     return[
         "0" => "We are facing some technical issues. Please contact the support team",
+        "2" => "Invalid User",
         "3" => "Validation errors",
         "4" => "No doctor found",
         "5" => "No hospital found",
@@ -100,4 +101,50 @@
         "509" => "Unable to deliver fee receipts through SMS",
         "510" => "Fee receipt delivered successfully through email",
         "511" => "Unable to deliver fee receipts through email",
+
+        //Symptoms error codes 701 to 800
+
+        "701" => "Unable to retrieve main symptoms",
+        "702" => "Successfully retrieved main symptoms",
+        "703" => "No main symptoms available",
+
+        "704" => "Unable to retrieve sub symptoms",
+        "705" => "Successfully retrieved sub symptoms",
+        "706" => "No sub symptoms available",
+
+        "707" => "Unable to retrieve symptoms",
+        "708" => "Successfully retrieved symptoms",
+        "709" => "No symptoms available",
+
+        "710" => "Unable to retrieve patient personal history",
+        "711" => "Successfully retrieved patient personal history",
+        "712" => "No patient personal history available",
+
+        "713" => "Unable to retrieve patient past illness details",
+        "714" => "Successfully retrieved patient past illness details",
+        "715" => "No past illness details found for the patient",
+
+        "716" => "Unable to retrieve patient family illness details",
+        "717" => "Successfully retrieved patient family illness details",
+        "718" => "No family illness details found for the patient",
+
+        "719" => "Unable to save patient personal history",
+        "720" => "Successfully saved patient personal history",
+
+        "721" => "Unable to retrieve patient general examination details",
+        "722" => "Successfully retrieved patient general examination details",
+        "723" => "No general examination details available for the patient",
+
+        "724" => "Unable to save patient general examination details",
+        "725" => "Successfully saved patient general examination details",
+
+        "726" => "Unable to save patient past illness details",
+        "727" => "Successfully saved patient past illness details",
+
+        "728" => "Unable to save patient family illness details",
+        "729" => "Successfully saved patient family illness details",
+
+        "730" => "Unable to retrieve patient examination dates",
+        "731" => "Successfully retrieved patient examination dates",
+        "732" => "No examination dates available for the patient",
     ];
