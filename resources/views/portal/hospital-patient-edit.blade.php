@@ -13,214 +13,153 @@ $profile_menu="0";
 <div class="wrapper">
     @include('portal.hospital-header')
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        @include('portal.hospital-sidebar')
-        <!-- /.sidebar -->
-    </aside>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>Patient Details</h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-
-                <li class="active">Patient Details</li>
-            </ol>
-            <?php //print_r($prescriptionDetails);exit; ?>
-        </section>
-
-        <!-- Main content -->
-        <section class="content hidden">
-            <div class="row">
-
-                <div class="col-xs-12">
-
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;width:500px;float:left;">Patient Details</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
-
-                            <div class="col-md-12">
+    <!-- sidebar: style can be found in sidebar.less -->
+    @include('portal.hospital-sidebar')
+    <!-- /.sidebar -->
 
 
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Patient ID</label>
-                                    <div class="col-sm-6">
-                                        {{$patientDetails[0]->pid}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Patient Name</label>
-                                    <div class="col-sm-6">
-                                        {{$patientDetails[0]->name}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Phone Number</label>
-                                    <div class="col-sm-6">
-                                        {{$patientDetails[0]->telephone}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">E-Mail</label>
-                                    <div class="col-sm-6">
-                                        {{$patientDetails[0]->email}}
-                                    </div>
-                                </div>
+    <!-- Start right Content here -->
 
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Patient Age</label>
-                                    <div class="col-sm-6">
-                                        {{$patientDetails[0]->age}}
-                                    </div>
-                                </div>
+    <div class="content-page">
+        <!-- Start content -->
+        <div class="content">
 
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Patient Gender</label>
-                                    <div class="col-sm-6">
-                                        @if($patientDetails[0]->gender==1) Male @else Female @endif
-                                    </div>
-                                </div>
-
-
-
-
-
-                            </div>
-                            <div class="col-md-1"></div>
-
-
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
+            <div class="">
+                <div class="page-header-title">
+                    <h4 class="page-title">Patient Details</h4>
                 </div>
-           </div><!-- /.row -->
-        </section><!-- /.content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-header">
-                            <!-- <h3 class="box-title" style="line-height:30px;">Hospital Profile Details</h3> -->
-                            <!--
-                            <a href="doctorcreate.html" style="float:right;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Create New Doctor</b></button></a>
-                            -->
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
+            </div>
 
-                            @if (session()->has('message'))
-                                <div class="col_full login-title">
+            <div class="page-content-wrapper ">
+
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <h4 class="m-t-0 m-b-30">Patient Details</h4>
+
+
+                                    @if (session()->has('message'))
+                                        <div class="col_full login-title">
                                 <span style="color:red;">
                                     <b>{{session('message')}}</b>
                                 </span>
-                                </div>
-                            @endif
+                                        </div>
+                                    @endif
 
-                            @if (session()->has('success'))
-                                <div class="col_full login-title">
+                                    @if (session()->has('success'))
+                                        <div class="col_full login-title">
                                 <span style="color:green;">
                                     <b>{{session('success')}}</b>
                                 </span>
-                                </div>
-                                @endif
-
-                                        <!-- form start -->
-                                <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/update" role="form" method="POST">
-                                    <input type="hidden" name="hospitalId" value="{{Auth::user()->id}}" required="required" />
-                                    <input type="hidden" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
-
-                                    <div class="col-md-12">
-                                        <style>.control-label{line-height:32px;}</style>
-
-                                        <div class="form-group col-md-12">
-                                            <label class="col-sm-3 control-label">PID</label>
-                                            <div class="col-sm-9">
-                                                {{$patientDetails[0]->pid}}
-                                                <input type="hidden" class="form-control" name="patient_id" value="{{$patientDetails[0]->patient_id}}" required="required" />
-                                            </div>
                                         </div>
+                                    @endif
 
-                                        <div class="form-group col-md-12">
-                                            <label class="col-sm-3 control-label">Name</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="name" value="{{$patientDetails[0]->name}}" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label class="col-sm-3 control-label">Email</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="email" value="{{$patientDetails[0]->email}}" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label class="col-sm-3 control-label">Mobile</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="telephone" value="{{$patientDetails[0]->telephone}}" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label class="col-sm-3 control-label">Age</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="age" value="{{$patientDetails[0]->age}}" required="required" />
-                                            </div>
-                                        </div>
 
-                                        <div class="form-group col-md-12">
-                                            <label class="col-sm-3 control-label">Gender</label>
-                                            <div class="col-sm-9">
+                                    <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/update" role="form" method="POST">
+                                        <input type="hidden" name="hospitalId" value="{{Auth::user()->id}}" required="required" />
+                                        <input type="hidden" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
 
-                                                <input type="radio" class="form-controlx" name="gender" value="1" required="required" @if($patientDetails[0]->gender==1) checked @endif />Male
-                                                &nbsp;&nbsp;
-                                                <input type="radio" class="form-controlx" name="gender" value="2" required="required" @if($patientDetails[0]->gender==2) checked @endif />Female
+                                        <div class="col-md-12">
+                                            <style>.control-label{line-height:32px;}</style>
+
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">PID</label>
+                                                <div class="col-sm-9">
+                                                    {{$patientDetails[0]->pid}}
+                                                    <input type="hidden" class="form-control" name="patient_id" value="{{$patientDetails[0]->patient_id}}" required="required" />
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group col-md-12">
-                                            <label class="col-sm-3 control-label">Relationship</label>
-                                            <div class="col-sm-9">
-                                                <!--
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="name" value="{{$patientDetails[0]->name}}" required="required" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">Email</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="email" value="{{$patientDetails[0]->email}}" required="required" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">Mobile</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="telephone" value="{{$patientDetails[0]->telephone}}" required="required" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">Age</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="age" value="{{$patientDetails[0]->age}}" required="required" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">Gender</label>
+                                                <div class="col-sm-9">
+
+                                                    <input type="radio" class="form-controlx" name="gender" value="1" required="required" @if($patientDetails[0]->gender==1) checked @endif />Male
+                                                    &nbsp;&nbsp;
+                                                    <input type="radio" class="form-controlx" name="gender" value="2" required="required" @if($patientDetails[0]->gender==2) checked @endif />Female
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">Relationship</label>
+                                                <div class="col-sm-9">
+                                                    <!--
                                                 <input type="text" class="form-control" name="relationship" value="{{$patientDetails[0]->relationship}}" required="required" />
                                                 -->
-                                                <select class="form-control" name="relationship" required="required">
-                                                    <option selected>{{$patientDetails[0]->relationship}}</option>
-                                                    <option>Brother</option>
-                                                    <option>Sister</option>
-                                                    <option>Husband</option>
-                                                    <option>Wife</option>
-                                                    <option>Father</option>
-                                                    <option>Mother</option>
-                                                    <option>Others</option>
-                                                </select>
+                                                    <select class="form-control" name="relationship" required="required">
+                                                        <option selected>{{$patientDetails[0]->relationship}}</option>
+                                                        <option>Brother</option>
+                                                        <option>Sister</option>
+                                                        <option>Husband</option>
+                                                        <option>Wife</option>
+                                                        <option>Father</option>
+                                                        <option>Mother</option>
+                                                        <option>Others</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">Relation Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="spouseName" value="{{$patientDetails[0]->spouseName}}" required="required" />
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <div class="form-group col-md-12">
-                                            <label class="col-sm-3 control-label">Relation Name</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="spouseName" value="{{$patientDetails[0]->spouseName}}" required="required" />
-                                            </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="box-footer">
+                                            <button type="submit" class="btn btn-success" style="float:right;">Save Profile</button>
                                         </div>
-                                    </div>
-                                    <div class="col-md-1"></div>
-                                    <div class="box-footer">
-                                        <button type="submit" class="btn btn-success" style="float:right;">Save Profile</button>
-                                    </div>
 
-                                </form>
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
+                                    </form>
 
 
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </section><!-- /.content -->
+                                </div> <!-- panel-body -->
+                            </div> <!-- panel -->
+                        </div> <!-- col -->
+                    </div> <!-- End row -->
 
-    </div><!-- /.content-wrapper -->
-    @include('portal.doctor-footer')
+                </div><!-- container -->
+
+
+            </div> <!-- Page content Wrapper -->
+
+        </div> <!-- content -->
+
+        @include('portal.hospital-footer')
+
+    </div>
+    <!-- End Right content here -->
+
 </div><!-- ./wrapper -->
 
 @endsection
