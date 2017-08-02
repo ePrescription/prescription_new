@@ -15,6 +15,9 @@ use App\Http\ViewModels\PatientGeneralExaminationViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
 use App\Http\ViewModels\PatientPersonalHistoryViewModel;
 use App\Http\ViewModels\PatientProfileViewModel;
+use App\Http\ViewModels\PatientPregnancyViewModel;
+use App\Http\ViewModels\PatientScanViewModel;
+use App\Http\ViewModels\PatientSymptomsViewModel;
 use Illuminate\Http\Request;
 use App\Http\Requests\FeeReceiptRequest;
 use Session;
@@ -208,6 +211,81 @@ class PatientProfileMapper
         $patientFamilyIllnessVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $patientFamilyIllnessVM;
+    }
+
+    public static function setPatientPregnancyDetails(Request $pregnancyRequest)
+    {
+        $patientPregnancyVM = new PatientPregnancyViewModel();
+
+        $pregnancyObj = (object) $pregnancyRequest->all();
+        $patientPregnancyVM->setPatientId($pregnancyRequest->patientId);
+        $pregnancyDetails = $pregnancyObj->pregnancyDetails;
+        //dd($candidateEmployments);
+
+        foreach($pregnancyDetails as $pregnancy)
+        {
+            $patientPregnancyVM->setPatientPregnancy($pregnancy);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientPregnancyVM->setCreatedBy($userName);
+        $patientPregnancyVM->setUpdatedBy($userName);
+        $patientPregnancyVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientPregnancyVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientPregnancyVM;
+    }
+
+    public static function setPatientScanDetails(Request $scanRequest)
+    {
+        $patientScanVM = new PatientScanViewModel();
+
+        $scanObj = (object) $scanRequest->all();
+        $patientScanVM->setPatientId($scanRequest->patientId);
+        $scanDetails = $scanObj->scanDetails;
+        //dd($candidateEmployments);
+
+        foreach($scanDetails as $scan)
+        {
+            $patientScanVM->setPatientScans($scan);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientScanVM->setCreatedBy($userName);
+        $patientScanVM->setUpdatedBy($userName);
+        $patientScanVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientScanVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientScanVM;
+    }
+
+    public static function setPatientSymptomDetails(Request $symptomsRequest)
+    {
+        $patientSymVM = new PatientSymptomsViewModel();
+
+        $symObj = (object) $symptomsRequest->all();
+        $patientSymVM->setPatientId($symptomsRequest->patientId);
+        $symptomDetails = $symObj->symptomDetails;
+        //dd($candidateEmployments);
+
+        foreach($symptomDetails as $symptom)
+        {
+            $patientSymVM->setPatientSymptoms($symptom);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientSymVM->setCreatedBy($userName);
+        $patientSymVM->setUpdatedBy($userName);
+        $patientSymVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientSymVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientSymVM;
     }
 
 }
