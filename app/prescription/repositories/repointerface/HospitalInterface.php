@@ -8,6 +8,7 @@
 
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
 use App\Http\ViewModels\PatientLabTestViewModel;
@@ -104,4 +105,6 @@ interface HospitalInterface {
     public function getPatientSymptoms($patientId, $symptomDate);
     public function savePatientSymptoms(PatientSymptomsViewModel $patientSymVM);
 
+    public function getPatientDrugHistory($patientId);
+    public function savePatientDrugHistory(PatientDrugHistoryViewModel $drugHistoryVM);
 }

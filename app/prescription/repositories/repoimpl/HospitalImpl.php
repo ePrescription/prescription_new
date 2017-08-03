@@ -10,6 +10,7 @@ namespace App\prescription\repositories\repoimpl;
 
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
 use App\Http\ViewModels\PatientLabTestViewModel;
@@ -676,6 +677,7 @@ class HospitalImpl implements HospitalInterface{
                 $patientPrescription->hospital_id = $hospitalId;
                 $patientPrescription->doctor_id = $doctorId;
                 $patientPrescription->brief_description = $patientPrescriptionVM->getBriefDescription();
+                $patientPrescription->drug_history = $patientPrescriptionVM->getDrugHistory();
                 //$patientPrescription->unique_id = "PRID".time();
                 $patientPrescription->unique_id = 'PRID'.crc32(uniqid(rand()));
                 $patientPrescription->prescription_date = $patientPrescriptionVM->getPrescriptionDate();
@@ -2699,6 +2701,68 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get patient drug history
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientDrugHistory($patientId)
+    {
+        $drugHistory = null;
+        $surgeryHistory = null;
+        $drugSurgeryHistory = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $drugQuery = DB::table('patient_drug_history as pdh')->select('pdh.id as id', 'pdh.patient_id as patientId',
+                'pdh.drug_name as drugName', 'pdh.dosage', 'pdh.timings');
+            $drugQuery->where('pdh.patient_id', $patientId);
+
+            //dd($query->toSql());
+
+            $drugHistory = $drugQuery->get();
+
+            $surgeryQuery = DB::table('patient_surgeries as ps')->select('ps.id as id', 'ps.patient_id as patientId',
+                'ps.patient_surgeries as patientSurgeries', 'ps.operation_date as operationDate');
+            $surgeryQuery->where('ps.patient_id', $patientId);
+
+            $surgeryHistory = $surgeryQuery->get();
+
+            $drugSurgeryHistory['drugHistory'] = $drugHistory;
+            $drugSurgeryHistory['surgeryHistory'] = $surgeryHistory;
+
+
+            //dd($drugHistory);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_DRUG_HISTORY_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_DRUG_HISTORY_ERROR, $exc);
+        }
+
+        return $drugSurgeryHistory;
+    }
+
+    /**
      * Get patient examination dates
      * @param $patientId
      * @throws $hospitalException
@@ -2715,6 +2779,7 @@ class HospitalImpl implements HospitalInterface{
         $personalHistoryDates = null;
         $pregnancyDates = null;
         $scanDates = null;
+        $symptomDates = null;
 
         $patientLabTests = null;
 
@@ -2751,12 +2816,17 @@ class HospitalImpl implements HospitalInterface{
             $scanDetailsQuery->select('ps.patient_id', 'ps.scan_date')->orderBy('ps.scan_date', 'DESC');
             $scanDates = $scanDetailsQuery->get();
 
+            $symptomDatesQuery = DB::table('patient_symptoms as ps')->where('ps.patient_id', '=', $patientId);
+            $symptomDatesQuery->select('ps.patient_id', 'ps.patient_symptom_date')->orderBy('ps.patient_symptom_date', 'DESC');
+            $symptomDates = $symptomDatesQuery->get();
+
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;
             $examinationDates["pastIllnessDates"] = $pastIllnessDates;
             $examinationDates["familyIllnessDates"] = $familyIllnessDates;
             $examinationDates["personalHistoryDates"] = $personalHistoryDates;
             $examinationDates["pregnancyDates"] = $pregnancyDates;
             $examinationDates["scanDates"] = $scanDates;
+            $examinationDates["symptomDates"] = $symptomDates;
 
             //dd($examinationDates);
 
@@ -3476,6 +3546,87 @@ class HospitalImpl implements HospitalInterface{
             //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_SYMPTOM_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save patient drug and surgery history
+     * @param $drugHistoryVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientDrugHistory(PatientDrugHistoryViewModel $drugHistoryVM)
+    {
+        $status = true;
+        $patientDrugHistory = null;
+
+        try
+        {
+            $patientId = $drugHistoryVM->getPatientId();
+            $patientUser = User::find($patientId);
+
+            $patientDrugHistory = $drugHistoryVM->getDrugHistory();
+            $patientSurgeryHistory = $drugHistoryVM->getSurgeryHistory();
+
+            if (!is_null($patientUser))
+            {
+
+                foreach($patientDrugHistory as $history)
+                {
+                    $patientDrugHistory = new PatientDrugHistory();
+                    //$patientDrugHistory->patient_id = $patientId;
+                    $patientDrugHistory->drug_name = $history->drugName;
+                    $patientDrugHistory->dosage = $history->dosage;
+                    $patientDrugHistory->timings = $history->timings;
+                    $patientDrugHistory->drug_history_date = $history->drugHistoryDate;
+                    $patientDrugHistory->created_by = $drugHistoryVM->getCreatedBy();
+                    $patientDrugHistory->modified_by = $drugHistoryVM->getUpdatedBy();
+                    $patientDrugHistory->created_at = $drugHistoryVM->getCreatedAt();
+                    $patientDrugHistory->updated_at = $drugHistoryVM->getUpdatedAt();
+
+                    $patientUser->patientdrughistory()->save($patientDrugHistory);
+                }
+
+                foreach($patientSurgeryHistory as $history)
+                {
+                    $patientSurgeryHistory = new PatientSurgeries();
+                    //$patientDrugHistory->patient_id = $patientId;
+                    $patientSurgeryHistory->patient_surgeries = $history->surgeryName;
+                    $patientSurgeryHistory->operation_date = $history->operationDate;
+                    $patientSurgeryHistory->surgery_input_date = $history->surgeryInputDate;
+                    $patientSurgeryHistory->created_by = $drugHistoryVM->getCreatedBy();
+                    $patientSurgeryHistory->modified_by = $drugHistoryVM->getUpdatedBy();
+                    $patientSurgeryHistory->created_at = $drugHistoryVM->getCreatedAt();
+                    $patientSurgeryHistory->updated_at = $drugHistoryVM->getUpdatedAt();
+
+                    $patientUser->patientsurgeries()->save($patientSurgeryHistory);
+                }
+
+                //$patientDrugHistory->drug_name = $drugHistoryVM->getd;
+                //$patientLabTests->unique_id = "LTID".time();
+
+                /*$patientLabTests->unique_id = 'LTID'.crc32(uniqid(rand()));
+                $patientLabTests->brief_description = $patientLabTestVM->getDescription();
+                $patientLabTests->labtest_date = $patientLabTestVM->getLabTestDate();
+                $patientLabTests->created_by = 'Admin';
+                $patientLabTests->modified_by = 'Admin';
+                $patientUser->labtests()->save($patientLabTests);*/
+            }
+
+        }
+        catch(QueryException $queryEx)
+        {
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_DRUG_HISTORY_SAVE_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_DRUG_HISTORY_SAVE_ERROR, $exc);
         }
 
         return $status;

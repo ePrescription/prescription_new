@@ -25,6 +25,7 @@ class PatientPrescriptionMapper {
         $prescriptionVM->setHospitalId($prescription->hospitalId);
         $prescriptionVM->setBriefDescription($prescription->notes);
         //$prescriptionVM->setIntakeForm($prescription->intakeForm);
+        $prescriptionVM->setDrugHistory(property_exists($prescription, 'drugHistory') ? $prescription->drugHistory : null);
         $prescriptionVM->setDrugDetails($prescription->drugs);
         $prescriptionVM->setPrescriptionDate(date("Y-m-d H:i:s"));
         $prescriptionVM->setCreatedAt(date("Y-m-d H:i:s"));
