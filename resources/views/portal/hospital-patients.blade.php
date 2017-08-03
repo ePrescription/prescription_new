@@ -87,6 +87,8 @@ $profile_menu="0";
                                                 <td>
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/details" style="float:rightx;">View Profile</a>
                                                     <br/>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/medical-details" style="float:rightx;">View Medical</a>
+                                                    <br/>
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/edit" style="float:rightx;">Edit Profile</a>
                                                     <br/>
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/addappointment" style="float:rightx;">Book Appointment</a>
