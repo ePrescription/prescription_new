@@ -2763,6 +2763,204 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get all family illness
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllFamilyIllness()
+    {
+        $familyIllness = null;
+
+        try
+        {
+            $query = DB::table('family_illness as fi')->where('fi.status', '=', 1);
+            $query->select('fi.id', 'fi.illness_name');
+
+            $familyIllness = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::FAMILY_ILLNESS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::FAMILY_ILLNESS_ERROR, $exc);
+        }
+
+        return $familyIllness;
+    }
+
+    /**
+     * Get all past illness
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllPastIllness()
+    {
+        $pastIllness = null;
+
+        try
+        {
+            $query = DB::table('past_illness as pi')->where('pi.status', '=', 1);
+            $query->select('pi.id', 'pi.illness_name');
+
+            $pastIllness = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PAST_ILLNESS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PAST_ILLNESS_ERROR, $exc);
+        }
+
+        return $pastIllness;
+    }
+
+    /**
+     * Get all general examinations
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllGeneralExaminations()
+    {
+        $generalExaminations = null;
+
+        try
+        {
+            $query = DB::table('general_examination as ge')->where('ge.status', '=', 1);
+            $query->select('ge.id', 'ge.general_examination_name');
+
+            $generalExaminations = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::GENERAL_EXAMINATIONS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::GENERAL_EXAMINATIONS_ERROR, $exc);
+        }
+
+        return $generalExaminations;
+    }
+
+    /**
+     * Get all personal history
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllPersonalHistory()
+    {
+        $personalHistory = null;
+
+        try
+        {
+            $query = DB::table('personal_history as ph')->where('ph.status', '=', 1);
+            $query->select('ph.id', 'ph.personal_history_name');
+
+            $personalHistory = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $exc);
+        }
+
+        return $personalHistory;
+    }
+
+    /**
+     * Get all pregnancy
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllPregnancy()
+    {
+        $pregnancy = null;
+
+        try
+        {
+            $query = DB::table('pregnancy as p')->where('p.status', '=', 1);
+            $query->select('p.id', 'p.pregnancy_details');
+
+            $pregnancy = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PREGNANCY_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PREGNANCY_LIST_ERROR, $exc);
+        }
+
+        return $pregnancy;
+    }
+
+    /**
+     * Get all scans
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllScans()
+    {
+        $scans = null;
+
+        try
+        {
+            $query = DB::table('scans as s')->where('s.status', '=', 1);
+            $query->select('s.id', 's.scan_name');
+
+            $scans = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::SCAN_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::SCAN_LIST_ERROR, $exc);
+        }
+
+        return $scans;
+    }
+
+    /**
      * Get patient examination dates
      * @param $patientId
      * @throws $hospitalException

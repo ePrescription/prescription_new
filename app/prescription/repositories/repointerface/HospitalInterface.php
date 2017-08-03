@@ -107,4 +107,11 @@ interface HospitalInterface {
 
     public function getPatientDrugHistory($patientId);
     public function savePatientDrugHistory(PatientDrugHistoryViewModel $drugHistoryVM);
+
+    public function getAllFamilyIllness();
+    public function getAllPastIllness();
+    public function getAllGeneralExaminations();
+    public function getAllPersonalHistory();
+    public function getAllPregnancy();
+    public function getAllScans();
 }
