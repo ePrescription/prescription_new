@@ -4167,4 +4167,229 @@ class DoctorController extends Controller
 
     }
 
+    public function AddPatientMedicalGeneralByHospitalForFront($hid,$patientId)
+    {
+        $patientGeneralExaminations = null;
+        try
+        {
+            $patientGeneralExaminations = HospitalServiceFacade::getAllGeneralExaminations();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-general',compact('patientGeneralExaminations'));
+
+    }
+
+    public function AddPatientMedicalFamilyByHospitalForFront($hid,$patientId)
+    {
+        $patientFamilyIllness = null;
+        try
+        {
+
+            $patientFamilyIllness = HospitalServiceFacade::getAllFamilyIllness();
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-family-illness',compact('patientFamilyIllness'));
+
+    }
+
+    public function AddPatientMedicalPastByHospitalForFront($hid,$patientId)
+    {
+        $patientPastIllness = null;
+        try
+        {
+
+            $patientPastIllness = HospitalServiceFacade::getAllPastIllness();
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-past-illness',compact('patientPastIllness'));
+
+    }
+
+    public function AddPatientMedicalPersonalByHospitalForFront($hid,$patientId)
+    {
+        $patientPersonalHistory = null;
+        try
+        {
+            $patientPersonalHistory = HospitalServiceFacade::getAllPersonalHistory();
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-personal-illness',compact('patientPersonalHistory'));
+
+    }
+
+    public function AddPatientMedicalScanByHospitalForFront($hid,$patientId)
+    {
+        $patientScans = null;
+
+        try
+        {
+
+            $patientScans = HospitalServiceFacade::getAllScans();
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-scan',compact('patientScans'));
+
+    }
+
+    public function AddPatientMedicalDrugByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+
+            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            //dd($patientDetails);
+            $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
+            $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
+            //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
+            $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
+            //dd($patientAppointment);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-past-drug',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+
+    }
+
+    public function AddPatientMedicalPregnancyByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+
+            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            //dd($patientDetails);
+            $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
+            $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
+            //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
+            $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
+            //dd($patientAppointment);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-pregnency',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+
+    }
+
 }

@@ -26,7 +26,7 @@ $profile_menu="0";
 
                 <div class="">
                     <div class="page-header-title">
-                        <h4 class="page-title">Add Patient General Examination</h4>
+                        <h4 class="page-title">Add Patient Pregnancy</h4>
                     </div>
                 </div>
 
@@ -38,7 +38,7 @@ $profile_menu="0";
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
-                                        <h4 class="m-t-0 m-b-30">Add General Examination</h4>
+                                        <h4 class="m-t-0 m-b-30">Add Pregnancy</h4>
 
 
                                         @if (session()->has('message'))

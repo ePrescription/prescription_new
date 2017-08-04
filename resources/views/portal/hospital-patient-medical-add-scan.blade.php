@@ -26,7 +26,7 @@ $profile_menu="0";
 
                 <div class="">
                     <div class="page-header-title">
-                        <h4 class="page-title">Add Patient General Examination</h4>
+                        <h4 class="page-title">Add Patient Scan</h4>
                     </div>
                 </div>
 
@@ -38,7 +38,7 @@ $profile_menu="0";
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
-                                        <h4 class="m-t-0 m-b-30">Add General Examination</h4>
+                                        <h4 class="m-t-0 m-b-30">Add Scan</h4>
 
 
                                         @if (session()->has('message'))
@@ -60,94 +60,27 @@ $profile_menu="0";
 
 
                                             <form class="form-horizontal">
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
+                                                 @foreach($patientScans as $patientScanValue)
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">{{$patientScanValue->scan_name}}</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="radio radio-info radio-inline">
+                                                                <input type="radio" id="inlineRadio{{$patientScanValue->id}}1" value="Yes" name="scan_name_{{$patientScanValue->id}}">
+                                                                <label for="inlineRadio{{$patientScanValue->id}}1"> Yes </label>
+                                                            </div>
+                                                            <div class="radio radio-inline">
+                                                                <input type="radio" id="inlineRadio{{$patientScanValue->id}}2" value="No" name="scan_name_{{$patientScanValue->id}}" checked="checked">
+                                                                <label for="inlineRadio{{$patientScanValue->id}}2"> No </label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
+                                                @endforeach
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4"></div>
+                                                        <div class="col-sm-6">
+                                                            <input type="submit" name="addscan" value="Save" class="btn btn-success"/>
                                                         </div>
                                                     </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="checkbox checkbox-primary">
-                                                        <input id="checkbox111" type="checkbox">
-                                                        <label for="checkbox111">
-                                                            Remember me
-                                                        </label>
-                                                    </div>
-                                                </div>
 
                                             </form>
 

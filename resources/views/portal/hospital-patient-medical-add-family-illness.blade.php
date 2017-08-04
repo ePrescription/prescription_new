@@ -26,7 +26,7 @@ $profile_menu="0";
 
                 <div class="">
                     <div class="page-header-title">
-                        <h4 class="page-title">Add Patient General Examination</h4>
+                        <h4 class="page-title">Add Patient Family Illness</h4>
                     </div>
                 </div>
 
@@ -38,7 +38,7 @@ $profile_menu="0";
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
-                                        <h4 class="m-t-0 m-b-30">Add General Examination</h4>
+                                        <h4 class="m-t-0 m-b-30">Add Family Illness</h4>
 
 
                                         @if (session()->has('message'))
@@ -59,99 +59,198 @@ $profile_menu="0";
                                                     <!-- form start -->
 
 
-                                            <form class="form-horizontal">
+                                            <form class="form-horizontal hidden">
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-4 control-label">Endocrime diseases</label>
+                                                    <div class="col-sm-6">
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
+                                                            <label for="inlineRadio1"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
+                                                            <label for="inlineRadio2"> No </label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-4 control-label">Hyperthyroidism</label>
+                                                    <div class="col-sm-6">
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
+                                                            <label for="inlineRadio1"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
+                                                            <label for="inlineRadio2"> No </label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-4 control-label">Diabetes</label>
+                                                    <div class="col-sm-6">
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
+                                                            <label for="inlineRadio1"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
                                                             <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">HyperTension</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Heart disease</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Asthma</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Tuberculosis</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Stroke</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Cancers</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Any other herideitory diseases</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Psychaitric illness</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Others</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio radio-info radio-inline">
+                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
+                                                            <label for="inlineRadio1"> Yes </label>
+                                                        </div>
+                                                        <div class="radio radio-inline">
+                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
+                                                            <label for="inlineRadio2"> No </label>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="checkbox checkbox-primary">
-                                                        <input id="checkbox111" type="checkbox">
-                                                        <label for="checkbox111">
-                                                            Remember me
-                                                        </label>
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-6">
+                                                        <input type="submit" name="addfamily" value="Save" class="btn btn-success">
                                                     </div>
                                                 </div>
 
                                             </form>
 
 
+                                             <form class="form-horizontal">
+                                                @foreach($patientFamilyIllness as $patientFamilyIllnessValue)
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">{{$patientFamilyIllnessValue->illness_name}}</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="radio radio-info radio-inline">
+                                                                <input type="radio" id="inlineRadio{{$patientFamilyIllnessValue->id}}1" value="Yes" name="illness_name_{{$patientFamilyIllnessValue->id}}">
+                                                                <label for="inlineRadio{{$patientFamilyIllnessValue->id}}1"> Yes </label>
+                                                            </div>
+                                                            <div class="radio radio-inline">
+                                                                <input type="radio" id="inlineRadio{{$patientFamilyIllnessValue->id}}2" value="No" name="illness_name_{{$patientFamilyIllnessValue->id}}" checked="checked">
+                                                                <label for="inlineRadio{{$patientFamilyIllnessValue->id}}2"> No </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                                <div class="form-group">
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-6">
+                                                        <input type="submit" name="addfamily" value="Save" class="btn btn-success"/>
+                                                    </div>
+                                                </div>
+
+                                            </form>
 
 
                                     </div> <!-- panel-body -->

@@ -81,9 +81,9 @@ $profile_menu="0";
                                                     </a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#pregnency" data-toggle="tab" aria-expanded="false">
+                                                    <a href="#pregnancy" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                        <span class="hidden-xs">Pregnency</span>
+                                                        <span class="hidden-xs">Pregnancy</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -315,13 +315,13 @@ $profile_menu="0";
 
                                                     </p>
                                                 </div>
-                                                <div class="tab-pane" id="pregnency">
+                                                <div class="tab-pane" id="pregnancy">
                                                     <p>
                                                     <div>
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-pregnency" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Pregnency History </b></button></a>
+                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-pregnancy" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Pregnancy History </b></button></a>
                                                     </div>
                                                     <div>
-                                                        PRGHID ( Pregnency History Identification) - PID ( Patient Identification)
+                                                        PRGHID ( Pregnancy History Identification) - PID ( Patient Identification)
                                                     </div>
                                                     <table id="example2" class="table table-bordered table-hover">
                                                         <thead>
