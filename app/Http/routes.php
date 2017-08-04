@@ -328,7 +328,7 @@ Route::group(['prefix' => 'doctor'], function()
 
         Route::get('rest/api/{patientId}/pregnancydetails', array('as' => 'doctor.pregnancydetails', 'uses' => 'DoctorApiController@getPregnancyDetails'));
         Route::post('rest/api/pregnancydetails', array('as' => 'doctor.savepregnancydetails', 'uses' => 'DoctorApiController@savePatientPregnancyDetails'));
-        Route::get('rest/api/{patientId}/scandetails', array('as' => 'doctor.scandetails', 'uses' => 'DoctorApiController@getScanDetails'));
+        Route::get('rest/api/{patientId}/scandetails', array('as' => 'doctor.scandetails', 'uses' => 'DoctorApiController@getPatientScanDetails'));
         Route::post('rest/api/scandetails', array('as' => 'doctor.savescandetails', 'uses' => 'DoctorApiController@savePatientScanDetails'));
 
         Route::get('rest/api/{patientId}/symptomdetails', array('as' => 'doctor.symptomdetails', 'uses' => 'DoctorApiController@getPatientSymptoms'));
@@ -336,6 +336,20 @@ Route::group(['prefix' => 'doctor'], function()
 
         Route::get('rest/api/{patientId}/drughistory', array('as' => 'doctor.drughistory', 'uses' => 'DoctorApiController@getPatientDrugHistory'));
         Route::post('rest/api/drughistory', array('as' => 'doctor.savedrughistory', 'uses' => 'DoctorApiController@savePatientDrugHistory'));
+
+        Route::get('rest/api/{patientId}/urinetests', array('as' => 'doctor.urinetests', 'uses' => 'DoctorApiController@getPatientUrineTests'));
+        Route::post('rest/api/urinetests', array('as' => 'doctor.saveurinetests', 'uses' => 'DoctorApiController@savePatientUrineTests'));
+        Route::get('rest/api/{patientId}/motiontests', array('as' => 'doctor.motiontests', 'uses' => 'DoctorApiController@getPatientMotionTests'));
+        Route::post('rest/api/motiontests', array('as' => 'doctor.savemotiontests', 'uses' => 'DoctorApiController@savePatientMotionTests'));
+        Route::get('rest/api/{patientId}/bloodtests', array('as' => 'doctor.bloodtests', 'uses' => 'DoctorApiController@getPatientBloodTests'));
+        Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorApiController@savePatientBloodTests'));
+
+        Route::get('rest/api/familyillness', array('as' => 'doctor.allfamilyillness', 'uses' => 'DoctorApiController@getAllFamilyIllness'));
+        Route::get('rest/api/pastillness', array('as' => 'doctor.allpastillness', 'uses' => 'DoctorApiController@getAllPastIllness'));
+        Route::get('rest/api/generalexaminations', array('as' => 'doctor.allgeneralexaminations', 'uses' => 'DoctorApiController@getAllGeneralExaminations'));
+        Route::get('rest/api/personalhistory', array('as' => 'doctor.allpersonalhistory', 'uses' => 'DoctorApiController@getAllPersonalHistory'));
+        Route::get('rest/api/pregnancy', array('as' => 'doctor.allpregnancydetails', 'uses' => 'DoctorApiController@getAllPregnancy'));
+        Route::get('rest/api/scans', array('as' => 'doctor.allscandetails', 'uses' => 'DoctorApiController@getAllScans'));
     });
 
 
