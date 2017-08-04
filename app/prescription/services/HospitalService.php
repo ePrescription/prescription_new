@@ -2007,6 +2007,40 @@ class HospitalService {
     }
 
     /**
+     * Save patient blood examination details
+     * @param $patientBloodVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientBloodTests($patientBloodVM)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($patientBloodVM, &$status)
+            {
+                $status = $this->hospitalRepo->savePatientBloodTests($patientBloodVM);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
      * Save patient drug and surgery history
      * @param $patientDrugsVM
      * @throws $hospitalException
