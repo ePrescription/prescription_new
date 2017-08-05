@@ -3979,7 +3979,10 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$personalHistoryRequest->patientId.'/add-medical-personal');
+
     }
 
     /**
@@ -4026,7 +4029,10 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$personalExaminationRequest->patientId.'/add-medical-general');
+
     }
 
     /**
@@ -4039,6 +4045,7 @@ class DoctorController extends Controller
 
     public function savePatientPastIllness(Request $pastIllnessRequest)
     {
+        //dd($pastIllnessRequest);
         $patientPastIllnessVM = null;
         $status = true;
         $responseJson = null;
@@ -4073,7 +4080,11 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+
+
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$pastIllnessRequest->patientId.'/add-medical-past');
+
     }
 
     /**
@@ -4086,6 +4097,7 @@ class DoctorController extends Controller
 
     public function savePatientFamilyIllness(Request $familyIllnessRequest)
     {
+        //dd($familyIllnessRequest);
         $patientFamilyIllnessVM = null;
         $status = true;
         $responseJson = null;
@@ -4120,7 +4132,10 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$familyIllnessRequest->patientId.'/add-medical-family');
+
     }
 
 
@@ -4464,7 +4479,10 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$drugHistoryRequest->patientId.'/add-medical-drug');
+
     }
 
 
@@ -4518,6 +4536,7 @@ class DoctorController extends Controller
         $patientGeneralExaminations = null;
         try
         {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientGeneralExaminations = HospitalServiceFacade::getAllGeneralExaminations();
         }
         catch(HospitalException $hospitalExc)
@@ -4536,7 +4555,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-medical-add-general',compact('patientGeneralExaminations'));
+        return view('portal.hospital-patient-medical-add-general',compact('patientGeneralExaminations','patientDetails'));
 
     }
 
@@ -4547,6 +4566,7 @@ class DoctorController extends Controller
         try
         {
 
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientFamilyIllness = HospitalServiceFacade::getAllFamilyIllness();
 
         }
@@ -4566,7 +4586,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-medical-add-family-illness',compact('patientFamilyIllness'));
+        return view('portal.hospital-patient-medical-add-family-illness',compact('patientFamilyIllness','patientDetails'));
 
     }
 
@@ -4577,6 +4597,7 @@ class DoctorController extends Controller
         try
         {
 
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientPastIllness = HospitalServiceFacade::getAllPastIllness();
 
         }
@@ -4596,7 +4617,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-medical-add-past-illness',compact('patientPastIllness'));
+        return view('portal.hospital-patient-medical-add-past-illness',compact('patientPastIllness','patientDetails'));
 
     }
 
@@ -4606,6 +4627,8 @@ class DoctorController extends Controller
         $patientPersonalHistory = null;
         try
         {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+
             $patientPersonalHistory = HospitalServiceFacade::getAllPersonalHistory();
 
         }
@@ -4625,7 +4648,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-medical-add-personal-illness',compact('patientPersonalHistory'));
+        return view('portal.hospital-patient-medical-add-personal-illness',compact('patientPersonalHistory','patientDetails'));
 
     }
 
@@ -4664,22 +4687,11 @@ class DoctorController extends Controller
     public function AddPatientMedicalDrugByHospitalForFront($hid,$patientId)
     {
         $patientDetails = null;
-        $patientPrescriptions = null;
-        $labTests = null;
-        $patientAppointment = null;
-        //$jsonResponse = null;
-        //dd('Inside patient details');
+
         try
         {
 
-            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
-            //dd($patientDetails);
-            $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
-            $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
-            //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
-            $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
-            //dd($patientAppointment);
 
         }
         catch(HospitalException $hospitalExc)
@@ -4698,7 +4710,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-medical-add-past-drug',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+        return view('portal.hospital-patient-medical-add-past-drug',compact('patientDetails'));
 
     }
 

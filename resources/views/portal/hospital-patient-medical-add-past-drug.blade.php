@@ -59,93 +59,38 @@ $profile_menu="0";
                                                     <!-- form start -->
 
 
-                                            <form class="form-horizontal">
+                                            <form action="{{URL::to('/')}}/fronthospital/rest/api/drughistory" role="form" method="POST" class="form-horizontal ">
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
+                                                    <label class="col-sm-2 control-label">Drug Details</label>
                                                     <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
+                                                        Drug Name<br/>
+                                                        <input type="text" class="form-control" name="drugHistory[0][drugName]" value="" required="required" />
+                                                        Drug Dosage<br/>
+                                                        <input type="text" class="form-control" name="drugHistory[0][dosage]" value="" required="required" />
+                                                        Drug Timing<br/>
+                                                        <input type="text" class="form-control" name="drugHistory[0][timings]" value="" required="required" />
+                                                        <input type="hidden" class="form-control" name="drugHistory[0][drugHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
+
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
+                                                    <label class="col-sm-2 control-label">Surgery Details</label>
                                                     <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
+                                                        Surgery Name<br/>
+                                                        <input type="text" class="form-control" name="surgeryHistory[0][surgeryName]" value="" required="required" />
+                                                        Operation Date (YYYY-MM-DD)<br/>
+                                                        <input type="text" class="form-control" name="surgeryHistory[0][operationDate]" value="" required="required" />
+                                                        <input type="hidden" class="form-control" name="surgeryHistory[0][surgeryInputDate]" value="{{date('Y-m-d')}}" required="required" />
+
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Helping text</label>
-                                                    <div class="col-sm-7">
-                                                        <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="checked">
-                                                            <label for="inlineRadio1"> Inline One </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                                            <label for="inlineRadio2"> Inline Two </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-6">
+                                                        <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
 
-                                                <div class="form-group">
-                                                    <div class="checkbox checkbox-primary">
-                                                        <input id="checkbox111" type="checkbox">
-                                                        <label for="checkbox111">
-                                                            Remember me
-                                                        </label>
+                                                        <input type="submit" name="addpersonal" value="Save" class="btn btn-success">
                                                     </div>
                                                 </div>
 
