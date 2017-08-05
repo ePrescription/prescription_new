@@ -59,25 +59,31 @@ $profile_menu="0";
                                                     <!-- form start -->
 
 
-                                            <form class="form-horizontal">
+                                            <form action="{{URL::to('/')}}/fronthospital/rest/api/scandetails" role="form" method="POST" class="form-horizontal ">
+                                                 <?php $i=0; ?>
                                                  @foreach($patientScans as $patientScanValue)
                                                     <div class="form-group">
                                                         <label class="col-sm-4 control-label">{{$patientScanValue->scan_name}}</label>
                                                         <div class="col-sm-6">
+                                                            <input type="hidden" class="form-control" name="scanDetails[{{$i}}][scanId]" value="{{$patientScanValue->id}}" required="required" />
+                                                            <input type="hidden" class="form-control" name="scanDetails[{{$i}}][scanDate]" value="{{date('Y-m-d')}}" required="required" />
                                                             <div class="radio radio-info radio-inline">
-                                                                <input type="radio" id="inlineRadio{{$patientScanValue->id}}1" value="Yes" name="scan_name_{{$patientScanValue->id}}">
-                                                                <label for="inlineRadio{{$patientScanValue->id}}1"> Yes </label>
+                                                                <input type="radio" id="scanDetails{{$patientScanValue->id}}1" value="1" name="scanDetails[{{$i}}][isValueSet]">
+                                                                <label for="scanDetails{{$patientScanValue->id}}1"> Yes </label>
                                                             </div>
                                                             <div class="radio radio-inline">
-                                                                <input type="radio" id="inlineRadio{{$patientScanValue->id}}2" value="No" name="scan_name_{{$patientScanValue->id}}" checked="checked">
-                                                                <label for="inlineRadio{{$patientScanValue->id}}2"> No </label>
+                                                                <input type="radio" id="scanDetails{{$patientScanValue->id}}2" value="0" name="scanDetails[{{$i}}][isValueSet]" checked="checked">
+                                                                <label for="scanDetails{{$patientScanValue->id}}2"> No </label>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <?php $i++; ?>
                                                 @endforeach
                                                     <div class="form-group">
                                                         <div class="col-sm-4"></div>
                                                         <div class="col-sm-6">
+                                                            <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
+
                                                             <input type="submit" name="addscan" value="Save" class="btn btn-success"/>
                                                         </div>
                                                     </div>

@@ -4134,6 +4134,8 @@ class DoctorController extends Controller
 
     public function savePatientPregnancyDetails(Request $pregnancyRequest)
     {
+
+        //dd($pregnancyRequest->patientId);
         //dd($pregnancyRequest);
         $patientPregnancyVM = null;
         $status = true;
@@ -4159,19 +4161,23 @@ class DoctorController extends Controller
         }
         catch(HospitalException $hospitalExc)
         {
-            dd($hospitalExc);
+            //dd($hospitalExc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_ERROR));
             $responseJson->sendErrorResponse($hospitalExc);
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        dd($responseJson);
-        return $responseJson;
+        //dd($responseJson);
+        //return $responseJson;
+
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$pregnancyRequest->patientId.'/add-medical-pregnancy');
+
+
     }
 
     /**
@@ -4184,6 +4190,7 @@ class DoctorController extends Controller
 
     public function savePatientScanDetails(Request $scanRequest)
     {
+        //dd($scanRequest);
         $patientScanVM = null;
         $status = true;
         $responseJson = null;
@@ -4218,7 +4225,11 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+
+
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$scanRequest->patientId.'/add-medical-scan');
+
     }
 
     /**
@@ -4626,6 +4637,7 @@ class DoctorController extends Controller
         try
         {
 
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientScans = HospitalServiceFacade::getAllScans();
 
         }
@@ -4645,7 +4657,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-medical-add-scan',compact('patientScans'));
+        return view('portal.hospital-patient-medical-add-scan',compact('patientScans','patientDetails'));
 
     }
 

@@ -63,7 +63,6 @@ $profile_menu="0";
                                                 <?php $i=0; ?>
                                                 @foreach($patientPregnancyDetails as $patientPregnancyValue)
                                                     <div class="form-group">
-
                                                         <label class="col-sm-4 control-label">{{$patientPregnancyValue->pregnancy_details}}</label>
                                                         <div class="col-sm-6">
                                                             <input type="hidden" class="form-control" name="pregnancyDetails[{{$i}}][pregnancyId]" value="{{$patientPregnancyValue->id}}" required="required" />
