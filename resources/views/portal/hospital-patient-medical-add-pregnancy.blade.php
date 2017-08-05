@@ -59,7 +59,34 @@ $profile_menu="0";
                                                     <!-- form start -->
 
 
-                                            <form class="form-horizontal">
+                                            <form action="{{URL::to('/')}}/fronthospital/rest/api/pregnancydetails" role="form" method="POST" class="form-horizontal ">
+                                                <?php $i=0; ?>
+                                                @foreach($patientPregnancyDetails as $patientPregnancyValue)
+                                                    <div class="form-group">
+
+                                                        <label class="col-sm-4 control-label">{{$patientPregnancyValue->pregnancy_details}}</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="hidden" class="form-control" name="pregnancyDetails[{{$i}}][pregnancyId]" value="{{$patientPregnancyValue->id}}" required="required" />
+                                                            <input type="text" class="form-control" name="pregnancyDetails[{{$i}}][pregnancyValue]" value="" required="required" />
+                                                            <input type="hidden" class="form-control" name="pregnancyDetails[{{$i}}][pregnancyDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                            <input type="hidden" class="form-control" name="pregnancyDetails[{{$i}}][isValueSet]" value="1" required="required" />
+                                                        </div>
+                                                    </div>
+                                                <?php $i++; ?>
+                                                @endforeach
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-6">
+                                                        <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
+                                                        <input type="submit" name="addpregnancy" value="Save" class="btn btn-success"/>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+
+
+                                            <form class="form-horizontal hidden">
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Helping text</label>
                                                     <div class="col-sm-7">

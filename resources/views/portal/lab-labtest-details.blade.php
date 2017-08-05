@@ -155,7 +155,7 @@ $profile_menu="0";
                                         @if(!is_null($labtest->labtest_report))
                                             <a target="_blank" href="{{$labtest->labtest_report}}">Download</a>
                                         @else
-                                            None
+                                            --
                                         @endif
                                     </td>
                                 </tr>

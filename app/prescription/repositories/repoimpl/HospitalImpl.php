@@ -3686,18 +3686,19 @@ class HospitalImpl implements HospitalInterface{
 
             $patientPregnancy = $patientPregnancyVM->getPatientPregnancy();
 
+            //dd($patientPregnancy);
+
             if (!is_null($patientUser))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
 
                 foreach($patientPregnancy as $pregnancy)
                 {
-                    //dd($patientHistory);
+                    //dd($pregnancy);
                     $pregnancyId = $pregnancy->pregnancyId;
                     $pregnancyValue = $pregnancy->pregnancyValue;
                     $isValueSet = $pregnancy->isValueSet;
                     //$pregnancyDate = $pregnancy->pregnancyDate;
-
                     $pregnancyDate = property_exists($pregnancy, 'pregnancyDate') ? $pregnancy->pregnancyDate : null;
 
                     if(!is_null($pregnancyDate))
@@ -3708,6 +3709,8 @@ class HospitalImpl implements HospitalInterface{
                     {
                         $patientPregnancyDate = null;
                     }
+
+                    //dd($pregnancy);
 
                     $patientUser->patientpregnancy()->attach($pregnancyId,
                         array('pregnancy_value' => $pregnancyValue,
@@ -3729,18 +3732,18 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(QueryException $queryEx)
         {
-            //dd($queryEx);
+            dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_ERROR, $queryEx);
         }
         catch(UserNotFoundException $userExc)
         {
-            //dd($userExc);
+            dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_ERROR, $exc);
         }
