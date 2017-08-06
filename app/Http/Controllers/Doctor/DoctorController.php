@@ -3710,7 +3710,9 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+
+        return view('portal.hospital-patient-medical-personal-illness-detail',compact('personalHistoryDetails'));
     }
 
     /**
@@ -3768,7 +3770,9 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+
+        return view('portal.hospital-patient-medical-past-illness-detail',compact('pastIllness'));
     }
 
     /**
@@ -3824,7 +3828,8 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+        return view('portal.hospital-patient-medical-family-illness-detail',compact('familyIllness'));
     }
 
     /**
@@ -3880,8 +3885,125 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+        return view('portal.hospital-patient-medical-general-detail',compact('generalExamination'));
     }
+
+    /**
+     * Get patient pregnancy details
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPregnancyDetails($patientId, Request $patientSearchRequest)
+    {
+        $pregnancyDetails = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $pregnancyDate = date('Y-m-d', strtotime($examinationDate));
+            $pregnancyDetails = $this->hospitalService->getPregnancyDetails($patientId, $pregnancyDate);
+            //dd($familyIllness);
+
+            if(!is_null($pregnancyDetails) && !empty($pregnancyDetails))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PREGNANCY_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($pregnancyDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_PREGNANCY_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($pregnancyDetails);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PREGNANCY_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return view('portal.hospital-patient-medical-pregnancy-detail',compact('pregnancyDetails'));
+    }
+
+    /**
+     * Get patient scan details
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientScanDetails($patientId, Request $patientSearchRequest)
+    {
+        $scanDetails = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $scanDate = date('Y-m-d', strtotime($examinationDate));
+            $scanDetails = $this->hospitalService->getPatientScanDetails($patientId, $scanDate);
+            //dd($familyIllness);
+
+            if(!is_null($scanDetails) && !empty($scanDetails))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_SCAN_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($scanDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_SCAN_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($scanDetails);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SCAN_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return view('portal.hospital-patient-medical-scan-detail',compact('scanDetails'));
+
+    }
+
 
     /**
      * Get patient examination dates
@@ -4499,9 +4621,10 @@ class DoctorController extends Controller
         //dd('Inside patient details');
         try
         {
-
-            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId);
+            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
+
             //dd($patientDetails);
             $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
             $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
@@ -4526,7 +4649,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-medical-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+        return view('portal.hospital-patient-medical-details',compact('patientExaminations','patientDetails','patientPrescriptions','labTests','patientAppointment'));
 
     }
 

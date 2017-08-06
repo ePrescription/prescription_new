@@ -87,270 +87,119 @@ $profile_menu="0";
                                                     </a>
                                                 </li>
                                             </ul>
+                                            <?php /* ?>{{print_r($patientExaminations)}}<?php */ ?>
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="general">
                                                     <p>
-                                                    <div>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="selectgerenal" onchange="javascript:ajaxloadgeneraldetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['generalExaminationDates'] as $generalExaminationDate)
+                                                                <option value="{{$generalExaminationDate->general_examination_date}}">{{$generalExaminationDate->general_examination_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-general" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add General Examination </b></button></a>
                                                     </div>
-                                                    <div>
-                                                        GEID ( General Examination Identification) - PID ( Patient Identification)
-                                                    </div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>GEID</th>
-                                                            <th>PID</th>
-                                                            <th>PATIENT</th>
-                                                            <th>DATE</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($patientPrescriptions as $prescription)
-                                                            <tr>
-                                                                <td>{{$prescription->unique_id}}</td>
-                                                                <td>{{$prescription->pid}}</td>
-                                                                <td>{{$prescription->name}}</td>
-                                                                <td>{{$prescription->prescription_date}}</td>
-                                                                <td>
-
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-
-                                                    </table>
-
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientgeneraldiv"></div>
                                                     </p>
                                                 </div>
                                                 <div class="tab-pane" id="family">
                                                     <p>
-                                                    <div>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="selectfamily" onchange="javascript:ajaxloadfamilydetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['familyIllnessDates'] as $familyIllnessDates)
+                                                                <option value="{{$familyIllnessDates->family_illness_date}}">{{$familyIllnessDates->family_illness_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-family" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Family Illness History </b></button></a>
                                                     </div>
-                                                    <div>
-                                                        FIHID ( Family Illness History Identification) - PID ( Patient Identification)
-                                                    </div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>FIHID</th>
-                                                            <th>PID</th>
-                                                            <th>PATIENT</th>
-                                                            <th>DATE</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($patientPrescriptions as $prescription)
-                                                            <tr>
-                                                                <td>{{$prescription->unique_id}}</td>
-                                                                <td>{{$prescription->pid}}</td>
-                                                                <td>{{$prescription->name}}</td>
-                                                                <td>{{$prescription->prescription_date}}</td>
-                                                                <td>
-
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-
-                                                    </table>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientfamilydiv"></div>
                                                     </p>
                                                 </div>
                                                 <div class="tab-pane" id="past">
 
                                                     <p>
-                                                    <div>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="selectpast" onchange="javascript:ajaxloadpastdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['pastIllnessDates'] as $pastIllnessDates)
+                                                                <option value="{{$pastIllnessDates->past_illness_date}}">{{$pastIllnessDates->past_illness_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-past" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Past Illness History </b></button></a>
                                                     </div>
-                                                    <div>
-                                                        PIHID ( Past Illness History Identification) - PID ( Patient Identification)
-                                                    </div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>PIHID</th>
-                                                            <th>PID</th>
-                                                            <th>PATIENT</th>
-                                                            <th>DATE</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($labTests as $labTest)
-                                                            <tr>
-                                                                <td>{{$labTest->unique_id}}</td>
-                                                                <td>{{$labTest->pid}}</td>
-                                                                <td>{{$labTest->name}}</td>
-                                                                <td>{{$labTest->labtest_date}}</td>
-                                                                <td>
-
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/lab/{{$labTest->labtest_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-
-                                                    </table>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientpastdiv"></div>
                                                     </p>
                                                 </div>
                                                 <div class="tab-pane" id="personal">
                                                     <p>
-                                                    <div>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="selectpersonal" onchange="javascript:ajaxloadpersonaldetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['personalHistoryDates'] as $personalHistoryDates)
+                                                                <option value="{{$personalHistoryDates->personal_history_date}}">{{$personalHistoryDates->personal_history_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-personal" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Personal Illness History </b></button></a>
                                                     </div>
-                                                    <div>
-                                                        PRIHID ( Personal Illness History Identification) - PID ( Patient Identification)
-                                                    </div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>PRIHID</th>
-                                                            <th>PID</th>
-                                                            <th>PATIENT</th>
-                                                            <th>DATE</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($patientPrescriptions as $prescription)
-                                                            <tr>
-                                                                <td>{{$prescription->unique_id}}</td>
-                                                                <td>{{$prescription->pid}}</td>
-                                                                <td>{{$prescription->name}}</td>
-                                                                <td>{{$prescription->prescription_date}}</td>
-                                                                <td>
-
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-
-                                                    </table>
-
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientpersonaldiv"></div>
                                                     </p>
                                                 </div>
                                                 <div class="tab-pane" id="scan">
                                                     <p>
-                                                    <div>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="selectscan" onchange="javascript:ajaxloadscandetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['scanDates'] as $scanDates)
+                                                                <option value="{{$scanDates->scan_date}}">{{$scanDates->scan_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-scan" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Scan History </b></button></a>
                                                     </div>
-                                                    <div>
-                                                        SHID ( Scan History Identification) - PID ( Patient Identification)
-                                                    </div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>SHID</th>
-                                                            <th>PID</th>
-                                                            <th>PATIENT</th>
-                                                            <th>DATE</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($patientPrescriptions as $prescription)
-                                                            <tr>
-                                                                <td>{{$prescription->unique_id}}</td>
-                                                                <td>{{$prescription->pid}}</td>
-                                                                <td>{{$prescription->name}}</td>
-                                                                <td>{{$prescription->prescription_date}}</td>
-                                                                <td>
-
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-
-                                                    </table>
-
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientscandiv"></div>
                                                     </p>
                                                 </div>
                                                 <div class="tab-pane" id="drug">
                                                     <p>
-                                                    <div>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="selectdrug" onchange="javascript:ajaxloaddrugdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['scanDates'] as $scanDates)
+                                                                <option value="{{$scanDates->scan_date}}">{{$scanDates->scan_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-drug" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Past Drug History </b></button></a>
                                                     </div>
-                                                    <div>
-                                                        PDHID ( Past Drug History Identification) - PID ( Patient Identification)
-                                                    </div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>PHID</th>
-                                                            <th>PID</th>
-                                                            <th>PATIENT</th>
-                                                            <th>DATE</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($patientPrescriptions as $prescription)
-                                                            <tr>
-                                                                <td>{{$prescription->unique_id}}</td>
-                                                                <td>{{$prescription->pid}}</td>
-                                                                <td>{{$prescription->name}}</td>
-                                                                <td>{{$prescription->prescription_date}}</td>
-                                                                <td>
-
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-
-                                                    </table>
-
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientdrugdiv"></div>
                                                     </p>
                                                 </div>
                                                 <div class="tab-pane" id="pregnancy">
                                                     <p>
-                                                    <div>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="selectpregnancy" onchange="javascript:ajaxloadpregnancydetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['pregnancyDates'] as $pregnancyDates)
+                                                                <option value="{{$pregnancyDates->pregnancy_date}}">{{$pregnancyDates->pregnancy_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-pregnancy" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Pregnancy History </b></button></a>
                                                     </div>
-                                                    <div>
-                                                        PRGHID ( Pregnancy History Identification) - PID ( Patient Identification)
-                                                    </div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>PRGHID</th>
-                                                            <th>PID</th>
-                                                            <th>PATIENT</th>
-                                                            <th>DATE</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($patientPrescriptions as $prescription)
-                                                            <tr>
-                                                                <td>{{$prescription->unique_id}}</td>
-                                                                <td>{{$prescription->pid}}</td>
-                                                                <td>{{$prescription->name}}</td>
-                                                                <td>{{$prescription->prescription_date}}</td>
-                                                                <td>
-
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-
-                                                    </table>
-
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientpregnancydiv"></div>
                                                     </p>
                                                 </div>
                                             </div>
@@ -379,3 +228,187 @@ $profile_menu="0";
 </div><!-- ./wrapper -->
 
 @endsection
+
+
+
+@section('scripts')
+
+    <script>
+        function ajaxloadgeneraldetails(pid,date) {
+
+            $("#patientgeneraldiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/generalexamination';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientgeneraldiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientgeneraldiv").html("");
+            }
+
+        }
+
+        function ajaxloadfamilydetails(pid,date) {
+
+            $("#patientfamilydiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/familyillness';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientfamilydiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientfamilydiv").html("");
+            }
+
+        }
+
+
+        function ajaxloadpastdetails(pid,date) {
+
+            $("#patientpastdiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/pastillness';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientpastdiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientpastdiv").html("");
+            }
+
+        }
+
+
+        function ajaxloadpersonaldetails(pid,date) {
+
+            $("#patientpersonaldiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/patienthistory';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientpersonaldiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientpersonaldiv").html("");
+            }
+
+        }
+
+        function ajaxloadscandetails(pid,date) {
+
+            $("#patientscandiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/scandetails';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientscandiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientscandiv").html("");
+            }
+
+        }
+
+        function ajaxloaddrugdetails(pid,date) {
+
+            $("#patientdrugdiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/pregnancydetails';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientdrugdiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientdrugdiv").html("");
+            }
+
+        }
+
+        function ajaxloadpregnancydetails(pid,date) {
+
+            $("#patientpregnancydiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/pregnancydetails';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientpregnancydiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientpregnancydiv").html("");
+            }
+
+        }
+    </script>
+@stop

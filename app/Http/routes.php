@@ -168,6 +168,20 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     //Medical
     Route::get('rest/api/{hospitalId}/patient/{patientId}/medical-details', array('as' => 'hospital.patientmedicaldetails', 'uses' => 'DoctorController@PatientMedicalDetailsByHospitalForFront'));
 
+
+    Route::get('rest/api/{patientId}/examinationdates', array('as' => 'doctor.examinationdates', 'uses' => 'DoctorController@getExaminationDates'));
+
+    Route::get('rest/api/{patientId}/generalexamination', array('as' => 'doctor.generalexamination', 'uses' => 'DoctorController@getPatientGeneralExamination'));
+    Route::get('rest/api/{patientId}/familyillness', array('as' => 'doctor.familyillness', 'uses' => 'DoctorController@getPatientFamilyIllness'));
+    Route::get('rest/api/{patientId}/pastillness', array('as' => 'doctor.patientpastillness', 'uses' => 'DoctorController@getPatientPastIllness'));
+    Route::get('rest/api/{patientId}/patienthistory', array('as' => 'doctor.patienthistory', 'uses' => 'DoctorController@getPersonalHistory'));
+    Route::get('rest/api/{patientId}/scandetails', array('as' => 'doctor.scandetails', 'uses' => 'DoctorController@getPatientScanDetails'));
+    Route::get('rest/api/{patientId}/drughistory', array('as' => 'doctor.drughistory', 'uses' => 'DoctorController@getPatientDrugHistory'));
+    Route::get('rest/api/{patientId}/pregnancydetails', array('as' => 'doctor.pregnancydetails', 'uses' => 'DoctorController@getPregnancyDetails'));
+
+    Route::get('rest/api/{patientId}/symptomdetails', array('as' => 'doctor.symptomdetails', 'uses' => 'DoctorController@getPatientSymptoms'));
+
+
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-general', array('as' => 'hospital.patientmedicalgeneral', 'uses' => 'DoctorController@AddPatientMedicalGeneralByHospitalForFront'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-family', array('as' => 'hospital.patientmedicalfamily', 'uses' => 'DoctorController@AddPatientMedicalFamilyByHospitalForFront'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-past', array('as' => 'hospital.patientmedicalpast', 'uses' => 'DoctorController@AddPatientMedicalPastByHospitalForFront'));
