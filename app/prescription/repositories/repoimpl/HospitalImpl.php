@@ -2394,7 +2394,7 @@ class HospitalImpl implements HospitalInterface{
             }
 
             $query = DB::table('past_illness as pii')->select('ppi.id as patientPastIllnessId', 'pii.id as patientIllnessId', 'pii.illness_name as illnessName',
-                'ppi.past_illness_name as otherIllnessName', 'ppi.relation');
+                'ppi.past_illness_name as otherIllnessName', 'ppi.relation', 'ppi.is_value_set as isValueSet');
             //$query->leftJoin('patient_past_illness as ppi', function($join){
             $query->join('patient_past_illness as ppi', function($join){
                 $join->on('ppi.past_illness_id', '=', 'pii.id');
@@ -2448,7 +2448,7 @@ class HospitalImpl implements HospitalInterface{
             }
 
             $query = DB::table('family_illness as fi')->select('fi.id as familyIllnessId', 'fi.illness_name as familyIllnessName',
-                'pfi.id as patientIllnessId', 'pfi.family_illness_name as otherIllnessName', 'pfi.relation');
+                'pfi.id as patientIllnessId', 'pfi.family_illness_name as otherIllnessName', 'pfi.relation', 'pfi.is_value_set as isValueSet');
             //$query->leftJoin('patient_family_illness as pfi', function($join){
             $query->join('patient_family_illness as pfi', function($join){
                 $join->on('pfi.family_illness_id', '=', 'fi.id');
@@ -2599,6 +2599,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientScanDetails($patientId, $scanDate)
     {
         $scanDetails = null;
+        //dd($patientId);
 
         try
         {
@@ -2609,7 +2610,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_scan as ps')->select('s.id as scanId', 'p.scan_name as scanName',
+            $query = DB::table('patient_scan as ps')->select('s.id as scanId', 's.scan_name as scanName',
                 'ps.id as patientScanId', 'ps.is_value_set as isValueSet', 'ps.scan_date as scanDate');
             //$query->rightJoin('scans as s', function($join){
             $query->join('scans as s', function($join){
@@ -2622,7 +2623,7 @@ class HospitalImpl implements HospitalInterface{
             //dd($query->toSql());
 
             $scanDetails = $query->get();
-            //dd($pregnancyDetails);
+            //dd($scanDetails);
         }
         catch(QueryException $queryEx)
         {

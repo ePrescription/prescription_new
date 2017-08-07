@@ -3966,7 +3966,7 @@ class DoctorController extends Controller
             //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
             $scanDate = date('Y-m-d', strtotime($examinationDate));
             $scanDetails = $this->hospitalService->getPatientScanDetails($patientId, $scanDate);
-            //dd($familyIllness);
+            //dd($scanDetails);
 
             if(!is_null($scanDetails) && !empty($scanDetails))
             {
