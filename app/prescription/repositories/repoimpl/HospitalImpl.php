@@ -2937,6 +2937,61 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get patient ultrasound tests
+     * @param $patientId, $ultraSoundDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientUltraSoundTests($patientId, $ultraSoundDate)
+    {
+        $ultraSound = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $query = DB::table('patient_ultra_sound as pus')->select('us.id as examinationId', 'us.examination_name as examinationName',
+                'pus.id as patientExaminationId', 'pus.is_value_set as isValueSet', 'pus.examination_date as examinationDate');
+            //$query->rightJoin('scans as s', function($join){
+            $query->join('ultra_sound as us', function($join){
+                $join->on('us.id', '=', 'pus.ultra_sound_id');
+                $join->on('pus.patient_id', '=', DB::raw('?'));
+                $join->on('pus.examination_date', '=', DB::raw('?'));
+            })->setBindings(array_merge($query->getBindings(), array($patientId, $ultraSoundDate)));
+            $query->where('us.status', '=', 1);
+
+            //dd($query->toSql());
+
+            $ultraSound = $query->get();
+            //dd($pregnancyDetails);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_ULTRASOUND_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_ULTRASOUND_DETAILS_ERROR, $exc);
+        }
+
+        return $ultraSound;
+    }
+
+    /**
      * Get all family illness
      * @param none
      * @throws $hospitalException
@@ -4160,6 +4215,85 @@ class HospitalImpl implements HospitalInterface{
             //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save patient ultra sound details
+     * @param $patientUltraSoundVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientUltraSoundTests(PatientUrineExaminationViewModel $patientUltraSoundVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $patientUltraSoundVM->getPatientId();
+            $patientUser = User::find($patientId);
+
+            $patientExaminations = $patientUltraSoundVM->getExaminations();
+
+            if (!is_null($patientUser))
+            {
+                //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+
+                foreach($patientExaminations as $examination)
+                {
+                    //dd($patientHistory);
+                    $examinationId = $examination->examinationId;
+                    $isValueSet = $examination->isValueSet;
+                    //$pregnancyDate = $pregnancy->pregnancyDate;
+
+                    $examinationDate = property_exists($examination, 'examinationDate') ? $examination->examinationDate : null;
+
+                    if(!is_null($examinationDate))
+                    {
+                        $patientExaminationDate = date('Y-m-d', strtotime($examinationDate));
+                    }
+                    else
+                    {
+                        $patientExaminationDate = null;
+                    }
+
+                    $patientUser->patientultrasounds()->attach($examinationId,
+                        array('examination_date' => $patientExaminationDate,
+                            'is_value_set' => $isValueSet,
+                            'created_by' => 'Admin',
+                            'modified_by' => 'Admin',
+                            'created_at' => date("Y-m-d H:i:s"),
+                            'updated_at' => date("Y-m-d H:i:s"),
+                        ));
+
+                }
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_ERROR, $exc);
         }
 
         return $status;
