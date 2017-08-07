@@ -7,7 +7,6 @@
 <div class="panel-body">
 
 <!-- form start -->
-{{print_r($personalHistoryDetails['patientHistory'])}}
 
 <form role="form" method="POST" class="form-horizontal ">
 <div class="form-group">

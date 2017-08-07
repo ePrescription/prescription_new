@@ -42,6 +42,62 @@ $profile_menu="0";
                                     <h4 class="m-t-0 m-b-30">Patient Medical Details</h4>
 
                                     <div class="row">
+
+                                        <div class="col-lg-12">
+
+
+                                            <div class="form-group col-md-4">
+                                                <label class="col-sm-6 control-label">Patient ID</label>
+                                                <div class="col-sm-6">
+                                                    {{$patientDetails[0]->pid}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label class="col-sm-6 control-label">Patient Name</label>
+                                                <div class="col-sm-6">
+                                                    {{$patientDetails[0]->name}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label class="col-sm-6 control-label">Phone Number</label>
+                                                <div class="col-sm-6">
+                                                    {{$patientDetails[0]->telephone}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label class="col-sm-6 control-label">E-Mail</label>
+                                                <div class="col-sm-6">
+                                                    {{$patientDetails[0]->email}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label class="col-sm-6 control-label">Patient Age</label>
+                                                <div class="col-sm-6">
+                                                    {{$patientDetails[0]->age}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label class="col-sm-6 control-label">Patient Gender</label>
+                                                <div class="col-sm-6">
+                                                    @if($patientDetails[0]->gender==1) Male @else Female @endif
+                                                </div>
+                                            </div>
+                                            <div class="hidden form-group col-md-4">
+                                                <label class="col-sm-6 control-label">Patient Relationship</label>
+                                                <div class="col-sm-6">
+                                                    {{$patientDetails[0]->relationship}}
+                                                </div>
+                                            </div>
+                                            <div class="hidden form-group col-md-4">
+                                                <label class="col-sm-6 control-label">Patient Relation Name</label>
+                                                <div class="col-sm-6">
+                                                    {{$patientDetails[0]->spouseName}}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-lg-12">
                                             <ul class="nav nav-tabs navtab-bg">
                                                 <li class="active">
