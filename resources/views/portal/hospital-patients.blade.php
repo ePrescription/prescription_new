@@ -45,6 +45,7 @@ $profile_menu="0";
 
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+
                                     <h4 class="m-b-30 m-t-0">Hospital Patients List</h4>
 
                                     @if (session()->has('message'))
@@ -73,7 +74,7 @@ $profile_menu="0";
                                             <th>Patient Mobile No</th>
                                             <th>Patient Age</th>
                                             <th>Patient's gender</th>
-                                            <th>View</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -85,6 +86,14 @@ $profile_menu="0";
                                                 <td>{{$patient->age}}</td>
                                                 <td>@if($patient->gender==1) Male @else Female @endif</td>
                                                 <td>
+
+
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i> </a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/medical-details" title="Medical Profile"><i class="fa fa-medkit"></i></a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/edit" title="Edit Profile"><i class="fa fa-edit"></i></a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/addappointment" title="Book Appointment"><i class="fa fa-stethoscope"></i> </a>
+
+                                                <?php /* ?>
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/details" style="float:rightx;">View Profile</a>
                                                     <br/>
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/medical-details" style="float:rightx;">View Medical</a>
@@ -95,6 +104,7 @@ $profile_menu="0";
                                                     <!--
                                                     <a href="#doctorview.html"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
                                                     -->
+                                                    <?php */ ?>
                                                 </td>
                                             </tr>
                                         @endforeach

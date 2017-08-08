@@ -4004,6 +4004,60 @@ class DoctorController extends Controller
 
     }
 
+    /**
+     * Get patient drug history
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientDrugHistory($patientId)
+    {
+        $drugSurgeryHistory = null;
+        $responseJson = null;
+
+        try
+        {
+            $drugSurgeryHistory = $this->hospitalService->getPatientDrugHistory($patientId);
+            //dd($drugSurgeryHistory);
+
+            if(!is_null($drugSurgeryHistory) && !empty($drugSurgeryHistory))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_DRUG_HISTORY_SUCCESS));
+                $responseJson->setCount(sizeof($drugSurgeryHistory));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_DRUG_HISTORY_FOUND));
+            }
+
+            $responseJson->setObj($drugSurgeryHistory);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DRUG_HISTORY_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+
+        return view('portal.hospital-patient-medical-past-drug-detail',compact('drugSurgeryHistory'));
+
+    }
 
     /**
      * Get patient examination dates
@@ -4623,14 +4677,7 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId);
-            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
 
-            //dd($patientDetails);
-            $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
-            $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
-            //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
-            $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
-            //dd($patientAppointment);
 
         }
         catch(HospitalException $hospitalExc)
@@ -4649,7 +4696,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-medical-details',compact('patientExaminations','patientDetails','patientPrescriptions','labTests','patientAppointment'));
+        return view('portal.hospital-patient-medical-details',compact('patientExaminations','patientDetails'));
 
     }
 

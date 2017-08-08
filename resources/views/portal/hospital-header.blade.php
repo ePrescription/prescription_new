@@ -89,9 +89,8 @@
                                         </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:void(0)"> Profile</a></li>
-                            <li><a href="javascript:void(0)"><span class="badge badge-success pull-right">5</span> Settings </a></li>
-                            <li><a href="javascript:void(0)"> Lock screen</a></li>
+                            <li><a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/profile"> Profile</a></li>
+                            <li><a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/editprofile"> Edit Profile</a></li>
                             <li class="divider"></li>
                             <li><a href="{{ URL::to('/logout') }}"> Logout</a></li>
                         </ul>

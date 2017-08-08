@@ -34,12 +34,11 @@ $profile_menu="0";
             <div class="page-content-wrapper ">
 
                 <div class="container">
-
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-body">
-                                    <h4 class="m-t-0 m-b-30">Patient Details</h4>
+                    <div class="col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
+                                <h4 class="m-t-0 m-b-30">Hospital Details</h4>
 
 
                                     @if (session()->has('message'))
@@ -144,9 +143,9 @@ $profile_menu="0";
 
 
                                 </div> <!-- panel-body -->
-                            </div> <!-- panel -->
-                        </div> <!-- col -->
-                    </div> <!-- End row -->
+                        </div> <!-- panel -->
+                    </div> <!-- col -->
+
 
                 </div><!-- container -->
 

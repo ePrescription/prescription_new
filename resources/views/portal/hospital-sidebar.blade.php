@@ -18,9 +18,8 @@
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{Session::get('AuthDisplayName')}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)"> Profile</a></li>
-                        <li><a href="javascript:void(0)"> Settings</a></li>
-                        <li><a href="javascript:void(0)"> Lock screen</a></li>
+                        <li><a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/profile"> Profile</a></li>
+                        <li><a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/editprofile"> Edit Profile</a></li>
                         <li class="divider"></li>
                         <li><a href="{{ URL::to('/logout') }}"> Logout</a></li>
                     </ul>
@@ -35,24 +34,24 @@
                 <ul> 
                     <li class="@if($dashboard_menu==1) active @endif treeview">
                         <a href="{{URL::to('/')}}/fronthospital/{{Auth::user()->id}}/dashboard">
-                            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                            <i class="fa fa-snowflake-o"></i> <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="@if($patient_menu==1) active @endif treeview">
                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
-                            <i class="fa fa-users"></i> <span>Patients</span>
+                            <i class="fa fa-wheelchair"></i> <span>Patients</span>
                         </a>
                     </li>
                     <?php if(!isset($doctor_menu)) { $doctor_menu=0; } ?>
                     <li class="@if($doctor_menu==1) active @endif treeview">
                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/doctorlist">
-                            <i class="fa fa-users"></i> <span>Doctor Fee</span>
+                            <i class="fa fa-money"></i> <span>Doctor Fee</span>
                         </a>
                     </li>
 
                     <li class="@if($doctor_menu==1) active @endif treeview">
                         <a href="{{URL::to('/')}}/fronthospital/payment/online">
-                            <i class="fa fa-users"></i> <span>Online Payment</span>
+                            <i class="fa fa-cc-visa"></i> <span>Online Payment</span>
                         </a>
                     </li>
 

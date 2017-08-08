@@ -13,38 +13,32 @@ $profile_menu="1";
 <div class="wrapper">
     @include('portal.hospital-header')
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        @include('portal.hospital-sidebar')
-        <!-- /.sidebar -->
-    </aside>
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    @include('portal.hospital-sidebar')
+    <!-- /.sidebar -->
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>Hospital Profile Details</h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <div class="content-page">
 
-                <li class="active">Hospital Profile Details</li>
-            </ol>
-            <?php //print_r($pharmacyProfile); ?>
-            <?php //print_r($cities); ?>
-        </section>
+
 
         <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;">Hospital Profile Details</h3>
-                            <!--
-                            <a href="doctorcreate.html" style="float:right;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Create New Doctor</b></button></a>
-                            -->
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
+        <div class="content">
+
+            <div class="">
+                <div class="page-header-title">
+                    <h4 class="page-title">Patient Details</h4>
+                </div>
+            </div>
+
+            <div class="page-content-wrapper ">
+
+                <div class="container">
+                    <div class="col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <h4 class="m-t-0 m-b-30">Hospital Details</h4>
                             <!-- form start -->
                             <form action="{{URL::to('/')}}/fronthospital/rest/api/hospital" role="form" method="POST">
 
@@ -98,15 +92,14 @@ $profile_menu="1";
                                 </div>
 
                             </form>
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </section><!-- /.content -->
-    </div><!-- /.content-wrapper -->
-    @include('portal.hospital-footer')
+                            </div><!-- /.panel-body -->
+                        </div><!-- /.panel -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.content -->
+        </div>
+        @include('portal.hospital-footer')
+    </div>
 </div><!-- ./wrapper -->
 
 @endsection

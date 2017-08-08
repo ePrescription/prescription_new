@@ -66,6 +66,7 @@ $time_array=array(
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
+                                        <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
                                         <h4 class="m-t-0 m-b-30">Add Patient Appointment</h4>
 
 

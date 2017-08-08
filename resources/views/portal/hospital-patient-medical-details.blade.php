@@ -39,6 +39,7 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+                                    <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
                                     <h4 class="m-t-0 m-b-30">Patient Medical Details</h4>
 
                                     <div class="row">
@@ -143,7 +144,7 @@ $profile_menu="0";
                                                     </a>
                                                 </li>
                                             </ul>
-                                            <?php /* ?>{{print_r($patientExaminations)}}<?php */ ?>
+                                            <?php /* * / ?>{{print_r($patientExaminations)}}<?php / * */ ?>
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="general">
                                                     <p>
@@ -422,7 +423,7 @@ $profile_menu="0";
             $("#patientdrugdiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/pregnancydetails';
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/drughistory';
 
             if(date!=0)
             {
