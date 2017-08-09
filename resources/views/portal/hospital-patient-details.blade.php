@@ -48,19 +48,19 @@ $profile_menu="0";
 
 
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient ID</label>
+                                                <label class="col-sm-6 control-label">PID</label>
                                                 <div class="col-sm-6">
                                                     {{$patientDetails[0]->pid}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Name</label>
+                                                <label class="col-sm-6 control-label">Name</label>
                                                 <div class="col-sm-6">
                                                     {{$patientDetails[0]->name}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Phone Number</label>
+                                                <label class="col-sm-6 control-label">Number</label>
                                                 <div class="col-sm-6">
                                                     {{$patientDetails[0]->telephone}}
                                                 </div>
@@ -72,25 +72,25 @@ $profile_menu="0";
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Age</label>
+                                                <label class="col-sm-6 control-label">Age</label>
                                                 <div class="col-sm-6">
                                                     {{$patientDetails[0]->age}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Gender</label>
+                                                <label class="col-sm-6 control-label">Gender</label>
                                                 <div class="col-sm-6">
                                                     @if($patientDetails[0]->gender==1) Male @else Female @endif
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Relationship</label>
+                                                <label class="col-sm-6 control-label">Relationship</label>
                                                 <div class="col-sm-6">
                                                     {{$patientDetails[0]->relationship}}
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Relation Name</label>
+                                                <label class="col-sm-6 control-label">Relation Name</label>
                                                 <div class="col-sm-6">
                                                     {{$patientDetails[0]->spouseName}}
                                                 </div>
