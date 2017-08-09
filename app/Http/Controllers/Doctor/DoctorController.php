@@ -4077,6 +4077,7 @@ class DoctorController extends Controller
         $subSymptoms= HospitalServiceFacade::getSubSymptomsForMainSymptoms($mainSymptomsId);
 
         $OptionHTML = "";
+        $OptionHTML .= '<option value="0">Sub Symptom</option>';
         foreach($subSymptoms as $subSymptomValue)
         {
             $OptionHTML .= '<option value="'.$subSymptomValue->id.'">'.$subSymptomValue->sub_symptom_name.'</option>';
@@ -4100,6 +4101,7 @@ class DoctorController extends Controller
         $symptomsName = HospitalServiceFacade::getSymptomsForSubSymptoms($subSymptomsId);
 
         $OptionHTML = "";
+        $OptionHTML .= '<option value="0">Symptom Name</option>';
         foreach ($symptomsName as $symptomsNameValue) {
             $OptionHTML .= '<option value="' . $symptomsNameValue->id . '">' . $symptomsNameValue->symptom_name . '</option>';
         }

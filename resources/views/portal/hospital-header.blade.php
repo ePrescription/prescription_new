@@ -83,7 +83,7 @@
                     </li>
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
-                            <img src="{{ URL::to('/') }}/theme/assets/images/users/avatar-1.jpg" alt="user-img" class="img-circle">
+                            <img src="{{ URL::to('/') }}/theme/assets/images/users/hospital.png" alt="user-img" class="img-circle">
                                         <span class="profile-username">
                                             {{Session::get('AuthDisplayName')}} <span class="caret"></span>
                                         </span>

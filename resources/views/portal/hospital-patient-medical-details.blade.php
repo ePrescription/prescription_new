@@ -84,13 +84,13 @@ $profile_menu="0";
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-3 control-label">Patient Relationship</label>
+                                                <label class="col-sm-3 control-label">Relationship</label>
                                                 <div class="col-sm-9">
                                                     {{$patientDetails[0]->relationship}}
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Relation Name</label>
+                                                <label class="col-sm-6 control-label">Relation Name</label>
                                                 <div class="col-sm-6">
                                                     {{$patientDetails[0]->spouseName}}
                                                 </div>
@@ -155,6 +155,7 @@ $profile_menu="0";
                                                 <div class="tab-pane active" id="general">
                                                     <p>
                                                     <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectgerenal" onchange="javascript:ajaxloadgeneraldetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['generalExaminationDates'] as $generalExaminationDate)
@@ -171,6 +172,7 @@ $profile_menu="0";
                                                 <div class="tab-pane" id="family">
                                                     <p>
                                                     <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectfamily" onchange="javascript:ajaxloadfamilydetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['familyIllnessDates'] as $familyIllnessDates)
@@ -188,6 +190,7 @@ $profile_menu="0";
 
                                                     <p>
                                                     <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectpast" onchange="javascript:ajaxloadpastdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['pastIllnessDates'] as $pastIllnessDates)
@@ -204,6 +207,7 @@ $profile_menu="0";
                                                 <div class="tab-pane" id="personal">
                                                     <p>
                                                     <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectpersonal" onchange="javascript:ajaxloadpersonaldetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['personalHistoryDates'] as $personalHistoryDates)
@@ -220,6 +224,7 @@ $profile_menu="0";
                                                 <div class="tab-pane" id="scan">
                                                     <p>
                                                     <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectscan" onchange="javascript:ajaxloadscandetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['scanDates'] as $scanDates)
@@ -236,6 +241,7 @@ $profile_menu="0";
                                                 <div class="tab-pane" id="drug">
                                                     <p>
                                                     <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Data</label>
                                                         <select class="form-control" id="selectdrug" onchange="javascript:ajaxloaddrugdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             <option value="1">GET SYMPTOM</option>
@@ -250,6 +256,7 @@ $profile_menu="0";
                                                 <div class="tab-pane" id="pregnancy">
                                                     <p>
                                                     <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectpregnancy" onchange="javascript:ajaxloadpregnancydetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['pregnancyDates'] as $pregnancyDates)
@@ -266,6 +273,7 @@ $profile_menu="0";
                                                 <div class="tab-pane" id="symptom">
                                                     <p>
                                                     <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectdrug" onchange="javascript:ajaxloadsymptomdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['symptomDates'] as $symptomDates)

@@ -42,74 +42,6 @@ $profile_menu="0";
 
                 <div class="container">
 
-                    <div class="row hidden">
-                        <div class="col-xs-12">
-                            <div class="box">
-                                <div class="box-header">
-                                    <h3 class="box-title" style="line-height:30px;">Doctor Patients Details List</h3>
-                                    <!--
-                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/addpatient" style="float:right;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Create New Patient</b></button></a>
--->
-                                </div><!-- /.box-header -->
-                                <div class="box-body">
-                                    @if (session()->has('message'))
-                                        <div class="col_full login-title">
-                                <span style="color:red;">
-                                    <b>{{session('message')}}</b>
-                                </span>
-                                        </div>
-                                    @endif
-
-                                    @if (session()->has('success'))
-                                        <div class="col_full login-title">
-                                <span style="color:green;">
-                                    <b>{{session('success')}}</b>
-                                </span>
-                                        </div>
-                                    @endif
-
-                                    <div>
-                                        PID ( Patient Identification)
-                                    </div>
-                                    <table id="example2" class="table table-bordered table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>Patient ID</th>
-                                            <th>Patient Name in Full</th>
-                                            <th>Patient Mobile No</th>
-                                            <th>Patient Age</th>
-                                            <th>Patient's gender</th>
-                                            <th></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($patients as $patient)
-                                            <tr>
-                                                <td>{{$patient->pid}}</td>
-                                                <td>{{$patient->name}}</td>
-                                                <td>{{$patient->telephone}}</td>
-                                                <td>{{$patient->age}}</td>
-                                                <td>@if($patient->gender==1) Male @else Female @endif</td>
-                                                <td>
-
-                                                    <!--
-<a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/addappointment" style="float:right;">Appointment</a>
-                                        <a href="#doctorview.html"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
--->
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-
-                                    </table>
-
-                                </div><!-- /.box-body -->
-                            </div><!-- /.box -->
-
-
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="panel panel-primary">
@@ -141,11 +73,11 @@ $profile_menu="0";
                                             <table id="datatable" class="table table-striped table-bordered">
                                                 <thead>
                                                 <tr>
-                                                    <th>Patient ID</th>
-                                                    <th>Patient Name in Full</th>
-                                                    <th>Patient Mobile No</th>
-                                                    <th>Patient Age</th>
-                                                    <th>Patient's gender</th>
+                                                    <th>PID</th>
+                                                    <th>Name in Full</th>
+                                                    <th>Mobile No</th>
+                                                    <th>Age</th>
+                                                    <th>Gender</th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>

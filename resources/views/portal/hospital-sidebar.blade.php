@@ -12,7 +12,7 @@
 
         <div class="user-details">
             <div class="text-center">
-                <img src="{{ URL::to('/') }}/theme/assets/images/users/avatar-1.jpg" alt="" class="img-circle">
+                <img src="{{ URL::to('/') }}/theme/assets/images/users/hospital.png" alt="" class="img-circle">
             </div>
             <div class="user-info">
                 <div class="dropdown">

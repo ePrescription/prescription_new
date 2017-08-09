@@ -12,15 +12,12 @@
 
         <div class="user-details">
             <div class="text-center">
-                <img src="{{ URL::to('/') }}/theme/assets/images/users/avatar-1.jpg" alt="" class="img-circle">
+                <img src="{{ URL::to('/') }}/theme/assets/images/users/doctor.png" alt="" class="img-circle">
             </div>
             <div class="user-info">
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{Session::get('AuthDisplayName')}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)"> Profile</a></li>
-                        <li><a href="javascript:void(0)"> Settings</a></li>
-                        <li><a href="javascript:void(0)"> Lock screen</a></li>
                         <li class="divider"></li>
                         <li><a href="{{ URL::to('/logout') }}"> Logout</a></li>
                     </ul>
