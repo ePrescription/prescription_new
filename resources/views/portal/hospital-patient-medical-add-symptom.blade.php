@@ -190,7 +190,7 @@ $profile_menu="0";
     <script type="text/javascript">
         $(document).ready(function(){
 
-            $('#mainsymptombox').on("change",function () {
+            $('body').on("change","#mainsymptombox", function () {
                  //alert('HI');
                  var BASEURL = "{{ URL::to('/') }}/";
                  var categoryId = $(this).find('option:selected').val();
@@ -209,7 +209,7 @@ $profile_menu="0";
             });
 
 
-            $('#subsymptombox').on("change",function () {
+            $('body').on("change", "#subsymptombox", function () {
                 //alert('HI');
                 var BASEURL = "{{ URL::to('/') }}/";
                 var categoryId = $(this).find('option:selected').val();
