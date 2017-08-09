@@ -2247,8 +2247,11 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $query = DB::table('sub_symptoms as ss')->where('ss.status', '=', 1);
-            $query->where('ss.main_symptom_id', $mainSymptomsId);
-            $query->select('ss.id', 'ss.sub_symptom_name', 'ss.sub_symptom_code');
+            if($mainSymptomsId>0)
+            {
+                $query->where('ss.main_symptom_id', $mainSymptomsId);
+            }
+            $query->select('ss.id', 'ss.main_symptom_id', 'ss.sub_symptom_name', 'ss.sub_symptom_code');
             $subSymptoms = $query->get();
         }
         catch(QueryException $queryEx)
@@ -2278,8 +2281,11 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $query = DB::table('symptoms as s')->where('s.status', '=', 1);
-            $query->where('s.sub_symptom_id', $subSymptomId);
-            $query->select('s.id', 's.symptom_name', 's.symptom_code');
+            if($subSymptomId>0)
+            {
+                $query->where('s.sub_symptom_id', $subSymptomId);
+            }
+            $query->select('s.id', 's.sub_symptom_id', 's.symptom_name', 's.symptom_code');
             $symptoms = $query->get();
         }
         catch(QueryException $queryEx)

@@ -70,10 +70,10 @@ $profile_menu="0";
                                         <thead>
                                         <tr>
                                             <th>Patient ID</th>
-                                            <th>Patient Name in Full</th>
-                                            <th>Patient Mobile No</th>
-                                            <th>Patient Age</th>
-                                            <th>Patient's gender</th>
+                                            <th>Name in Full</th>
+                                            <th>Mobile No</th>
+                                            <th>Age</th>
+                                            <th>Gender</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>

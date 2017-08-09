@@ -48,44 +48,44 @@ $profile_menu="0";
 
 
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient ID</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">PID</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->pid}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Name</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Name</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->name}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Phone Number</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Number</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->telephone}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">E-Mail</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">E-Mail</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->email}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Age</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Age</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->age}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Gender</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Gender</label>
+                                                <div class="col-sm-9">
                                                     @if($patientDetails[0]->gender==1) Male @else Female @endif
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Patient Relationship</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Patient Relationship</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->relationship}}
                                                 </div>
                                             </div>
@@ -141,6 +141,12 @@ $profile_menu="0";
                                                     <a href="#pregnancy" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Pregnancy</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#symptom" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                        <span class="hidden-xs">Symptom</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -232,9 +238,7 @@ $profile_menu="0";
                                                     <div class="col-md-12">
                                                         <select class="form-control" id="selectdrug" onchange="javascript:ajaxloaddrugdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['scanDates'] as $scanDates)
-                                                                <option value="{{$scanDates->scan_date}}">{{$scanDates->scan_date}}</option>
-                                                            @endforeach
+                                                            <option value="1">GET SYMPTOM</option>
                                                         </select>
 
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-drug" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Past Drug History </b></button></a>
@@ -257,6 +261,22 @@ $profile_menu="0";
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientpregnancydiv"></div>
+                                                    </p>
+                                                </div>
+                                                <div class="tab-pane" id="symptom">
+                                                    <p>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="selectdrug" onchange="javascript:ajaxloadsymptomdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['symptomDates'] as $symptomDates)
+                                                                <option value="{{$symptomDates->patient_symptom_date}}">{{$symptomDates->patient_symptom_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-symptom" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Symptoms </b></button></a>
+                                                    </div>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientsymptomdiv"></div>
                                                     </p>
                                                 </div>
                                             </div>
@@ -464,6 +484,31 @@ $profile_menu="0";
             else
             {
                 $("#patientpregnancydiv").html("");
+            }
+
+        }
+
+        function ajaxloadsymptomdetails(pid,date) {
+
+            $("#patientsymptomdiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/symptomdetails';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientsymptomdiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientsymptomdiv").html("");
             }
 
         }
