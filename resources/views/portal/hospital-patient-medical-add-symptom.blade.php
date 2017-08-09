@@ -190,7 +190,7 @@ $profile_menu="0";
     <script type="text/javascript">
         $(document).ready(function(){
 
-            $('body').on("change","#mainsymptombox", function () {
+            $("#mainsymptombox").on("change", function () {
                  //alert('HI');
                  var BASEURL = "{{ URL::to('/') }}/";
                  var categoryId = $(this).find('option:selected').val();
@@ -208,8 +208,27 @@ $profile_menu="0";
                  });
             });
 
+            $('body').on("change","#mainsymptombox", function () {
+                //alert('HI');
+                var BASEURL = "{{ URL::to('/') }}/";
+                var categoryId = $(this).find('option:selected').val();
+                var status = 1;
+                var callurl = BASEURL + 'fronthospital/rest/api/getsubsymptom';
+                console.log(categoryId+' '+callurl);
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    context: this,
+                    data: {"categoryId": categoryId, "status": status},
+                    success: function (data) {
+                        console.log(data);
+                        //$("#subsymptombox").html(data);
+                        $(this).parents( "div.remove-doc-box" ).find("#subsymptombox").html(data);
+                    }
+                });
+            });
 
-            $('body').on("change", "#subsymptombox", function () {
+            $("#subsymptombox").on("change",function () {
                 //alert('HI');
                 var BASEURL = "{{ URL::to('/') }}/";
                 var categoryId = $(this).find('option:selected').val();
@@ -223,6 +242,25 @@ $profile_menu="0";
                     success: function (data) {
                         console.log(data);
                         $("#symptombox").html(data);
+                    }
+                });
+            });
+
+            $('body').on("change", "#subsymptombox", function () {
+                //alert('HI');
+                var BASEURL = "{{ URL::to('/') }}/";
+                var categoryId = $(this).find('option:selected').val();
+                var status = 1;
+                var callurl = BASEURL + 'fronthospital/rest/api/getsymptomname';
+                console.log(categoryId+' '+callurl);
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    context: this,
+                    data: {"categoryId": categoryId, "status": status},
+                    success: function (data) {
+                        console.log(data);
+                        $(this).parents( "div.remove-doc-box" ).find("#symptombox").html(data);
                     }
                 });
             });
