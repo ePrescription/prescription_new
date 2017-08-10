@@ -5056,4 +5056,73 @@ class DoctorController extends Controller
 
     }
 
+
+    //LAB
+
+
+    public function PatientLabDetailsByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-lab-details',compact('patientExaminations','patientDetails'));
+
+    }
+
+
+    public function AddPatientLabBloodTestsByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientBloodTests = null;
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+
+            $patientBloodTests = DB::select('select * from blood_examination where status = ?', [1]);
+            //dd($blood_examination);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-lab-add-blood',compact('patientBloodTests','patientDetails'));
+
+    }
 }
