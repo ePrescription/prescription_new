@@ -25,7 +25,7 @@ $profile_menu="1";
 
             <div class="">
                 <div class="page-header-title">
-                    <h4 class="page-title">Patient Details</h4>
+                    <h4 class="page-title">Hospital Details</h4>
                 </div>
             </div>
 
