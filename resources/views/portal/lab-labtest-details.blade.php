@@ -199,7 +199,7 @@ $profile_menu="0";
 
             </div> <!-- content -->
 
-            @include('portal.hospital-footer')
+            @include('portal.lab-footer')
 
         </div>
         <!-- End Right content here -->

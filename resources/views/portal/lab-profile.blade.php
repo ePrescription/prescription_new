@@ -27,7 +27,7 @@ $profile_menu="1";
 
             <div class="">
                 <div class="page-header-title">
-                    <h4 class="page-title">Lab Details</h4>
+                    <h4 class="page-title">Lab Profile Details</h4>
                 </div>
             </div>
 
@@ -40,7 +40,7 @@ $profile_menu="1";
 
                     <div class="panel panel-primary">
                         <div class="panel-body">
-                            <h4 class="m-t-0 m-b-30">Lab Details</h4>
+                            <h4 class="m-t-0 m-b-30">Lab Profile Details</h4>
 
                             <div class="col-md-12">
                                 <style>.control-label{line-height:32px;}</style>
@@ -118,7 +118,7 @@ $profile_menu="1";
 
         </div> <!-- content -->
 
-        @include('portal.doctor-footer')
+        @include('portal.lab-footer')
 
     </div>
     <!-- End Right content here -->

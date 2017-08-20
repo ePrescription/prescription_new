@@ -111,7 +111,7 @@ $profile_menu="0";
 
             </div> <!-- content -->
 
-        @include('portal.doctor-footer')
+        @include('portal.lab-footer')
 
         </div>
 <!-- End Right content here -->

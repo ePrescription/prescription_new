@@ -11,42 +11,38 @@ $patient_menu="0";
 $profile_menu="1";
 ?>
 @section('content')
-<div class="wrapper">
-    @include('portal.pharmacy-header')
-    <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
+    <div class="wrapper">
+        @include('portal.pharmacy-header')
+        <!-- Left side column. contains the logo and sidebar -->
+
         <!-- sidebar: style can be found in sidebar.less -->
         @include('portal.pharmacy-sidebar')
         <!-- /.sidebar -->
-    </aside>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>Pharmacy Profile Details</h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <!-- Content Wrapper. Contains page content -->
 
-                <li class="active">Pharmacy Profile Details</li>
-            </ol>
-            <?php //print_r($labProfile); ?>
-        </section>
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
 
-        <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;">Pharmacy Profile Details</h3>
-                            <!--
-                            <a href="doctorcreate.html" style="float:right;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Create New Doctor</b></button></a>
-                            -->
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
+                <div class="">
+                    <div class="page-header-title">
+                        <h4 class="page-title">Pharmacy Profile Details</h4>
+                    </div>
+                </div>
 
-                            <div class="col-md-12">
+                <div class="page-content-wrapper ">
+
+                    <div class="container">
+
+                        <div class="row">
+                            <div class="col-xs-12">
+
+                                <div class="panel panel-primary">
+                                    <div class="panel-body">
+                                        <h4 class="m-t-0 m-b-30">Pharmacy Profile Details</h4>
+
+                                        <div class="col-md-12">
                                 <style>.control-label{line-height:32px;}</style>
                                 @if(!empty($message))
                                     <p style="color:green;">{{$message}}</p>
@@ -100,18 +96,28 @@ $profile_menu="1";
 
 
                             </div>
-                            <div class="col-md-1"></div>
 
 
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
 
 
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </section><!-- /.content -->
-    </div><!-- /.content-wrapper -->
-    @include('portal.pharmacy-footer')
-</div><!-- ./wrapper -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+
+                    </div><!-- container -->
+
+                </div> <!-- Page content Wrapper -->
+
+            </div> <!-- content -->
+
+            @include('portal.pharmacy-footer')
+
+        </div>
+        <!-- End Right content here -->
+
+
+
+    </div><!-- ./wrapper -->
 
 @endsection

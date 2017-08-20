@@ -1,4 +1,4 @@
-@extends('layout.master-pharmacy')
+@extends('layout.master-pharmacy-inner')
 
 @section('title', 'ePrescription and Lab Tests Application')
 
@@ -14,68 +14,170 @@ $profile_menu="0";
 <div class="wrapper">
     @include('portal.pharmacy-header')
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        @include('portal.pharmacy-sidebar')
-        <!-- /.sidebar -->
-    </aside>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Dashboard
-                <small>Control panel</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Dashboard</li>
-            </ol>
-        </section>
+    <!-- sidebar: style can be found in sidebar.less -->
+    @include('portal.pharmacy-sidebar')
+    <!-- /.sidebar -->
 
-        <!-- Main content -->
-        <section class="content">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
+    <!-- Start right Content here -->
 
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h4>Prescriptions</h4>
-                            <p></p>
-                            <p></p>
+    <div class="content-page">
+        <!-- Start content -->
+        <div class="content">
+
+            <div class="">
+                <div class="page-header-title">
+                    <h4 class="page-title">Dashboard</h4>
+                </div>
+            </div>
+
+            <div class="page-content-wrapper ">
+
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title text-muted m-t-10 font-light">Total Subscription</h4>
+                                </div>
+                                <div class="panel-body p-t-10">
+                                    <h2 class="m-t-0 m-b-15 text-warning font-light"><i class="mdi mdi-arrow-down-bold-circle-outline m-r-10"></i>89,52,125</h2>
+                                    <p class=" m-b-0 m-t-20 text-muted"><b>48%</b> From Last 24 Hours</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="icon">
-                            <i class="fa fa-pencil-square-o"></i>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title text-muted m-t-10 font-light">Unique Visitors</h4>
+                                </div>
+                                <div class="panel-body p-t-10">
+                                    <h2 class="m-t-0 m-b-15 text-success font-light"><i class="mdi mdi-arrow-up-bold-circle-outline m-r-10"></i>4,52,564</h2>
+                                    <p class="text-muted m-b-0 m-t-20"><b>22%</b> From Last 24 Hours</p>
+                                </div>
+                            </div>
                         </div>
-                        <a href="{{URL::to('/')}}/pharmacy/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/prescriptions" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title text-muted m-t-10 font-light">Order Status</h4>
+                                </div>
+                                <div class="panel-body p-t-10">
+                                    <h2 class="m-t-0 m-b-15 text-purple font-light"><i class="mdi mdi-arrow-up-bold-circle-outline m-r-10"></i>65,21,542</h2>
+                                    <p class="m-b-0 m-t-20 text-muted"><b>42%</b> Orders in Last 10 months</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title text-muted m-t-10 font-light">Monthly Earnings</h4>
+                                </div>
+                                <div class="panel-body p-t-10">
+                                    <h2 class="m-t-0 m-b-15 text-pink font-light"><i class="mdi mdi-arrow-down-bold-circle-outline m-r-10"></i>56,21,256</h2>
+                                    <p class="text-muted m-b-0 m-t-20"><b>35%</b> From Last 1 Month</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div><!-- ./col -->
 
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h4>Patients</h4>
-                            <p></p>
-                            <p></p>
+                    <div class="row">
+
+                        <div class="col-lg-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <h4 class="m-t-0">Monthly Earnings</h4>
+
+                                    <ul class="list-inline widget-chart m-t-20 text-center">
+                                        <li>
+                                            <h4 class=""><b>3654</b></h4>
+                                            <p class="text-muted m-b-0">Marketplace</p>
+                                        </li>
+                                        <li>
+                                            <h4 class=""><b>954</b></h4>
+                                            <p class="text-muted m-b-0">Last week</p>
+                                        </li>
+                                        <li>
+                                            <h4 class=""><b>8462</b></h4>
+                                            <p class="text-muted m-b-0">Last Month</p>
+                                        </li>
+                                    </ul>
+
+                                    <div id="morris-donut-example" style="height: 300px"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="icon">
-                            <i class="fa fa-users"></i>
+
+                        <div class="col-lg-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <h4 class="m-t-0">Revenue</h4>
+
+                                    <ul class="list-inline widget-chart m-t-20 text-center">
+                                        <li>
+                                            <h4 class=""><b>5248</b></h4>
+                                            <p class="text-muted m-b-0">Marketplace</p>
+                                        </li>
+                                        <li>
+                                            <h4 class=""><b>321</b></h4>
+                                            <p class="text-muted m-b-0">Last week</p>
+                                        </li>
+                                        <li>
+                                            <h4 class=""><b>964</b></h4>
+                                            <p class="text-muted m-b-0">Last Month</p>
+                                        </li>
+                                    </ul>
+
+                                    <div id="morris-bar-example" style="height: 300px"></div>
+                                </div>
+                            </div>
                         </div>
-                        <a href="{{URL::to('/')}}/pharmacy/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+
+                        <div class="col-lg-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <h4 class="m-t-0">Email Sent</h4>
+
+                                    <ul class="list-inline widget-chart m-t-20 text-center">
+                                        <li>
+                                            <h4 class=""><b>3652</b></h4>
+                                            <p class="text-muted m-b-0">Marketplace</p>
+                                        </li>
+                                        <li>
+                                            <h4 class=""><b>5421</b></h4>
+                                            <p class="text-muted m-b-0">Last week</p>
+                                        </li>
+                                        <li>
+                                            <h4 class=""><b>9652</b></h4>
+                                            <p class="text-muted m-b-0">Last Month</p>
+                                        </li>
+                                    </ul>
+
+                                    <div id="morris-area-example" style="height: 300px"></div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                </div><!-- ./col -->
+                    <!-- end row -->
 
-            </div><!-- /.row -->
-            <!-- Main row -->
 
-        </section><!-- /.content -->
-    </div><!-- /.content-wrapper -->
-    @include('portal.pharmacy-footer')
+
+                </div><!-- container -->
+
+
+            </div> <!-- Page content Wrapper -->
+
+        </div> <!-- content -->
+
+        @include('portal.doctor-footer')
+
+    </div>
+    <!-- End Right content here -->
 </div><!-- ./wrapper -->
 
-</body>
-</html>
+@endsection

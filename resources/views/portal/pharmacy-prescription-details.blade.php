@@ -11,391 +11,214 @@ $patient_menu="0";
 $profile_menu="0";
 ?>
 @section('content')
-<div class="wrapper">
-    @include('portal.pharmacy-header')
-    <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
+    <div class="wrapper">
+        @include('portal.pharmacy-header')
+        <!-- Left side column. contains the logo and sidebar -->
         <!-- sidebar: style can be found in sidebar.less -->
         @include('portal.pharmacy-sidebar')
         <!-- /.sidebar -->
-    </aside>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>Prescriptions Details</h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <!-- Content Wrapper. Contains page content -->
 
-                <li class="active">Prescriptions Details</li>
-            </ol>
-            <?php //print_r($prescriptionDetails);exit; ?>
-        </section>
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
 
-        <!-- Main content -->
-        <div style="width:98%;float: right;padding:10px;margin:10px;"><a href="" style="float: right;" ><button type="button" class="btn btn-success btn-xs" onclick="javascript:printDiv();"><i class="fa fa-print"></i> PRINT</button></a></div>
-        <!-- Main content -->
-        <section id="PagePrintX" class="content">
-            <div class="row">
-
-                <div class="col-xs-6">
-
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;width:500px;float:left;">Patient Details</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
-
-                            <div class="col-md-12">
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Patient ID</label>
-                                    <div class="col-sm-6">
-                                        {{$prescriptionDetails['PatientProfile'][0]->pid}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Patient Name</label>
-                                    <div class="col-sm-6">
-                                        {{$prescriptionDetails['PatientProfile'][0]->name}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Phone Number</label>
-                                    <div class="col-sm-6">
-                                        {{$prescriptionDetails['PatientProfile'][0]->telephone}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">E-Mail</label>
-                                    <div class="col-sm-6">
-                                        {{$prescriptionDetails['PatientProfile'][0]->email}}
-                                    </div>
-                                </div>
-
-
-
-
-                            </div>
-                            <div class="col-md-1"></div>
-
-
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-                </div>
-                <div class="col-xs-6">
-
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;width:500px;float:left;">Doctor Details</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
-
-                            <div class="col-md-12">
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Doctor ID</label>
-                                    <div class="col-sm-6">
-                                        {{$prescriptionDetails['DoctorProfile'][0]->did}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Doctor Name</label>
-                                    <div class="col-sm-6">
-                                        {{$prescriptionDetails['DoctorProfile'][0]->name}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">Phone Number</label>
-                                    <div class="col-sm-6">
-                                        {{$prescriptionDetails['DoctorProfile'][0]->telephone}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-6 control-label">E-Mail</label>
-                                    <div class="col-sm-6">
-                                        {{$prescriptionDetails['DoctorProfile'][0]->email}}
-                                    </div>
-                                </div>
-
-
-
-
-                            </div>
-                            <div class="col-md-1"></div>
-
-
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-                </div>
-                <div class="col-xs-12">
-
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;width:500px;float:left;">Drugs Details</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>TRADE</th>
-                                    <th>FORMULATION</th>
-                                    <th>DOSAGE</th>
-                                    <th>DAYS</th>
-                                    <th>INTAKE</th>
-                                    <th>Morning - Afternoon - Night</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($prescriptionDetails['PatientDrugDetails'] as $prescription)
-                                    <tr>
-                                        <td>{{$prescription->trade_name}}</td>
-                                        <td>{{$prescription->formulation_name}}</td>
-                                        <td>{{$prescription->dosage}}</td>
-                                        <td>{{$prescription->no_of_days}}</td>
-                                        <td>{{$prescription->intake_form}}</td>
-                                        <td>
-                                            {{$prescription->morning}} - {{$prescription->afternoon}} - {{$prescription->night}}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-
-                            </table>
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-                </div><!-- /.col -->
-                <div class="col-xs-12">
-
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;width:500px;float:left;">Notes</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
-
-                            <div class="col-md-12">
-                                <div class="form-group col-md-12">
-                                    <div class="col-sm-12">
-                                        @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
-                                            {{$prescriptioninfo->notes}}
-                                        @endforeach
-                                    </div>
-                                </div>
-
-
-
-                            </div>
-                            <div class="col-md-1"></div>
-
-
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-                </div>
-            </div><!-- /.row -->
-        </section><!-- /.content -->
-
-
-
-        <!-- PRINT OPEN -->
-
-        <section id="PagePrint" class="content hidden" style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">
-            <div class="row">
-
-                <div class="col-xs-12">
-                    <div style="width:100%;float:left;">
-                        <h2 style="padding: 0px;margin: 8px;color: #FFF; font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight: bold;    font-size: 18px;">
-                            Dr All Caps - Medical Prescription<br/>
-                            {{Session::get('AuthDisplayName')}} - {{Session::get('LoginDoctorDetails')}}
-                            <br/>
-                            {{Session::get('LoginHospitalDetails')}}
-
-                        </h2>
+                <div class="">
+                    <div class="page-header-title">
+                        <h4 class="page-title">Prescriptions Details</h4>
                     </div>
                 </div>
 
-                <div class="col-xs-6"  style="width:50%;float:left;font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;font-size: 16px;">
+                <div class="page-content-wrapper ">
 
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;width:500px;float:left;">Patient Details</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
+                    <div class="container">
 
-                            <div class="col-md-12" style="width:100%;float:left;">
-                                <div class="form-group col-md-6" style="width:100%;float:left;line-height:20px;">
-                                    <label class="col-sm-6 control-label" style="width:50%;float:left;">Patient ID</label>
-                                    <div class="col-sm-6" style="width:50%;float:left;">
-                                        {{$prescriptionDetails['PatientProfile'][0]->pid}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6" style="width:100%;float:left;line-height:20px;">
-                                    <label class="col-sm-6 control-label" style="width:50%;float:left;">Patient Name</label>
-                                    <div class="col-sm-6" style="width:50%;float:left;">
-                                        {{$prescriptionDetails['PatientProfile'][0]->name}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6" style="width:100%;float:left;line-height:20px;">
-                                    <label class="col-sm-6 control-label" style="width:50%;float:left;">Phone Number</label>
-                                    <div class="col-sm-6" style="width:50%;float:left;">
-                                        {{$prescriptionDetails['PatientProfile'][0]->telephone}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6" style="width:100%;float:left;line-height:20px;">
-                                    <label class="col-sm-6 control-label" style="width:50%;float:left;">E-Mail</label>
-                                    <div class="col-sm-6" style="width:50%;float:left;">
-                                        {{$prescriptionDetails['PatientProfile'][0]->email}}
-                                    </div>
-                                </div>
-
-
-
-
-                            </div>
-                            <div class="col-md-1"></div>
-
-
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-                </div>
-                <div class="col-xs-6"  style="width:50%;float:left;font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;font-size: 16px;">
-
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;width:500px;float:left;">Doctor Details</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
-
-                            <div class="col-md-12" style="width:100%;float:left;">
-                                <div class="form-group col-md-6" style="width:100%;float:left;line-height:20px;">
-                                    <label class="col-sm-6 control-label" style="width:50%;float:left;">Doctor ID</label>
-                                    <div class="col-sm-6" style="width:50%;float:left;">
-                                        {{$prescriptionDetails['DoctorProfile'][0]->did}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6" style="width:100%;float:left;line-height:20px;">
-                                    <label class="col-sm-6 control-label" style="width:50%;float:left;">Doctor Name</label>
-                                    <div class="col-sm-6" style="width:50%;float:left;">
-                                        {{$prescriptionDetails['DoctorProfile'][0]->name}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6" style="width:100%;float:left;line-height:20px;">
-                                    <label class="col-sm-6 control-label" style="width:50%;float:left;">Phone Number</label>
-                                    <div class="col-sm-6" style="width:50%;float:left;">
-                                        {{$prescriptionDetails['DoctorProfile'][0]->telephone}}
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6" style="width:100%;float:left;line-height:20px;">
-                                    <label class="col-sm-6 control-label" style="width:50%;float:left;">E-Mail</label>
-                                    <div class="col-sm-6" style="width:50%;float:left;">
-                                        {{$prescriptionDetails['DoctorProfile'][0]->email}}
-                                    </div>
-                                </div>
-
-
-
-
-                            </div>
-                            <div class="col-md-1"></div>
-
-
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-                </div>
-                <div class="col-xs-12">
-
-                    <div class="box">
-                        <div class="box-header" style="width:100%;float:left;font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;font-size: 18px;">
-                            <h3 class="box-title" style="line-height:30px;width:500px;float:left;">Drug Details</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body" style="width:100%;float:left;font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;font-size: 16px;">
-                            <table id="example2" class="table table-bordered table-hover" border="0" style="width:100%;border:1px solid #000;padding:5px;margin:5px;">
-                                <thead>
-                                <tr style="width:100%;line-height:30px;">
-                                    <th  style="width:20%;    text-align: left;line-height:30px;">TRADE NAME</th>
-                                    <th  style="width:20%;    text-align: left;line-height:30px;">FORMULATIONS</th>
-                                    <th  style="width:15%;    text-align: left;line-height:30px;">TYPE</th>
-                                    <th  style="width:10%;    text-align: left;line-height:30px;">DOSAGE</th>
-                                    <th  style="width:10%;    text-align: left;line-height:30px;">DAYS</th>
-                                    <th  style="width:25%;    text-align: left;line-height:30px;">PERIODICITY / INTERVALS</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($prescriptionDetails['PatientDrugDetails'] as $prescription)
-                                    <tr style="width:100%;line-height:30px;">
-                                        <td>{{$prescription->trade_name}}</td>
-                                        <td>{{$prescription->formulation_name}}</td>
-                                        <td>{{$prescription->intake_form}}</td>
-                                        <td>{{$prescription->dosage}}</td>
-                                        <td>{{$prescription->no_of_days}}</td>
-
-                                        <td>
-                                            {{$prescription->morning}} - {{$prescription->afternoon}} - {{$prescription->night}}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-
-                            </table>
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-                </div><!-- /.col -->
-
-                <div class="col-xs-12">
-
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title" style="line-height:30px;width:100%;float:left;font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;font-size: 18px;">Notes</h3>
-                        </div><!-- /.box-header -->
-                        <div class="box-body">
-
+                        <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group col-md-12">
-                                    <div class="col-sm-12" style="line-height:30px;width:100%;float:left;font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;font-size: 16px;">
-                                        @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
-                                            {{$prescriptioninfo->notes}}
-                                        @endforeach
-                                    </div>
-                                </div>
+                                <div class="panel panel-default">
+                                    <!-- <div class="panel-heading">
+                                        <h4>Invoice</h4>
+                                    </div> -->
+                                    <div class="panel-body">
+
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="invoice-title">
+                                                    <h4 class="pull-right">Prescription ID # {{$prescriptionDetails['PrescriptionInfo'][0]->PRID}}</h4>
+                                                    <h3 class="m-t-0">Prescription Details</h3>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <address>
+                                                            <strong>Patient Details:</strong><br>
+
+                                                            <div class="col-md-12">
+                                                                <label class="col-sm-6 control-label">Patient ID</label>
+                                                                <div class="col-sm-6">
+                                                                    {{$prescriptionDetails['PatientProfile'][0]->pid}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <label class="col-sm-6 control-label">Patient Name</label>
+                                                                <div class="col-sm-6">
+                                                                    {{$prescriptionDetails['PatientProfile'][0]->name}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <label class="col-sm-6 control-label">Phone Number</label>
+                                                                <div class="col-sm-6">
+                                                                    {{$prescriptionDetails['PatientProfile'][0]->telephone}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <label class="col-sm-6 control-label">E-Mail</label>
+                                                                <div class="col-sm-6">
+                                                                    {{$prescriptionDetails['PatientProfile'][0]->email}}
+                                                                </div>
+                                                            </div>
+                                                        </address>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <address>
+                                                            <strong>Doctor Details:</strong><br>
+                                                            <div class="col-md-12">
+                                                                <label class="col-sm-6 contr1ol-label">Doctor ID</label>
+                                                                <div class="col-sm-6">
+                                                                    {{$prescriptionDetails['DoctorProfile'][0]->did}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <label class="col-sm-6 control-label">Doctor Name</label>
+                                                                <div class="col-sm-6">
+                                                                    {{$prescriptionDetails['DoctorProfile'][0]->name}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <label class="col-sm-6 control-label">Phone Number</label>
+                                                                <div class="col-sm-6">
+                                                                    {{$prescriptionDetails['DoctorProfile'][0]->telephone}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <label class="col-sm-6 control-label">E-Mail</label>
+                                                                <div class="col-sm-6">
+                                                                    {{$prescriptionDetails['DoctorProfile'][0]->email}}
+                                                                </div>
+                                                            </div>
+                                                        </address>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <address>
+                                                            <strong>Notes:</strong><br>
+                                                            @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
+                                                                {{$prescriptioninfo->notes}}
+                                                            @endforeach
+                                                        </address>
+                                                    </div>
+                                                    <div class="col-xs-6 text-right">
+                                                        <address>
+                                                            <strong>Prescription Date:</strong><br>
+                                                            {{$prescriptionDetails['PrescriptionInfo'][0]->prescription_date}}<br><br>
+                                                        </address>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h3 class="panel-title"><strong>Drugs Details</strong></h3>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>TRADE</th>
+                                                                    <th>FORMULATION</th>
+                                                                    <th>DOSAGE</th>
+                                                                    <th>DAYS</th>
+                                                                    <th>INTAKE</th>
+                                                                    <th>Morning - Afternoon - Night</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                @foreach($prescriptionDetails['PatientDrugDetails'] as $prescription)
+                                                                    <tr>
+                                                                        <td>{{$prescription->trade_name}}</td>
+                                                                        <td>{{$prescription->formulation_name}}</td>
+                                                                        <td>{{$prescription->dosage}}</td>
+                                                                        <td>{{$prescription->no_of_days}}</td>
+                                                                        <td>{{$prescription->intake_form}}</td>
+                                                                        <td>
+                                                                            {{$prescription->morning}} - {{$prescription->afternoon}} - {{$prescription->night}}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                        <div class="hidden-print">
+                                                            <div class="pull-right">
+                                                                <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
+                                                                <a href="#" class="btn btn-primary waves-effect waves-light hidden">Send</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div> <!-- end row -->
+                                    </div> <!-- panel body -->
+                                </div> <!-- end panel -->
+
+                            </div> <!-- end col -->
+
+                        </div>
+                        <!-- end row -->
 
 
-
-                            </div>
-                            <div class="col-md-1"></div>
+                    </div><!-- container -->
 
 
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
+                </div> <!-- Page content Wrapper -->
 
-                </div>
-            </div><!-- /.row -->
-        </section><!-- /.content -->
-        <!-- PRINT END -->
-    </div><!-- /.content-wrapper -->
-    @include('portal.pharmacy-footer')
-</div><!-- ./wrapper -->
+            </div> <!-- content -->
 
-<script>
-    function printDiv()
-    {
+            @include('portal.pharmacy-footer')
 
-        var divToPrint=document.getElementById('PagePrint');
+        </div>
+        <!-- End Right content here -->
 
-        var newWin=window.open('','Print-Window');
+    </div><!-- ./wrapper -->
 
-        newWin.document.open();
+    <script>
+        function printDiv()
+        {
 
-        newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+            var divToPrint=document.getElementById('PagePrint');
 
-        newWin.document.close();
+            var newWin=window.open('','Print-Window');
 
-        setTimeout(function(){newWin.close();},10);
+            newWin.document.open();
 
-    }
-</script>
+            newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+            newWin.document.close();
+
+            setTimeout(function(){newWin.close();},10);
+
+        }
+    </script>
 @endsection
+
+@section('scripts')
+    {!!  Html::script(asset('theme/assets/js/app.js')) !!}
+@stop
