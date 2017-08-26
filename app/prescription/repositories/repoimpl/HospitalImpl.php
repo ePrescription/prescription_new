@@ -1528,6 +1528,7 @@ class HospitalImpl implements HospitalInterface{
             //$patient->sub_symptoms_id = $patientProfileVM->getSubSymptomId();
             //$patient->symptoms_id = $patientProfileVM->getSymptomId();
 
+
             $patient->created_by = $patientProfileVM->getCreatedBy();
             $patient->created_at = $patientProfileVM->getCreatedAt();
             $patient->updated_by = $patientProfileVM->getUpdatedBy();

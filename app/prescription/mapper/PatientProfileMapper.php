@@ -31,6 +31,7 @@ class PatientProfileMapper
         $profileVM = new PatientProfileViewModel();
         $profile = (object) $patientProfileRequest->all();
 
+
         //$userName = Session::get('DisplayName');
         $userName = 'Admin';
 
