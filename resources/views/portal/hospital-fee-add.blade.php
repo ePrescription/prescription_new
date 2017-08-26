@@ -24,7 +24,7 @@ $profile_menu="0";
         <!-- Start content -->
         <div class="content">
 
-            <div class="">
+            <div class="hidden">
                 <div class="page-header-title">
                     <h4 class="page-title">Fees Details</h4>
                 </div>
@@ -55,6 +55,9 @@ $profile_menu="0";
                                 </span>
                                     </div>
                                 @endif
+                                <div class="panel-heading">
+                                    <h4>Add Doctor Fee Details</h4>
+                                </div>
                                 <div class="panel-body">
 
                                     <div class="row">

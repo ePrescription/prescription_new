@@ -24,7 +24,7 @@ $profile_menu="0";
         <!-- Start content -->
         <div class="content">
 
-            <div class="">
+            <div class="hidden">
                 <div class="page-header-title">
                     <h4 class="page-title">Fees Details</h4>
                 </div>
@@ -111,9 +111,10 @@ $profile_menu="0";
                     <div class="row">
                         <div class="col-md-12">
                             <div class="panel panel-default">
-                                <!-- <div class="panel-heading">
-                                    <h4>Invoice</h4>
-                                </div> -->
+
+                                <div class="panel-heading">
+                                    <h4>Fee Details</h4>
+                                </div>
                                 <div class="panel-body">
 
                                     <div class="row">

@@ -35,7 +35,7 @@ $profile_menu="0";
 
                 <div class="container">
 
-                    <div class="row">
+                    <div class="row hidden">
                         <div class="col-sm-6 col-lg-3">
                             <div class="panel">
                                 <div class="panel-heading">
@@ -85,7 +85,7 @@ $profile_menu="0";
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row hidden">
 
                         <div class="col-lg-4">
                             <div class="panel panel-primary">

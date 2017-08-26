@@ -220,6 +220,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
 {
     Route::get('{id}/dashboard', function () {
+        //return redirect('fronthospital/rest/api/'.$id.'/profile');
         return view('portal.hospital-dashboard');
     });
     Route::post('send', 'DoctorController@sendEmail');
@@ -302,9 +303,16 @@ Route::group(array('prefix' => 'hospital','namespace' => 'Lab'), function() {
 
 Route::group(['prefix' => 'pharmacy'], function()
 {
+    Route::get('{id}/dashboard', function ($id) {
+        return redirect('pharmacy/rest/api/'.$id.'/profile');
+        //return view('portal.pharmacy-dashboard');
+    });
+
+    /*
     Route::get('{id}/dashboard', function () {
         return view('portal.pharmacy-dashboard');
     });
+    */
 
 
     Route::group(['namespace' => 'Pharmacy'], function()
@@ -429,9 +437,16 @@ Route::group(['prefix' => 'doctor'], function()
 
 Route::group(['prefix' => 'lab'], function()
 {
+    Route::get('{id}/dashboard', function ($id) {
+        return redirect('lab/rest/api/'.$id.'/profile');
+        //return view('portal.lab-dashboard');
+    });
+
+    /*
     Route::get('{id}/dashboard', function () {
         return view('portal.lab-dashboard');
     });
+    */
 
     Route::group(['namespace' => 'Lab'], function()
     {

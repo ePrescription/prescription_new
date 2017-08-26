@@ -14,11 +14,9 @@ $profile_menu="0";
 <div class="wrapper">
     @include('portal.hospital-header')
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        @include('portal.hospital-sidebar')
-        <!-- /.sidebar -->
-    </aside>
+    <!-- sidebar: style can be found in sidebar.less -->
+    @include('portal.hospital-sidebar')
+    <!-- /.sidebar -->
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

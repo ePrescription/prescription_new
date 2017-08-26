@@ -25,7 +25,7 @@ $profile_menu="0";
         <!-- Start content -->
         <div class="content">
 
-            <div class="">
+            <div class="hidden">
                 <div class="page-header-title">
                     <h4 class="page-title">Online Payment</h4>
                 </div>
@@ -56,6 +56,8 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+                                    <h4 class="m-b-30 m-t-0">Online Payment</h4>
+
                                     <form action="{{URL::to('/')}}/fronthospital/payment/process" role="form" method="POST">
 
                                         <h4 class="m-t-0 m-b-30">Patient Details</h4>

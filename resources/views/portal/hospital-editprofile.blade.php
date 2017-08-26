@@ -26,9 +26,9 @@ $profile_menu="1";
         <!-- Main content -->
         <div class="content">
 
-            <div class="">
+            <div class="hidden">
                 <div class="page-header-title">
-                    <h4 class="page-title">Patient Details</h4>
+                    <h4 class="page-title">Hospital Edit Details</h4>
                 </div>
             </div>
 
@@ -38,7 +38,7 @@ $profile_menu="1";
                     <div class="col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-body">
-                                <h4 class="m-t-0 m-b-30">Hospital Details</h4>
+                                <h4 class="m-t-0 m-b-30">Hospital Edit Details</h4>
                             <!-- form start -->
                             <form action="{{URL::to('/')}}/fronthospital/rest/api/hospital" role="form" method="POST">
 

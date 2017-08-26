@@ -25,7 +25,7 @@ $profile_menu="0";
         <!-- Start content -->
         <div class="content">
 
-            <div class="">
+            <div class="hidden">
                 <div class="page-header-title">
                     <h4 class="page-title">Patient Details</h4>
                 </div>

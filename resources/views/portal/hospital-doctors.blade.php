@@ -31,7 +31,7 @@ $profile_menu="0";
         <!-- Start content -->
         <div class="content">
 
-            <div class="">
+            <div class="hidden">
                 <div class="page-header-title">
                     <h4 class="page-title">Hospital Doctors List</h4>
 
@@ -47,7 +47,7 @@ $profile_menu="0";
 
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <h4 class="m-b-30 m-t-0">Hospital Doctors Details List</h4>
+                                    <h4 class="m-b-30 m-t-0">Hospital Doctors List</h4>
 
                                 @if (session()->has('message'))
                                         <div class="col_full login-title">

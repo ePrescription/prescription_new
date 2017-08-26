@@ -23,7 +23,7 @@ $profile_menu="1";
         <!-- Start content -->
         <div class="content">
 
-            <div class="">
+            <div class="hidden">
                 <div class="page-header-title">
                     <h4 class="page-title">Hospital Details</h4>
                 </div>

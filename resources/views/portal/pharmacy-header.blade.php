@@ -1,3 +1,6 @@
+<style>
+    div.page-header-title { display:none !important; }
+</style>
 <!-- Top Bar Start -->
 <div class="topbar">
     <!-- LOGO -->
