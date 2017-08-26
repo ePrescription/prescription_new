@@ -1,5 +1,4 @@
 <!-- Top Bar Start -->
-
 <div class="topbar">
     <!-- LOGO -->
     <div class="topbar-left">
