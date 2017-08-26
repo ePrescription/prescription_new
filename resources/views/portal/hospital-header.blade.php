@@ -5,8 +5,8 @@
         <div class="text-center">
             <!--<a href="index.html" class="logo"><span>Up</span>Bond</a>-->
             <!--<a href="index.html" class="logo-sm"><span>U</span></a>-->
-            <a href="index.html" class="logo"><img src="{{ URL::to('/') }}/theme/assets/images/logo/head-logosmall.png" height="20" alt="logo"></a>
-            <a href="index.html" class="logo-sm"><img src="{{ URL::to('/') }}/theme/assets/images/logo/head-logoicon.png" height="30" alt="logo"></a>
+            <a href="#index.html" class="logo"><img src="{{ URL::to('/') }}/theme/assets/images/logo/head-logosmall.png" height="20" alt="logo"></a>
+            <a href="#index.html" class="logo-sm"><img src="{{ URL::to('/') }}/theme/assets/images/logo/head-logoicon.png" height="30" alt="logo"></a>
         </div>
     </div>
     <!-- Button mobile view to collapse sidebar menu -->

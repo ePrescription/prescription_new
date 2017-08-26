@@ -1523,9 +1523,10 @@ class HospitalImpl implements HospitalInterface{
             $patient->nationality = $patientProfileVM->getNationality();
             $patient->gender = $patientProfileVM->getGender();
             $patient->married = $patientProfileVM->getMaritalStatus();
-            $patient->main_symptoms_id = $patientProfileVM->getMainSymptomId();
-            $patient->sub_symptoms_id = $patientProfileVM->getSubSymptomId();
-            $patient->symptoms_id = $patientProfileVM->getSymptomId();
+
+            //$patient->main_symptoms_id = $patientProfileVM->getMainSymptomId();
+            //$patient->sub_symptoms_id = $patientProfileVM->getSubSymptomId();
+            //$patient->symptoms_id = $patientProfileVM->getSymptomId();
 
             $patient->created_by = $patientProfileVM->getCreatedBy();
             $patient->created_at = $patientProfileVM->getCreatedAt();
