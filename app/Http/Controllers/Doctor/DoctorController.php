@@ -4334,7 +4334,7 @@ class DoctorController extends Controller
         {
             //dd($personalHistoryRequest->all());
             $patientPastIllnessVM = PatientProfileMapper::setPatientPastIllness($pastIllnessRequest);
-            //dd($patientHistoryVM);
+            //dd($patientPastIllnessVM);
             $status = $this->hospitalService->savePatientPastIllness($patientPastIllnessVM);
 
             if($status)

@@ -38,8 +38,9 @@ $profile_menu="0";
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
-                                        <h4 class="m-t-0 m-b-30">Add Personal Illness</h4>
                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
+                                        <h4 class="m-t-0 m-b-30">Add Personal Illness</h4>
+
 
                                         @if (session()->has('message'))
                                             <div class="col_full login-title">
@@ -166,11 +167,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="personalHistory[5][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[5][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="personalHistory61" value="11" name="personalHistory[5][personalHistoryItemId]" required="required">
+                                                            <input type="radio" id="personalHistory61" value="13" name="personalHistory[5][personalHistoryItemId]" required="required">
                                                             <label for="personalHistory61"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="personalHistory62" value="12" name="personalHistory[5][personalHistoryItemId]" required="required">
+                                                            <input type="radio" id="personalHistory62" value="14" name="personalHistory[5][personalHistoryItemId]" required="required">
                                                             <label for="personalHistory62"> No </label>
                                                         </div>
                                                     </div>
@@ -183,11 +184,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="personalHistory[6][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[6][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="personalHistory71" value="13" name="personalHistory[6][personalHistoryItemId]" required="required">
+                                                            <input type="radio" id="personalHistory71" value="15" name="personalHistory[6][personalHistoryItemId]" required="required">
                                                             <label for="personalHistory71"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="personalHistory72" value="14" name="personalHistory[6][personalHistoryItemId]" required="required">
+                                                            <input type="radio" id="personalHistory72" value="16" name="personalHistory[6][personalHistoryItemId]" required="required">
                                                             <label for="personalHistory72"> No </label>
                                                         </div>
                                                     </div>

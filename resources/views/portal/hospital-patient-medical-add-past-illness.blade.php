@@ -119,3 +119,36 @@ $profile_menu="0";
 
 
 @endsection
+        @section('scripts')
+            <script>
+                $(document).ready(function() {
+                    $('select').attr('disabled', 'disabled');
+                });
+                $('form').submit(function() {
+                    $('select').removeAttr('disabled');
+                });
+            </script>
+            <script>
+                function enableBox(cssvalue) {
+                    //alert(cssvalue);
+                    $('select#'+cssvalue).removeAttr('disabled');
+                    if(cssvalue=='family11')
+                    {
+                        $('input#'+cssvalue).show();
+                        $('input#'+cssvalue).val('');
+                    }
+                }
+
+                function disableBox(cssvalue) {
+                    //alert(cssvalue);
+                    $('select#'+cssvalue).val('');
+                    if(cssvalue=='family11')
+                    {
+                        $('input#'+cssvalue).hide();
+                        $('input#'+cssvalue).val('None');
+                    }
+                    $('select#'+cssvalue).attr('disabled', 'disabled');
+                }
+            </script>
+
+@endsection

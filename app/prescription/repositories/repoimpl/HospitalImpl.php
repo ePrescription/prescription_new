@@ -3543,6 +3543,7 @@ class HospitalImpl implements HospitalInterface{
                     $pastIllnessName = $illness->pastIllnessName;
                     //$pastIllnessDate = \DateTime::createFromFormat('Y-m-d', $illness->pastIllnessDate);
                     //$relation = $illness->relation;
+                    $isValueSet = property_exists($illness, 'isValueSet') ? $illness->isValueSet : null;
                     //$illnessDate = $illness->pastIllnessDate;
                     //dd($examinationDate);
                     //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
@@ -3563,6 +3564,7 @@ class HospitalImpl implements HospitalInterface{
                         array('past_illness_name' => $pastIllnessName,
                             'past_illness_date' => $pastIllnessDate,
                             //'relation' => $relation,
+                            'is_value_set' => $isValueSet,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
@@ -3653,6 +3655,7 @@ class HospitalImpl implements HospitalInterface{
                     $familyIllnessId = $illness->familyIllnessId;
                     $familyIllnessName = $illness->familyIllnessName;
                     $relation = $illness->relation;
+                    $isValueSet = property_exists($illness, 'isValueSet') ? $illness->isValueSet : null;
                     //$familyIllnessDate = \DateTime::createFromFormat('Y-m-d', $illness->familyIllnessDate);
                     //$illnessDate = $illness->familyIllnessDate;
                     //dd($examinationDate);
@@ -3674,6 +3677,7 @@ class HospitalImpl implements HospitalInterface{
                         array('family_illness_name' => $familyIllnessName,
                             'family_illness_date' => $familyIllnessDate,
                             'relation' => $relation,
+                            'is_value_set' => $isValueSet,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
