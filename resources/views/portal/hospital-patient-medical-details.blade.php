@@ -122,7 +122,7 @@ $profile_menu="0";
                                                 <li class="">
                                                     <a href="#personal" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                        <span class="hidden-xs">Personal Illness</span>
+                                                        <span class="hidden-xs">Personal History</span>
                                                     </a>
                                                 </li>
                                                 <li class="">
@@ -215,7 +215,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-personal" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Personal Illness History </b></button></a>
+                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-personal" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Personal History </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientpersonaldiv"></div>

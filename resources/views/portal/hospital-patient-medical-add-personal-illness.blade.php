@@ -39,7 +39,7 @@ $profile_menu="0";
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
                                         <h4 class="m-t-0 m-b-30">Add Personal Illness</h4>
-
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
 
                                         @if (session()->has('message'))
                                             <div class="col_full login-title">
