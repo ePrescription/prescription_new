@@ -9,7 +9,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Endocrime diseases</label>
             <div class="col-sm-3">
-                @if($familyIllness[0]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[0]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[0][familyIllnessId]" value="1" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[0][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -32,7 +32,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Hyperthyroidism</label>
             <div class="col-sm-3">
-                @if($familyIllness[1]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[1]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[1][familyIllnessId]" value="2" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[1][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -55,7 +55,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Diabetes</label>
             <div class="col-sm-3">
-                @if($familyIllness[2]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[2]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[2][familyIllnessId]" value="3" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[2][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -78,7 +78,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">HyperTension</label>
             <div class="col-sm-3">
-                @if($familyIllness[3]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[3]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[3][familyIllnessId]" value="4" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[3][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -101,7 +101,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Heart disease</label>
             <div class="col-sm-3">
-                @if($familyIllness[4]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[4]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[4][familyIllnessId]" value="5" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[4][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -124,7 +124,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Asthma</label>
             <div class="col-sm-3">
-                @if($familyIllness[5]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[5]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[5][familyIllnessId]" value="6" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[5][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -147,7 +147,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Tuberculosis</label>
             <div class="col-sm-3">
-                @if($familyIllness[6]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[6]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[6][familyIllnessId]" value="7" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[6][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -170,7 +170,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Stroke</label>
             <div class="col-sm-3">
-                @if($familyIllness[7]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[7]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[7][familyIllnessId]" value="8" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[7][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -193,7 +193,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Cancers</label>
             <div class="col-sm-3">
-                @if($familyIllness[8]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[8]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[8][familyIllnessId]" value="9" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[8][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -216,7 +216,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Any other herideitory diseases</label>
             <div class="col-sm-3">
-                @if($familyIllness[9]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[9]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[9][familyIllnessId]" value="10" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[9][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -239,7 +239,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Psychaitric illness</label>
             <div class="col-sm-3">
-                @if($familyIllness[10]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[10]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[10][familyIllnessId]" value="11" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[10][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">
@@ -263,7 +263,7 @@
             <label class="col-sm-4 control-label">Others</label>
             <div class="col-sm-3">
                 {{$familyIllness[11]->otherIllnessName}} -
-                @if($familyIllness[11]->isValueSet==1) Yes @else No @endif
+                @if($familyIllness[11]->relation!="") Yes @else No @endif
                 <input type="hidden" class="form-control" name="familyIllness[11][familyIllnessId]" value="12" required="required">
                 <input type="hidden" class="form-control" name="familyIllness[11][familyIllnessDate]" value="2017-08-06" required="required">
                 <div class="hidden radio radio-info radio-inline">

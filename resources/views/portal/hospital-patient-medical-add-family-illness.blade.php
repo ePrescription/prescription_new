@@ -70,22 +70,30 @@ $profile_menu="0";
                                                             <input type="hidden" class="form-control" name="familyIllness[{{$i}}][familyIllnessId]" value="{{$patientFamilyIllnessValue->id}}" required="required" />
                                                             <input type="hidden" class="form-control" name="familyIllness[{{$i}}][familyIllnessDate]" value="{{date('Y-m-d')}}" required="required" />
                                                             <div class="radio radio-info radio-inline">
-                                                                <input type="radio" id="scanDetails{{$patientFamilyIllnessValue->id}}1" value="1" name="familyIllness[{{$i}}][isValueSet]">
+                                                                <input type="radio" id="scanDetails{{$patientFamilyIllnessValue->id}}1" value="1" name="familyIllness[{{$i}}][isValueSet]" onclick="javascript:enableBox('family{{$i}}')" class="family{{$i}}" />
                                                                 <label for="scanDetails{{$patientFamilyIllnessValue->id}}1"> Yes </label>
                                                             </div>
                                                             <div class="radio radio-inline">
-                                                                <input type="radio" id="scanDetails{{$patientFamilyIllnessValue->id}}2" value="0" name="familyIllness[{{$i}}][isValueSet]" checked="checked">
+                                                                <input type="radio" id="scanDetails{{$patientFamilyIllnessValue->id}}2" value="0" name="familyIllness[{{$i}}][isValueSet]" checked="checked" onclick="javascript:disableBox('family{{$i}}')" class="family{{$i}}" />
                                                                 <label for="scanDetails{{$patientFamilyIllnessValue->id}}2"> No </label>
                                                             </div>
                                                             @if($patientFamilyIllnessValue->illness_name=="Others")
-                                                                <input type="text" class="form-control" name="familyIllness[{{$i}}][familyIllnessName]" value="" required="required" />
+                                                                <input type="text" class="form-control" name="familyIllness[{{$i}}][familyIllnessName]" value="None" required="required" id="family{{$i}}" style="display: none;" />
                                                             @else
                                                                 <input type="hidden" class="form-control" name="familyIllness[{{$i}}][familyIllnessName]" value="{{$patientFamilyIllnessValue->illness_name}}" required="required" />
                                                             @endif
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <select  class="form-control" name="familyIllness[{{$i}}][relation]">
-                                                                <option>None</option>
+                                                            <select class="form-control" name="familyIllness[{{$i}}][relation]" id="family{{$i}}">
+                                                                <option value="" selected>None</option>
+                                                                <option value="Brother">Brother</option>
+                                                                <option value="Sister">Sister</option>
+                                                                <option value="Husband">Husband ( If Married )</option>
+                                                                <option value="Wife">Wife ( If Married )</option>
+                                                                <option value="Father">Father</option>
+                                                                <option value="Mother">Mother</option>
+                                                                <option value="Grand Father">Grand Father</option>
+                                                                <option value="Grand Mother">Grand Mother</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -120,5 +128,39 @@ $profile_menu="0";
         </div>
         <!-- End Right content here -->
 
+
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $('select').attr('disabled', 'disabled');
+    });
+    $('form').submit(function() {
+        $('select').removeAttr('disabled');
+    });
+</script>
+<script>
+    function enableBox(cssvalue) {
+        //alert(cssvalue);
+        $('select#'+cssvalue).removeAttr('disabled');
+        if(cssvalue=='family11')
+        {
+            $('input#'+cssvalue).show();
+            $('input#'+cssvalue).val('');
+        }
+    }
+
+    function disableBox(cssvalue) {
+        //alert(cssvalue);
+        $('select#'+cssvalue).val('');
+        if(cssvalue=='family11')
+        {
+            $('input#'+cssvalue).hide();
+            $('input#'+cssvalue).val('None');
+        }
+        $('select#'+cssvalue).attr('disabled', 'disabled');
+    }
+</script>
 
 @endsection
