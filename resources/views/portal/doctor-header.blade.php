@@ -23,7 +23,7 @@
                     <span class="clearfix"></span>
                 </div>
 
-                    <div style="width:500px;float:left;">
+                    <div style="width:450px;float:left;">
                         <h2 style="padding: 0px;margin: 0px 30px; color: #FFF; font-weight: bold; font-size: 16px; line-height: 22px;">
                             Dr All Caps<br/>
                             {{Session::get('AuthDisplayName')}} - {{Session::get('LoginDoctorDetails')}}
