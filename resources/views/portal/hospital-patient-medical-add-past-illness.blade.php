@@ -119,7 +119,7 @@ $profile_menu="0";
 
 
 @endsection
-        @section('scripts')
+@section('scripts')
             <script>
                 function enableBox(cssvalue) {
                         $('input#'+cssvalue).show();

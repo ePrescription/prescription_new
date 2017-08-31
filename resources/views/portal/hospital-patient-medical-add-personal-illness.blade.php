@@ -162,35 +162,42 @@ $profile_menu="0";
                                                 <div class="form-group">
 
                                                     <label class="col-sm-4 control-label">Known Allergies</label>
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-2">
                                                         <input type="hidden" class="form-control" name="personalHistory[5][personalHistoryId]" value="6" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[5][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[5][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="personalHistory61" value="13" name="personalHistory[5][personalHistoryItemId]" required="required">
+                                                            <input type="radio" id="personalHistory61" value="13" name="personalHistory[5][personalHistoryItemId]" required="required" onclick="javascript:enableBox('personal5')" />
                                                             <label for="personalHistory61"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="personalHistory62" value="14" name="personalHistory[5][personalHistoryItemId]" required="required">
+                                                            <input type="radio" id="personalHistory62" value="14" name="personalHistory[5][personalHistoryItemId]" required="required" onclick="javascript:disableBox('personal5')" />
                                                             <label for="personalHistory62"> No </label>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" name="personalHistory[5][personalHistoryItemValue]" value="None" required="required" id="personal5" style="display: none;" />
+
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
 
                                                     <label class="col-sm-4 control-label">Habits / Addictions</label>
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-2">
                                                         <input type="hidden" class="form-control" name="personalHistory[6][personalHistoryId]" value="7" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[6][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[6][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="personalHistory71" value="15" name="personalHistory[6][personalHistoryItemId]" required="required">
+                                                            <input type="radio" id="personalHistory71" value="15" name="personalHistory[6][personalHistoryItemId]" required="required" onclick="javascript:enableBox('personal6')" />
                                                             <label for="personalHistory71"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="personalHistory72" value="16" name="personalHistory[6][personalHistoryItemId]" required="required">
+                                                            <input type="radio" id="personalHistory72" value="16" name="personalHistory[6][personalHistoryItemId]" required="required"onclick="javascript:disableBox('personal6')" />
                                                             <label for="personalHistory72"> No </label>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" name="personalHistory[6][personalHistoryItemValue]" value="None" required="required" id="personal6" style="display: none;" />
                                                     </div>
                                                 </div>
 
@@ -227,5 +234,20 @@ $profile_menu="0";
         </div>
         <!-- End Right content here -->
 
+
+@endsection
+
+        @section('scripts')
+            <script>
+                function enableBox(cssvalue) {
+                    $('input#'+cssvalue).show();
+                    $('input#'+cssvalue).val('');
+                }
+
+                function disableBox(cssvalue) {
+                    $('input#'+cssvalue).hide();
+                    $('input#'+cssvalue).val('None');
+                }
+            </script>
 
 @endsection

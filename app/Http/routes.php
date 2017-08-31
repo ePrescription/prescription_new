@@ -207,13 +207,20 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     //Lab
     Route::get('rest/api/{hospitalId}/patient/{patientId}/lab-details', array('as' => 'hospital.patientlabdetails', 'uses' => 'DoctorController@PatientLabDetailsByHospitalForFront'));
 
-    Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-urinetests', array('as' => 'hospital.patientlaburinetests', 'uses' => 'DoctorController@AddPatientMedicalGeneralByHospitalForFront'));
-    Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-motiontests', array('as' => 'hospital.patientlabmotiontests', 'uses' => 'DoctorController@AddPatientMedicalGeneralByHospitalForFront'));
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-ultrasoundtests', array('as' => 'hospital.patientlabultrasoundtests', 'uses' => 'DoctorController@AddPatientLabUltraSoundTestsByHospitalForFront'));
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-urinetests', array('as' => 'hospital.patientlaburinetests', 'uses' => 'DoctorController@AddPatientLabUrineTestsByHospitalForFront'));
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-motiontests', array('as' => 'hospital.patientlabmotiontests', 'uses' => 'DoctorController@AddPatientLabMotionTestsByHospitalForFront'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-bloodtests', array('as' => 'hospital.patientlabbloodtests', 'uses' => 'DoctorController@AddPatientLabBloodTestsByHospitalForFront'));
 
+    Route::post('rest/api/ultrasoundtests', array('as' => 'doctor.saveultrasoundtests', 'uses' => 'DoctorController@savePatientUltraSoundTests'));
     Route::post('rest/api/urinetests', array('as' => 'doctor.saveurinetests', 'uses' => 'DoctorController@savePatientUrineTests'));
     Route::post('rest/api/motiontests', array('as' => 'doctor.savemotiontests', 'uses' => 'DoctorController@savePatientMotionTests'));
     Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorController@savePatientBloodTests'));
+
+    Route::get('rest/api/{patientId}/ultrasoundtests', array('as' => 'doctor.ultrasoundtests', 'uses' => 'DoctorController@getPatientUltraSoundTests'));
+    Route::get('rest/api/{patientId}/urinetests', array('as' => 'doctor.urinetests', 'uses' => 'DoctorController@getPatientUrineTests'));
+    Route::get('rest/api/{patientId}/motiontests', array('as' => 'doctor.motiontests', 'uses' => 'DoctorController@getPatientMotionTests'));
+    Route::get('rest/api/{patientId}/bloodtests', array('as' => 'doctor.bloodtests', 'uses' => 'DoctorController@getPatientBloodTests'));
 
 });
 

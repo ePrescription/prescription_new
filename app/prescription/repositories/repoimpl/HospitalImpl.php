@@ -21,8 +21,9 @@ use App\Http\ViewModels\PatientProfileViewModel;
 use App\Http\ViewModels\PatientPregnancyViewModel;
 use App\Http\ViewModels\PatientScanViewModel;
 use App\Http\ViewModels\PatientSymptomsViewModel;
-
+use App\Http\ViewModels\PatientUltraSoundExaminationViewModel;
 use App\Http\ViewModels\PatientUrineExaminationViewModel;
+
 use App\prescription\model\entities\Doctor;
 use App\prescription\model\entities\DoctorAppointments;
 use App\prescription\model\entities\FeeReceipt;

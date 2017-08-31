@@ -38,7 +38,7 @@ $profile_menu="0";
                         <div class="panel panel-primary">
                             <div class="panel-body">
                                 <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
-                                <h4 class="m-t-0 m-b-30">Hospital Details</h4>
+                                <h4 class="m-t-0 m-b-30">Patient Details</h4>
 
 
                                     @if (session()->has('message'))

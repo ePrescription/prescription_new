@@ -39,8 +39,30 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
+                                    <div style="float:right;">
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
+                                            <button class="btn btn-info waves-effect waves-light">Back</button>
+                                        </a>
+                                    </div>
                                     <h4 class="m-t-0 m-b-30">Patient Medical Details</h4>
+
+                                    @if (session()->has('message'))
+                                        <div class="col_full login-title">
+                                            <span style="color:red;">
+                                                <b>{{session('message')}}</b>
+                                            </span>
+                                            <br/>
+                                        </div>
+                                    @endif
+
+                                    @if (session()->has('success'))
+                                        <div class="col_full login-title">
+                                            <span style="color:green;">
+                                                <b>{{session('success')}}</b>
+                                            </span>
+                                            <br/>
+                                        </div>
+                                    @endif
 
                                     <div class="row">
 

@@ -39,7 +39,11 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
+                                    <div style="float:right;">
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
+                                            <button class="btn btn-info waves-effect waves-light">Back</button>
+                                        </a>
+                                    </div>
                                     <h4 class="m-t-0 m-b-30">Patient Lab Details</h4>
 
                                     <div class="row">
@@ -149,7 +153,7 @@ $profile_menu="0";
                                                     <p>
                                                     <div class="col-md-12">
                                                         <label style="float: left;margin: 10px;">Choose Date</label>
-                                                        <select class="form-control" id="selectfamily" onchange="javascript:ajaxloadmationdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                        <select class="form-control" id="selectfamily" onchange="javascript:ajaxloadmotiondetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['familyIllnessDates'] as $familyIllnessDates)
                                                                 <option value="{{$familyIllnessDates->family_illness_date}}">{{$familyIllnessDates->family_illness_date}}</option>
@@ -234,7 +238,7 @@ $profile_menu="0";
             $("#patientblooddiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/bloodhistory';
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/bloodtests';
 
             if(date!=0)
             {
@@ -259,7 +263,7 @@ $profile_menu="0";
             $("#patientmotiondiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/motionhistory';
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/motiontests';
 
             if(date!=0)
             {
@@ -284,7 +288,7 @@ $profile_menu="0";
             $("#patienturinediv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/urinehistory';
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/urinetests';
 
             if(date!=0)
             {
@@ -309,7 +313,7 @@ $profile_menu="0";
             $("#patientultradiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/ultrahistory';
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/ultrasoundtests';
 
             if(date!=0)
             {
@@ -378,7 +382,7 @@ $profile_menu="0";
             $("#patientultradiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-ultratests';
+            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-ultrasoundtests';
             $.ajax({
                 url: callurl,
                 type: "get",

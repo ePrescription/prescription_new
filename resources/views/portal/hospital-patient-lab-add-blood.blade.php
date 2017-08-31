@@ -26,7 +26,7 @@
 
 @if(count($patientBloodTests)>0)
 
-<form action="{{URL::to('/')}}/fronthospital/rest/api/scandetails" role="form" method="POST" class="form-horizontal ">
+<form action="{{URL::to('/')}}/fronthospital/rest/api/bloodtests" role="form" method="POST" class="form-horizontal ">
 <?php $i=0; ?>
 @foreach($patientBloodTests as $patientBloodTestValue)
 <div class="form-group">

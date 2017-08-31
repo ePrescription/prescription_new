@@ -4240,11 +4240,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PERSONAL_HISTORY_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$personalHistoryRequest->patientId.'/medical-details#personal')->with('success',trans('messages.'.ErrorEnum::PATIENT_PERSONAL_HISTORY_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PERSONAL_HISTORY_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$personalHistoryRequest->patientId.'/medical-details#personal')->with('message',trans('messages.'.ErrorEnum::PATIENT_PERSONAL_HISTORY_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4262,6 +4264,7 @@ class DoctorController extends Controller
         //return $responseJson;
 
         return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$personalHistoryRequest->patientId.'/add-medical-personal');
+
 
     }
 
@@ -4290,11 +4293,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_GENERAL_EXAMINATION_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$personalExaminationRequest->patientId.'/medical-details#general')->with('success',trans('messages.'.ErrorEnum::PATIENT_GENERAL_EXAMINATION_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_GENERAL_EXAMINATION_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$personalExaminationRequest->patientId.'/medical-details#general')->with('success',trans('messages.'.ErrorEnum::PATIENT_GENERAL_EXAMINATION_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4341,11 +4346,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$pastIllnessRequest->patientId.'/medical-details#past')->with('success',trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$pastIllnessRequest->patientId.'/medical-details#past')->with('success',trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4393,11 +4400,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_FAMILY_ILLNESS_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$familyIllnessRequest->patientId.'/medical-details#family')->with('success',trans('messages.'.ErrorEnum::PATIENT_FAMILY_ILLNESS_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_FAMILY_ILLNESS_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$familyIllnessRequest->patientId.'/medical-details#family')->with('success',trans('messages.'.ErrorEnum::PATIENT_FAMILY_ILLNESS_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4447,11 +4456,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$pregnancyRequest->patientId.'/medical-details#pregnancy')->with('success',trans('messages.'.ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$pregnancyRequest->patientId.'/medical-details#pregnancy')->with('success',trans('messages.'.ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4501,11 +4512,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$scanRequest->patientId.'/medical-details#scan')->with('success',trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$scanRequest->patientId.'/medical-details#scan')->with('success',trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4552,11 +4565,15 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$symptomsRequest->patientId.'/medical-details#symptom')->with('success',trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_SAVE_SUCCESS));
+
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$symptomsRequest->patientId.'/medical-details#symptom')->with('success',trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_SAVE_ERROR));
+
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4574,6 +4591,59 @@ class DoctorController extends Controller
         //return $responseJson;
         return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$symptomsRequest->patientId.'/add-medical-symptom');
 
+    }
+
+
+
+    /**
+     * Save patient ultra sound details
+     * @param $examinationRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientUltraSoundTests(Request $examinationRequest)
+    {
+        //dd($examinationRequest);
+        $patientUltraSoundVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($personalHistoryRequest->all());
+            $patientUltraSoundVM = PatientProfileMapper::setPatientUltraSoundExamination($examinationRequest);
+            //dd($patientUltraSoundVM);
+            $status = $this->hospitalService->savePatientUltraSoundTests($patientUltraSoundVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#ultra')->with('success',trans('messages.'.ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_SUCCESS));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#ultra')->with('success',trans('messages.'.ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_ERROR));
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#ultra');
     }
 
     /**
@@ -4601,11 +4671,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_URINE_DETAILS_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#urine')->with('success',trans('messages.'.ErrorEnum::PATIENT_URINE_DETAILS_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_URINE_DETAILS_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#urine')->with('success',trans('messages.'.ErrorEnum::PATIENT_URINE_DETAILS_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4620,7 +4692,8 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#urine');
     }
 
     /**
@@ -4648,11 +4721,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_MOTION_DETAILS_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#motion')->with('success',trans('messages.'.ErrorEnum::PATIENT_MOTION_DETAILS_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_MOTION_DETAILS_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#motion')->with('success',trans('messages.'.ErrorEnum::PATIENT_MOTION_DETAILS_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4667,7 +4742,8 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#blood');
     }
 
     /**
@@ -4695,11 +4771,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#blood')->with('success',trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details#blood')->with('success',trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -4714,7 +4792,8 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
-        return $responseJson;
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$examinationRequest->patientId.'/lab-details');
     }
 
     /**
@@ -4742,11 +4821,13 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_DRUG_HISTORY_SAVE_SUCCESS));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$drugHistoryRequest->patientId.'/medical-details#drug')->with('success',trans('messages.'.ErrorEnum::PATIENT_DRUG_HISTORY_SAVE_SUCCESS));
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DRUG_HISTORY_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$drugHistoryRequest->patientId.'/medical-details#drug')->with('success',trans('messages.'.ErrorEnum::PATIENT_DRUG_HISTORY_SAVE_ERROR));
             }
         }
         catch(HospitalException $hospitalExc)
@@ -5125,4 +5206,331 @@ class DoctorController extends Controller
         return view('portal.hospital-patient-lab-add-blood',compact('patientBloodTests','patientDetails'));
 
     }
+
+
+    public function AddPatientLabMotionTestsByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientMotionTests = null;
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+
+            $patientMotionTests = DB::select('select * from motion_examination where status = ?', [1]);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-lab-add-motion',compact('patientMotionTests','patientDetails'));
+
+    }
+
+
+    public function AddPatientLabUrineTestsByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientUrineTests = null;
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+
+            $patientUrineTests = DB::select('select * from urine_examination where status = ?', [1]);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-lab-add-urine',compact('patientUrineTests','patientDetails'));
+
+    }
+
+    public function AddPatientLabUltraSoundTestsByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientUltraSoundTests = null;
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+
+            $patientUltraSoundTests = DB::select('select * from ultra_sound where status = ?', [1]);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-lab-add-ultrasound',compact('patientUltraSoundTests','patientDetails'));
+
+    }
+
+
+    /**
+     * Get patient urine tests
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientUrineTests($patientId, Request $patientSearchRequest)
+    {
+        $urineTests = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $examinationDate = date('Y-m-d', strtotime($examinationDate));
+            $urineTests = $this->hospitalService->getPatientUrineTests($patientId, $examinationDate);
+            //dd($familyIllness);
+
+            if(!is_null($urineTests) && !empty($urineTests))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_URINE_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($urineTests));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_URINE_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($urineTests);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_URINE_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return view('portal.hospital-patient-lab-urine-tests-detail',compact('urineTests'));
+    }
+
+    /**
+     * Get patient motion tests
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientMotionTests($patientId, Request $patientSearchRequest)
+    {
+        $motionTests = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $examinationDate = date('Y-m-d', strtotime($examinationDate));
+            $motionTests = $this->hospitalService->getPatientMotionTests($patientId, $examinationDate);
+            //dd($familyIllness);
+
+            if(!is_null($motionTests) && !empty($motionTests))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_MOTION_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($motionTests));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_MOTION_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($motionTests);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_MOTION_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return view('portal.hospital-patient-lab-motion-tests-detail',compact('motionTests'));
+    }
+
+    /**
+     * Get patient blood tests
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientBloodTests($patientId, Request $patientSearchRequest)
+    {
+        $bloodTests = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $examinationDate = date('Y-m-d', strtotime($examinationDate));
+            $bloodTests = $this->hospitalService->getPatientBloodTests($patientId, $examinationDate);
+            //dd($bloodTests);
+
+            if(!is_null($bloodTests) && !empty($bloodTests))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($bloodTests));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_BLOOD_DETAILS_FOUND));
+            }
+
+            //$responseJson->setObj($bloodTests);
+            //$responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+
+        return view('portal.hospital-patient-lab-blood-tests-detail',compact('bloodTests'));
+    }
+
+    /**
+     * Get patient ultrasound tests
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientUltraSoundTests($patientId, Request $patientSearchRequest)
+    {
+        $ultraSound = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $examinationDate = date('Y-m-d', strtotime($examinationDate));
+            $ultraSound = $this->hospitalService->getPatientUltraSoundTests($patientId, $examinationDate);
+            //dd($familyIllness);
+
+            if(!is_null($ultraSound) && !empty($ultraSound))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_ULTRASOUND_DETAILS_ERROR));
+                $responseJson->setCount(sizeof($ultraSound));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_ULTRASOUND_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($ultraSound);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_ULTRASOUND_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return view('portal.hospital-patient-lab-ultrasound-tests-detail',compact('ultraSound'));
+    }
+
+
 }
