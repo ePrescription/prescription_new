@@ -3219,6 +3219,10 @@ class HospitalImpl implements HospitalInterface{
         $pregnancyDates = null;
         $scanDates = null;
         $symptomDates = null;
+        $ultraSoundDates = null;
+        $bloodTestDates = null;
+        $urineTestDates = null;
+        $motionTestDates = null;
 
         $patientLabTests = null;
 
@@ -3261,6 +3265,22 @@ class HospitalImpl implements HospitalInterface{
             $symptomDatesQuery->select('ps.patient_symptom_date')->orderBy('ps.patient_symptom_date', 'DESC');
             $symptomDates = $symptomDatesQuery->distinct()->get();
 
+            $ultraSoundDatesQuery = DB::table('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
+            $ultraSoundDatesQuery->select('pus.examination_date')->orderBy('pus.examination_date', 'DESC');
+            $ultraSoundDates = $ultraSoundDatesQuery->distinct()->get();
+
+            $bloodDatesQuery = DB::table('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+            $bloodDatesQuery->select('pbe.examination_date')->orderBy('pbe.examination_date', 'DESC');
+            $bloodTestDates = $bloodDatesQuery->distinct()->get();
+
+            $urineDatesQuery = DB::table('patient_urine_examination as pue')->where('pue.patient_id', '=', $patientId);
+            $urineDatesQuery->select('pue.examination_date')->orderBy('pue.examination_date', 'DESC');
+            $urineTestDates = $urineDatesQuery->distinct()->get();
+
+            $motionDatesQuery = DB::table('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
+            $motionDatesQuery->select('pme.examination_date')->orderBy('pme.examination_date', 'DESC');
+            $motionTestDates = $motionDatesQuery->distinct()->get();
+
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;
             $examinationDates["pastIllnessDates"] = $pastIllnessDates;
             $examinationDates["familyIllnessDates"] = $familyIllnessDates;
@@ -3268,6 +3288,10 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["pregnancyDates"] = $pregnancyDates;
             $examinationDates["scanDates"] = $scanDates;
             $examinationDates["symptomDates"] = $symptomDates;
+            $examinationDates["ultraSoundDates"] = $ultraSoundDates;
+            $examinationDates["bloodTestDates"] = $bloodTestDates;
+            $examinationDates["urineTestDates"] = $urineTestDates;
+            $examinationDates["motionTestDates"] = $motionTestDates;
 
             //dd($examinationDates);
 
@@ -3306,6 +3330,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientHistoryVM->getPatientId();
+            $doctorId = $patientHistoryVM->getDoctorId();
+            $hospitalId = $patientHistoryVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             //dd($patientId);
@@ -3340,6 +3366,8 @@ class HospitalImpl implements HospitalInterface{
 
                     $patientUser->personalhistory()->attach($personalHistoryId,
                         array('personal_history_item_id' => $personalHistoryItemId,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'personal_history_date' => $personalHistoryDate,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
@@ -3416,7 +3444,10 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientExaminationVM->getPatientId();
+            $doctorId = $patientExaminationVM->getDoctorId();
+            $hospitalId = $patientExaminationVM->getHospitalId();
             $patientUser = User::find($patientId);
+
 
             $patientGeneralExamination = $patientExaminationVM->getPatientGeneralExamination();
 
@@ -3451,6 +3482,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientgeneralexaminations()->attach($generalExaminationId,
                         array('general_examination_value' => $generalExaminationValue,
                             'general_examination_date' => $generalExaminationDate,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
@@ -3527,6 +3560,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientPastIllnessVM->getPatientId();
+            $doctorId = $patientPastIllnessVM->getDoctorId();
+            $hospitalId = $patientPastIllnessVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientPastIllness = $patientPastIllnessVM->getPatientPastIllness();
@@ -3564,6 +3599,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientpastillness()->attach($pastIllnessId,
                         array('past_illness_name' => $pastIllnessName,
                             'past_illness_date' => $pastIllnessDate,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             //'relation' => $relation,
                             'is_value_set' => $isValueSet,
                             'created_by' => 'Admin',
@@ -3642,6 +3679,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientFamilyIllnessVM->getPatientId();
+            $doctorId = $patientFamilyIllnessVM->getDoctorId();
+            $hospitalId = $patientFamilyIllnessVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientFamilyIllness = $patientFamilyIllnessVM->getPatientFamilyIllness();
@@ -3677,6 +3716,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientfamilyillness()->attach($familyIllnessId,
                         array('family_illness_name' => $familyIllnessName,
                             'family_illness_date' => $familyIllnessDate,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'relation' => $relation,
                             'is_value_set' => $isValueSet,
                             'created_by' => 'Admin',
@@ -3756,6 +3797,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientPregnancyVM->getPatientId();
+            $doctorId = $patientPregnancyVM->getDoctorId();
+            $hospitalId = $patientPregnancyVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientPregnancy = $patientPregnancyVM->getPatientPregnancy();
@@ -3789,6 +3832,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientpregnancy()->attach($pregnancyId,
                         array('pregnancy_value' => $pregnancyValue,
                             'pregnancy_date' => $patientPregnancyDate,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'is_value_set' => $isValueSet,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
@@ -3806,18 +3851,18 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(QueryException $queryEx)
         {
-            dd($queryEx);
+            //dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_ERROR, $queryEx);
         }
         catch(UserNotFoundException $userExc)
         {
-            dd($userExc);
+            //dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PREGNANCY_DETAILS_SAVE_ERROR, $exc);
         }
@@ -3840,6 +3885,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientScanVM->getPatientId();
+            $doctorId = $patientScanVM->getDoctorId();
+            $hospitalId = $patientScanVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientScans = $patientScanVM->getPatientScans();
@@ -3869,6 +3916,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientscans()->attach($scanId,
                         array('scan_date' => $patientScanDate,
                             'is_value_set' => $isValueSet,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
@@ -3919,6 +3968,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientSymVM->getPatientId();
+            $doctorId = $patientSymVM->getDoctorId();
+            $hospitalId = $patientSymVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientSymptoms = $patientSymVM->getPatientSymptoms();
@@ -3949,6 +4000,8 @@ class HospitalImpl implements HospitalInterface{
 
                     $patientSymptom = new PatientSymptoms();
                     $patientSymptom->patient_id = $patientId;
+                    $patientSymptom->doctor_id = $doctorId;
+                    $patientSymptom->hospital_id = $hospitalId;
                     $patientSymptom->main_symptom_id = $mainSymptomId;
                     $patientSymptom->sub_symptom_id = $subSymptomId;
                     $patientSymptom->symptom_id = $symptomId;
@@ -4014,6 +4067,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientUrineVM->getPatientId();
+            $doctorId = $patientUrineVM->getDoctorId();
+            $hospitalId = $patientUrineVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientExaminations = $patientUrineVM->getExaminations();
@@ -4043,6 +4098,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patienturineexaminations()->attach($examinationId,
                         array('examination_date' => $patientExaminationDate,
                             'is_value_set' => $isValueSet,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
@@ -4093,6 +4150,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientMotionVM->getPatientId();
+            $doctorId = $patientMotionVM->getDoctorId();
+            $hospitalId = $patientMotionVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientExaminations = $patientMotionVM->getExaminations();
@@ -4122,6 +4181,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientmotionexaminations()->attach($examinationId,
                         array('examination_date' => $patientExaminationDate,
                             'is_value_set' => $isValueSet,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
@@ -4172,6 +4233,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientBloodVM->getPatientId();
+            $doctorId = $patientBloodVM->getDoctorId();
+            $hospitalId = $patientBloodVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientExaminations = $patientBloodVM->getExaminations();
@@ -4201,6 +4264,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientbloodexaminations()->attach($examinationId,
                         array('examination_date' => $patientExaminationDate,
                             'is_value_set' => $isValueSet,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
@@ -4251,6 +4316,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $patientUltraSoundVM->getPatientId();
+            $doctorId = $patientUltraSoundVM->getDoctorId();
+            $hospitalId = $patientUltraSoundVM->getHospitalId();
             $patientUser = User::find($patientId);
 
             $patientExaminations = $patientUltraSoundVM->getExaminations();
@@ -4280,6 +4347,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientultrasounds()->attach($examinationId,
                         array('examination_date' => $patientExaminationDate,
                             'is_value_set' => $isValueSet,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),

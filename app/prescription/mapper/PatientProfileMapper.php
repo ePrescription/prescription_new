@@ -31,7 +31,6 @@ class PatientProfileMapper
         $profileVM = new PatientProfileViewModel();
         $profile = (object) $patientProfileRequest->all();
 
-
         //$userName = Session::get('DisplayName');
         $userName = 'Admin';
 
@@ -56,15 +55,6 @@ class PatientProfileMapper
         //$profileVM->setMainSymptomId(property_exists($profile, 'mainSymptomId') ? $profile->mainSymptomId : null);
         //$profileVM->setSubSymptomId(property_exists($profile, 'subSymptomId') ? $profile->subSymptomId : null);
         //$profileVM->setSymptomId(property_exists($profile, 'symptomId') ? $profile->symptomId : null);
-
-        //$symptoms = $profile->$symptoms;
-        //dd($candidateEmployments);
-
-        /*foreach($symptoms as $symptom)
-        {
-            $profileVM->setSymptoms($symptom);
-            //$patientPastIllnessVM->setPatientPastIllness($illness);
-        }*/
 
         $profileVM->setCreatedBy($userName);
         $profileVM->setUpdatedBy($userName);
@@ -126,8 +116,8 @@ class PatientProfileMapper
         $patientHistory = (object) $personalHistoryRequest->all();
 
         $patientHistoryVM->setPatientId($patientHistory->patientId);
-        //$patientHistoryVM->setHospitalId($patientHistory->hospitalId);
-        //$patientHistoryVM->setDoctorId($patientHistory->doctorId);
+        $patientHistoryVM->setHospitalId($patientHistory->hospitalId);
+        $patientHistoryVM->setDoctorId($patientHistory->doctorId);
 
         $medicalHistory = $patientHistory->personalHistory;
         //dd($candidateEmployments);
@@ -155,6 +145,8 @@ class PatientProfileMapper
         $generalExaminationObj = (object) $personalExaminationRequest->all();
 
         $patientGenExaminationVM->setPatientId($generalExaminationObj->patientId);
+        $patientGenExaminationVM->setDoctorId($generalExaminationObj->doctorId);
+        $patientGenExaminationVM->setHospitalId($generalExaminationObj->hospitalId);
 
         $generalExamination = $generalExaminationObj->generalExamination;
         //dd($candidateEmployments);
@@ -181,6 +173,8 @@ class PatientProfileMapper
 
         $pastIllnessObj = (object) $pastIllnessRequest->all();
         $patientPastIllnessVM->setPatientId($pastIllnessObj->patientId);
+        $patientPastIllnessVM->setDoctorId($pastIllnessObj->doctorId);
+        $patientPastIllnessVM->setHospitalId($pastIllnessObj->hospitalId);
         $pastIllness = $pastIllnessObj->pastIllness;
         //dd($candidateEmployments);
 
@@ -206,6 +200,8 @@ class PatientProfileMapper
 
         $familyIllnessObj = (object) $familyIllnessRequest->all();
         $patientFamilyIllnessVM->setPatientId($familyIllnessObj->patientId);
+        $patientFamilyIllnessVM->setDoctorId($familyIllnessObj->doctorId);
+        $patientFamilyIllnessVM->setHospitalId($familyIllnessObj->hospitalId);
         $familyIllness = $familyIllnessObj->familyIllness;
         //dd($candidateEmployments);
 
@@ -230,7 +226,9 @@ class PatientProfileMapper
         $patientPregnancyVM = new PatientPregnancyViewModel();
 
         $pregnancyObj = (object) $pregnancyRequest->all();
-        $patientPregnancyVM->setPatientId($pregnancyRequest->patientId);
+        $patientPregnancyVM->setPatientId($pregnancyObj->patientId);
+        $patientPregnancyVM->setDoctorId($pregnancyObj->doctorId);
+        $patientPregnancyVM->setHospitalId($pregnancyObj->hospitalId);
         $pregnancyDetails = $pregnancyObj->pregnancyDetails;
         //dd($candidateEmployments);
 
@@ -255,7 +253,9 @@ class PatientProfileMapper
         $patientScanVM = new PatientScanViewModel();
 
         $scanObj = (object) $scanRequest->all();
-        $patientScanVM->setPatientId($scanRequest->patientId);
+        $patientScanVM->setPatientId($scanObj->patientId);
+        $patientScanVM->setDoctorId($scanObj->doctorId);
+        $patientScanVM->setHospitalId($scanObj->hospitalId);
         $scanDetails = $scanObj->scanDetails;
         //dd($candidateEmployments);
 
@@ -280,7 +280,9 @@ class PatientProfileMapper
         $patientSymVM = new PatientSymptomsViewModel();
 
         $symObj = (object) $symptomsRequest->all();
-        $patientSymVM->setPatientId($symptomsRequest->patientId);
+        $patientSymVM->setPatientId($symObj->patientId);
+        $patientSymVM->setDoctorId($symObj->doctorId);
+        $patientSymVM->setHospitalId($symObj->hospitalId);
         $symptomDetails = $symObj->symptomDetails;
         //dd($candidateEmployments);
 
@@ -336,7 +338,9 @@ class PatientProfileMapper
         $patientUrineVM = new PatientUrineExaminationViewModel();
 
         $examinationObj = (object) $examinationRequest->all();
-        $patientUrineVM->setPatientId($examinationRequest->patientId);
+        $patientUrineVM->setPatientId($examinationObj->patientId);
+        $patientUrineVM->setDoctorId($examinationObj->doctorId);
+        $patientUrineVM->setHospitalId($examinationObj->hospitalId);
         $examinationDetails = $examinationObj->urineExaminations;
         //dd($candidateEmployments);
 
@@ -361,7 +365,9 @@ class PatientProfileMapper
         $patientMotionVM = new PatientUrineExaminationViewModel();
 
         $examinationObj = (object) $examinationRequest->all();
-        $patientMotionVM->setPatientId($examinationRequest->patientId);
+        $patientMotionVM->setPatientId($examinationObj->patientId);
+        $patientMotionVM->setDoctorId($examinationObj->doctorId);
+        $patientMotionVM->setHospitalId($examinationObj->hospitalId);
         $examinationDetails = $examinationObj->motionExaminations;
         //dd($candidateEmployments);
 
@@ -386,7 +392,9 @@ class PatientProfileMapper
         $patientBloodVM = new PatientUrineExaminationViewModel();
 
         $examinationObj = (object) $examinationRequest->all();
-        $patientBloodVM->setPatientId($examinationRequest->patientId);
+        $patientBloodVM->setPatientId($examinationObj->patientId);
+        $patientBloodVM->setDoctorId($examinationObj->doctorId);
+        $patientBloodVM->setHospitalId($examinationObj->hospitalId);
         $examinationDetails = $examinationObj->bloodExaminations;
         //dd($candidateEmployments);
 
@@ -411,7 +419,9 @@ class PatientProfileMapper
         $patientUltraSoundVM = new PatientUrineExaminationViewModel();
 
         $examinationObj = (object) $examinationRequest->all();
-        $patientUltraSoundVM->setPatientId($examinationRequest->patientId);
+        $patientUltraSoundVM->setPatientId($examinationObj->patientId);
+        $patientUltraSoundVM->setDoctorId($examinationObj->doctorId);
+        $patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
         $examinationDetails = $examinationObj->ultraSoundExaminations;
         //dd($candidateEmployments);
 

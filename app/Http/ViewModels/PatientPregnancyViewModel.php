@@ -12,6 +12,8 @@ namespace App\Http\ViewModels;
 class PatientPregnancyViewModel
 {
     private $patientId;
+    private $doctorId;
+    private $hospitalId;
     private $patientPregnancy;
 
     private $createdBy;
@@ -38,6 +40,38 @@ class PatientPregnancyViewModel
     public function setPatientId($patientId)
     {
         $this->patientId = $patientId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDoctorId()
+    {
+        return $this->doctorId;
+    }
+
+    /**
+     * @param mixed $doctorId
+     */
+    public function setDoctorId($doctorId)
+    {
+        $this->doctorId = $doctorId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHospitalId()
+    {
+        return $this->hospitalId;
+    }
+
+    /**
+     * @param mixed $hospitalId
+     */
+    public function setHospitalId($hospitalId)
+    {
+        $this->hospitalId = $hospitalId;
     }
 
     /**

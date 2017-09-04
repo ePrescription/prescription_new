@@ -12,8 +12,8 @@ namespace App\Http\ViewModels;
 class PatientPersonalHistoryViewModel
 {
     private $patientId;
-    //private $hospitalId;
-    //private $doctorId;
+    private $hospitalId;
+    private $doctorId;
     private $patientPersonalHistory;
     private $createdBy;
     private $updatedBy;
@@ -44,34 +44,34 @@ class PatientPersonalHistoryViewModel
     /**
      * @return mixed
      */
-    /*public function getHospitalId()
+    public function getHospitalId()
     {
         return $this->hospitalId;
-    }*/
+    }
 
     /**
      * @param mixed $hospitalId
      */
-    /*public function setHospitalId($hospitalId)
+    public function setHospitalId($hospitalId)
     {
         $this->hospitalId = $hospitalId;
-    }*/
+    }
 
     /**
      * @return mixed
      */
-    /*public function getDoctorId()
+    public function getDoctorId()
     {
         return $this->doctorId;
-    }*/
+    }
 
     /**
      * @param mixed $doctorId
      */
-    /*public function setDoctorId($doctorId)
+    public function setDoctorId($doctorId)
     {
         $this->doctorId = $doctorId;
-    }*/
+    }
 
     /**
      * @return mixed
