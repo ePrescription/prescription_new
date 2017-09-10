@@ -71,6 +71,144 @@ class DoctorApiController extends Controller
     }
 
     /**
+     * Get patient appointment counts
+     * @param $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDashboardDetails($hospitalId, Request $dashboardRequest)
+    {
+        $dashboardDetails = null;
+        $selectedDate = $dashboardRequest->get('selectedDate');
+        //dd($hospitalId);
+
+        try
+        {
+            $dashboardDetails = $this->hospitalService->getDashboardDetails($hospitalId, $selectedDate);
+
+            if(!is_null($dashboardDetails) && !empty($dashboardDetails))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_SUCCESS));
+                $responseJson->setCount(sizeof($dashboardDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_DASHBOARD_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($dashboardDetails);
+            $responseJson->sendSuccessResponse();
+            //dd($appointments);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Get patients by appointment category
+     * @param $hospitalId, $categoryType
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientsByAppointmentCategory($hospitalId, Request $appointmentRequest)
+    {
+        $patients = null;
+        $categoryType = $appointmentRequest->get('appointmentCategory');
+        //dd($hospitalId);
+
+        try
+        {
+            $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId, $categoryType);
+
+            if(!is_null($patients) && !empty($patients))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_SUCCESS));
+                $responseJson->setCount(sizeof($patients));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_LIST_BY_CATEGORY));
+            }
+
+            $responseJson->setObj($patients);
+            $responseJson->sendSuccessResponse();
+            //dd($appointments);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Get patient appointment dates by hospital
+     * @param $hospitalId, $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientAppointmentDates($hospitalId, $patientId)
+    {
+        $appointmentDates = null;
+        //$hospitalId = $appointmentRequest->get('hospital');
+        //dd($hospitalId);
+
+        try
+        {
+            $appointmentDates = $this->hospitalService->getPatientAppointmentDates($patientId, $hospitalId);
+
+            if(!is_null($appointmentDates) && !empty($appointmentDates))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_DATES_SUCCESS));
+                $responseJson->setCount(sizeof($appointmentDates));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_APPOINTMENT_DATES_FOUND));
+            }
+
+            $responseJson->setObj($appointmentDates);
+            $responseJson->sendSuccessResponse();
+            //dd($appointments);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_DATES_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_DATES_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
      * Get all the sub symptoms for main symptom
      * @param $mainSymptomsId
      * @throws $hospitalException

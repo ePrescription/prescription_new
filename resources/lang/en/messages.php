@@ -81,6 +81,15 @@
         "224" => "Successfully retrieved doctor names",
 
         "304" => "Unable to retrieve patient appointments",
+        "305" => "Unable to retrieve dashboard details",
+        "306" => "Successfully retrieved dashboard details",
+        "307" => "Unable to retrieve patients by appointment category",
+        "308" => "Successfully retrieved patients by appointment category",
+        "309" => "No patient list available for the appointment category",
+        "310" => "Unable to retrieve patient appointment dates",
+        "311" => "Successfully retrieved patient appointment dates",
+        "312" => "No patient appointment dates found",
+        "313" => "No dashboard details available",
 
         "1001" => "Prescription delivered successfully through SMS",
         "1002" => "Unable to deliver prescription through SMS",

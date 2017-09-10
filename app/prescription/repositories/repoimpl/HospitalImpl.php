@@ -51,6 +51,7 @@ use Illuminate\Database\QueryException;
 use Exception;
 use Numbers_Words;
 use Config as CA;
+use Carbon\Carbon;
 
 
 class HospitalImpl implements HospitalInterface{
@@ -1338,6 +1339,136 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get patient appointment counts
+     * @param $hospitalId, $selectedDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDashboardDetails($hospitalId, $selectedDate)
+    {
+        $appointments = null;
+        $totalAmount = null;
+        $dashboardDetails = null;
+
+        try
+        {
+            $currentDate = Carbon::now()->format('Y-m-d');
+            //dd($currentDate);
+            $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $query->whereDate('da.appointment_date', '<', $currentDate);
+            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $query->groupBy('da.appointment_category');
+
+            $appointments = $query->get();
+
+            $dashBoardQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $dashBoardQuery->whereDate('da.appointment_date', '=', $selectedDate);
+            $dashBoardQuery->where(function($dashBoardQuery){
+                $dashBoardQuery->where('da.appointment_time', '>=', '07:00:00');
+                $dashBoardQuery->where('da.appointment_time', '<=', '19:00:00');
+            });
+
+            /*$hospitalQuery->join('hospital as h', function($join) {
+                $join->on('h.hospital_id', '=', 'users.id');
+                $join->on('h.hospital_id', '=', DB::raw('?'));
+            })->setBindings(array_merge($doctorQuery->getBindings(), array($hospitalId)));*/
+            $dashBoardQuery->select(DB::raw("SUM(da.fee) as totalAmount"));
+            //dd($dashBoardQuery->toSql());
+            $totalAmount = $dashBoardQuery->get();
+
+
+            $dashboardDetails["appointmentCategory"] = $appointments;
+            $dashboardDetails["totalAmountCollected"] = $totalAmount;
+            //dd($dashboardDetails);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $queryEx);
+        }
+        catch(Exception $ex)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $ex);
+        }
+
+        return $dashboardDetails;
+    }
+
+    /**
+     * Get patients by appointment category
+     * @param $hospitalId, $categoryType
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientsByAppointmentCategory($hospitalId, $categoryType)
+    {
+        $patients = null;
+
+        try
+        {
+            $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $query->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
+            $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
+            $query->where('usr.delete_status', '=', 1);
+            $query->where('da.appointment_category', '=', $categoryType);
+            $query->select('p.id', 'p.patient_id', 'p.name as name', 'p.address','p.pid', 'p.telephone', 'p.email', 'p.relationship',
+                    'da.appointment_category', 'da.appointment_date');
+
+            $patients = $query->get();
+            //dd($patients);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR, $queryEx);
+        }
+        catch(Exception $ex)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR, $ex);
+        }
+
+        return $patients;
+    }
+
+    /**
+     * Get patient appointment dates by hospital
+     * @param $hospitalId, $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientAppointmentDates($patientId, $hospitalId)
+    {
+        $appointmentDates = null;
+
+        try
+        {
+            $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $query->where('da.patient_id', '=', $patientId);
+            $query->select('da.patient_id', 'da.appointment_date');
+
+            $appointmentDates = $query->get();
+            //dd($patients);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_DATES_ERROR, $queryEx);
+        }
+        catch(Exception $ex)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_DATES_ERROR, $ex);
+        }
+
+        return $appointmentDates;
+    }
+
+    /**
      * Get patient appointments by hospital
      * @param $patientId, $hospitalId
      * @throws $hospitalException
@@ -1466,17 +1597,22 @@ class HospitalImpl implements HospitalInterface{
 
     public function savePatientProfile(PatientProfileViewModel $patientProfileVM)
     {
+        //dd('Inside save profile');
         $status = true;
         $user = null;
         $patientId = null;
         $patient = null;
         $hospitalPatient = null;
         $hospitalId = null;
+        $doctorId = null;
+
+        $patientUserId = null;
 
         try
         {
             $patientId = $patientProfileVM->getPatientId();
             $hospitalId = $patientProfileVM->getHospitalId();
+            $doctorId = $patientProfileVM->getDoctorId();
 
             $hospitalUser = User::find($hospitalId);
 
@@ -1484,6 +1620,25 @@ class HospitalImpl implements HospitalInterface{
             {
                 $status = false;
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND);
+            }
+
+            /*$doctorQuery = User::query();
+            $doctorQuery->join('doctor as d', 'd.doctor_id', '=', 'users.id');
+            $doctorQuery->where('d.doctor_id', '=', $doctorId);
+            $doctorQuery->where('users.delete_status', '=', 1);
+            $doctorUser = $doctorQuery->first();*/
+
+            $doctorQuery = User::where('id','=', $doctorId)->where('delete_status', '=', 1);
+            /*$doctorQuery->join('doctor as d', 'd.doctor_id', '=', 'users.id');
+            $doctorQuery->where('d.doctor_id', '=', $doctorId);
+            $doctorQuery->where('users.delete_status', '=', 1);*/
+            $doctorUser = $doctorQuery->first();
+
+            //dd($doctorUser);
+
+            if(is_null($doctorUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
             }
             //dd($patientId);
 
@@ -1494,54 +1649,68 @@ class HospitalImpl implements HospitalInterface{
                 $patient = new Patient();
                 $patient->pid = 'PID'.crc32(uniqid(rand()));
                 $patient->email = $patientProfileVM->getEmail();
+
+                $patientUserId = $user->id;
+
+                $patient->name = $patientProfileVM->getName();
+                $patient->address = $patientProfileVM->getAddress();
+                $patient->city = $patientProfileVM->getCity();
+                $patient->country = $patientProfileVM->getCountry();
+                $patient->telephone = $patientProfileVM->getTelephone();
+                $patient->relationship = $patientProfileVM->getRelationship();
+                $patient->patient_spouse_name = $patientProfileVM->getSpouseName();
+                $patient->patient_photo = $patientProfileVM->getPatientPhoto();
+                $patient->dob = $patientProfileVM->getDob();
+                $patient->age = $patientProfileVM->getAge();
+                $patient->nationality = $patientProfileVM->getNationality();
+                $patient->gender = $patientProfileVM->getGender();
+                $patient->married = $patientProfileVM->getMaritalStatus();
+
+                $patient->created_by = $patientProfileVM->getCreatedBy();
+                $patient->created_at = $patientProfileVM->getCreatedAt();
+                $patient->updated_by = $patientProfileVM->getUpdatedBy();
+                $patient->updated_at = $patientProfileVM->getUpdatedAt();
+
+                $user->patient()->save($patient);
+
+                $user->patienthospitals()->attach($hospitalId, array('created_by' => $patientProfileVM->getCreatedBy(),
+                    'updated_by' => $patientProfileVM->getUpdatedBy()));
+
+                /*if($patientId == 0)
+                {
+                    $user->patienthospitals()->attach($hospitalId, array('created_by' => $patientProfileVM->getCreatedBy(),
+                        'updated_by' => $patientProfileVM->getUpdatedBy()));
+                }*/
             }
             else
             {
                 $patient = Patient::where('patient_id', '=', $patientId)->first();
-                //dd($patient);
-                if(!is_null($patient))
+                $patientUserId = $patient->patient_id;
+
+                if(is_null($patient))
                 {
-                    //$user = User::find($companyId);
-                    $user = $this->registerNewPatient($patientProfileVM);
+                    $status = false;
+                    throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND);
+                }
+                //dd($patient);
+                /*if(!is_null($patient))
+                {
+                    $user = User::find($patientUserId);
+                    //$user = $this->registerNewPatient($patientProfileVM);
                 }
                 else
                 {
                     $status = false;
-                    throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND);
-                }
+                    throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND);
+                }*/
             }
 
-            $patient->name = $patientProfileVM->getName();
-            $patient->address = $patientProfileVM->getAddress();
-            $patient->city = $patientProfileVM->getCity();
-            $patient->country = $patientProfileVM->getCountry();
-            $patient->telephone = $patientProfileVM->getTelephone();
-            $patient->relationship = $patientProfileVM->getRelationship();
-            $patient->patient_spouse_name = $patientProfileVM->getSpouseName();
-            $patient->patient_photo = $patientProfileVM->getPatientPhoto();
-            $patient->dob = $patientProfileVM->getDob();
-            $patient->age = $patientProfileVM->getAge();
-            $patient->nationality = $patientProfileVM->getNationality();
-            $patient->gender = $patientProfileVM->getGender();
-            $patient->married = $patientProfileVM->getMaritalStatus();
+            $this->savePatientAppointment($patientProfileVM, $doctorUser, $patientUserId);
 
-            //$patient->main_symptoms_id = $patientProfileVM->getMainSymptomId();
-            //$patient->sub_symptoms_id = $patientProfileVM->getSubSymptomId();
-            //$patient->symptoms_id = $patientProfileVM->getSymptomId();
-
-
-            $patient->created_by = $patientProfileVM->getCreatedBy();
-            $patient->created_at = $patientProfileVM->getCreatedAt();
-            $patient->updated_by = $patientProfileVM->getUpdatedBy();
-            $patient->updated_at = $patientProfileVM->getUpdatedAt();
-
-            $user->patient()->save($patient);
-
-            if($patientId == 0)
+            /*if (!is_null($doctorUser) && !is_null($hospitalUser))
             {
-                $user->patienthospitals()->attach($hospitalId, array('created_by' => $patientProfileVM->getCreatedBy(),
-                    'updated_by' => $patientProfileVM->getUpdatedBy()));
-            }
+                $this->savePatientAppointment($patientProfileVM, $doctorUser, $patientUserId);
+            }*/
 
         }
         catch(QueryException $queryEx)
@@ -1552,6 +1721,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(UserNotFoundException $userExc)
         {
+            //dd($userExc);
             $status = false;
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         }
@@ -1564,6 +1734,64 @@ class HospitalImpl implements HospitalInterface{
 
         return $status;
         //return $patient;
+    }
+
+    private function savePatientAppointment(PatientProfileViewModel $patientProfileVM, User $doctorUser, $patientUserId)
+    {
+        //$appointments = $patientProfileVM->getAppointment();
+        //dd($doctorUser);
+        $doctorAppointment = new DoctorAppointments();
+
+        $doctorAppointment->patient_id = $patientUserId;
+        $doctorAppointment->hospital_id = $patientProfileVM->getHospitalId();
+        $doctorAppointment->brief_history = $patientProfileVM->getBriefHistory();
+        $doctorAppointment->appointment_date = $patientProfileVM->getAppointmentDate();
+        $doctorAppointment->appointment_time = $patientProfileVM->getAppointmentTime();
+        $doctorAppointment->appointment_category = $patientProfileVM->getAppointmentCategory();
+        $doctorAppointment->referral_type = $patientProfileVM->getReferralType();
+        $doctorAppointment->referral_doctor = $patientProfileVM->getReferralDoctor();
+        $doctorAppointment->referral_hospital = $patientProfileVM->getReferralHospital();
+        $doctorAppointment->referral_hospital_location = $patientProfileVM->getHospitalLocation();
+        $doctorAppointment->fee = $patientProfileVM->getAmount();
+        $doctorAppointment->payment_type = $patientProfileVM->getPaymentType();
+        //$doctorAppointment->doctor_id = $doctorUser->doctor_id;
+        /*$doctorAppointment->brief_history = $appointment->briefHistory;
+        $doctorAppointment->appointment_date = $appointment->appointmentDate;
+        $doctorAppointment->appointment_time = $appointment->appointmentTime;
+        $doctorAppointment->appointment_category = $appointment->appointmentCategory;
+        $doctorAppointment->referral_doctor = $appointment->referralDoctor;
+        $doctorAppointment->referral_hospital = $appointment->referralHospital;
+        $doctorAppointment->referral_hospital_location = $appointment->hospitalLocation;*/
+        $doctorAppointment->created_by = $patientProfileVM->getCreatedBy();
+        $doctorAppointment->modified_by = $patientProfileVM->getUpdatedBy();
+        $doctorAppointment->created_at = $patientProfileVM->getCreatedAt();
+        $doctorAppointment->updated_at = $patientProfileVM->getUpdatedAt();
+
+        $doctorUser->appointments()->save($doctorAppointment);
+        //$doctorAppointment->save();
+
+        /*foreach($appointments as $appointment)
+        {
+            $doctorAppointment = new DoctorAppointments();
+            $doctorAppointment->patient_id = $patientUserId;
+            $doctorAppointment->hospital_id = $patientProfileVM->getHospitalId();
+            $doctorAppointment->doctor_id = $doctorUser->doctor_id;
+            $doctorAppointment->brief_history = $appointment->briefHistory;
+            $doctorAppointment->appointment_date = $appointment->appointmentDate;
+            $doctorAppointment->appointment_time = $appointment->appointmentTime;
+            $doctorAppointment->appointment_category = $appointment->appointmentCategory;
+            $doctorAppointment->referral_doctor = $appointment->referralDoctor;
+            $doctorAppointment->referral_hospital = $appointment->referralHospital;
+            $doctorAppointment->referral_hospital_location = $appointment->hospitalLocation;
+            $doctorAppointment->created_by = $patientProfileVM->getCreatedBy();
+            $doctorAppointment->modified_by = $patientProfileVM->getUpdatedBy();
+            $doctorAppointment->created_at = $patientProfileVM->getCreatedAt();
+            $doctorAppointment->updated_at = $patientProfileVM->getUpdatedAt();
+
+            //$doctorUser->appointments()->save($doctorAppointment);
+            $doctorAppointment->save();
+        }*/
+
     }
 
     /**
@@ -4315,8 +4543,10 @@ class HospitalImpl implements HospitalInterface{
 
         try
         {
+            //dd('test');
             $patientId = $patientUltraSoundVM->getPatientId();
             $doctorId = $patientUltraSoundVM->getDoctorId();
+            //dd($doctorId);
             $hospitalId = $patientUltraSoundVM->getHospitalId();
             $patientUser = User::find($patientId);
 

@@ -52,6 +52,26 @@ class PatientProfileMapper
         $profileVM->setMaritalStatus(property_exists($profile, 'maritalStatus') ? $profile->maritalStatus : null);
         $profileVM->setHospitalId(property_exists($profile, 'hospitalId') ? $profile->hospitalId : null);
         $profileVM->setDoctorId(property_exists($profile, 'doctorId') ? $profile->doctorId : null);
+
+        $profileVM->setAppointmentTime($profile->appointmentTime);
+        $profileVM->setBriefHistory(property_exists($profile, 'briefHistory') ? $profile->briefHistory : null);
+        $profileVM->setAppointmentDate($profile->appointmentDate);
+        $profileVM->setAppointmentCategory(property_exists($profile, 'appointmentCategory') ? $profile->appointmentCategory : null);
+        $profileVM->setReferralType(property_exists($profile, 'referralType') ? $profile->referralType : null);
+        $profileVM->setReferralDoctor(property_exists($profile, 'referralDoctor') ? $profile->referralDoctor : null);
+        $profileVM->setReferralHospital(property_exists($profile, 'referralHospital') ? $profile->referralHospital : null);
+        $profileVM->setHospitalLocation(property_exists($profile, 'hospitalLocation') ? $profile->hospitalLocation : null);
+        $profileVM->setAmount(property_exists($profile, 'fee') ? $profile->fee : null);
+        $profileVM->setPaymentType(property_exists($profile, 'paymentType') ? $profile->paymentType : null);
+
+        /*$appointments = $profile->appointment;
+
+        foreach($appointments as $appointment)
+        {
+            $profileVM->setAppointment($appointment);
+        }*/
+
+        //$profileVM->setAppointment();
         //$profileVM->setMainSymptomId(property_exists($profile, 'mainSymptomId') ? $profile->mainSymptomId : null);
         //$profileVM->setSubSymptomId(property_exists($profile, 'subSymptomId') ? $profile->subSymptomId : null);
         //$profileVM->setSymptomId(property_exists($profile, 'symptomId') ? $profile->symptomId : null);

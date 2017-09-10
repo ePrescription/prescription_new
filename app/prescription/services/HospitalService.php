@@ -495,6 +495,90 @@ class HospitalService {
     }
 
     /**
+     * Get patient appointment counts
+     * @param $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDashboardDetails($hospitalId, $selectedDate)
+    {
+        $dashboardDetails = null;
+
+        try
+        {
+            $dashboardDetails = $this->hospitalRepo->getDashboardDetails($hospitalId, $selectedDate);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $exc);
+        }
+
+        return $dashboardDetails;
+    }
+
+    /**
+     * Get patients by appointment category
+     * @param $hospitalId, $categoryType
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientsByAppointmentCategory($hospitalId, $categoryType)
+    {
+        $patients = null;
+
+        try
+        {
+            $patients = $this->hospitalRepo->getPatientsByAppointmentCategory($hospitalId, $categoryType);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR, $exc);
+        }
+
+        return $patients;
+    }
+
+    /**
+     * Get patient appointment dates by hospital
+     * @param $hospitalId, $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientAppointmentDates($patientId, $hospitalId)
+    {
+        $appointmentDates = null;
+
+        try
+        {
+            $appointmentDates = $this->hospitalRepo->getPatientAppointmentDates($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_DATES_ERROR, $exc);
+        }
+
+        return $appointmentDates;
+    }
+
+    /**
      * Get patient appointments by hospital
      * @param $patientId, $hospitalId
      * @throws $hospitalException

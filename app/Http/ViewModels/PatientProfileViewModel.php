@@ -30,11 +30,28 @@ class PatientProfileViewModel
     private $maritalStatus;
     private $hospitalId;
     private $doctorId;
+    private $appointment;
+
+    private $briefHistory;
+    private $appointmentDate;
+    private $appointmentTime;
+    private $appointmentCategory;
+    private $referralDoctor;
+    private $referralHospital;
+    private $hospitalLocation;
+    private $amount;
+    private $referralType;
+    private $paymentType;
 
     private $createdBy;
     private $updatedBy;
     private $createdAt;
     private $updatedAt;
+
+    public function __construct()
+    {
+        $this->appointment = array();
+    }
 
     /**
      * @return mixed
@@ -339,6 +356,184 @@ class PatientProfileViewModel
     {
         $this->doctorId = $doctorId;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAppointment()
+    {
+        return $this->appointment;
+    }
+
+    /**
+     * @param mixed $appointment
+     */
+    public function setAppointment($appointment)
+    {
+        //$this->appointment = $appointment;
+        array_push($this->appointment, (object) $appointment);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBriefHistory()
+    {
+        return $this->briefHistory;
+    }
+
+    /**
+     * @param mixed $briefHistory
+     */
+    public function setBriefHistory($briefHistory)
+    {
+        $this->briefHistory = $briefHistory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppointmentDate()
+    {
+        return $this->appointmentDate;
+    }
+
+    /**
+     * @param mixed $appointmentDate
+     */
+    public function setAppointmentDate($appointmentDate)
+    {
+        $this->appointmentDate = $appointmentDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppointmentCategory()
+    {
+        return $this->appointmentCategory;
+    }
+
+    /**
+     * @param mixed $appointmentCategory
+     */
+    public function setAppointmentCategory($appointmentCategory)
+    {
+        $this->appointmentCategory = $appointmentCategory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReferralDoctor()
+    {
+        return $this->referralDoctor;
+    }
+
+    /**
+     * @param mixed $referralDoctor
+     */
+    public function setReferralDoctor($referralDoctor)
+    {
+        $this->referralDoctor = $referralDoctor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReferralHospital()
+    {
+        return $this->referralHospital;
+    }
+
+    /**
+     * @param mixed $referralHospital
+     */
+    public function setReferralHospital($referralHospital)
+    {
+        $this->referralHospital = $referralHospital;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHospitalLocation()
+    {
+        return $this->hospitalLocation;
+    }
+
+    /**
+     * @param mixed $hospitalLocation
+     */
+    public function setHospitalLocation($hospitalLocation)
+    {
+        $this->hospitalLocation = $hospitalLocation;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param mixed $amount
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReferralType()
+    {
+        return $this->referralType;
+    }
+
+    /**
+     * @param mixed $referralType
+     */
+    public function setReferralType($referralType)
+    {
+        $this->referralType = $referralType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * @param mixed $paymentType
+     */
+    public function setPaymentType($paymentType)
+    {
+        $this->paymentType = $paymentType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppointmentTime()
+    {
+        return $this->appointmentTime;
+    }
+
+    /**
+     * @param mixed $appointmentTime
+     */
+    public function setAppointmentTime($appointmentTime)
+    {
+        $this->appointmentTime = $appointmentTime;
+    }
+
 
     /**
      * @return mixed

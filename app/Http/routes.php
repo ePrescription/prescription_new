@@ -232,6 +232,9 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
     });
     Route::post('send', 'DoctorController@sendEmail');
 
+    Route::get('rest/api/{hospitalId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'DoctorApiController@getDashboardDetails'));
+    Route::get('rest/api/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorApiController@getPatientsByAppointmentCategory'));
+    Route::get('rest/api/{hospitalId}/patients/{patientId}/appointmentdates', array('as' => 'patient.appointmentdates', 'uses' => 'DoctorApiController@getPatientAppointmentDates'));
     /*Route::group(['middleware' => 'prescription.auth'], function () {
 
         Route::get('rest/api/patient', array('as' => 'patient.patient', 'uses' => 'DoctorController@searchPatientByPid'));
@@ -364,6 +367,8 @@ Route::group(['prefix' => 'doctor'], function()
 
     Route::group(['namespace' => 'Doctor'], function()
     {
+
+
         Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patients', array('as' => 'doctor.patients', 'uses' => 'DoctorController@getPatientsByDoctorForFront'));
         Route::get('rest/api/mainsymptoms', array('as' => 'doctor.symptoms', 'uses' => 'DoctorApiController@getMainSymptoms'));
 

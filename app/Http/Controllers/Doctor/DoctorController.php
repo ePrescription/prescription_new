@@ -1192,11 +1192,11 @@ class DoctorController extends Controller
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
             $responseJson->sendErrorResponse($hospitalExc);
         }
-            /*catch(UserNotFoundException $userExc)
-            {
-                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$userExc->getUserErrorCode()));
-                $responseJson->sendErrorResponse($userExc);
-            }*/
+        /*catch(UserNotFoundException $userExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$userExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($userExc);
+        }*/
         catch(Exception $exc)
         {
             //dd($exc);
