@@ -37,6 +37,9 @@ $profile_menu="0";
 
                     <div class="row">
                         <div class="col-sm-12">
+
+
+
                             <div class="panel panel-primary">
                                 <div class="panel-body">
                                     <div style="float:right;">
@@ -45,6 +48,24 @@ $profile_menu="0";
                                         </a>
                                     </div>
                                     <h4 class="m-t-0 m-b-30">Patient Lab Details</h4>
+
+
+                                    @if (session()->has('message'))
+                                        <div class="col_full login-title">
+                                            <span style="color:red;">
+                                                <p class="text-danger">{{session('message')}}</p>
+                                            </span>
+                                        </div>
+                                    @endif
+
+                                    @if (session()->has('success'))
+                                        <div class="col_full login-title">
+                                            <span style="color:green;">
+                                                <p class="text-success">{{session('success')}}</p>
+                                            </span>
+                                        </div>
+                                    @endif
+
 
                                     <div class="row">
 
@@ -104,6 +125,9 @@ $profile_menu="0";
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12">
+
+
+
                                             <ul class="nav nav-tabs navtab-bg">
                                                 <li class="active">
                                                     <a href="#blood" data-toggle="tab" aria-expanded="true">

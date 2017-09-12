@@ -78,7 +78,7 @@ $profile_menu="0";
                                                     <th>Mobile No</th>
                                                     <th>Age</th>
                                                     <th>Gender</th>
-                                                    <th></th>
+                                                    <th>Action</th>
                                                 </tr>
                                                 </thead>
 
@@ -92,6 +92,20 @@ $profile_menu="0";
                                                         <td>{{$patient->age}}</td>
                                                         <td>@if($patient->gender==1) Male @else Female @endif</td>
                                                         <td>
+
+
+                                                            <a href="{{URL::to('/')}}/doctor/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i> </a>
+                                                            &nbsp;&nbsp;
+                                                            <a href="{{URL::to('/')}}/doctor/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/edit" title="Edit Profile"><i class="fa fa-edit"></i></a>
+                                                            <!--
+                                                            &nbsp;&nbsp;
+                                                            <a href="{{URL::to('/')}}/doctor/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/medical-details" title="Medical Profile"><i class="fa fa-medkit"></i></a>
+                                                            &nbsp;&nbsp;
+                                                            <a href="{{URL::to('/')}}/doctor/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i> </a>
+
+                                                            &nbsp;&nbsp;
+                                                            <a href="{{URL::to('/')}}/doctor/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/addappointment" title="Book Appointment"><i class="fa fa-stethoscope"></i> </a>
+                                                            -->
 
                                                             <!--
 <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/addappointment" style="float:right;">Appointment</a>

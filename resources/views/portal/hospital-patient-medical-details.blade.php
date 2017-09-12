@@ -49,20 +49,20 @@ $profile_menu="0";
                                     @if (session()->has('message'))
                                         <div class="col_full login-title">
                                             <span style="color:red;">
-                                                <b>{{session('message')}}</b>
+                                                <p class="text-danger">{{session('message')}}</p>
                                             </span>
-                                            <br/>
                                         </div>
                                     @endif
 
                                     @if (session()->has('success'))
                                         <div class="col_full login-title">
                                             <span style="color:green;">
-                                                <b>{{session('success')}}</b>
+                                                <p class="text-success">{{session('success')}}</p>
                                             </span>
-                                            <br/>
                                         </div>
                                     @endif
+
+
 
                                     <div class="row">
 

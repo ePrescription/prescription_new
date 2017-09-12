@@ -380,6 +380,15 @@ Route::group(['prefix' => 'doctor'], function()
 
 
         Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patients', array('as' => 'doctor.patients', 'uses' => 'DoctorController@getPatientsByDoctorForFront'));
+        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/details', array('as' => 'doctor.patientdetails', 'uses' => 'DoctorController@PatientDetailsByDoctorForFront'));
+
+
+        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/edit', array('as' => 'doctor.patientdetailsedit', 'uses' => 'DoctorController@PatientEditByDoctorForFront'));
+        Route::post('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/update', array('as' => 'doctor.savepatient', 'uses' => 'DoctorController@updatePatientsByDoctorForFront'));
+
+
+
+
         Route::get('rest/api/mainsymptoms', array('as' => 'doctor.symptoms', 'uses' => 'DoctorApiController@getMainSymptoms'));
 
         Route::get('rest/api/{mainsymptomId}/subsymptoms', array('as' => 'doctor.subsymptoms', 'uses' => 'DoctorApiController@getSubSymptomsForMainSymptoms'));
