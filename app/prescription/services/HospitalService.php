@@ -755,6 +755,34 @@ class HospitalService {
     }
 
     /**
+     * Get patient by Name for the hospital
+     * @param $keyword, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function searchPatientByHospitalAndName($hospitalId, $keyword = null)
+    {
+        $patients = null;
+
+        try
+        {
+            $patients = $this->hospitalRepo->searchPatientByHospitalAndName($hospitalId, $keyword);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LIST_ERROR, $exc);
+        }
+
+        return $patients;
+    }
+
+    /**
      * Save new appointments for the patient
      * @param $newAppointmentVM
      * @throws $hospitalException
@@ -1810,6 +1838,62 @@ class HospitalService {
         }
 
         return $scans;
+    }
+
+    /**
+     * Get patient lab tests by hospital and fee status
+     * @param $patientId, $hospitalId, $feeStatus
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientLabTests($hospitalId, $patientId, $feeStatus)
+    {
+        $patientLabTests = null;
+
+        try
+        {
+            $patientLabTests = $this->hospitalRepo->getPatientLabTests($hospitalId, $patientId, $feeStatus);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LABTEST_FEES_STATUS_ERROR, $exc);
+        }
+
+        return $patientLabTests;
+    }
+
+    /**
+     * Get patient lab test details by patient and labtesttype
+     * @param $patientId, $hospitalId, $feeStatus
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabTestDetailsByPatient($patientId, $labTestType, $labTestId)
+    {
+        $labTestDetails = null;
+
+        try
+        {
+            $labTestDetails = $this->hospitalRepo->getLabTestDetailsByPatient($patientId, $labTestType, $labTestId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LABTEST_FEES_STATUS_ERROR, $exc);
+        }
+
+        return $labTestDetails;
     }
 
     /**

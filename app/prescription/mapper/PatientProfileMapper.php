@@ -136,8 +136,10 @@ class PatientProfileMapper
         $patientHistory = (object) $personalHistoryRequest->all();
 
         $patientHistoryVM->setPatientId($patientHistory->patientId);
-        $patientHistoryVM->setHospitalId($patientHistory->hospitalId);
-        $patientHistoryVM->setDoctorId($patientHistory->doctorId);
+        $patientHistoryVM->setDoctorId(property_exists($patientHistory, 'doctorId') ? $patientHistory->doctorId : null);
+        $patientHistoryVM->setHospitalId(property_exists($patientHistory, 'hospitalId') ? $patientHistory->hospitalId : null);
+        /*$patientHistoryVM->setHospitalId($patientHistory->hospitalId);
+        $patientHistoryVM->setDoctorId($patientHistory->doctorId);*/
 
         $medicalHistory = $patientHistory->personalHistory;
         //dd($candidateEmployments);
@@ -165,8 +167,10 @@ class PatientProfileMapper
         $generalExaminationObj = (object) $personalExaminationRequest->all();
 
         $patientGenExaminationVM->setPatientId($generalExaminationObj->patientId);
-        $patientGenExaminationVM->setDoctorId($generalExaminationObj->doctorId);
-        $patientGenExaminationVM->setHospitalId($generalExaminationObj->hospitalId);
+        $patientGenExaminationVM->setDoctorId(property_exists($generalExaminationObj, 'doctorId') ? $generalExaminationObj->doctorId : null);
+        $patientGenExaminationVM->setHospitalId(property_exists($generalExaminationObj, 'hospitalId') ? $generalExaminationObj->hospitalId : null);
+        /*$patientGenExaminationVM->setDoctorId($generalExaminationObj->doctorId);
+        $patientGenExaminationVM->setHospitalId($generalExaminationObj->hospitalId);*/
 
         $generalExamination = $generalExaminationObj->generalExamination;
         //dd($candidateEmployments);
@@ -193,8 +197,10 @@ class PatientProfileMapper
 
         $pastIllnessObj = (object) $pastIllnessRequest->all();
         $patientPastIllnessVM->setPatientId($pastIllnessObj->patientId);
-        $patientPastIllnessVM->setDoctorId($pastIllnessObj->doctorId);
-        $patientPastIllnessVM->setHospitalId($pastIllnessObj->hospitalId);
+        /*$patientPastIllnessVM->setDoctorId($pastIllnessObj->doctorId);
+        $patientPastIllnessVM->setHospitalId($pastIllnessObj->hospitalId);*/
+        $patientPastIllnessVM->setDoctorId(property_exists($pastIllnessObj, 'doctorId') ? $pastIllnessObj->doctorId : null);
+        $patientPastIllnessVM->setHospitalId(property_exists($pastIllnessObj, 'hospitalId') ? $pastIllnessObj->hospitalId : null);
         $pastIllness = $pastIllnessObj->pastIllness;
         //dd($candidateEmployments);
 
@@ -220,8 +226,10 @@ class PatientProfileMapper
 
         $familyIllnessObj = (object) $familyIllnessRequest->all();
         $patientFamilyIllnessVM->setPatientId($familyIllnessObj->patientId);
-        $patientFamilyIllnessVM->setDoctorId($familyIllnessObj->doctorId);
-        $patientFamilyIllnessVM->setHospitalId($familyIllnessObj->hospitalId);
+        /*$patientFamilyIllnessVM->setDoctorId($familyIllnessObj->doctorId);
+        $patientFamilyIllnessVM->setHospitalId($familyIllnessObj->hospitalId);*/
+        $patientFamilyIllnessVM->setDoctorId(property_exists($familyIllnessObj, 'doctorId') ? $familyIllnessObj->doctorId : null);
+        $patientFamilyIllnessVM->setHospitalId(property_exists($familyIllnessObj, 'hospitalId') ? $familyIllnessObj->hospitalId : null);
         $familyIllness = $familyIllnessObj->familyIllness;
         //dd($candidateEmployments);
 
@@ -247,8 +255,10 @@ class PatientProfileMapper
 
         $pregnancyObj = (object) $pregnancyRequest->all();
         $patientPregnancyVM->setPatientId($pregnancyObj->patientId);
-        $patientPregnancyVM->setDoctorId($pregnancyObj->doctorId);
-        $patientPregnancyVM->setHospitalId($pregnancyObj->hospitalId);
+        /*$patientPregnancyVM->setDoctorId($pregnancyObj->doctorId);
+        $patientPregnancyVM->setHospitalId($pregnancyObj->hospitalId);*/
+        $patientPregnancyVM->setDoctorId(property_exists($pregnancyObj, 'doctorId') ? $pregnancyObj->doctorId : null);
+        $patientPregnancyVM->setHospitalId(property_exists($pregnancyObj, 'hospitalId') ? $pregnancyObj->hospitalId : null);
         $pregnancyDetails = $pregnancyObj->pregnancyDetails;
         //dd($candidateEmployments);
 
@@ -274,8 +284,10 @@ class PatientProfileMapper
 
         $scanObj = (object) $scanRequest->all();
         $patientScanVM->setPatientId($scanObj->patientId);
-        $patientScanVM->setDoctorId($scanObj->doctorId);
-        $patientScanVM->setHospitalId($scanObj->hospitalId);
+        /*$patientScanVM->setDoctorId($scanObj->doctorId);
+        $patientScanVM->setHospitalId($scanObj->hospitalId);*/
+        $patientScanVM->setDoctorId(property_exists($scanObj, 'doctorId') ? $scanObj->doctorId : null);
+        $patientScanVM->setHospitalId(property_exists($scanObj, 'hospitalId') ? $scanObj->hospitalId : null);
         $scanDetails = $scanObj->scanDetails;
         //dd($candidateEmployments);
 
@@ -301,8 +313,10 @@ class PatientProfileMapper
 
         $symObj = (object) $symptomsRequest->all();
         $patientSymVM->setPatientId($symObj->patientId);
-        $patientSymVM->setDoctorId($symObj->doctorId);
-        $patientSymVM->setHospitalId($symObj->hospitalId);
+        $patientSymVM->setDoctorId(property_exists($symObj, 'doctorId') ? $symObj->doctorId : null);
+        $patientSymVM->setHospitalId(property_exists($symObj, 'hospitalId') ? $symObj->hospitalId : null);
+        /*$patientSymVM->setDoctorId($symObj->doctorId);
+        $patientSymVM->setHospitalId($symObj->hospitalId);*/
         $symptomDetails = $symObj->symptomDetails;
         //dd($candidateEmployments);
 
@@ -328,6 +342,9 @@ class PatientProfileMapper
 
         $drugHistoryObj = (object) $drugHistoryRequest->all();
         $patientDrugsVM->setPatientId($drugHistoryRequest->patientId);
+        $patientDrugsVM->setDoctorId(property_exists($drugHistoryObj, 'doctorId') ? $drugHistoryObj->doctorId : null);
+        $patientDrugsVM->setHospitalId(property_exists($drugHistoryObj, 'hospitalId') ? $drugHistoryObj->hospitalId : null);
+        //$patientDrugsVM->set
         $drugHistory = $drugHistoryObj->drugHistory;
         $surgeryHistory = $drugHistoryObj->surgeryHistory;
         //dd($candidateEmployments);
@@ -359,8 +376,10 @@ class PatientProfileMapper
 
         $examinationObj = (object) $examinationRequest->all();
         $patientUrineVM->setPatientId($examinationObj->patientId);
-        $patientUrineVM->setDoctorId($examinationObj->doctorId);
-        $patientUrineVM->setHospitalId($examinationObj->hospitalId);
+        /*$patientUrineVM->setDoctorId($examinationObj->doctorId);
+        $patientUrineVM->setHospitalId($examinationObj->hospitalId);*/
+        $patientUrineVM->setDoctorId(property_exists($examinationObj, 'doctorId') ? $examinationObj->doctorId : null);
+        $patientUrineVM->setHospitalId(property_exists($examinationObj, 'hospitalId') ? $examinationObj->hospitalId : null);
         $examinationDetails = $examinationObj->urineExaminations;
         //dd($candidateEmployments);
 
@@ -386,8 +405,10 @@ class PatientProfileMapper
 
         $examinationObj = (object) $examinationRequest->all();
         $patientMotionVM->setPatientId($examinationObj->patientId);
-        $patientMotionVM->setDoctorId($examinationObj->doctorId);
-        $patientMotionVM->setHospitalId($examinationObj->hospitalId);
+        /*$patientMotionVM->setDoctorId($examinationObj->doctorId);
+        $patientMotionVM->setHospitalId($examinationObj->hospitalId);*/
+        $patientMotionVM->setDoctorId(property_exists($examinationObj, 'doctorId') ? $examinationObj->doctorId : null);
+        $patientMotionVM->setHospitalId(property_exists($examinationObj, 'hospitalId') ? $examinationObj->hospitalId : null);
         $examinationDetails = $examinationObj->motionExaminations;
         //dd($candidateEmployments);
 
@@ -413,8 +434,10 @@ class PatientProfileMapper
 
         $examinationObj = (object) $examinationRequest->all();
         $patientBloodVM->setPatientId($examinationObj->patientId);
-        $patientBloodVM->setDoctorId($examinationObj->doctorId);
-        $patientBloodVM->setHospitalId($examinationObj->hospitalId);
+        /*$patientBloodVM->setDoctorId($examinationObj->doctorId);
+        $patientBloodVM->setHospitalId($examinationObj->hospitalId);*/
+        $patientBloodVM->setDoctorId(property_exists($examinationObj, 'doctorId') ? $examinationObj->doctorId : null);
+        $patientBloodVM->setHospitalId(property_exists($examinationObj, 'hospitalId') ? $examinationObj->hospitalId : null);
         $examinationDetails = $examinationObj->bloodExaminations;
         //dd($candidateEmployments);
 
@@ -440,8 +463,10 @@ class PatientProfileMapper
 
         $examinationObj = (object) $examinationRequest->all();
         $patientUltraSoundVM->setPatientId($examinationObj->patientId);
-        $patientUltraSoundVM->setDoctorId($examinationObj->doctorId);
-        $patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
+        //$patientUltraSoundVM->setDoctorId($examinationObj->doctorId);
+        $patientUltraSoundVM->setDoctorId(property_exists($examinationObj, 'doctorId') ? $examinationObj->doctorId : null);
+        $patientUltraSoundVM->setHospitalId(property_exists($examinationObj, 'hospitalId') ? $examinationObj->hospitalId : null);
+        //$patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
         $examinationDetails = $examinationObj->ultraSoundExaminations;
         //dd($candidateEmployments);
 

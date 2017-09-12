@@ -65,6 +65,7 @@ interface HospitalInterface {
     public function searchPatientByPid($pid);
 
     public function searchByPatientByPidOrName($keyWord = null);
+    public function searchPatientByHospitalAndName($hospitalId, $keyword = null);
 
     //Drug list
     public function getTradeNames($keyword);
@@ -130,4 +131,7 @@ interface HospitalInterface {
     public function getAllPersonalHistory();
     public function getAllPregnancy();
     public function getAllScans();
+
+    public function getPatientLabTests($hospitalId, $patientId, $feeStatus = null);
+    public function getLabTestDetailsByPatient($patientId, $labTestType, $labTestId);
 }

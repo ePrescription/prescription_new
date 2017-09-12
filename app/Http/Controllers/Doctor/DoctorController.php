@@ -692,14 +692,14 @@ class DoctorController extends Controller
             $errorMsg = $hospitalExc->getMessageForCode();
             $msg = AppendMessage::appendMessage($hospitalExc);
             Log::error($msg);
-            $prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::FAILURE));
+            //$prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::FAILURE));
         }
         catch(Exception $exc)
         {
             //dd("2".$exc);
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
-            $prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::FAILURE));
+            //$prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::FAILURE));
         }
 
     }
@@ -1398,6 +1398,55 @@ class DoctorController extends Controller
             }
 
             $responseJson->setObj($patient);
+            $responseJson->sendSuccessResponse();
+
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LIST_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Get patient by Name for the hospital
+     * @param $keyword, $patientRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function searchPatientByHospitalAndName($hospitalId, Request $patientRequest)
+    {
+        $patients = null;
+        $responseJson = null;
+        //$pid = \Input::get('pid');
+        $keyword = $patientRequest->get('keyword');
+
+        try
+        {
+            //$patient = HospitalServiceFacade::searchByPatientByPidOrName($keyword);
+            $patients = $this->hospitalService->searchPatientByHospitalAndName($hospitalId, $keyword);
+
+            if(!empty($patients))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($patients));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_LIST_FOUND));
+            }
+
+            $responseJson->setObj($patients);
             $responseJson->sendSuccessResponse();
 
 
@@ -5009,6 +5058,82 @@ class DoctorController extends Controller
 
     }
 
+    /**
+     * Get patient lab tests by hospital and fee status
+     * @param $patientId, $hospitalId, $feeStatus
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientLabTests($hospitalId, $patientId, Request $labTestRequest)
+    {
+        $patientLabTests = null;
+        $feeStatus = $labTestRequest->get('feeStatus');
+        //dd($feeStatus);
+
+        try
+        {
+            $patientLabTests = $this->hospitalService->getPatientLabTests($hospitalId, $patientId, $feeStatus);
+            //dd($patientLabTests);
+            //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+    }
+
+    /**
+     * Get patient lab test details by patient and labtesttype
+     * @param $patientId, $hospitalId, $feeStatus
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabTestDetailsByPatient($patientId, Request $labDetailsRequest, $labTestId)
+    {
+        $labTestDetails = null;
+        $labTestType = $labDetailsRequest->get('testType');
+        //dd($labTestType);
+
+        try
+        {
+            $labTestDetails = $this->hospitalService->getLabTestDetailsByPatient($patientId, $labTestType, $labTestId);
+            dd($labTestDetails);
+            //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+    }
+
     public function AddPatientMedicalScanByHospitalForFront($hid,$patientId)
     {
         $patientDetails = null;
@@ -5153,6 +5278,7 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId);
+            //dd($patientExaminations);
         }
         catch(HospitalException $hospitalExc)
         {

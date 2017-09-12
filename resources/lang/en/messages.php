@@ -236,4 +236,8 @@
 
         "789" => "Unable to save patient ultra sound examination details",
         "790" => "Successfully saved patient ultra sound examination details",
+
+        "791" => "Unable to retrieve patient lab tests",
+        "792" => "Successfully retrieved patient lab tests",
+        "793" => "No patient lab test available",
     ];

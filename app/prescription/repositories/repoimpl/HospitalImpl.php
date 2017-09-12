@@ -909,6 +909,43 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get patient by Name for the hospital
+     * @param $keyword, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function searchPatientByHospitalAndName($hospitalId, $keyword = null)
+    {
+        $patients = null;
+
+        try
+        {
+            $query = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.telephone');
+            $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
+            $query->join('hospital_patient as hp', 'hp.patient_id', '=', 'usr.id');
+            $query->where('usr.delete_status', '=', 1);
+            $query->where('hp.hospital_id', '=', $hospitalId);
+            $query->where('p.name', 'LIKE', '%'.$keyword.'%');
+
+            //dd($query->toSql());
+            $patients = $query->get();
+            //dd($patients);
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LIST_ERROR, $exc);
+        }
+
+        return $patients;
+    }
+
+    /**
      * Save new appointments for the patient
      * @param $newAppointmentVM
      * @throws $hospitalException
@@ -3430,6 +3467,226 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get patient lab tests by hospital and fee status
+     * @param $patientId, $hospitalId, $feeStatus
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientLabTests($hospitalId, $patientId, $feeStatus = null)
+    {
+        $patientLabTests = null;
+        //$bloodExamination = null;
+        $motionExamination = null;
+        $scanExamination = null;
+        $ultraSoundExamination = null;
+        $urineExamination = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+            $hospitalUser = User::find($hospitalId);
+
+            //dd($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            if(is_null($hospitalUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $bloodExaminationQuery = DB::table('patient as p');
+            $bloodExaminationQuery->join('patient_blood_examination as pbe', 'pbe.patient_id', '=', 'p.patient_id');
+            //$bloodExaminationQuery->
+                //'pbe.id', 'pbe.examination_date', 'pbe.is_fees_paid');
+
+            $bloodExaminationQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            $bloodExaminationQuery->where('pbe.patient_id', $patientId);
+            $bloodExaminationQuery->where('pbe.hospital_id', $hospitalId);
+            if(!is_null($feeStatus))
+            {
+                //dd('Inside not null');
+                $bloodExaminationQuery->where('pbe.is_fees_paid', $feeStatus);
+            }
+            $bloodExaminationQuery->select('p.patient_id', 'p.name', 'p.pid', 'pbe.id', 'pbe.examination_date',
+                'pbe.is_fees_paid', 'pbe.examination_type', 'be.examination_name');
+            //$bloodExaminationQuery->groupBy('pbe.examination_date');
+
+            //dd($bloodExaminationQuery->toSql());
+            $bloodExamination = $bloodExaminationQuery->get();
+            //dd($bloodExamination);
+
+            $motionExaminationQuery = DB::table('patient_motion_examination as pme');
+            $motionExaminationQuery->join('patient as p', 'p.patient_id', '=', 'pme.patient_id');
+            $motionExaminationQuery->join('motion_examination as me', 'me.id', '=', 'pme.motion_examination_id');
+            $motionExaminationQuery->where('pme.patient_id', '=', $patientId);
+            $motionExaminationQuery->where('pme.hospital_id', '=', $hospitalId);
+            if(!is_null($feeStatus))
+            {
+                $motionExaminationQuery->where('pme.is_fees_paid', '=', $feeStatus);
+            }
+            $motionExaminationQuery->select('p.patient_id', 'p.name', 'p.pid',
+                'pme.id', 'pme.examination_date', 'pme.is_fees_paid', 'pme.examination_type', 'me.examination_name');
+            $motionExamination = $motionExaminationQuery->get();
+
+            $scanQuery = DB::table('patient_scan as ps');
+            $scanQuery->join('patient as p', 'p.patient_id', '=', 'ps.patient_id');
+            $scanQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
+            $scanQuery->where('ps.patient_id', '=', $patientId);
+            $scanQuery->where('ps.hospital_id', '=', $hospitalId);
+            if(!is_null($feeStatus))
+            {
+                $scanQuery->where('ps.is_fees_paid', '=', $feeStatus);
+            }
+            $scanQuery->select('p.patient_id', 'p.name', 'p.pid',
+                'ps.id', 'ps.scan_date', 'ps.is_fees_paid', 'ps.examination_type', 's.scan_name');
+            $scanExamination = $scanQuery->get();
+
+            $ultraSoundQuery = DB::table('patient_ultra_sound as pus');
+            $ultraSoundQuery->join('patient as p', 'p.patient_id', '=', 'pus.patient_id');
+            $ultraSoundQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
+            $ultraSoundQuery->where('pus.patient_id', '=', $patientId);
+            $ultraSoundQuery->where('pus.hospital_id', '=', $hospitalId);
+            if(!is_null($feeStatus))
+            {
+                $ultraSoundQuery->where('pus.is_fees_paid', '=', $feeStatus);
+            }
+            $ultraSoundQuery->select('p.patient_id', 'p.name', 'p.pid',
+                'pus.id', 'pus.examination_date', 'pus.is_fees_paid', 'pus.examination_type', 'us.examination_name');
+            $ultraSoundExamination = $ultraSoundQuery->get();
+
+            $urineExaminationQuery = DB::table('patient_urine_examination as pue');
+            $urineExaminationQuery->join('patient as p', 'p.patient_id', '=', 'pue.patient_id');
+            $urineExaminationQuery->join('urine_examination as ue', 'ue.id', '=', 'pue.urine_examination_id');
+            $urineExaminationQuery->where('pue.patient_id', '=', $patientId);
+            $urineExaminationQuery->where('pue.hospital_id', '=', $hospitalId);
+            if(!is_null($feeStatus))
+            {
+                $urineExaminationQuery->where('pue.is_fees_paid', '=', $feeStatus);
+            }
+            $urineExaminationQuery->select('p.patient_id', 'p.name', 'p.pid',
+                'pue.id', 'pue.examination_date', 'pue.is_fees_paid', 'pue.examination_type', 'ue.examination_name');
+            $urineExamination = $urineExaminationQuery->get();
+
+            $patientLabTests["bloodExamination"] = $bloodExamination;
+            $patientLabTests["motionExamination"] = $motionExamination;
+            $patientLabTests["scanExamination"] = $scanExamination;
+            $patientLabTests["ultraSoundExamination"] = $ultraSoundExamination;
+            $patientLabTests["urineExamination"] = $urineExamination;
+
+            //dd($patientLabTests);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_LABTEST_FEES_STATUS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LABTEST_FEES_STATUS_ERROR, $exc);
+        }
+
+        return $patientLabTests;
+    }
+
+    /**
+     * Get patient lab test details by patient and labtesttype
+     * @param $patientId, $hospitalId, $feeStatus
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabTestDetailsByPatient($patientId, $labTestType, $labTestId)
+    {
+
+        $doctorId = null;
+        $hospitalId = null;
+        $patientDetails = null;
+        $doctorDetails = null;
+        $hospitalDetails = null;
+        $feeReceiptDetails = null;
+
+        try
+        {
+            $tableName = CA::get('constants.'.$labTestType);
+
+            //$examinationQuery = DB::table($tableName. ' as ltd')->where('ltd.id', '=', $labTestId);
+            //$examinationQuery->select('ltd.id', '')
+            /*$feeDetailsQuery->select('fr.id as receiptId', 'fr.patient_id as patientId', 'fr.doctor_id as doctorId',
+                'fr.hospital_id as hospitalId', 'fr.fee');
+
+            $feeInfo = $feeDetailsQuery->first();
+
+            //dd($feeInfo);
+
+            $doctorId = $feeInfo->doctorId;
+            $hospitalId = $feeInfo->hospitalId;
+            $patientId = $feeInfo->patientId;
+            $fees = $feeInfo->fee;
+
+            $feeWords = $this->convertFee($fees);
+            //dd($feeWords);
+
+            //$feeDetails = (array)$feeInfo;
+            $feeDetails['inWords'] = $feeWords;
+            $feeDetails['fee'] = $fees;
+
+            //array_push($feeDetails, $feeWords);
+            //dd($feeDetails);
+
+            $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
+                'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
+            $patientQuery->where('p.patient_id', '=', $patientId);
+            $patientDetails = $patientQuery->first();
+
+            $doctorQuery = DB::table('doctor as d')->select('d.id', 'd.doctor_id', 'd.name', 'd.did', 'd.designation',
+                'd.specialty as department');
+            $doctorQuery->where('d.doctor_id', '=', $doctorId);
+            $doctorDetails = $doctorQuery->first();
+
+            $hospitalQuery = DB::table('hospital as h')->select('h.id', 'h.hospital_id', 'h.hospital_name', 'h.hid',
+                'h.address', 'h.hospital_logo', 'c.city_name as cityName', 'co.name as country');
+            $hospitalQuery->join('cities as c', 'c.id', '=', 'h.city');
+            $hospitalQuery->join('countries as co', 'co.id', '=', 'h.country');
+            $hospitalQuery->where('h.hospital_id', '=', $hospitalId);
+            $hospitalDetails = $hospitalQuery->first();
+
+            $feeReceiptDetails["patientDetails"] = $patientDetails;
+            $feeReceiptDetails["doctorDetails"] = $doctorDetails;
+            $feeReceiptDetails["hospitalDetails"] = $hospitalDetails;
+            $feeReceiptDetails["feeDetails"] = $feeDetails;*/
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::FEE_RECEIPT_DETAILS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::FEE_RECEIPT_DETAILS_ERROR, $exc);
+        }
+
+        //dd($feeReceiptDetails);
+        return $feeReceiptDetails;
+
+
+
+    }
+
+    /**
      * Get patient examination dates
      * @param $patientId
      * @throws $hospitalException
@@ -4646,6 +4903,8 @@ class HospitalImpl implements HospitalInterface{
                     $patientDrugHistory->dosage = $history->dosage;
                     $patientDrugHistory->timings = $history->timings;
                     $patientDrugHistory->drug_history_date = $history->drugHistoryDate;
+                    $patientDrugHistory->doctor_id = $drugHistoryVM->getDoctorId();
+                    $patientDrugHistory->hospital_id = $drugHistoryVM->getHospitalId();
                     $patientDrugHistory->created_by = $drugHistoryVM->getCreatedBy();
                     $patientDrugHistory->modified_by = $drugHistoryVM->getUpdatedBy();
                     $patientDrugHistory->created_at = $drugHistoryVM->getCreatedAt();

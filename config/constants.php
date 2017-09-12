@@ -14,4 +14,10 @@ return [
 
     'locale' => 'en_IN',
     'currency' => 'INR',
+
+    'B' => 'patient_blood_examination',
+    'M' => 'patient_motion_examination',
+    'S' => 'patient_scan',
+    'US' => 'patient_ultra_sound',
+    'U' => 'patient_urine_examination',
 ];

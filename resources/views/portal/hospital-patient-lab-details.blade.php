@@ -138,8 +138,8 @@ $profile_menu="0";
                                                         <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectgerenal" onchange="javascript:ajaxloadblooddetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['generalExaminationDates'] as $generalExaminationDate)
-                                                                <option value="{{$generalExaminationDate->general_examination_date}}">{{$generalExaminationDate->general_examination_date}}</option>
+                                                            @foreach($patientExaminations['bloodTestDates'] as $generalExaminationDate)
+                                                                <option value="{{$generalExaminationDate->examination_date}}">{{$generalExaminationDate->examination_date}}</option>
                                                             @endforeach
                                                         </select>
 
@@ -155,8 +155,8 @@ $profile_menu="0";
                                                         <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectfamily" onchange="javascript:ajaxloadmotiondetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['familyIllnessDates'] as $familyIllnessDates)
-                                                                <option value="{{$familyIllnessDates->family_illness_date}}">{{$familyIllnessDates->family_illness_date}}</option>
+                                                            @foreach($patientExaminations['motionTestDates'] as $familyIllnessDates)
+                                                                <option value="{{$familyIllnessDates->examination_date}}">{{$familyIllnessDates->examination_date}}</option>
                                                             @endforeach
                                                         </select>
 
@@ -173,8 +173,8 @@ $profile_menu="0";
                                                         <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectpast" onchange="javascript:ajaxloadurinedetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['pastIllnessDates'] as $pastIllnessDates)
-                                                                <option value="{{$pastIllnessDates->past_illness_date}}">{{$pastIllnessDates->past_illness_date}}</option>
+                                                            @foreach($patientExaminations['urineTestDates'] as $pastIllnessDates)
+                                                                <option value="{{$pastIllnessDates->examination_date}}">{{$pastIllnessDates->examination_date}}</option>
                                                             @endforeach
                                                         </select>
 
@@ -190,8 +190,8 @@ $profile_menu="0";
                                                         <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectpersonal" onchange="javascript:ajaxloadultradetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['personalHistoryDates'] as $personalHistoryDates)
-                                                                <option value="{{$personalHistoryDates->personal_history_date}}">{{$personalHistoryDates->personal_history_date}}</option>
+                                                            @foreach($patientExaminations['ultraSoundDates'] as $personalHistoryDates)
+                                                                <option value="{{$personalHistoryDates->examination_date}}">{{$personalHistoryDates->examination_date}}</option>
                                                             @endforeach
                                                         </select>
 
