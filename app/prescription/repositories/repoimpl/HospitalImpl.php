@@ -8,6 +8,7 @@
 
 namespace App\prescription\repositories\repoimpl;
 
+use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
@@ -26,6 +27,7 @@ use App\Http\ViewModels\PatientUrineExaminationViewModel;
 
 use App\prescription\model\entities\Doctor;
 use App\prescription\model\entities\DoctorAppointments;
+use App\prescription\model\entities\DoctorReferral;
 use App\prescription\model\entities\FeeReceipt;
 use App\prescription\model\entities\Hospital;
 use App\prescription\model\entities\LabTestDetails;
@@ -3607,7 +3609,7 @@ class HospitalImpl implements HospitalInterface{
      * @author Baskar
      */
 
-    public function getLabTestDetailsByPatient($patientId, $labTestType, $labTestId)
+    public function getLabTestDetailsByPatient($labTestType, $labTestId)
     {
 
         $doctorId = null;
@@ -3615,25 +3617,46 @@ class HospitalImpl implements HospitalInterface{
         $patientDetails = null;
         $doctorDetails = null;
         $hospitalDetails = null;
-        $feeReceiptDetails = null;
+        $examinationDetails = null;
+        $patientId = null;
 
         try
         {
+            //dd($labTestId);
             $tableName = CA::get('constants.'.$labTestType);
 
-            //$examinationQuery = DB::table($tableName. ' as ltd')->where('ltd.id', '=', $labTestId);
+            /*\DB::listen(function($sql, $bindings, $time) {
+                var_dump($sql);
+                var_dump($bindings);
+                var_dump($time);
+                dd($sql. "   ".$bindings);
+            });*/
+
+            //dd(DB::getQueryLog());
+
+            //dd($sql)
+
+            $examinationQuery = DB::table($tableName. ' as ltd')->where('ltd.id', '=', $labTestId);
             //$examinationQuery->select('ltd.id', '')
-            /*$feeDetailsQuery->select('fr.id as receiptId', 'fr.patient_id as patientId', 'fr.doctor_id as doctorId',
-                'fr.hospital_id as hospitalId', 'fr.fee');
+            $examinationQuery->select('ltd.id', 'ltd.patient_id as patientId', 'ltd.doctor_id as doctorId',
+                'ltd.hospital_id as hospitalId');
 
-            $feeInfo = $feeDetailsQuery->first();
+            $examinationDetails = $examinationQuery->first();
 
-            //dd($feeInfo);
+            //dd($examinationQuery->toSql());
+            /*DB::connection()->enableQueryLog();
+            $examinationDetails = $examinationQuery->first();
+            $query = DB::getQueryLog();
+            //$lastQuery = end($query);
+            dd($query);*/
 
-            $doctorId = $feeInfo->doctorId;
-            $hospitalId = $feeInfo->hospitalId;
-            $patientId = $feeInfo->patientId;
-            $fees = $feeInfo->fee;
+            //dd($examinationDetails);
+
+            $doctorId = $examinationDetails->doctorId;
+            $hospitalId = $examinationDetails->hospitalId;
+            $patientId = $examinationDetails->patientId;
+
+            /*$fees = $feeInfo->fee;
 
             $feeWords = $this->convertFee($fees);
             //dd($feeWords);
@@ -3680,10 +3703,148 @@ class HospitalImpl implements HospitalInterface{
         }
 
         //dd($feeReceiptDetails);
-        return $feeReceiptDetails;
+        return $examinationDetails;
+    }
 
+    /**
+     * Get all specialties
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
 
+    public function getAllSpecialties()
+    {
+        $specialties = null;
 
+        try
+        {
+            $query = DB::table('specialty as s')->select('s.id', 's.specialty_name')->where('s.specialty_status', '=', 1);
+            $specialties = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::SPECIALTIES_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::SPECIALTIES_LIST_ERROR, $exc);
+        }
+
+        return $specialties;
+    }
+
+    /**
+     * Get doctors by specialty
+     * @param $specialtyId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDoctorsBySpecialty($specialtyId)
+    {
+        $referralDoctors = null;
+
+        try
+        {
+            $query = DB::table('doctor_specialty_referral as drs')->select('drs.id', 'drs.doctor_name',
+                'drs.hospital_name', 'drs.location');
+            $query->where('drs.specialty_id', '=', $specialtyId);
+
+            $referralDoctors = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_LIST_ERROR, $exc);
+        }
+
+        return $referralDoctors;
+    }
+
+    /**
+     * Save doctor referral
+     * @param $doctorReferralsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveReferralDoctor(DoctorReferralsViewModel $doctorReferralsVM)
+    {
+        $status = true;
+
+        try
+        {
+            $doctorReferral = new DoctorReferral();
+            $doctorReferral->doctor_name = $doctorReferralsVM->getDoctorName();
+            $doctorReferral->hospital_name = $doctorReferralsVM->getHospitalName();
+            $doctorReferral->location = $doctorReferralsVM->getLocation();
+            $doctorReferral->specialty_id = $doctorReferralsVM->getSpecialtyId();
+            $doctorReferral->created_by = $doctorReferralsVM->getCreatedBy();
+            $doctorReferral->modified_by     = $doctorReferralsVM->getUpdatedBy();
+            $doctorReferral->created_at = $doctorReferralsVM->getCreatedAt();
+            $doctorReferral->updated_at = $doctorReferralsVM->getUpdatedAt();
+
+            $doctorReferral->save();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_SAVE_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Get referral doctor details
+     * @param $referralId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getReferralDoctorDetails($referralId)
+    {
+        $referralDoctorDetails = null;
+
+        try
+        {
+            $query = DB::table('doctor_specialty_referral as drs')->select('drs.id', 'drs.doctor_name',
+                'drs.hospital_name', 'drs.location');
+            $query->where('drs.id', '=', $referralId);
+
+            $referralDoctorDetails = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_DETAILS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_DETAILS_ERROR, $exc);
+        }
+
+        return $referralDoctorDetails;
     }
 
     /**

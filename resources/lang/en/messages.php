@@ -240,4 +240,19 @@
         "791" => "Unable to retrieve patient lab tests",
         "792" => "Successfully retrieved patient lab tests",
         "793" => "No patient lab test available",
+
+        "851" => "Unable to retrieve specialties list",
+        "852" => "Successfully retrieved specialties list",
+        "853" => "No specialties list available",
+
+        "854" => "Unable to retrieve referral doctors",
+        "855" => "Successfully retrieved referral doctors",
+        "856" => "No referral doctors list",
+
+        "857" => "Unable to save referral doctor",
+        "858" => "Successfully saved referral doctor",
+
+        "859" => "Unable to retrieve referral doctor details",
+        "860" => "Successfully retrieved referral doctor details",
+        "861" => "No referral doctor details available",
     ];

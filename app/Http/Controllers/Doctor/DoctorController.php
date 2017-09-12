@@ -2070,6 +2070,42 @@ class DoctorController extends Controller
         //return $pharmacyProfile;
     }
 
+    /**
+     * Get all specialties
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllSpecialties()
+    {
+        //dd('HI');
+        $specialties = null;
+
+        try
+        {
+            $specialties = $this->hospitalService->getAllSpecialties();
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        //return view('portal.hospital-patients',compact('patients'));
+        return $specialties;
+    }
+
     public function editProfile($hospitalId, HelperService $helperService)
     {
         $hospitalProfile = null;
@@ -5104,7 +5140,7 @@ class DoctorController extends Controller
      * @author Baskar
      */
 
-    public function getLabTestDetailsByPatient($patientId, Request $labDetailsRequest, $labTestId)
+    public function getLabTestDetailsByPatient($labTestId, Request $labDetailsRequest)
     {
         $labTestDetails = null;
         $labTestType = $labDetailsRequest->get('testType');
@@ -5112,7 +5148,7 @@ class DoctorController extends Controller
 
         try
         {
-            $labTestDetails = $this->hospitalService->getLabTestDetailsByPatient($patientId, $labTestType, $labTestId);
+            $labTestDetails = $this->hospitalService->getLabTestDetailsByPatient($labTestType, $labTestId);
             dd($labTestDetails);
             //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
 

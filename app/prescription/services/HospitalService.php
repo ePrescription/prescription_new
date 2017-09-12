@@ -1876,13 +1876,13 @@ class HospitalService {
      * @author Baskar
      */
 
-    public function getLabTestDetailsByPatient($patientId, $labTestType, $labTestId)
+    public function getLabTestDetailsByPatient($labTestType, $labTestId)
     {
         $labTestDetails = null;
 
         try
         {
-            $labTestDetails = $this->hospitalRepo->getLabTestDetailsByPatient($patientId, $labTestType, $labTestId);
+            $labTestDetails = $this->hospitalRepo->getLabTestDetailsByPatient($labTestType, $labTestId);
         }
         catch(HospitalException $hospitalExc)
         {
@@ -1894,6 +1894,124 @@ class HospitalService {
         }
 
         return $labTestDetails;
+    }
+
+    /**
+     * Get all specialties
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllSpecialties()
+    {
+        $specialties = null;
+
+        try
+        {
+            $specialties = $this->hospitalRepo->getAllSpecialties();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::SPECIALTIES_LIST_ERROR, $exc);
+        }
+
+        return $specialties;
+    }
+
+    /**
+     * Get doctors by specialty
+     * @param $specialtyId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDoctorsBySpecialty($specialtyId)
+    {
+        $referralDoctors = null;
+
+        try
+        {
+            $referralDoctors = $this->hospitalRepo->getDoctorsBySpecialty($specialtyId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_LIST_ERROR, $exc);
+        }
+
+        return $referralDoctors;
+    }
+
+    /**
+     * Save doctor referral
+     * @param $doctorReferralsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveReferralDoctor($doctorReferralsVM)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($doctorReferralsVM, &$status)
+            {
+                $status = $this->hospitalRepo->saveReferralDoctor($doctorReferralsVM);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_SAVE_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Get referral doctor details
+     * @param $referralId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getReferralDoctorDetails($referralId)
+    {
+        $referralDoctorDetails = null;
+
+        try
+        {
+            $referralDoctorDetails = $this->hospitalRepo->getReferralDoctorDetails($referralId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::REFERRAL_DOCTOR_DETAILS_ERROR, $exc);
+        }
+
+        return $referralDoctorDetails;
     }
 
     /**

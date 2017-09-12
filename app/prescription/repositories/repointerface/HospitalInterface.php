@@ -6,6 +6,7 @@
  * Time: 5:07 PM
  */
 
+use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
@@ -133,5 +134,10 @@ interface HospitalInterface {
     public function getAllScans();
 
     public function getPatientLabTests($hospitalId, $patientId, $feeStatus = null);
-    public function getLabTestDetailsByPatient($patientId, $labTestType, $labTestId);
+    public function getLabTestDetailsByPatient($labTestType, $labTestId);
+
+    public function getAllSpecialties();
+    public function getDoctorsBySpecialty($specialtyId);
+    public function saveReferralDoctor(DoctorReferralsViewModel $doctorReferralsVM);
+    public function getReferralDoctorDetails($referralId);
 }

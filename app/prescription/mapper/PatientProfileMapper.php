@@ -8,6 +8,7 @@
 
 namespace App\prescription\mapper;
 
+use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
@@ -484,6 +485,29 @@ class PatientProfileMapper
         $patientUltraSoundVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $patientUltraSoundVM;
+    }
+
+    public static function setReferralDoctor(Request $doctorReferralRequest)
+    {
+        $doctorReferralsVM = new DoctorReferralsViewModel();
+
+        $referralObj = (object) $doctorReferralRequest->all();
+        $doctorReferralsVM->setDoctorName($referralObj->doctorName);
+        //$patientUltraSoundVM->setDoctorId($examinationObj->doctorId);
+        $doctorReferralsVM->setHospitalName(property_exists($referralObj, 'hospitalName') ? $referralObj->hospitalName : null);
+        $doctorReferralsVM->setLocation(property_exists($referralObj, 'location') ? $referralObj->location : null);
+        //$patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
+        $doctorReferralsVM->setSpecialtyId($referralObj->specialtyId);
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $doctorReferralsVM->setCreatedBy($userName);
+        $doctorReferralsVM->setUpdatedBy($userName);
+        $doctorReferralsVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $doctorReferralsVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $doctorReferralsVM;
     }
 
 }
