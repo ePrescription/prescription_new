@@ -440,7 +440,7 @@ class HospitalImpl implements HospitalInterface{
             $query->where('p.patient_id', $patientId);
             $query->orderBy('da.appointment_date', 'DESC');
             $query->orderBy('da.appointment_time', 'DESC');
-
+            $query->limit(1);
             //'p.main_symptoms_id', 'p.sub_symptoms_id', 'p.symptoms_id'
 
             //dd($query->toSql());

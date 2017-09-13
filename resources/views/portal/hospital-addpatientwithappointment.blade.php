@@ -87,10 +87,9 @@ $time_array=array(
                                     @endif
 
                                             <!-- form start -->
-                                        <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/savepatient" role="form" method="POST">
+                                        <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/savepatientwithappointment" role="form" method="POST">
                                             <input type="hidden" name="hospitalId" value="{{Auth::user()->id}}" required="required" />
-                                            <input type="hidden" name="patientId" value="0" required="required" />
-                                            <input type="hidden" name="doctorId" value="0" required="required" />
+                                            <input type="hidden" name="patientId" id="patientId" value="0" required="required" />
                                             <div class="col-md-12">
                                                 <style>.control-label{line-height:32px;}</style>
 
@@ -109,7 +108,7 @@ $time_array=array(
                                                         <!--
                                                         <input type="text" class="form-control" name="searchPatient" value="" id="autocomplete-ajax" />
                                                         -->
-                                                        <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="patientUpdate();">
+                                                        <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">
                                                             <option value="">--CHOOSE PATIENT--</option>
                                                             @foreach($patients as $patient)
                                                                 <option value="{{$patient->patient_id}}" >{{$patient->pid}} - {{$patient->name}}</option>
@@ -148,9 +147,9 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Gender</label>
                                                     <div class="col-sm-9">
-                                                        <input type="radio" class="form-controlx" id="gender" name="gender" value="1" required="required" />Male
-                                                        &nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" id="gender" name="gender" value="2" required="required" />Female
+                                                        <input type="radio" class="form-controlx" id="gender1" name="gender" value="1" required="required" />&nbsp;&nbsp;Male
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <input type="radio" class="form-controlx" id="gender2" name="gender" value="2" required="required" />&nbsp;&nbsp;Female
                                                     </div>
                                                 </div>
 
@@ -250,29 +249,33 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Hospital Name</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="spouseName" value="" required="required" />
+                                                        <input type="text" class="form-control" name="referralHospital" value="" required="required" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Hospital Location</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="spouseName" value="" required="required" />
+                                                        <input type="text" class="form-control" name="hospitalLocation" value="" required="required" />
                                                     </div>
                                                 </div>
 
                                                 <h4 class="m-t-0 m-b-30">Payment Info</h4>
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Amount</label>
-                                                    <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="spouseName" value="" required="required" />
-                                                    </div>
-                                                </div>
+
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Payment Type</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="spouseName" value="" required="required" />
+                                                        <input type="radio" class="form-controlx" id="payment" name="paymentType" value="Cash" required="required" />&nbsp;&nbsp;Cash
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <input type="radio" class="form-controlx" id="payment" name="paymentType" value="Card" required="required" />&nbsp;&nbsp;Card
                                                     </div>
                                                 </div>
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Amount</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="fee" value="" required="required" />
+                                                    </div>
+                                                </div>
+
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Notes</label>
                                                     <div class="col-sm-9">
@@ -314,7 +317,7 @@ $time_array=array(
 
 
 @section('scripts')
-
+<?php /* ?>
     {!!  Html::script(asset('plugins/jQuery-Autocomplete/scripts/jquery.mockjax.js')) !!}
     {!!  Html::script(asset('plugins/jQuery-Autocomplete/src/jquery.autocomplete.js')) !!}
     {!!  Html::script(asset('plugins/jQuery-Autocomplete/scripts/countries.js')) !!}
@@ -328,18 +331,68 @@ $time_array=array(
         });
 
     </script>
-
+<?php */ ?>
     <script>
         function visitPatient(id)
         {
             if(id==1)
             {
                 $("#searchPatientBox").hide();
+
+                $('input#name').attr('readonly', false);
+                $('input#email').attr('readonly', false);
+                $('input#telephone').attr('readonly', false);
+                $('input#age').attr('readonly', false);
+                $('input#gender1').attr('disabled', false);
+                $('input#gender2').attr('disabled', false);
+
             }
             else
             {
                 $("#searchPatientBox").show();
+
+                $('input#name').attr('readonly', true);
+                $('input#email').attr('readonly', true);
+                $('input#telephone').attr('readonly', true);
+                $('input#age').attr('readonly', true);
+                $('input#gender1').attr('disabled', true);
+                $('input#gender2').attr('disabled', true);
             }
+        }
+
+        function getPatient(pid) {
+
+            $("input#patientId").val(pid);
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/details';
+
+
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    //alert(data.result[0].id);
+                    console.log(data);
+                    //$("#patienturinediv").html(data);
+                    $("input#name").val(data.result[0].name);
+                    $("input#email").val(data.result[0].email);
+                    $("input#telephone").val(data.result[0].telephone);
+                    $("input#age").val(data.result[0].age);
+                    if(data.result[0].gender==1)
+                    {
+                        $("input#gender1").attr('checked', 'checked');
+                    }
+                    if(data.result[0].gender==2)
+                    {
+                        $("input#gender2").attr('checked', 'checked');
+                    }
+
+                }
+            });
+
+
         }
 
     </script>

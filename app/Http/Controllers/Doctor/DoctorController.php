@@ -2351,12 +2351,12 @@ class DoctorController extends Controller
                 //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
 
                 $msg = "Patient Profile Added Successfully.";
-                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatient')->with('success',$msg);
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('success',$msg);
             }
             else
             {
                 $msg = "Patient Details Invalid / Incorrect! Try Again.";
-                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatient')->with('message',$msg);
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg);
             }
 
         }
@@ -2377,7 +2377,7 @@ class DoctorController extends Controller
         }
 
         $msg = "Patient Details Invalid / Incorrect! Try Again.";
-        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatient')->with('message',$msg);
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg);
         //return $jsonResponse;
 
     }
