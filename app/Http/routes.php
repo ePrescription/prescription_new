@@ -121,6 +121,10 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
         //return view('portal.hospital-dashboard');
     });
 
+
+    Route::get('rest/api/{hospitalId}/patientnames', array('as' => 'patient.searchnames', 'uses' => 'DoctorController@getPatientNamesForHospital'));
+
+
     Route::get('rest/api/{hospitalId}/patients', array('as' => 'hospital.patients', 'uses' => 'DoctorController@getPatientsByHospitalForFront'));
 
 

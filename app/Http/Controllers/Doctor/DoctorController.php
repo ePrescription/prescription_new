@@ -2309,7 +2309,9 @@ class DoctorController extends Controller
         $patients = null;
         try
         {
-            //$patients = HospitalServiceFacade::getPatientsByHospital($hospitalId);
+            $patients = HospitalServiceFacade::getPatientsByHospital($hospitalId, $keyword = null);
+            $doctors = HospitalServiceFacade::getDoctorsByHospitalId($hospitalId);
+            $specialties = HospitalServiceFacade::getAllSpecialties();
 
         }
         catch(HospitalException $hospitalExc)
@@ -2326,7 +2328,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-addpatientwithappointment');
+        return view('portal.hospital-addpatientwithappointment',compact('patients','doctors','specialties'));
     }
 
 
@@ -2725,6 +2727,53 @@ class DoctorController extends Controller
         return $responseJson;
     }
 
+
+    public function getPatientNamesForHospital($hospitalId, Request $nameRequest)
+    {
+        $patientNames = null;
+        $responseJson = null;
+
+        $keyword = $nameRequest->get('query');
+
+
+        $data = '{"query": '.$keyword.',"suggestions": ["United Arab Emirates", "United Kingdom", "United States"]}';
+        return $data;
+        //dd($keyword);
+        //return $keyword;
+        try
+        {
+            //$patientNames = HospitalServiceFacade::searchPatientByName($keyword);
+            $patientNames = $this->hospitalService->getPatientNames($hospitalId, $keyword);
+            //dd($patientNames);
+
+            if(!empty($patientNames))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($patientNames));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_LIST_ERROR));
+            }
+
+            $responseJson->setObj($patientNames);
+            $responseJson->sendSuccessResponse();
+            //dd($jsonResponse);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LIST_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
     public function PatientDetailsByHospitalForFront($hid,$patientId)
     {
         $patientDetails = null;
