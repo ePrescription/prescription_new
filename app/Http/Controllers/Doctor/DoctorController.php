@@ -2733,11 +2733,12 @@ class DoctorController extends Controller
         $patientNames = null;
         $responseJson = null;
 
-        $keyword = $nameRequest->get('query');
+        $keyword = $nameRequest->get('term');
 
-
+        /*
         $data = '{"query": '.$keyword.',"suggestions": ["United Arab Emirates", "United Kingdom", "United States"]}';
         return $data;
+        */
         //dd($keyword);
         //return $keyword;
         try

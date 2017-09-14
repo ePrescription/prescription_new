@@ -108,12 +108,16 @@ $time_array=array(
                                                         <!--
                                                         <input type="text" class="form-control" name="searchPatient" value="" id="autocomplete-ajax" />
                                                         -->
+
+                                                        <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">title="Select for a state" search><option></option></select>
+                                                        <!--
                                                         <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">
                                                             <option value="">--CHOOSE PATIENT--</option>
                                                             @foreach($patients as $patient)
                                                                 <option value="{{$patient->patient_id}}" >{{$patient->pid}} - {{$patient->name}}</option>
                                                             @endforeach
                                                         </select>
+                                                        -->
                                                     </div>
                                                 </div>
 
@@ -317,7 +321,36 @@ $time_array=array(
 
 
 @section('scripts')
-<?php /* ?>
+
+
+    {!!  Html::script(asset('plugins/ajax-chosen/dist/chosen/chosen/chosen.jquery.min.js')) !!}
+    {!!  Html::script(asset('plugins/ajax-chosen/lib/ajax-chosen.js')) !!}
+
+    {!!  Html::style(asset('plugins/ajax-chosen/dist/chosen/chosen/chosen.css')) !!}
+    <style type="text/css">
+        select#searchPatient { width: 300px; display: block; }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select#searchPatient").ajaxChosen({
+                type: 'GET',
+                //url: '/vistara/ajax-chosen-master/data.json',
+                ///url: '/treatin-web-app/public/ajaxGetCountry',
+                url: '{{ URL::to('/') }}/fronthospital/rest/api/{{Auth::user()->id}}/patientnames',
+                dataType: 'json'
+            }, function (data) {
+                var terms = {};
+                console.log(data.result);
+                $.each(data.result, function (i, val) {
+                    terms[val.patientId] = val.name;
+                });
+
+                return terms;
+            });
+        });
+    </script>
+
+    <?php /* ?>
     {!!  Html::script(asset('plugins/jQuery-Autocomplete/scripts/jquery.mockjax.js')) !!}
     {!!  Html::script(asset('plugins/jQuery-Autocomplete/src/jquery.autocomplete.js')) !!}
     {!!  Html::script(asset('plugins/jQuery-Autocomplete/scripts/countries.js')) !!}
