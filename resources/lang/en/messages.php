@@ -32,7 +32,7 @@
         "114" => "Unable to retrieve patient profile",
         "115" => "Patient profile retrieved successfully",
         "116" => "Unable to save patient profile",
-        "117" => "Successfully saved patient profile",
+        "117" => "Successfully saved patient profile and appointment",
         "118" => "Unable to fix new appointment",
         "119" => "Patient appointment fixed",
         "120" => "Unable to check the patient status",
