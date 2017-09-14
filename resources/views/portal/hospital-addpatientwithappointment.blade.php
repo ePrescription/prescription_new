@@ -217,18 +217,22 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Referral Type</label>
                                                     <div class="col-sm-9">
-                                                        <select name="referralType" class="form-control" required="required" >
-                                                            <option value="">--CHOOSE--</option>
-                                                            <option value="Internal">Internal</option>
-                                                            <option value="External">External</option>
-                                                        </select>
+
+                                                        <div class="col-sm-9">
+                                                            <input type="radio" class="form-controlx" name="referralType" value="1" required="required" checked onclick="javascript:referralTypePatient(1);" />&nbsp;&nbsp;Internal
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <input type="radio" class="form-controlx" name="referralType" value="2" required="required" onclick="javascript:referralTypePatient(2);" />&nbsp;&nbsp;External
+                                                        </div>
+
                                                     </div>
                                                 </div>
+
+                                                <div id="referralTypeInfo" style="display:none;">
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Doctor Specialization</label>
                                                     <div class="col-sm-9">
 
-                                                        <select name="referralSpecialty" class="form-control" required="required" >
+                                                        <select name="referralSpecialty" id="referralSpecialty" class="form-control"  onchange="javascript:getDoctors(this.value);">
                                                             <option value="">--CHOOSE--</option>
                                                             @foreach($specialties as $specialty)
                                                                 <option value="{{$specialty->id}}">{{$specialty->specialty_name}}</option>
@@ -241,11 +245,8 @@ $time_array=array(
                                                     <div class="col-sm-9">
 
 
-                                                        <select name="referralDoctor" class="form-control" required="required" >
+                                                        <select name="referralDoctor" id="referralDoctor" class="form-control" onchange="javascript:getDoctorInfo();">
                                                             <option value="">--CHOOSE--</option>
-                                                            @foreach($doctors as $doctor)
-                                                                <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
-                                                            @endforeach
                                                         </select>
 
                                                     </div>
@@ -253,14 +254,15 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Hospital Name</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="referralHospital" value="" required="required" />
+                                                        <input type="text" class="form-control" name="referralHospital" id="referralHospital" value="" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Hospital Location</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="hospitalLocation" value="" required="required" />
+                                                        <input type="text" class="form-control" name="hospitalLocation" id="hospitalLocation" value="" readonly />
                                                     </div>
+                                                </div>
                                                 </div>
 
                                                 <h4 class="m-t-0 m-b-30">Payment Info</h4>
@@ -427,6 +429,68 @@ $time_array=array(
 
 
         }
+
+
+        function referralTypePatient(id)
+        {
+            if(id==1)
+            {
+                $("#referralTypeInfo").hide();
+
+                $('select#referralSpecialty').attr('required', false);
+                $('select#referralDoctor').attr('required', false);
+                $('input#referralHospital').attr('required', false);
+                $('input#hospitalLocation').attr('required', false);
+
+
+            }
+            else
+            {
+                $("#referralTypeInfo").show();
+
+                $('select#referralSpecialty').attr('required', true);
+                $('select#referralDoctor').attr('required', true);
+                $('input#referralHospital').attr('required', true);
+                $('input#hospitalLocation').attr('required', true);
+
+            }
+        }
+
+        function getDoctors(sid) {
+
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + sid + '/referraldoctors';
+
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": sid, "status": status},
+                success: function (data) {
+                    var terms = '<option value="" data-doctor="" data-hospital="" data-location="">--Choose Doctor--</option>';
+                    $.each(data.result, function (i, val) {
+                        terms += '<option value="'+val.id+'" data-doctor="'+val.doctor_name+'" data-hospital="'+val.hospital_name+'" data-location="'+val.location+'">'+val.doctor_name+'</option>';
+                    });
+                    $("#referralDoctor").html(terms);
+
+                }
+            });
+
+
+        }
+
+        function getDoctorInfo()
+        {
+            var doctorName = $("#referralDoctor").find(':selected').attr('data-doctor');
+            var hospitalName = $("#referralDoctor").find(':selected').attr('data-hospital');
+            var locationName = $("#referralDoctor").find(':selected').attr('data-location');
+
+
+            $('input#referralHospital').val(hospitalName);
+            $('input#hospitalLocation').val(locationName);
+
+        }
+
 
     </script>
 

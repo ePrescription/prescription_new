@@ -2898,6 +2898,46 @@ class DoctorController extends Controller
 
     }
 
+
+    public function getDoctorsBySpecialty($specialtyId)
+    {
+        $referralDoctors = null;
+        $responseJson = null;
+
+        try
+        {
+            $referralDoctors = $this->hospitalService->getDoctorsBySpecialty($specialtyId);
+            //dd($referralDoctors);
+
+            if(!is_null($referralDoctors) && !empty($referralDoctors))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($referralDoctors));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_REFERRAL_DOCTOR_LIST_FOUND));
+            }
+
+            $responseJson->setObj($referralDoctors);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
     //Fee Receipts
 
     /**
