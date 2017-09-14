@@ -114,7 +114,8 @@ class PatientProfileRequest extends BasePrescriptionRequest
 
                 $doctorId = $this->get('doctorId');
                 $hospitalId = $this->get('hospitalId');
-                $appDate = $this->get('appointmentDate');
+                //$date = date("Y-m-d", strtotime($input['appointmentDate']));
+                $appDate = date("Y-m-d", strtotime($this->get('appointmentDate')));
                 $currentAppTime = $this->get('appointmentTime');
 
                 //dd($doctorId);
@@ -178,6 +179,7 @@ class PatientProfileRequest extends BasePrescriptionRequest
                     $query->where('da.appointment_time', '<=', $upperTime);
                 });
 
+                //dd($appDate);
                 //$query->whereBetween('da.appointment_time', [$appTime, $appDuration]);
 
                 //dd($query->toSql());
@@ -280,6 +282,8 @@ class PatientProfileRequest extends BasePrescriptionRequest
         $rules['hospitalId'] = 'required';
 
         $rules['appointmentDate'] = ['required', 'date_format:Y-m-d', 'invaliddate'];
+        $time = date( "H:i:s", strtotime($profile->appointmentTime));
+        $profile->appointmentTime = $time;
         $rules['appointmentTime'] = ['required', 'regex:^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$^', 'duplicate'];
 
         if($profile->referralType == 'External')
@@ -313,6 +317,7 @@ class PatientProfileRequest extends BasePrescriptionRequest
         //$rules['age'] = 'required | numeric';
         //$rules['gender'] = 'required';
 
+        //dd($rules);
         return $rules;
     }
 
