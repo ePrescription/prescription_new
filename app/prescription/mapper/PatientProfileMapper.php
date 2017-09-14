@@ -54,6 +54,7 @@ class PatientProfileMapper
         $profileVM->setHospitalId(property_exists($profile, 'hospitalId') ? $profile->hospitalId : null);
         $profileVM->setDoctorId(property_exists($profile, 'doctorId') ? $profile->doctorId : null);
 
+        //dd($profile->appointmentTime);
         $profileVM->setAppointmentTime($profile->appointmentTime);
         $profileVM->setBriefHistory(property_exists($profile, 'briefHistory') ? $profile->briefHistory : null);
         $profileVM->setAppointmentDate($profile->appointmentDate);

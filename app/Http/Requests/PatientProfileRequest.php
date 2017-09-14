@@ -16,6 +16,22 @@ use Carbon\Carbon;
 //class PatientProfileRequest extends Request
 class PatientProfileRequest extends BasePrescriptionRequest
 {
+
+    public function sanitize()
+    {
+        //dd('Inside sanitize');
+        $input = $this->all();
+        //dd($input);
+        $date = date("Y-m-d", strtotime($input['appointmentDate']));
+        //dd($date);
+        $time = date( "H:i:s", strtotime($input['appointmentTime']));
+        //dd($time);
+        $input['appointmentDate'] = $date;
+        $input['appointmentTime'] = $time;
+        $this->replace($input);
+        return $this->all();
+    }
+
     public function __construct(Factory $validationFactory)
     {
 
@@ -25,7 +41,8 @@ class PatientProfileRequest extends BasePrescriptionRequest
                 $isValid = true;
                 $doctorId = $this->get('doctorId');
                 $hospitalId = $this->get('hospitalId');
-                $appDate = $this->get('appointmentDate');
+                //$appDate = $this->get('appointmentDate');
+                $appDate = date("Y-m-d", strtotime($this->get('appointmentDate')));
                 $appTime = $this->get('appointmentTime');
 
                 $currentDate = Carbon::now()->format('Y-m-d');
@@ -34,6 +51,7 @@ class PatientProfileRequest extends BasePrescriptionRequest
                 $currentTime = date('H:i', strtotime($currentDateTime));
                 $appointmentTime = date('H:i', strtotime($appTime));
 
+                //dd($appDate."  ".$currentDate);
                 if($appDate < $currentDate)
                 {
                     //dd('Inside less');
@@ -261,6 +279,7 @@ class PatientProfileRequest extends BasePrescriptionRequest
         $rules['doctorId'] = 'required';
         $rules['hospitalId'] = 'required';
 
+        $rules['appointmentDate'] = ['required', 'date_format:Y-m-d', 'invaliddate'];
         $rules['appointmentTime'] = ['required', 'regex:^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$^', 'duplicate'];
 
         if($profile->referralType == 'External')
