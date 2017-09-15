@@ -6042,4 +6042,58 @@ class DoctorController extends Controller
         //return $responseJson;
     }
 
+
+    /**
+     * Save doctor referral
+     * @param $doctorReferralRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveReferralDoctor(Request $doctorReferralRequest)
+    {
+        $doctorReferralsVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($personalHistoryRequest->all());
+            $doctorReferralsVM = PatientProfileMapper::setReferralDoctor($doctorReferralRequest);
+            //dd($doctorReferralsVM);
+            $status = $this->hospitalService->saveReferralDoctor($doctorReferralsVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                $msg = trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_SAVE_SUCCESS);
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('success',$msg);
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+                $msg = trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_SAVE_ERROR);
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg);
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_SAVE_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment');
+    }
+
+
 }

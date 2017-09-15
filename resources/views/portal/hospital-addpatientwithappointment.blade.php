@@ -86,6 +86,63 @@ $time_array=array(
                                         </div>
                                     @endif
 
+
+
+                                        <!-- The Modal -->
+                                        <div id="myModal" class="modal">
+
+                                            <!-- Modal content -->
+                                            <div class="modal-content">
+                                                <span class="close">&times;</span>
+                                                <!-- form start -->
+                                                <form action="{{URL::to('/')}}/fronthospital/rest/api/referraldoctor" role="form" method="POST">
+                                                    <div class="col-md-12">
+                                                        <style>.control-label{line-height:32px;}</style>
+
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Doctor specialty</label>
+                                                            <div class="col-sm-9">
+                                                                <select name="specialtyId" class="form-control" required="required">
+                                                                    <option value="">--CHOOSE--</option>
+                                                                    @foreach($specialties as $specialty)
+                                                                        <option value="{{$specialty->id}}">{{$specialty->specialty_name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Doctor Name</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" name="doctorName" value="" required="required" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Hospital Name</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" name="hospitalName" value="" required="required" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Hospital Location</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" name="location" value="" required="required" />
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    </div>
+                                                    <div class="col-md-1"></div>
+                                                    <div class="box-footer">
+                                                        <button type="submit" class="btn btn-success" style="float:right;">Save Profile</button>
+                                                    </div>
+
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+
                                             <!-- form start -->
                                         <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/savepatientwithappointment" role="form" method="POST">
                                             <input type="hidden" name="hospitalId" value="{{Auth::user()->id}}" required="required" />
@@ -230,7 +287,7 @@ $time_array=array(
                                                 <div id="referralTypeInfo" style="display:none;">
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Doctor Specialization</label>
-                                                    <div class="col-sm-9">
+                                                    <div class="col-sm-6">
 
                                                         <select name="referralSpecialty" id="referralSpecialty" class="form-control"  onchange="javascript:getDoctors(this.value);">
                                                             <option value="">--CHOOSE--</option>
@@ -238,6 +295,11 @@ $time_array=array(
                                                                 <option value="{{$specialty->id}}">{{$specialty->specialty_name}}</option>
                                                             @endforeach
                                                         </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <!-- Trigger/Open The Modal -->
+                                                        <button type="button" id="myBtn">Add Referred Doctor</button>
+
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -282,12 +344,6 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Notes</label>
-                                                    <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="spouseName" value="" required="required" />
-                                                    </div>
-                                                </div>
 
                                             </div>
                                             <div class="col-md-1"></div>
@@ -494,168 +550,73 @@ $time_array=array(
 
     </script>
 
+
+
+    <style>
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* Could be more or less, depending on screen size */
+            height: 400px;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
     <script>
+        // Get the modal
+        var modal = document.getElementById('myModal');
 
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
 
-        function ajaxloadblooddetails(pid,date) {
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
 
-            $("#patientblooddiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/bloodtests';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientblooddiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientblooddiv").html("");
-            }
-
+        // When the user clicks on the button, open the modal
+        btn.onclick = function() {
+            modal.style.display = "block";
         }
 
-        function ajaxloadmotiondetails(pid,date) {
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
 
-            $("#patientmotiondiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/motiontests';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientmotiondiv").html(data);
-                    }
-                });
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
-            else
-            {
-                $("#patientmotiondiv").html("");
-            }
-
         }
-
-        function ajaxloadurinedetails(pid,date) {
-
-            $("#patienturinediv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/urinetests';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patienturinediv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patienturinediv").html("");
-            }
-
-        }
-
-        function ajaxloadultradetails(pid,date) {
-
-            $("#patientultradiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/ultrasoundtests';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientultradiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientultradiv").html("");
-            }
-
-        }
-
-        function ajaxloadbloodform(hid,pid) {
-            $("#patientblooddiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-bloodtests';
-            $.ajax({
-                url: callurl,
-                type: "get",
-                data: {"id": pid, "status": status},
-                success: function (data) {
-                    $("#patientblooddiv").html(data);
-                }
-            });
-        }
-
-        function ajaxloadmotionform(hid,pid) {
-            $("#patientmotiondiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-motiontests';
-            $.ajax({
-                url: callurl,
-                type: "get",
-                data: {"id": pid, "status": status},
-                success: function (data) {
-                    $("#patientmotiondiv").html(data);
-                }
-            });
-        }
-
-        function ajaxloadurineform(hid,pid) {
-            $("#patienturinediv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-urinetests';
-            $.ajax({
-                url: callurl,
-                type: "get",
-                data: {"id": pid, "status": status},
-                success: function (data) {
-                    $("#patienturinediv").html(data);
-                }
-            });
-        }
-
-        function ajaxloadultraform(hid,pid) {
-            $("#patientultradiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-ultrasoundtests';
-            $.ajax({
-                url: callurl,
-                type: "get",
-                data: {"id": pid, "status": status},
-                success: function (data) {
-                    $("#patientultradiv").html(data);
-                }
-            });
-        }
-
     </script>
 @stop
