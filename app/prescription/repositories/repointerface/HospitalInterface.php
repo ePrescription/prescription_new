@@ -104,6 +104,8 @@ interface HospitalInterface {
     public function savePatientFamilyIllness(PatientFamilyIllnessViewModel $patientFamilyIllnessVM);
 
     public function getExaminationDates($patientId);
+    //;
+
     public function getPregnancyDetails($patientId, $pregnancyDate);
     public function savePatientPregnancyDetails(PatientPregnancyViewModel $patientPregnancyVM);
     public function getPatientScanDetails($patientId, $scanDate);
