@@ -370,11 +370,18 @@ class DoctorApiController extends Controller
     {
         $pastIllness = null;
         $responseJson = null;
+        $examinationDate = null;
 
         try
         {
             //dd($patientId);
+            /*if($patientSearchRequest->has('examinationDate'))
+            {
+
+            }*/
+
             $examinationDate = $patientSearchRequest->get('examinationDate');
+
             //dd($examinationDate);
             //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
             $pastIllnessDate = date('Y-m-d', strtotime($examinationDate));
@@ -1311,6 +1318,60 @@ class DoctorApiController extends Controller
 
         return $responseJson;
     }
+
+    /**
+     * Get patient examination dates
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    /*public function getPatientExaminations($patientId, Request $examinationRequest)
+    {
+        $examinations = null;
+        $responseJson = null;
+        $examinationDate = null;
+
+        try
+        {
+            if($examinationRequest->has('examinationDate'))
+            {
+                $examinationDate = $examinationRequest->get('examinationDate');
+            }
+
+            $examinationDates = $this->hospitalService->getExaminationDates($patientId);
+            //dd($examinationDates);
+
+            if(!is_null($examinationDates) && !empty($examinationDates))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_DATES_SUCCESS));
+                $responseJson->setCount(sizeof($examinationDates));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_EXAMINATION_DATES_FOUND));
+            }
+
+            $responseJson->setObj($examinationDates);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }*/
 
     /**
      * Get all specialties
