@@ -118,28 +118,30 @@ class PatientProfileRequest extends BasePrescriptionRequest
                 $appDate = date("Y-m-d", strtotime($this->get('appointmentDate')));
                 $currentAppTime = $this->get('appointmentTime');
 
-                //dd($doctorId);
+                //dd($currentAppTime);
 
                 $appDuration = strtotime("+30 minutes", strtotime($currentAppTime));
 
                 $minutes = date('i', strtotime($currentAppTime));
                 $hours = date('H', strtotime($currentAppTime));
-                $min = $minutes - ($minutes % 30);
+                $min = $minutes - ($minutes % 5);
 
                 //dd($min);
 
                 $mm = $minutes % 30;
                 //dd($mm);
 
-                if($min == 30)
+                /*if($min == 15)
                 {
-                    $min = date('i', $minutes - ($minutes % 5));
+                    //dd('inside minutes');
+                    //$min = date('i', $minutes - ($minutes % 5));
+                    $min = $minutes - ($minutes % 5);
                     //dd($min);
                 }
                 else
                 {
                     $min = "00";
-                }
+                }*/
                 /*else
                 {
                     //dd('Inside else');
@@ -179,7 +181,7 @@ class PatientProfileRequest extends BasePrescriptionRequest
                     $query->where('da.appointment_time', '<=', $upperTime);
                 });
 
-                //dd($appDate);
+                //dd($appDate."  ".$upperTime."  ".$lowestTime);
                 //$query->whereBetween('da.appointment_time', [$appTime, $appDuration]);
 
                 //dd($query->toSql());
