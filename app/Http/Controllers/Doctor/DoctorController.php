@@ -5990,4 +5990,56 @@ class DoctorController extends Controller
 
     }
 
+
+
+    /**
+     * Get patient appointment counts
+     * @param $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+    /*
+    public function getDashboardDetails($hospitalId, Request $dashboardRequest) {}
+   */
+    public function getDashboardDetailsForFront($hospitalId)
+    {
+        $dashboardDetails = null;
+        //$selectedDate = $dashboardRequest->get('selectedDate');
+        //dd($hospitalId);
+
+        $selectedDate = date("Y-m-d");
+        try
+        {
+            $dashboardDetails = $this->hospitalService->getDashboardDetails($hospitalId, $selectedDate);
+
+            if(!is_null($dashboardDetails) && !empty($dashboardDetails))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_SUCCESS));
+                $responseJson->setCount(sizeof($dashboardDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_DASHBOARD_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($dashboardDetails);
+            $responseJson->sendSuccessResponse();
+            //dd($appointments);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return view('portal.hospital-dashboard',compact('dashboardDetails'));
+        //return $responseJson;
+    }
+
 }

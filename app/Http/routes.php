@@ -116,16 +116,22 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Pharmacy'), func
 
 Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), function()
 {
+    /*
     Route::get('{id}/dashboard', function ($id) {
-        return redirect('fronthospital/rest/api/'.$id.'/profile');
-        //return view('portal.hospital-dashboard');
+        //return redirect('fronthospital/rest/api/'.$id.'/profile');
+        return view('portal.hospital-dashboard');
     });
+    */
 
 
-    Route::get('rest/api/{hospitalId}/patientnames', array('as' => 'patient.searchnames', 'uses' => 'DoctorController@getPatientNamesForHospital'));
-    Route::get('rest/api/{patientId}/details', array('as' => 'patient.details', 'uses' => 'DoctorController@getPatientDetailsById'));
+    Route::get('{id}/dashboard', array('as' => 'patient.dashboard', 'uses' => 'DoctorController@getDashboardDetailsForFront'));
 
-    Route::get('rest/api/{specialtyId}/referraldoctors', array('as' => 'specialties.referraldoctors', 'uses' => 'DoctorController@getDoctorsBySpecialty'));
+
+
+    Route::get('rest/api/{hospitalId}/patientnames', array('as' => 'hospital.searchnames', 'uses' => 'DoctorController@getPatientNamesForHospital'));
+    Route::get('rest/api/{patientId}/details', array('as' => 'hospital.details', 'uses' => 'DoctorController@getPatientDetailsById'));
+
+    Route::get('rest/api/{specialtyId}/referraldoctors', array('as' => 'hospital.referraldoctors', 'uses' => 'DoctorController@getDoctorsBySpecialty'));
 
 
     Route::get('rest/api/{hospitalId}/patients', array('as' => 'hospital.patients', 'uses' => 'DoctorController@getPatientsByHospitalForFront'));
