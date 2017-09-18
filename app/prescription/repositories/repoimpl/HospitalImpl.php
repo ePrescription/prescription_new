@@ -4093,12 +4093,12 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["urineTestDates"] = $urineTestDates;
             $examinationDates["motionTestDates"] = $motionTestDates;
 
-            dd($examinationDates);
+            //dd($examinationDates);
 
         }
         catch(QueryException $queryEx)
         {
-            dd($queryEx);
+            //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $queryEx);
         }
         catch(UserNotFoundException $userExc)
