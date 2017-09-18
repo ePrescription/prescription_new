@@ -3900,7 +3900,8 @@ class HospitalImpl implements HospitalInterface{
                 $query->from('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
             });
             $latestGeneralExamQuery->where('pge.patient_id', '=', $patientId);
-            $latestGeneralExamQuery->select('pge.id', 'pge.patient_id', 'ge.general_examination_name', 'pge.general_examination_date');
+            $latestGeneralExamQuery->select('pge.id', 'pge.patient_id', 'ge.general_examination_name', 'pge.general_examination_value',
+                'pge.general_examination_date');
             $generalExaminations = $latestGeneralExamQuery->get();
             //dd($generalExaminations);
 
