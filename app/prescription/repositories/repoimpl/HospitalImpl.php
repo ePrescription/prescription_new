@@ -3889,6 +3889,7 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pbe.examination_date)'));
                 $query->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
             });
+            $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $latestBloodExamQuery->select('pbe.id', 'pbe.patient_id', 'be.examination_name', 'pbe.examination_date');
             $bloodExaminations = $latestBloodExamQuery->get();
 
@@ -3898,8 +3899,10 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pge.general_examination_date)'));
                 $query->from('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
             });
+            $latestGeneralExamQuery->where('pge.patient_id', '=', $patientId);
             $latestGeneralExamQuery->select('pge.id', 'pge.patient_id', 'ge.general_examination_name', 'pge.general_examination_date');
             $generalExaminations = $latestGeneralExamQuery->get();
+            //dd($generalExaminations);
 
             $latestPastIllnessQuery = DB::table('patient_past_illness as ppi');
             $latestPastIllnessQuery->join('past_illness as pii', 'pii.id', '=', 'ppi.past_illness_id');
@@ -3907,7 +3910,8 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(ppi.past_illness_date)'));
                 $query->from('patient_past_illness as ppi')->where('ppi.patient_id', '=', $patientId);
             });
-            $latestPastIllnessQuery->select('ppi.id', 'ppi.patient_id', 'pii.illness_name', 'ppi.past_illness_date');
+            $latestPastIllnessQuery->where('ppi.patient_id', '=', $patientId);
+            $latestPastIllnessQuery->select('ppi.id', 'ppi.patient_id', 'pii.illness_name', 'ppi.past_illness_name', 'ppi.past_illness_date');
             $latestPastIllness = $latestPastIllnessQuery->get();
 
             $latestFamilyIllnessQuery = DB::table('patient_family_illness as pfi');
@@ -3916,7 +3920,9 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pfi.family_illness_date)'));
                 $query->from('patient_family_illness as pfi')->where('pfi.patient_id', '=', $patientId);
             });
-            $latestFamilyIllnessQuery->select('pfi.id', 'pfi.patient_id', 'fi.illness_name', 'pfi.family_illness_date');
+            $latestFamilyIllnessQuery->where('pfi.patient_id', '=', $patientId);
+            $latestFamilyIllnessQuery->select('pfi.id', 'pfi.patient_id', 'fi.illness_name', 'pfi.family_illness_name',
+                'pfi.relation','pfi.family_illness_date');
             $latestFamilyIllness = $latestFamilyIllnessQuery->get();
 
             $latestPersonalHistoryQuery = DB::table('patient_personal_history as pph');
@@ -3926,6 +3932,7 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pph.personal_history_date)'));
                 $query->from('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
             });
+            $latestPersonalHistoryQuery->where('pph.patient_id', '=', $patientId);
             $latestPersonalHistoryQuery->select('pph.id', 'pph.patient_id', 'ph.personal_history_name',
                 'phi.personal_history_item_name','pph.personal_history_date');
             $latestPersonalHistory = $latestPersonalHistoryQuery->get();
@@ -3936,7 +3943,8 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pp.pregnancy_date)'));
                 $query->from('patient_pregnancy as pp')->where('pp.patient_id', '=', $patientId);
             });
-            $latestPregnancyQuery->select('pp.id', 'pp.patient_id', 'p.pregnancy_details', 'pp.pregnancy_date');
+            $latestPregnancyQuery->where('pp.patient_id', '=', $patientId);
+            $latestPregnancyQuery->select('pp.id', 'pp.patient_id', 'p.pregnancy_details', 'pp.pregnancy_value','pp.pregnancy_date');
             $latestPregnancy = $latestPregnancyQuery->get();
 
             $latestScanQuery = DB::table('patient_scan as ps');
@@ -3945,6 +3953,7 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(ps.scan_date)'));
                 $query->from('patient_scan as ps')->where('ps.patient_id', '=', $patientId);
             });
+            $latestScanQuery->where('ps.patient_id', '=', $patientId);
             $latestScanQuery->select('ps.id', 'ps.patient_id', 's.scan_name', 'ps.scan_date');
             $latestScans = $latestScanQuery->get();
 
@@ -3956,6 +3965,7 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(ps.patient_symptom_date)'));
                 $query->from('patient_symptoms as ps')->where('ps.patient_id', '=', $patientId);
             });
+            $latestSymptomsQuery->where('ps.patient_id', '=', $patientId);
             $latestSymptomsQuery->select('ps.id', 'ps.patient_id', 'ms.main_symptom_name',
                 'ss.sub_symptom_name', 's.symptom_name', 'ps.patient_symptom_date');
             $latestSymptoms = $latestSymptomsQuery->get();
@@ -3966,6 +3976,7 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pus.examination_date)'));
                 $query->from('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
             });
+            $latestUltrasoundQuery->where('pus.patient_id', '=', $patientId);
             $latestUltrasoundQuery->select('pus.id', 'pus.patient_id', 'us.examination_name', 'pus.examination_date');
             $latestUltrasound = $latestUltrasoundQuery->get();
 
@@ -3975,6 +3986,7 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pue.examination_date)'));
                 $query->from('patient_urine_examination as pue')->where('pue.patient_id', '=', $patientId);
             });
+            $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
             $latestUrineExamQuery->select('pue.id', 'pue.patient_id', 'ue.examination_name', 'pue.examination_date');
             $latestUrineExaminations = $latestUrineExamQuery->get();
 
@@ -3984,8 +3996,23 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pme.examination_date)'));
                 $query->from('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
             });
+            $latestMotionExamQuery->where('pme.patient_id', '=', $patientId);
             $latestMotionExamQuery->select('pme.id', 'pme.patient_id', 'me.examination_name', 'pme.examination_date');
             $latestMotionExaminations = $latestMotionExamQuery->get();
+
+            $latestDrugHistoryQuery = DB::table('patient_drug_history as pdh');
+            $latestDrugHistoryQuery->where('pdh.drug_history_date', function($query) use($patientId){
+                $query->select(DB::raw('MAX(pdh.drug_history_date)'));
+                $query->from('patient_drug_history as pdh')->where('pdh.patient_id', '=', $patientId);
+            });
+            $latestDrugHistoryQuery->where('pdh.patient_id', '=', $patientId);
+            $latestDrugHistoryQuery->select('pdh.id', 'pdh.patient_id',
+                'pdh.drug_name', 'pdh.dosage', 'pdh.timings', 'pdh.drug_history_date');
+            $latestDrugHistory = $latestDrugHistoryQuery->get();
+
+            /*$drugQuery = DB::table('patient_drug_history as pdh')->select('pdh.id as id', 'pdh.patient_id as patientId',
+                'pdh.drug_name as drugName', 'pdh.dosage', 'pdh.timings');
+            $drugQuery->where('pdh.patient_id', $patientId);*/
 
             //dd($generalExaminations);
             //dd($latestGeneralExamQuery->toSql());
@@ -4052,6 +4079,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates['recentUltrasound'] = $latestUltrasound;
             $examinationDates['recentUrineExaminations'] = $latestUrineExaminations;
             $examinationDates['recentMotionExaminations'] = $latestMotionExaminations;
+            $examinationDates['recentDrugHistory'] = $latestDrugHistory;
 
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;
             $examinationDates["pastIllnessDates"] = $pastIllnessDates;
@@ -4065,12 +4093,12 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["urineTestDates"] = $urineTestDates;
             $examinationDates["motionTestDates"] = $motionTestDates;
 
-            //dd($examinationDates);
+            dd($examinationDates);
 
         }
         catch(QueryException $queryEx)
         {
-            //dd($queryEx);
+            dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $queryEx);
         }
         catch(UserNotFoundException $userExc)
