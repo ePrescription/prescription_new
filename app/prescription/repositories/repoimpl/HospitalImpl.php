@@ -3881,6 +3881,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
+
             //DB::connection()->enableQueryLog();
 
             $latestBloodExamQuery = DB::table('patient_blood_examination as pbe');
@@ -3890,8 +3891,13 @@ class HospitalImpl implements HospitalInterface{
                 $query->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
             });
             $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
-            $latestBloodExamQuery->select('pbe.id', 'pbe.patient_id', 'be.examination_name', 'pbe.examination_date');
+            $latestBloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date');
             $bloodExaminations = $latestBloodExamQuery->get();
+
+            //dd($bloodExaminations);
+            $hospitalId = $bloodExaminations[0]->hospital_id;
+
+            //dd($hospitalId);
 
             $latestGeneralExamQuery = DB::table('patient_general_examination as pge');
             $latestGeneralExamQuery->join('general_examination as ge', 'ge.id', '=', 'pge.general_examination_id');
@@ -4069,6 +4075,20 @@ class HospitalImpl implements HospitalInterface{
             $motionDatesQuery->select('pme.examination_date')->orderBy('pme.examination_date', 'DESC');
             $motionTestDates = $motionDatesQuery->distinct()->take(2147483647)->skip(1)->get();
 
+            $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
+                'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
+            $patientQuery->where('p.patient_id', '=', $patientId);
+            $patientDetails = $patientQuery->first();
+
+            $hospitalQuery = DB::table('hospital as h')->select('h.id', 'h.hospital_id', 'h.hospital_name', 'h.address', 'c.city_name',
+                'co.name');
+            $hospitalQuery->join('cities as c', 'c.id', '=', 'h.city');
+            $hospitalQuery->join('countries as co', 'co.id', '=', 'h.country');
+            $hospitalQuery->where('h.hospital_id', '=', $hospitalId);
+            $hospitalDetails = $hospitalQuery->first();
+
+            $examinationDates['patientDetails'] = $patientDetails;
+            $examinationDates['hospitalDetails'] = $hospitalDetails;
             $examinationDates['recentBloodTests'] = $bloodExaminations;
             $examinationDates['recentGeneralTests'] = $generalExaminations;
             $examinationDates['recentPastIllness'] = $latestPastIllness;
@@ -4109,6 +4129,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(Exception $exc)
         {
+            //dd($exc);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
         }
 
