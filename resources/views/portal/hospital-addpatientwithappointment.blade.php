@@ -244,7 +244,7 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Appointment Date</label>
                                                     <div class="col-sm-9">
-                                                        <input type="date" data-date-format="YYYY-MM-DD" min="{{date('Y-m-d')}}" class="form-control" name="appointmentDate" value="" required="required" />
+                                                        <input type="date" data-date-format="YYYY-MM-DD" min="{{date('Y-m-d')}}" class="form-control" name="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); "/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -327,27 +327,30 @@ $time_array=array(
                                                 </div>
                                                 </div>
 
+                                                <div id="paymentTypeInfo" style="display:block;">
                                                 <h4 class="m-t-0 m-b-30">Payment Info</h4>
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Payment Type</label>
                                                     <div class="col-sm-9">
-                                                        <input type="radio" class="form-controlx" id="payment" name="paymentType" value="Cash" required="required" />&nbsp;&nbsp;Cash
+                                                        <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" required="required" />&nbsp;&nbsp;Cash
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" id="payment" name="paymentType" value="Card" required="required" />&nbsp;&nbsp;Card
+                                                        <input type="radio" class="form-controlx" id="payment2" name="paymentType" value="Card" required="required" />&nbsp;&nbsp;Card
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Amount</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="fee" value="" required="required" />
+                                                        <input type="text" class="form-control" id="fee" name="fee" value="" required="required" />
                                                     </div>
+                                                </div>
                                                 </div>
 
 
                                             </div>
                                             <div class="col-md-1"></div>
                                             <div class="box-footer">
+                                                <input type="hidden" class="form-control" name="prev_appointment_date" id="prev_appointment_date" value="" />
                                                 <button type="submit" class="btn btn-success" style="float:right;">Save & Book Appointment</button>
                                             </div>
 
@@ -471,6 +474,7 @@ $time_array=array(
                     $("input#email").val(data.result[0].email);
                     $("input#telephone").val(data.result[0].telephone);
                     $("input#age").val(data.result[0].age);
+
                     if(data.result[0].gender==1)
                     {
                         $("input#gender1").attr('checked', 'checked');
@@ -480,6 +484,7 @@ $time_array=array(
                         $("input#gender2").attr('checked', 'checked');
                     }
 
+                    $("input#prev_appointment_date").val(data.result[0].appointment_date);
                 }
             });
 
@@ -548,6 +553,38 @@ $time_array=array(
         }
 
 
+        function appointmentTypePatient(dateValue)
+        {
+            var new_appointment_date = dateValue;
+            var prev_appointment_date = $("input#prev_appointment_date").val();
+
+            var date1 = new Date(new_appointment_date);
+            var date2 = new Date(prev_appointment_date);
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            //alert(diffDays);
+
+
+            if(diffDays<=15)
+            {
+                $("#paymentTypeInfo").hide();
+
+                $('input#payment1').attr('required', false);
+                $('input#payment2').attr('required', false);
+                $('input#fee').attr('required', false);
+
+            }
+            else
+            {
+                $("#paymentTypeInfo").show();
+
+                $('input#payment1').attr('required', true);
+                $('input#payment2').attr('required', true);
+                $('input#fee').attr('required', true);
+
+            }
+        }
     </script>
 
 
