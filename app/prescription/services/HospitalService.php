@@ -1923,7 +1923,40 @@ class HospitalService {
 
         return $patientLabTests;
 
-        return $patientLabTests;
+    }
+
+    /**
+     * Save lab receipt details for the patient
+     * @param $labReceiptsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveLabReceiptDetailsForPatient($labReceiptsVM)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($labReceiptsVM, &$status)
+            {
+                $status = $this->hospitalRepo->saveLabReceiptDetailsForPatient($labReceiptsVM);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_SAVE_ERROR, $ex);
+        }
+
+        return $status;
     }
 
     /**

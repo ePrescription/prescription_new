@@ -14,6 +14,7 @@ use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
+use App\Http\ViewModels\PatientLabReceiptViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
 use App\Http\ViewModels\PatientPersonalHistoryViewModel;
 use App\Http\ViewModels\PatientProfileViewModel;
@@ -511,6 +512,49 @@ class PatientProfileMapper
         $doctorReferralsVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $doctorReferralsVM;
+    }
+
+    //public static function setPatientLabReceipts(Request $patientLabReceiptRequest)
+    public static function setPatientLabReceipts($patientLabReceiptRequest)
+    {
+        $labReceiptsVM = new PatientLabReceiptViewModel();
+        //$receiptObj = (object) $patientLabReceiptRequest->all();
+        $receiptObj = (object) $patientLabReceiptRequest;
+        $labTests = $receiptObj->labTests;
+        //dd($labTests);
+
+        if(array_key_exists('bloodTests', $labTests))
+        {
+            $labReceiptsVM->setBloodTests($labTests['bloodTests']);
+        }
+        if(array_key_exists('urineTests', $labTests))
+        {
+            $labReceiptsVM->setUrineTests($labTests['urineTests']);
+        }
+        if(array_key_exists('motionTests', $labTests))
+        {
+            $labReceiptsVM->setMotionTests($labTests['motionTests']);
+        }
+        if(array_key_exists('scanTests', $labTests))
+        {
+            $labReceiptsVM->setScanTests($labTests['scanTests']);
+        }
+        if(array_key_exists('ultraSoundTests', $labTests))
+        {
+            $labReceiptsVM->setUltraSoundTests($labTests['ultraSoundTests']);
+        }
+
+        $userName = 'Admin';
+
+        $labReceiptsVM->setPatientId($receiptObj->patientId);
+        $labReceiptsVM->setHospitalId($receiptObj->hospitalId);
+        //$labReceiptsVM->setBloodTests()
+        $labReceiptsVM->setCreatedBy($userName);
+        $labReceiptsVM->setUpdatedBy($userName);
+        $labReceiptsVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $labReceiptsVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $labReceiptsVM;
     }
 
 }

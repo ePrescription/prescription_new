@@ -14,6 +14,7 @@ use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
+use App\Http\ViewModels\PatientLabReceiptViewModel;
 use App\Http\ViewModels\PatientLabTestViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
 use App\Http\ViewModels\PatientPersonalHistoryViewModel;
@@ -3714,14 +3715,19 @@ class HospitalImpl implements HospitalInterface{
      * @author Baskar
      */
 
-    public function getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate)
+    public function getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate = null)
     {
-        $labTestDetails = null;
+        //$labTestDetails = null;
         $patientLabTests = null;
+        $receiptDate = null;
 
         try
         {
-            $receiptDate = date("Y-m-d", strtotime($generatedDate));
+            if(!is_null($generatedDate))
+            {
+                $receiptDate = date("Y-m-d", strtotime($generatedDate));
+            }
+
             $patientUser = User::find($patientId);
 
             if(is_null($patientUser))
@@ -3734,9 +3740,75 @@ class HospitalImpl implements HospitalInterface{
             $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
-            $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
+            $bloodExamQuery->where('pbe.is_value_set', '=', 1);
+            $bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
+            if(!is_null($receiptDate))
+            {
+                $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
+            }
             $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date');
+
+            //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
+            //$query = DB::getQueryLog();
+            //dd($query);
+            //dd($bloodExaminations);
+
+            $urineExamQuery = DB::table('patient_urine_examination as pue');
+            $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'pue.urine_examination_id');
+            $urineExamQuery->where('pue.patient_id', '=', $patientId);
+            $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
+            $urineExamQuery->where('pue.is_value_set', '=', 1);
+            $urineExamQuery->where('pue.is_fees_paid', '=', 0);
+            if(!is_null($receiptDate))
+            {
+                $urineExamQuery->whereDate('pue.created_at', '=', $receiptDate);
+            }
+            $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date');
+
+            $urineExaminations = $urineExamQuery->get();
+
+            $motionExamQuery = DB::table('patient_motion_examination as pme');
+            $motionExamQuery->join('motion_examination as me', 'me.id', '=', 'pme.motion_examination_id');
+            $motionExamQuery->where('pme.patient_id', '=', $patientId);
+            $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
+            $motionExamQuery->where('pme.is_value_set', '=', 1);
+            $motionExamQuery->where('pme.is_fees_paid', '=', 0);
+            if(!is_null($receiptDate))
+            {
+                $motionExamQuery->whereDate('pme.created_at', '=', $receiptDate);
+            }
+            $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'me.examination_name', 'pme.examination_date');
+
+            $motionExaminations = $motionExamQuery->get();
+
+            $scanExamQuery = DB::table('patient_scan as ps');
+            $scanExamQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
+            $scanExamQuery->where('ps.patient_id', '=', $patientId);
+            $scanExamQuery->where('ps.hospital_id', '=', $hospitalId);
+            $scanExamQuery->where('ps.is_value_set', '=', 1);
+            $scanExamQuery->where('ps.is_fees_paid', '=', 0);
+            if(!is_null($receiptDate))
+            {
+                $scanExamQuery->whereDate('ps.created_at', '=', $receiptDate);
+            }
+            $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 's.scan_name', 'ps.scan_date');
+
+            $scanExaminations = $scanExamQuery->get();
+
+            $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus');
+            $ultraSoundExamQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
+            $ultraSoundExamQuery->where('pus.patient_id', '=', $patientId);
+            $ultraSoundExamQuery->where('pus.hospital_id', '=', $hospitalId);
+            $ultraSoundExamQuery->where('pus.is_value_set', '=', 1);
+            $ultraSoundExamQuery->where('pus.is_fees_paid', '=', 0);
+            if(!is_null($receiptDate))
+            {
+                $ultraSoundExamQuery->whereDate('pus.created_at', '=', $receiptDate);
+            }
+            $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date');
+
+            $ultraSoundExaminations = $ultraSoundExamQuery->get();
 
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
                 'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
@@ -3752,10 +3824,13 @@ class HospitalImpl implements HospitalInterface{
 
             $patientLabTests['patientDetails'] = $patientDetails;
             $patientLabTests['hospitalDetails'] = $hospitalDetails;
-            $patientLabTests['recentBloodTests'] = $bloodExaminations;
+            $patientLabTests['bloodTests'] = $bloodExaminations;
+            $patientLabTests['urineTests'] = $urineExaminations;
+            $patientLabTests['motionTests'] = $motionExaminations;
+            $patientLabTests['scanTests'] = $scanExaminations;
+            $patientLabTests['ultraSoundTests'] = $ultraSoundExaminations;
 
-
-            //dd($examinationDates);
+            //dd($patientLabTests);
 
         }
         catch(QueryException $queryEx)
@@ -5547,6 +5622,119 @@ class HospitalImpl implements HospitalInterface{
         {
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_DRUG_HISTORY_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save lab receipt details for the patient
+     * @param $labReceiptsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveLabReceiptDetailsForPatient(PatientLabReceiptViewModel $labReceiptsVM)
+    {
+        $status = true;
+        $patientDrugHistory = null;
+        $bloodTests = null;
+
+        try
+        {
+            $patientId = $labReceiptsVM->getPatientId();
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $bloodTests = $labReceiptsVM->getBloodTests();
+            $urineTests = $labReceiptsVM->getUrineTests();
+            $motionTests = $labReceiptsVM->getMotionTests();
+            $scanTests = $labReceiptsVM->getScanTests();
+            $ultraSoundTests = $labReceiptsVM->getUltraSoundTests();
+            //dd($bloodTests);
+
+            if(!is_null($bloodTests) && !empty($bloodTests))
+            {
+                foreach($bloodTests as $bloodTest)
+                {
+                    $updateValues = array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1,
+                        'pbe.created_at' => $labReceiptsVM->getCreatedAt(), 'pbe.updated_at' => $labReceiptsVM->getUpdatedAt());
+                    $query = DB::table('patient_blood_examination as pbe')->where('pbe.id', '=', $bloodTest['id']);
+                    //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                    $query->update($updateValues);
+                }
+            }
+
+            if(!is_null($urineTests) && !empty($urineTests))
+            {
+                foreach($urineTests as $urineTest)
+                {
+                    $updateValues = array('pue.fees' => $urineTest['fees'], 'pue.is_fees_paid' => 1,
+                        'pue.created_at' => $labReceiptsVM->getCreatedAt(), 'pue.updated_at' => $labReceiptsVM->getUpdatedAt());
+                    $query = DB::table('patient_urine_examination as pue')->where('pue.id', '=', $urineTest['id']);
+                    //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                    $query->update($updateValues);
+                }
+            }
+
+            if(!is_null($motionTests) && !empty($motionTests))
+            {
+                foreach($motionTests as $motionTest)
+                {
+                    $updateValues = array('pme.fees' => $motionTest['fees'], 'pme.is_fees_paid' => 1,
+                        'pme.created_at' => $labReceiptsVM->getCreatedAt(), 'pme.updated_at' => $labReceiptsVM->getUpdatedAt());
+                    $query = DB::table('patient_motion_examination as pme')->where('pme.id', '=', $motionTest['id']);
+                    //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                    $query->update($updateValues);
+                }
+            }
+
+            if(!is_null($scanTests) && !empty($scanTests))
+            {
+                foreach($scanTests as $scanTest)
+                {
+                    $updateValues = array('ps.fees' => $scanTest['fees'], 'ps.is_fees_paid' => 1,
+                        'ps.created_at' => $labReceiptsVM->getCreatedAt(), 'ps.updated_at' => $labReceiptsVM->getUpdatedAt());
+                    $query = DB::table('patient_scan as ps')->where('ps.id', '=', $scanTest['id']);
+                    //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                    $query->update($updateValues);
+                }
+            }
+
+            if(!is_null($ultraSoundTests) && !empty($ultraSoundTests))
+            {
+                foreach($ultraSoundTests as $ultraSoundTest)
+                {
+                    $updateValues = array('pus.fees' => $ultraSoundTest['fees'], 'pus.is_fees_paid' => 1,
+                        'pus.created_at' => $labReceiptsVM->getCreatedAt(), 'pus.updated_at' => $labReceiptsVM->getUpdatedAt());
+                    $query = DB::table('patient_ultra_sound as pus')->where('pus.id', '=', $ultraSoundTest['id']);
+                    //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                    $query->update($updateValues);
+                }
+            }
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_SAVE_ERROR, $exc);
         }
 
         return $status;

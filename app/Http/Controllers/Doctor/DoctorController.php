@@ -5364,7 +5364,7 @@ class DoctorController extends Controller
         try
         {
             $labTestDetails = $this->hospitalService->getLabTestDetailsByPatient($labTestType, $labTestId);
-            dd($labTestDetails);
+            //dd($labTestDetails);
             //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
 
         }
@@ -5396,15 +5396,19 @@ class DoctorController extends Controller
     public function getLabTestDetailsForReceipt($patientId, Request $receiptRequest)
     {
         $labTestDetails = null;
+        $generatedDate = null;
 
         try
         {
             $hospitalId = $receiptRequest->get('hospitalId');
-            dd($hospitalId);
-            $generatedDate = $receiptRequest->get('generatedDate');
+
+            if($receiptRequest->has('generatedDate'))
+            {
+                $generatedDate = $receiptRequest->get('generatedDate');
+            }
 
             $labTestDetails = $this->hospitalService->getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate);
-            dd($labTestDetails);
+            //dd($labTestDetails);
             //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
 
         }
@@ -5422,6 +5426,67 @@ class DoctorController extends Controller
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
             //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+    }
+
+    //public function saveLabReceiptDetailsForPatient(Request $labReceiptRequest)
+    public function saveLabReceiptDetailsForPatient()
+    {
+        //dd('Hi');
+        $labReceiptsVM = null;
+        $status = true;
+
+        try
+        {
+            $labTestsPayments = array(
+                'patientId' => 57,
+                'hospitalId' => 1,
+                'labTests' => array('bloodTests' =>
+                    array(
+                        array('id' => 3, 'fees' => 500),
+                        array('id' => 4, 'fees' => 800)
+                    ),
+                    'urineTests' =>
+                    array(
+                        array('id' => 19, 'fees' => 1000),
+                        array('id' => 20, 'fees' => 200)
+                    ),
+                    'motionTests' =>
+                    array(
+                        array('id' => 3, 'fees' => 200),
+                        array('id' => 4, 'fees' => 300)
+                    ),
+                    'scanTests' =>
+                        array(
+                            array('id' => 3, 'fees' => 200),
+                            array('id' => 4, 'fees' => 300)
+                    ),
+                    'ultraSoundTests' =>
+                        array(
+                            array('id' => 3, 'fees' => 200),
+                            array('id' => 4, 'fees' => 300)
+                    ),
+                )
+                );
+
+            $labReceiptsVM = PatientProfileMapper::setPatientLabReceipts($labTestsPayments);
+            //dd($labReceiptsVM);
+            $status = $this->hospitalService->saveLabReceiptDetailsForPatient($labReceiptsVM);
+            dd($status);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
         }
     }
 

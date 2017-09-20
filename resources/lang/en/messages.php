@@ -263,4 +263,7 @@
         "865" => "Unable to retrieve the lab test details for the patient",
         "866" => "Successfully retrieved the lab test details for the patient",
         "867" => "No lab test list available for the patient",
+
+        "868" => "Unable to save patient lab receipt details",
+        "869" => "Successfully saved patient lab receipt details",
     ];

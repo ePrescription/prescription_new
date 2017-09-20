@@ -12,6 +12,7 @@ use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
+use App\Http\ViewModels\PatientLabReceiptViewModel;
 use App\Http\ViewModels\PatientLabTestViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
 use App\Http\ViewModels\PatientPersonalHistoryViewModel;
@@ -139,7 +140,8 @@ interface HospitalInterface {
     public function getPatientLabTests($hospitalId, $patientId, $feeStatus = null);
     public function getLabTestDetailsByPatient($labTestType, $labTestId);
 
-    public function getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate);
+    public function getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate = null);
+    public function saveLabReceiptDetailsForPatient(PatientLabReceiptViewModel $labReceiptsVM);
 
     public function getAllSpecialties();
     public function getDoctorsBySpecialty($specialtyId);

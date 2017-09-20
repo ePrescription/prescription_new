@@ -259,6 +259,9 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
 
     Route::get('rest/{patientId}/labtestreceipts', array('as' => 'patient.labtestreceipts', 'uses' => 'DoctorController@getLabTestDetailsForReceipt'));
 
+    //Route::post('rest/labtestreceipts', array('as' => 'patient.savelabreceipts', 'uses' => 'DoctorController@saveLabReceiptDetailsForPatient'));
+    Route::get('rest/labtestreceipts', array('as' => 'patient.savelabreceipts', 'uses' => 'DoctorController@saveLabReceiptDetailsForPatient'));
+
     Route::get('rest/api/specialties', array('as' => 'hospital.specialties', 'uses' => 'DoctorApiController@getAllSpecialties'));
     Route::get('rest/api/{specialtyId}/referraldoctors', array('as' => 'specialties.referraldoctors', 'uses' => 'DoctorApiController@getDoctorsBySpecialty'));
     Route::post('rest/api/referraldoctor', array('as' => 'specialties.savereferraldoctor', 'uses' => 'DoctorApiController@saveReferralDoctor'));
