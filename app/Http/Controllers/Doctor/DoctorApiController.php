@@ -1320,6 +1320,54 @@ class DoctorApiController extends Controller
     }
 
     /**
+     * Get patient latest appointment dates
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLatestAppointmentDateForPatient($patientId, Request $appDateRequest)
+    {
+        $hospitalId = null;
+        $latestAppointmentDetails = null;
+
+        try
+        {
+            $hospitalId = $appDateRequest->get('hospitalId');
+            //dd($hospitalId);
+            $latestAppointmentDetails = $this->hospitalService->getLatestAppointmentDateForPatient($patientId, $hospitalId);
+
+            if(!is_null($latestAppointmentDetails) && !empty($examinationDates))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::APPOINTMENT_DATE_SUCCESS));
+                $responseJson->setCount(sizeof($latestAppointmentDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::APPOINTMENT_DATE_NOT_FOUND));
+            }
+
+            $responseJson->setObj($latestAppointmentDetails);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::APPOINTMENT_DATE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
      * Get patient examination dates
      * @param $patientId
      * @throws $hospitalException

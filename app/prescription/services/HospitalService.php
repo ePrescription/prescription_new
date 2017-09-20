@@ -1897,6 +1897,36 @@ class HospitalService {
     }
 
     /**
+     * Get lab test details to generate receipt
+     * @param $patientId, $hospitalId, $generatedDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate)
+    {
+        $patientLabTests = null;
+
+        try
+        {
+            $patientLabTests = $this->hospitalRepo->getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::LAB_TEST_LIST_FOR_RECEIPT_ERROR, $exc);
+        }
+
+        return $patientLabTests;
+
+        return $patientLabTests;
+    }
+
+    /**
      * Get all specialties
      * @param none
      * @throws $hospitalException
@@ -2040,6 +2070,34 @@ class HospitalService {
         }
 
         return $examinationDates;
+    }
+
+    /**
+     * Get patient latest appointment dates
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLatestAppointmentDateForPatient($patientId, $hospitalId)
+    {
+        $latestAppointmentDetails = null;
+
+        try
+        {
+            $latestAppointmentDetails = $this->hospitalRepo->getLatestAppointmentDateForPatient($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::APPOINTMENT_DATE_ERROR, $exc);
+        }
+
+        return $latestAppointmentDetails;
     }
 
     /**

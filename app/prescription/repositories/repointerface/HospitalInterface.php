@@ -104,6 +104,7 @@ interface HospitalInterface {
     public function savePatientFamilyIllness(PatientFamilyIllnessViewModel $patientFamilyIllnessVM);
 
     public function getExaminationDates($patientId);
+    public function getLatestAppointmentDateForPatient($patientId, $hospitalId);
     //;
 
     public function getPregnancyDetails($patientId, $pregnancyDate);
@@ -137,6 +138,8 @@ interface HospitalInterface {
 
     public function getPatientLabTests($hospitalId, $patientId, $feeStatus = null);
     public function getLabTestDetailsByPatient($labTestType, $labTestId);
+
+    public function getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate);
 
     public function getAllSpecialties();
     public function getDoctorsBySpecialty($specialtyId);

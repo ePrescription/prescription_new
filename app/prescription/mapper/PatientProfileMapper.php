@@ -40,7 +40,8 @@ class PatientProfileMapper
         $profileVM->setAddress(property_exists($profile, 'address') ? $profile->address : null);
         $profileVM->setCity(property_exists($profile, 'city') ? $profile->city : null);
         $profileVM->setCountry(property_exists($profile, 'country') ? $profile->country : null);
-        $profileVM->setTelephone($profile->telephone);
+        $profileVM->setTelephone(property_exists($profile, 'telephone') ? $profile->telephone : null);
+        //$profileVM->setTelephone($profile->telephone);
         $profileVM->setEmail(property_exists($profile, 'email') ? $profile->email : null);
         $profileVM->setRelationship(property_exists($profile, 'relationship') ? $profile->relationship : null);
         $profileVM->setSpouseName(property_exists($profile, 'spouseName') ? $profile->spouseName : null);
@@ -49,7 +50,8 @@ class PatientProfileMapper
         $profileVM->setAge(property_exists($profile, 'age') ? $profile->age : null);
         $profileVM->setPlaceOfBirth(property_exists($profile, 'placeOfBirth') ? $profile->placeOfBirth : null);
         $profileVM->setNationality(property_exists($profile, 'nationality') ? $profile->nationality : null);
-        $profileVM->setGender($profile->gender);
+        $profileVM->setGender(property_exists($profile, 'gender') ? $profile->gender : null);
+        //$profileVM->setGender($profile->gender);
         $profileVM->setMaritalStatus(property_exists($profile, 'maritalStatus') ? $profile->maritalStatus : null);
         $profileVM->setHospitalId(property_exists($profile, 'hospitalId') ? $profile->hospitalId : null);
         $profileVM->setDoctorId(property_exists($profile, 'doctorId') ? $profile->doctorId : null);

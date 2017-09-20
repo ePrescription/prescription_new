@@ -255,4 +255,12 @@
         "859" => "Unable to retrieve referral doctor details",
         "860" => "Successfully retrieved referral doctor details",
         "861" => "No referral doctor details available",
+
+        "862" => "Unable to get patient appointment dates",
+        "863" => "Appointment date available for the patient",
+        "864" => "Successfully retrieved patient appointment dates",
+
+        "865" => "Unable to retrieve the lab test details for the patient",
+        "866" => "Successfully retrieved the lab test details for the patient",
+        "867" => "No lab test list available for the patient",
     ];

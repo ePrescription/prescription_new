@@ -4469,6 +4469,53 @@ class DoctorController extends Controller
     }
 
     /**
+     * Get patient latest appointment dates
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLatestAppointmentDateForPatient($patientId, Request $appDateRequest)
+    {
+        $hospitalId = null;
+        $latestAppointmentDetails = null;
+
+        try
+        {
+            $hospitalId = $appDateRequest->get('hospitalId');
+            $latestAppointmentDetails = $this->hospitalService->getLatestAppointmentDateForPatient($patientId, $hospitalId);
+
+            if(!is_null($latestAppointmentDetails) && !empty($examinationDates))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::APPOINTMENT_DATE_SUCCESS));
+                $responseJson->setCount(sizeof($latestAppointmentDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::APPOINTMENT_DATE_NOT_FOUND));
+            }
+
+            $responseJson->setObj($latestAppointmentDetails);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::APPOINTMENT_DATE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
      * Save patient personal history
      * @param $personalHistoryRequest
      * @throws $hospitalException
@@ -5317,6 +5364,46 @@ class DoctorController extends Controller
         try
         {
             $labTestDetails = $this->hospitalService->getLabTestDetailsByPatient($labTestType, $labTestId);
+            dd($labTestDetails);
+            //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+    }
+
+    /**
+     * Get lab test details to generate receipt
+     * @param $patientId, $hospitalId, $generatedDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabTestDetailsForReceipt($patientId, Request $receiptRequest)
+    {
+        $labTestDetails = null;
+
+        try
+        {
+            $hospitalId = $receiptRequest->get('hospitalId');
+            dd($hospitalId);
+            $generatedDate = $receiptRequest->get('generatedDate');
+
+            $labTestDetails = $this->hospitalService->getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate);
             dd($labTestDetails);
             //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
 
