@@ -183,6 +183,9 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::any('payment/response/success', array('as' => 'payment.success', 'uses' => 'DoctorController@successPayment'));
     Route::any('payment/response/failure', array('as' => 'payment.failure', 'uses' => 'DoctorController@failurePayment'));
 
+    //PRINT ALL
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/print', array('as' => 'hospital.patientprintdetails', 'uses' => 'DoctorController@PatientPrintDetailsByHospitalForFront'));
+
     //Medical
     Route::get('rest/api/{hospitalId}/patient/{patientId}/medical-details', array('as' => 'hospital.patientmedicaldetails', 'uses' => 'DoctorController@PatientMedicalDetailsByHospitalForFront'));
 

@@ -5153,6 +5153,39 @@ class DoctorController extends Controller
     /*Symptom section -- End */
 
 
+    public function PatientPrintDetailsByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-print-details',compact('patientExaminations'));
+
+    }
+
+
     public function PatientMedicalDetailsByHospitalForFront($hid,$patientId)
     {
         $patientDetails = null;
