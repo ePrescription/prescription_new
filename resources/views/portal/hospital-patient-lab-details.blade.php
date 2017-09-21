@@ -54,7 +54,7 @@ $profile_menu="0";
                                     <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>
 
-                                    <div style="float:right;">
+                                    <div style="float:right;display:none;">
                                         <a style="margin: 0px 10px;" href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/labtestreceipts?hospitalId={{Auth::user()->id}}">
                                             <button class="btn btn-error waves-effect waves-light">Generate Receipt</button>
                                         </a>
