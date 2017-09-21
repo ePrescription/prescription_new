@@ -43,11 +43,205 @@ $profile_menu="0";
                             <div class="panel panel-primary">
                                 <div class="panel-body">
                                     <div style="float:right;">
+                                    <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
+                                    </div>
+
+                                    <div style="float:right;">
                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
                                             <button class="btn btn-info waves-effect waves-light">Back</button>
                                         </a>
                                     </div>
                                     <h4 class="m-t-0 m-b-30">Patient Lab Details</h4>
+
+                                    <div id='DivIdToPrint' style="display:none;">
+
+                                        <div id="PatientInfoPrint" class="">
+                                            <div class="row">
+
+                                                <div class="col-lg-6" style="width:50%;float:left;">
+                                                    <h4 class="m-t-0 m-b-30">Hospital Details</h4>
+
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">Name</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['hospitalDetails']->hospital_name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">Address</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['hospitalDetails']->address}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">City</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['hospitalDetails']->city_name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">Country</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['hospitalDetails']->name}}
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-lg-6"  style="width:50%;float:left;">
+                                                    <h4 class="m-t-0 m-b-30">Patient Details</h4>
+
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">PID</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['patientDetails']->pid}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">Name</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['patientDetails']->name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">Number</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['patientDetails']->telephone}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">E-Mail</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['patientDetails']->email}}
+                                                        </div>
+                                                    </div>
+                                                    <?php /* ?>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">Age / Gender</label>
+                                                        <div class="col-sm-9">
+                                                            {{$patientExaminations['patientDetails']->age}} / @if($patientExaminations['patientDetails']->gender==1) Male @else Female @endif
+                                                        </div>
+                                                    </div>
+                                                    <?php */ ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        @if(count($patientExaminations['recentBloodTests'])>0)
+                                            <hr/>
+                                            <div class="form-group">
+                                            <label class="col-sm-12 control-label">Blood Test - {{$patientExaminations['recentBloodTests'][0]->examination_date}}</label>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                            @foreach($patientExaminations['recentBloodTests'] as $recentTest)
+                                                <div class="col-sm-4" style="width:33%;float:left;">
+
+                                                    {{$recentTest->examination_name}}
+
+                                                </div>
+                                            @endforeach
+                                            </div>
+                                            <br/><br/>
+                                        @endif
+
+                                        @if(count($patientExaminations['recentMotionExaminations'])>0)
+                                            <hr/>
+                                            <div class="form-group">
+                                                <label class="col-sm-12 control-label">Motion Test - {{$patientExaminations['recentMotionExaminations'][0]->examination_date}}</label>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                @foreach($patientExaminations['recentMotionExaminations'] as $recentTest)
+                                                    <div class="col-sm-4" style="width:33%;float:left;">
+
+                                                        {{$recentTest->examination_name}}
+
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <br/><br/>
+                                        @endif
+
+
+
+                                        @if(count($patientExaminations['recentUrineExaminations'])>0)
+                                            <hr/>
+                                            <div class="form-group">
+                                                <label class="col-sm-12 control-label">Urine Test - {{$patientExaminations['recentUrineExaminations'][0]->examination_date}}</label>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                @foreach($patientExaminations['recentUrineExaminations'] as $recentTest)
+                                                    <div class="col-sm-4" style="width:33%;float:left;">
+
+                                                        {{$recentTest->examination_name}}
+
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <br/><br/><br/><br/>
+                                        @endif
+
+
+                                        @if(count($patientExaminations['recentUltrasound'])>0)
+                                            <hr/>
+                                            <div class="form-group">
+                                                <label class="col-sm-12 control-label">Ultra Test - {{$patientExaminations['recentUltrasound'][0]->examination_date}}</label>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                @foreach($patientExaminations['recentUltrasound'] as $recentTest)
+                                                    <div class="col-sm-4" style="width:33%;float:left;">
+
+                                                        {{$recentTest->examination_name}}
+
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <br/><br/>
+                                        @endif
+
+
+                                        <hr/>
+
+                                        <?php /* ?>
+
+                                        {{print_r($patientExaminations['recentGeneralTests'])}}
+
+                                        <hr/>
+
+                                        {{print_r($patientExaminations['recentPastIllness'])}}
+
+                                        <hr/>
+
+                                        {{print_r($patientExaminations['recentFamilyIllness'])}}
+
+                                        <hr/>
+
+                                        {{print_r($patientExaminations['recentPersonalHistory'])}}
+
+                                        <hr/>
+
+                                        {{print_r($patientExaminations['recentPregnancy'])}}
+
+                                        <hr/>
+
+                                        {{print_r($patientExaminations['recentScans'])}}
+
+                                        <hr/>
+
+                                        {{print_r($patientExaminations['recentSymptoms'])}}
+
+                                        <hr/>
+
+                                        {{print_r($patientExaminations['recentDrugHistory'])}}
+
+                                        <hr/>
+                                        <p>This is a Popup which needs to be printed.</p>
+                                        <?php */ ?>
+                                    </div>
+
+                                    <div>
+                                        <p>Do not print.</p>
+                                    </div>
 
 
                                     @if (session()->has('message'))
@@ -415,6 +609,16 @@ $profile_menu="0";
                     $("#patientultradiv").html(data);
                 }
             });
+        }
+
+        function printDiv()
+        {
+            var divToPrint=document.getElementById('DivIdToPrint');
+            var newWin=window.open('','Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+            newWin.document.close();
+            setTimeout(function(){newWin.close();},10);
         }
 
     </script>
