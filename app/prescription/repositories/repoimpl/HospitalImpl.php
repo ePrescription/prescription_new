@@ -4128,8 +4128,8 @@ class HospitalImpl implements HospitalInterface{
             });
             $latestSymptomsQuery->where('ps.patient_id', '=', $patientId);
             $latestSymptomsQuery->where('ps.is_value_set', '=', 1);
-            $latestSymptomsQuery->select('ps.id', 'ps.patient_id', 'ms.main_symptom_name',
-                'ss.sub_symptom_name', 's.symptom_name', 'ps.patient_symptom_date');
+            $latestSymptomsQuery->select('ps.id', 'ps.patient_id', 'ms.id as main_symptom_id','ms.main_symptom_name',
+                'ss.id as sub_symptom_id', 'ss.sub_symptom_name', 's.id as symptom_id', 's.symptom_name', 'ps.patient_symptom_date');
             $latestSymptoms = $latestSymptomsQuery->get();
 
             $latestUltrasoundQuery = DB::table('patient_ultra_sound as pus');
