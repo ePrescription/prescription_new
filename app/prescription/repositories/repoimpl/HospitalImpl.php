@@ -4002,7 +4002,7 @@ class HospitalImpl implements HospitalInterface{
      * @author Baskar
      */
 
-    public function getExaminationDates($patientId)
+    public function getExaminationDates($patientId, $hospitalId)
     {
         $examinationDates = null;
         $generalExaminationDates = null;
@@ -4043,7 +4043,7 @@ class HospitalImpl implements HospitalInterface{
             $bloodExaminations = $latestBloodExamQuery->get();
 
             //dd($bloodExaminations);
-            $hospitalId = $bloodExaminations[0]->hospital_id;
+            //$hospitalId = $bloodExaminations[0]->hospital_id;
 
             //dd($hospitalId);
 
@@ -4277,7 +4277,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(QueryException $queryEx)
         {
-            //dd($queryEx);
+            dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $queryEx);
         }
         catch(UserNotFoundException $userExc)
@@ -4287,7 +4287,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            dd($exc);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
         }
 

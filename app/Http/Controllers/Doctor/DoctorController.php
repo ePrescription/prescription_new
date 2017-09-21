@@ -4431,7 +4431,8 @@ class DoctorController extends Controller
 
         try
         {
-            $examinationDates = $this->hospitalService->getExaminationDates($patientId);
+            $hospitalId = 1;
+            $examinationDates = $this->hospitalService->getExaminationDates($patientId, $hospitalId);
             //dd($examinationDates);
 
             if(!is_null($examinationDates) && !empty($examinationDates))
@@ -5163,7 +5164,7 @@ class DoctorController extends Controller
         try
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
-            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
 
 
         }
@@ -5633,7 +5634,7 @@ class DoctorController extends Controller
         try
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
-            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
             //dd($patientExaminations);
         }
         catch(HospitalException $hospitalExc)

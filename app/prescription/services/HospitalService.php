@@ -2085,13 +2085,13 @@ class HospitalService {
      * @author Baskar
      */
 
-    public function getExaminationDates($patientId)
+    public function getExaminationDates($patientId, $hospitalId)
     {
         $examinationDates = null;
 
         try
         {
-            $examinationDates = $this->hospitalRepo->getExaminationDates($patientId);
+            $examinationDates = $this->hospitalRepo->getExaminationDates($patientId, $hospitalId);
         }
         catch(HospitalException $hospitalExc)
         {
