@@ -42,13 +42,21 @@ $profile_menu="0";
 
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+
+
+                                    <div style="float:right;">
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
+                                            <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
+                                        </a>
+                                    </div>
+
                                     <div style="float:right;">
                                     <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>
 
                                     <div style="float:right;">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
-                                            <button class="btn btn-info waves-effect waves-light">Back</button>
+                                        <a style="margin: 0px 10px;" href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/labtestreceipts?hospitalId={{Auth::user()->id}}">
+                                            <button class="btn btn-error waves-effect waves-light">Generate Receipt</button>
                                         </a>
                                     </div>
                                     <h4 class="m-t-0 m-b-30">Patient Lab Details</h4>

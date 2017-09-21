@@ -5427,10 +5427,12 @@ class DoctorController extends Controller
      * @author Baskar
      */
 
-    public function getLabTestDetailsForReceipt($patientId, Request $receiptRequest)
+    public function getLabTestDetailsForReceipt($hid, $patientId, Request $receiptRequest)
     {
         $labTestDetails = null;
         $generatedDate = null;
+
+        //dd($receiptRequest);
 
         try
         {
@@ -5442,8 +5444,10 @@ class DoctorController extends Controller
             }
 
             $labTestDetails = $this->hospitalService->getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate);
-            //dd($labTestDetails);
-            //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
+            $patientDetails = $this->hospitalService->getPatientProfile($patientId);
+
+            dd($labTestDetails);
+            return view('portal.hospital-patient-receipt-details', compact('labTestDetails','patientDetails'));
 
         }
         catch(HospitalException $hospitalExc)

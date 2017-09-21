@@ -3766,6 +3766,7 @@ class HospitalImpl implements HospitalInterface{
             }
             $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date');
 
+            //dd($urineExamQuery->toSql());
             $urineExaminations = $urineExamQuery->get();
 
             $motionExamQuery = DB::table('patient_motion_examination as pme');
@@ -3780,6 +3781,7 @@ class HospitalImpl implements HospitalInterface{
             }
             $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'me.examination_name', 'pme.examination_date');
 
+            //dd($motionExamQuery->toSql());
             $motionExaminations = $motionExamQuery->get();
 
             $scanExamQuery = DB::table('patient_scan as ps');
@@ -3794,6 +3796,7 @@ class HospitalImpl implements HospitalInterface{
             }
             $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 's.scan_name', 'ps.scan_date');
 
+            //dd($scanExamQuery->toSql());
             $scanExaminations = $scanExamQuery->get();
 
             $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus');
@@ -3808,6 +3811,7 @@ class HospitalImpl implements HospitalInterface{
             }
             $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date');
 
+            dd($ultraSoundExamQuery->toSql());
             $ultraSoundExaminations = $ultraSoundExamQuery->get();
 
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
