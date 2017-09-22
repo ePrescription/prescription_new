@@ -5517,7 +5517,20 @@ class DoctorController extends Controller
             $labReceiptsVM = PatientProfileMapper::setPatientLabReceipts($labTestsPayments);
             //dd($labReceiptsVM);
             $status = $this->hospitalService->saveLabReceiptDetailsForPatient($labReceiptsVM);
-            dd($status);
+            //dd($status);
+
+            if($status)
+            {
+                //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
+
+                $msg = "Patient Fees Details Updated Successfully.";
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$labReceiptRequest['patientId'].'/labtestreceipts')->with('success',$msg);
+            }
+            else
+            {
+                $msg = "Patient Fess Details Invalid / Incorrect! Try Again.";
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$labReceiptRequest['patientId'].'/labtestreceipts')->with('message',$msg);
+            }
 
         }
         catch(HospitalException $hospitalExc)

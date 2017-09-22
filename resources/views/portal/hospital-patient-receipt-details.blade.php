@@ -48,6 +48,7 @@ $profile_menu="0";
                                             <button class="btn btn-info waves-effect waves-light">Back</button>
                                         </a>
                                     </div>
+                                    <div id='DivIdToPrint' style="display:block;">
                                     <h4 class="m-t-0 m-b-30">Patient Lab Receipt Details</h4>
 
 
@@ -251,7 +252,7 @@ $profile_menu="0";
                                                                         <div class="col-sm-6">
                                                                             <input type="hidden" class="form-control" name="patientId" value="{{$labTestDetails['patientDetails']->patient_id}}" required="required" />
                                                                             <input type="hidden" class="form-control" name="hospitalId" value="{{$labTestDetails['hospitalDetails']->hospital_id}}" required="required" />
-                                                                            <input type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success"/>
+                                                                            <input type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success" onclick="javascript:printDivXYZ();"/>
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -264,7 +265,7 @@ $profile_menu="0";
 
                                     </div><!-- container -->
 
-
+                                    </div>
 
                                 </div> <!-- panel-body -->
                             </div> <!-- panel -->
