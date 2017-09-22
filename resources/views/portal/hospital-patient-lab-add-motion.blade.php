@@ -50,6 +50,7 @@
 <div class="col-sm-4"></div>
 <div class="col-sm-6">
 <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
+<input type="hidden" class="form-control" name="hospitalId" value="{{$hid}}" required="required" />
 <input type="submit" name="addmotion" value="Save" class="btn btn-success"/>
 </div>
 </div>

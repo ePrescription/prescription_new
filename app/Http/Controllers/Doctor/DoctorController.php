@@ -5541,7 +5541,7 @@ class DoctorController extends Controller
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            ////dd($exc);
             //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
