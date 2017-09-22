@@ -37,17 +37,20 @@ $profile_menu="0";
 
                     <div class="row">
                         <div class="col-sm-12">
+
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+                                    <?php /* ?>
                                     <div style="float:right;display:none">
                                         <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>
+                                        <div style="float:right;">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
+                                                <button class="btn btn-info waves-effect waves-light">Back</button>
+                                            </a>
+                                        </div>
+                                    <?php */ ?>
 
-                                    <div style="float:right;">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
-                                            <button class="btn btn-info waves-effect waves-light">Back</button>
-                                        </a>
-                                    </div>
                                     <div id='DivIdToPrint' style="display:block;">
                                     <h4 class="m-t-0 m-b-30">Patient Lab Receipt Details</h4>
 
@@ -72,54 +75,54 @@ $profile_menu="0";
 
                                     <div class="row">
 
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-12" style="width:100%;float:left;">
 
 
-                                            <div class="form-group col-md-4">
-                                                <label class="col-sm-3 control-label">PID</label>
-                                                <div class="col-sm-9">
+                                            <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                <label class="col-sm-3 control-label" style="width:30%;float:left;">PID</label>
+                                                <div class="col-sm-9" style="width:70%;float:left;">
                                                     {{$patientDetails[0]->pid}}
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label class="col-sm-3 control-label">Name</label>
-                                                <div class="col-sm-9">
+                                            <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                <label class="col-sm-3 control-label" style="width:30%;float:left;">Name</label>
+                                                <div class="col-sm-9" style="width:70%;float:left;">
                                                     {{$patientDetails[0]->name}}
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label class="col-sm-3 control-label">Number</label>
-                                                <div class="col-sm-9">
+                                            <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                <label class="col-sm-3 control-label" style="width:30%;float:left;">Number</label>
+                                                <div class="col-sm-9" style="width:70%;float:left;">
                                                     {{$patientDetails[0]->telephone}}
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label class="col-sm-3 control-label">E-Mail</label>
-                                                <div class="col-sm-9">
+                                            <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                <label class="col-sm-3 control-label" style="width:30%;float:left;">E-Mail</label>
+                                                <div class="col-sm-9" style="width:70%;float:left;">
                                                     {{$patientDetails[0]->email}}
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label class="col-sm-3 control-label">Age</label>
-                                                <div class="col-sm-9">
+                                            <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                <label class="col-sm-3 control-label" style="width:30%;float:left;">Age</label>
+                                                <div class="col-sm-9" style="width:70%;float:left;">
                                                     {{$patientDetails[0]->age}}
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label class="col-sm-3 control-label">Gender</label>
-                                                <div class="col-sm-9">
+                                            <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                <label class="col-sm-3 control-label" style="width:30%;float:left;">Gender</label>
+                                                <div class="col-sm-9" style="width:70%;float:left;">
                                                     @if($patientDetails[0]->gender==1) Male @else Female @endif
                                                 </div>
                                             </div>
-                                            <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-3 control-label">Relationship</label>
-                                                <div class="col-sm-9">
+                                            <div class="hidden form-group col-md-4" style="width:33%;float:left;">
+                                                <label class="col-sm-3 control-label" style="width:30%;float:left;">Relationship</label>
+                                                <div class="col-sm-9" style="width:70%;float:left;">
                                                     {{$patientDetails[0]->relationship}}
                                                 </div>
                                             </div>
-                                            <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Relation Name</label>
-                                                <div class="col-sm-6">
+                                            <div class="hidden form-group col-md-4" style="width:33%;float:left;">
+                                                <label class="col-sm-6 control-label" style="width:30%;float:left;">Relation Name</label>
+                                                <div class="col-sm-6" style="width:70%;float:left;">
                                                     {{$patientDetails[0]->spouseName}}
                                                 </div>
                                             </div>
@@ -145,100 +148,161 @@ $profile_menu="0";
                                                                     @if(count($patientBloodTests)>0)
                                                                     <?php $i=0; ?>
                                                                         <h4 class="m-t-0 m-b-30">Blood Test</h4>
-                                                                    @foreach($patientBloodTests as $patientBloodTestValue)
-                                                                        <div class="form-group">
-                                                                            <label class="col-sm-4 control-label">{{$patientBloodTestValue->examination_name}} </label>
-                                                                            <div class="col-sm-6">
-                                                                                <input type="hidden" class="form-control" name="labTests[bloodTests][{{$i}}][id]" value="{{$patientBloodTestValue->id}}" required="required" />
-                                                                                <div class="radio radio-info radio-inline">
+                                                                        <div class="table-responsive">
+                                                                            <table class="table">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th>TEST NAME</th>
+                                                                                    <th>TEST DATE</th>
+                                                                                    <th>TEST AMOUNT</th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                @foreach($patientBloodTests as $patientBloodTestValue)
+                                                                                    <tr>
+                                                                                        <td>{{$patientBloodTestValue->examination_name}}</td>
+                                                                                        <td>{{$patientBloodTestValue->examination_date}} </td>
+                                                                                        <td>
+                                                                                            <input type="hidden" class="form-control" name="labTests[bloodTests][{{$i}}][id]" value="{{$patientBloodTestValue->id}}" required="required" />
+                                                                                            <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[bloodTests][{{$i}}][fees]" value="0" required="required" />
+                                                                                        </td>
+                                                                                    </tr>
 
-                                                                                    <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[bloodTests][{{$i}}][fees]" value="0" required="required" />
-
-                                                                                </div>
-                                                                            </div>
+                                                                                    <?php $i++; ?>
+                                                                                @endforeach
+                                                                                </tbody>
+                                                                            </table>
                                                                         </div>
-                                                                        <?php $i++; ?>
-                                                                    @endforeach
+
                                                                     @endif
 
                                                                     <?php $patientUrineTests=$labTestDetails['urineTests']; ?>
                                                                     @if(count($patientUrineTests)>0)
                                                                         <?php $i=0; ?>
                                                                         <h4 class="m-t-0 m-b-30">Urine Test</h4>
-                                                                        @foreach($patientUrineTests as $patientUrineTestValue)
-                                                                            <div class="form-group">
-                                                                                <label class="col-sm-4 control-label">{{$patientUrineTestValue->examination_name}} </label>
-                                                                                <div class="col-sm-6">
-                                                                                    <input type="hidden" class="form-control" name="labTests[urineTests][{{$i}}][id]" value="{{$patientUrineTestValue->id}}" required="required" />
-                                                                                    <div class="radio radio-info radio-inline">
+                                                                            <div class="table-responsive">
+                                                                                <table class="table">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th>TEST NAME</th>
+                                                                                        <th>TEST DATE</th>
+                                                                                        <th>TEST AMOUNT</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    @foreach($patientUrineTests as $patientUrineTestValue)
+                                                                                        <tr>
+                                                                                            <td>{{$patientUrineTestValue->examination_name}}</td>
+                                                                                            <td>{{$patientUrineTestValue->examination_date}} </td>
+                                                                                            <td>
+                                                                                                <input type="hidden" class="form-control" name="labTests[urineTests][{{$i}}][id]" value="{{$patientUrineTestValue->id}}" required="required" />
+                                                                                                <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[urineTests][{{$i}}][fees]" value="0" required="required" />
+                                                                                            </td>
+                                                                                        </tr>
 
-                                                                                        <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[urineTests][{{$i}}][fees]" value="0" required="required" />
-
-                                                                                    </div>
-                                                                                </div>
+                                                                                        <?php $i++; ?>
+                                                                                    @endforeach
+                                                                                    </tbody>
+                                                                                </table>
                                                                             </div>
-                                                                            <?php $i++; ?>
-                                                                        @endforeach
+
+
                                                                     @endif
 
                                                                     <?php $patientMotionTests=$labTestDetails['motionTests']; ?>
                                                                     @if(count($patientMotionTests)>0)
                                                                         <?php $i=0; ?>
                                                                         <h4 class="m-t-0 m-b-30">Motion Test</h4>
-                                                                        @foreach($patientMotionTests as $patientMotionTestValue)
-                                                                            <div class="form-group">
-                                                                                <label class="col-sm-4 control-label">{{$patientMotionTestValue->examination_name}} </label>
-                                                                                <div class="col-sm-6">
-                                                                                    <input type="hidden" class="form-control" name="labTests[motionTests][{{$i}}][id]" value="{{$patientMotionTestValue->id}}" required="required" />
-                                                                                    <div class="radio radio-info radio-inline">
+                                                                            <div class="table-responsive">
+                                                                                <table class="table">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th>TEST NAME</th>
+                                                                                        <th>TEST DATE</th>
+                                                                                        <th>TEST AMOUNT</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    @foreach($patientMotionTests as $patientMotionTestValue)
+                                                                                        <tr>
+                                                                                            <td>{{$patientMotionTestValue->examination_name}}</td>
+                                                                                            <td>{{$patientMotionTestValue->examination_date}} </td>
+                                                                                            <td>
+                                                                                                <input type="hidden" class="form-control" name="labTests[motionTests][{{$i}}][id]" value="{{$patientMotionTestValue->id}}" required="required" />
+                                                                                                <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[motionTests][{{$i}}][fees]" value="0" required="required" />
+                                                                                            </td>
+                                                                                        </tr>
 
-                                                                                        <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[motionTests][{{$i}}][fees]" value="0" required="required" />
-
-                                                                                    </div>
-                                                                                </div>
+                                                                                        <?php $i++; ?>
+                                                                                    @endforeach
+                                                                                    </tbody>
+                                                                                </table>
                                                                             </div>
-                                                                            <?php $i++; ?>
-                                                                        @endforeach
+
+
                                                                     @endif
 
                                                                     <?php $patientScanTests=$labTestDetails['scanTests']; ?>
                                                                     @if(count($patientScanTests)>0)
                                                                         <?php $i=0; ?>
                                                                         <h4 class="m-t-0 m-b-30">Scan Test</h4>
-                                                                        @foreach($patientScanTests as $patientScanTestValue)
-                                                                            <div class="form-group">
-                                                                                <label class="col-sm-4 control-label">{{$patientScanTestValue->scan_name}} </label>
-                                                                                <div class="col-sm-6">
-                                                                                    <input type="hidden" class="form-control" name="labTests[scanTests][{{$i}}][id]" value="{{$patientScanTestValue->id}}" required="required" />
-                                                                                    <div class="radio radio-info radio-inline">
+                                                                            <div class="table-responsive">
+                                                                                <table class="table">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th>SCAN NAME</th>
+                                                                                        <th>SCAN DATE</th>
+                                                                                        <th>SCAN AMOUNT</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    @foreach($patientScanTests as $patientScanTestValue)
+                                                                                        <tr>
+                                                                                            <td>{{$patientScanTestValue->scan_name}}</td>
+                                                                                            <td>{{$patientScanTestValue->scan_date}} </td>
+                                                                                            <td>
+                                                                                                <input type="hidden" class="form-control" name="labTests[scanTests][{{$i}}][id]" value="{{$patientScanTestValue->id}}" required="required" />
+                                                                                                <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[scanTests][{{$i}}][fees]" value="0" required="required" />
+                                                                                            </td>
+                                                                                        </tr>
 
-                                                                                        <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[scanTests][{{$i}}][fees]" value="0" required="required" />
-
-                                                                                    </div>
-                                                                                </div>
+                                                                                        <?php $i++; ?>
+                                                                                    @endforeach
+                                                                                    </tbody>
+                                                                                </table>
                                                                             </div>
-                                                                            <?php $i++; ?>
-                                                                        @endforeach
                                                                     @endif
 
                                                                     <?php $patientUltraTests=$labTestDetails['ultraSoundTests']; ?>
                                                                     @if(count($patientUltraTests)>0)
                                                                         <?php $i=0; ?>
                                                                         <h4 class="m-t-0 m-b-30">Ultra Sound Test</h4>
-                                                                        @foreach($patientUltraTests as $patientUltraTestValue)
-                                                                            <div class="form-group">
-                                                                                <label class="col-sm-4 control-label">{{$patientUltraTestValue->examination_name}} </label>
-                                                                                <div class="col-sm-6">
-                                                                                    <input type="hidden" class="form-control" name="labTests[ultraSoundTests][{{$i}}][id]" value="{{$patientUltraTestValue->id}}" required="required" />
-                                                                                    <div class="radio radio-info radio-inline">
+                                                                            <div class="table-responsive">
+                                                                                <table class="table">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th>TEST NAME</th>
+                                                                                        <th>TEST DATE</th>
+                                                                                        <th>TEST AMOUNT</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    @foreach($patientUltraTests as $patientUltraTestValue)
+                                                                                        <tr>
+                                                                                            <td>{{$patientUltraTestValue->examination_name}}</td>
+                                                                                            <td>{{$patientUltraTestValue->examination_date}} </td>
+                                                                                            <td>
+                                                                                                <input type="hidden" class="form-control" name="labTests[ultraSoundTests][{{$i}}][id]" value="{{$patientUltraTestValue->id}}" required="required" />
+                                                                                                <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[ultraSoundTests][{{$i}}][fees]" value="0" required="required" />
+                                                                                            </td>
+                                                                                        </tr>
 
-                                                                                        <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[ultraSoundTests][{{$i}}][fees]" value="0" required="required" />
-
-                                                                                    </div>
-                                                                                </div>
+                                                                                        <?php $i++; ?>
+                                                                                    @endforeach
+                                                                                    </tbody>
+                                                                                </table>
                                                                             </div>
-                                                                            <?php $i++; ?>
-                                                                        @endforeach
+
                                                                     @endif
                                                                     <div class="form-group">
                                                                         <h4 class="m-t-0 m-b-30">Total Fee</h4>
@@ -252,7 +316,7 @@ $profile_menu="0";
                                                                         <div class="col-sm-6">
                                                                             <input type="hidden" class="form-control" name="patientId" value="{{$labTestDetails['patientDetails']->patient_id}}" required="required" />
                                                                             <input type="hidden" class="form-control" name="hospitalId" value="{{$labTestDetails['hospitalDetails']->hospital_id}}" required="required" />
-                                                                            <input type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success" onclick="javascript:printDivXYZ();"/>
+                                                                            <input type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success" onclick="javascript:window.print();"/>
                                                                         </div>
                                                                     </div>
                                                                 </form>
