@@ -5436,7 +5436,8 @@ class DoctorController extends Controller
 
         try
         {
-            $hospitalId = $receiptRequest->get('hospitalId');
+            //$hospitalId = $receiptRequest->get('hospitalId');
+            $hospitalId = $hid;
 
             if($receiptRequest->has('generatedDate'))
             {
@@ -5446,7 +5447,7 @@ class DoctorController extends Controller
             $labTestDetails = $this->hospitalService->getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate);
             $patientDetails = $this->hospitalService->getPatientProfile($patientId);
 
-            dd($labTestDetails);
+            //dd($labTestDetails);
             return view('portal.hospital-patient-receipt-details', compact('labTestDetails','patientDetails'));
 
         }

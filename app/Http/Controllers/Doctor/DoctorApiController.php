@@ -1275,14 +1275,15 @@ class DoctorApiController extends Controller
      * @author Baskar
      */
 
-    public function getExaminationDates($patientId)
+    public function getExaminationDates($patientId, Request $examinationRequest)
     {
         $examinationDates = null;
         $responseJson = null;
 
         try
         {
-            $examinationDates = $this->hospitalService->getExaminationDates($patientId);
+            $hospitalId = $examinationRequest->get('hospitalId');
+            $examinationDates = $this->hospitalService->getExaminationDates($patientId, $hospitalId);
             //dd($examinationDates);
 
             if(!is_null($examinationDates) && !empty($examinationDates))
