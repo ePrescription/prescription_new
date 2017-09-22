@@ -3741,7 +3741,11 @@ class HospitalImpl implements HospitalInterface{
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
             $bloodExamQuery->where('pbe.is_value_set', '=', 1);
-            $bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
+            $bloodExamQuery->where(function($query){
+                $query->where('pbe.is_fees_paid', '=', 0);
+                $query->orWhereNull('pbe.is_fees_paid');
+            });
+            //$bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
@@ -3759,7 +3763,11 @@ class HospitalImpl implements HospitalInterface{
             $urineExamQuery->where('pue.patient_id', '=', $patientId);
             $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
             $urineExamQuery->where('pue.is_value_set', '=', 1);
-            $urineExamQuery->where('pue.is_fees_paid', '=', 0);
+            $urineExamQuery->where(function($query){
+                $query->where('pue.is_fees_paid', '=', 0);
+                $query->orWhereNull('pue.is_fees_paid');
+            });
+            //$urineExamQuery->where('pue.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $urineExamQuery->whereDate('pue.created_at', '=', $receiptDate);
@@ -3774,7 +3782,11 @@ class HospitalImpl implements HospitalInterface{
             $motionExamQuery->where('pme.patient_id', '=', $patientId);
             $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
             $motionExamQuery->where('pme.is_value_set', '=', 1);
-            $motionExamQuery->where('pme.is_fees_paid', '=', 0);
+            //$motionExamQuery->where('pme.is_fees_paid', '=', 0);
+            $motionExamQuery->where(function($query){
+                $query->where('pme.is_fees_paid', '=', 0);
+                $query->orWhereNull('pme.is_fees_paid');
+            });
             if(!is_null($receiptDate))
             {
                 $motionExamQuery->whereDate('pme.created_at', '=', $receiptDate);
@@ -3789,7 +3801,11 @@ class HospitalImpl implements HospitalInterface{
             $scanExamQuery->where('ps.patient_id', '=', $patientId);
             $scanExamQuery->where('ps.hospital_id', '=', $hospitalId);
             $scanExamQuery->where('ps.is_value_set', '=', 1);
-            $scanExamQuery->where('ps.is_fees_paid', '=', 0);
+            $scanExamQuery->where(function($query){
+                $query->where('ps.is_fees_paid', '=', 0);
+                $query->orWhereNull('ps.is_fees_paid');
+            });
+            //$scanExamQuery->where('ps.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $scanExamQuery->whereDate('ps.created_at', '=', $receiptDate);
@@ -3804,14 +3820,18 @@ class HospitalImpl implements HospitalInterface{
             $ultraSoundExamQuery->where('pus.patient_id', '=', $patientId);
             $ultraSoundExamQuery->where('pus.hospital_id', '=', $hospitalId);
             $ultraSoundExamQuery->where('pus.is_value_set', '=', 1);
-            $ultraSoundExamQuery->where('pus.is_fees_paid', '=', 0);
+            $ultraSoundExamQuery->where(function($query){
+                $query->where('pus.is_fees_paid', '=', 0);
+                $query->orWhereNull('pus.is_fees_paid');
+            });
+            //$ultraSoundExamQuery->where('pus.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $ultraSoundExamQuery->whereDate('pus.created_at', '=', $receiptDate);
             }
             $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date');
 
-            dd($ultraSoundExamQuery->toSql());
+            //dd($ultraSoundExamQuery->toSql());
             $ultraSoundExaminations = $ultraSoundExamQuery->get();
 
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',

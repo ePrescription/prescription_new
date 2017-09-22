@@ -286,7 +286,8 @@ class PatientProfileRequest extends BasePrescriptionRequest
         $rules['appointmentDate'] = ['required', 'date_format:Y-m-d', 'invaliddate'];
         $time = date( "H:i:s", strtotime($profile->appointmentTime));
         $profile->appointmentTime = $time;
-        $rules['appointmentTime'] = ['required', 'regex:^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$^', 'duplicate'];
+        $rules['appointmentTime'] = ['required', 'regex:^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$^'];
+        //$rules['appointmentTime'] = ['required', 'regex:^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$^', 'duplicate'];
 
         if($profile->referralType == 'External')
         {
