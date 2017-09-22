@@ -5468,8 +5468,10 @@ class DoctorController extends Controller
         }
     }
 
-    //public function saveLabReceiptDetailsForPatient(Request $labReceiptRequest)
-    public function saveLabReceiptDetailsForPatient()
+    //public function saveLabReceiptDetailsForPatient(Request $labReceiptRequest) {}
+    //public function saveLabReceiptDetailsForPatient() {}
+
+    public function saveLabReceiptDetailsForPatient(Request $labReceiptRequest)
     {
         //dd('Hi');
         $labReceiptsVM = null;
@@ -5477,6 +5479,8 @@ class DoctorController extends Controller
 
         try
         {
+            //dd($labReceiptRequest);
+            /*
             $labTestsPayments = array(
                 'patientId' => 57,
                 'hospitalId' => 1,
@@ -5507,7 +5511,9 @@ class DoctorController extends Controller
                     ),
                 )
                 );
+            */
 
+            $labTestsPayments = $labReceiptRequest;
             $labReceiptsVM = PatientProfileMapper::setPatientLabReceipts($labTestsPayments);
             //dd($labReceiptsVM);
             $status = $this->hospitalService->saveLabReceiptDetailsForPatient($labReceiptsVM);
@@ -5724,7 +5730,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-lab-add-blood',compact('patientBloodTests','patientDetails'));
+        return view('portal.hospital-patient-lab-add-blood',compact('patientBloodTests','patientDetails','hid'));
 
     }
 
@@ -5756,7 +5762,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-lab-add-motion',compact('patientMotionTests','patientDetails'));
+        return view('portal.hospital-patient-lab-add-motion',compact('patientMotionTests','patientDetails','hid'));
 
     }
 
@@ -5788,7 +5794,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-lab-add-urine',compact('patientUrineTests','patientDetails'));
+        return view('portal.hospital-patient-lab-add-urine',compact('patientUrineTests','patientDetails','hid'));
 
     }
 
@@ -5819,7 +5825,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-lab-add-ultrasound',compact('patientUltraSoundTests','patientDetails'));
+        return view('portal.hospital-patient-lab-add-ultrasound',compact('patientUltraSoundTests','patientDetails','hid'));
 
     }
 

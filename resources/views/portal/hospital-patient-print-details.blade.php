@@ -53,6 +53,7 @@ $profile_menu="0";
 
                                     <div id='DivIdToPrint' style="display:block;">
 
+
                                         <div id="PatientInfoPrint" class="">
                                             <div class="row">
 
@@ -60,26 +61,26 @@ $profile_menu="0";
                                                     <h4 class="m-t-0 m-b-30">Hospital Details</h4>
 
                                                     <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">Name</label>
-                                                        <div class="col-sm-9">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">Name</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientExaminations['hospitalDetails']->hospital_name}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">Address</label>
-                                                        <div class="col-sm-9">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">Address</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientExaminations['hospitalDetails']->address}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">City</label>
-                                                        <div class="col-sm-9">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">City</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientExaminations['hospitalDetails']->city_name}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">Country</label>
-                                                        <div class="col-sm-9">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">Country</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientExaminations['hospitalDetails']->name}}
                                                         </div>
                                                     </div>
@@ -90,26 +91,26 @@ $profile_menu="0";
                                                     <h4 class="m-t-0 m-b-30">Patient Details</h4>
 
                                                     <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">PID</label>
-                                                        <div class="col-sm-9">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">PID</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientExaminations['patientDetails']->pid}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">Name</label>
-                                                        <div class="col-sm-9">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">Name</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientExaminations['patientDetails']->name}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">Number</label>
-                                                        <div class="col-sm-9">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">Number</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientExaminations['patientDetails']->telephone}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">E-Mail</label>
-                                                        <div class="col-sm-9">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">E-Mail</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientExaminations['patientDetails']->email}}
                                                         </div>
                                                     </div>
@@ -124,7 +125,6 @@ $profile_menu="0";
                                                 </div>
                                             </div>
                                         </div>
-
 
                                         @if(count($patientExaminations['recentBloodTests'])>0)
                                             <hr/>

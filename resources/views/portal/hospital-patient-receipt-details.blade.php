@@ -68,8 +68,6 @@ $profile_menu="0";
                                     @endif
 
 
-                                    {{print_r($patientDetails)}}
-                                    {{print_r($labTestDetails)}}
 
                                     <div class="row">
 
@@ -128,6 +126,145 @@ $profile_menu="0";
                                         </div>
                                     </div>
 
+                                    <div class="container">
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-body">
+                                                        <h4 class="m-t-0 m-b-30">Receipt for Lab Tests</h4>
+
+                                                            <!-- form start -->
+
+                                                                <form action="{{URL::to('/')}}/fronthospital/rest/api/savelabreceipts" role="form" method="POST" class="form-horizontal ">
+
+                                                                <?php $fi=0; ?>
+
+                                                                    <?php $patientBloodTests=$labTestDetails['bloodTests']; ?>
+                                                                    @if(count($patientBloodTests)>0)
+                                                                    <?php $i=0; ?>
+                                                                        <h4 class="m-t-0 m-b-30">Blood Test</h4>
+                                                                    @foreach($patientBloodTests as $patientBloodTestValue)
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-4 control-label">{{$patientBloodTestValue->examination_name}} </label>
+                                                                            <div class="col-sm-6">
+                                                                                <input type="hidden" class="form-control" name="labTests[bloodTests][{{$i}}][id]" value="{{$patientBloodTestValue->id}}" required="required" />
+                                                                                <div class="radio radio-info radio-inline">
+
+                                                                                    <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[bloodTests][{{$i}}][fees]" value="0" required="required" />
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <?php $i++; ?>
+                                                                    @endforeach
+                                                                    @endif
+
+                                                                    <?php $patientUrineTests=$labTestDetails['urineTests']; ?>
+                                                                    @if(count($patientUrineTests)>0)
+                                                                        <?php $i=0; ?>
+                                                                        <h4 class="m-t-0 m-b-30">Urine Test</h4>
+                                                                        @foreach($patientUrineTests as $patientUrineTestValue)
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-4 control-label">{{$patientUrineTestValue->examination_name}} </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <input type="hidden" class="form-control" name="labTests[urineTests][{{$i}}][id]" value="{{$patientUrineTestValue->id}}" required="required" />
+                                                                                    <div class="radio radio-info radio-inline">
+
+                                                                                        <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[urineTests][{{$i}}][fees]" value="0" required="required" />
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <?php $i++; ?>
+                                                                        @endforeach
+                                                                    @endif
+
+                                                                    <?php $patientMotionTests=$labTestDetails['motionTests']; ?>
+                                                                    @if(count($patientMotionTests)>0)
+                                                                        <?php $i=0; ?>
+                                                                        <h4 class="m-t-0 m-b-30">Motion Test</h4>
+                                                                        @foreach($patientMotionTests as $patientMotionTestValue)
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-4 control-label">{{$patientMotionTestValue->examination_name}} </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <input type="hidden" class="form-control" name="labTests[motionTests][{{$i}}][id]" value="{{$patientMotionTestValue->id}}" required="required" />
+                                                                                    <div class="radio radio-info radio-inline">
+
+                                                                                        <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[motionTests][{{$i}}][fees]" value="0" required="required" />
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <?php $i++; ?>
+                                                                        @endforeach
+                                                                    @endif
+
+                                                                    <?php $patientScanTests=$labTestDetails['scanTests']; ?>
+                                                                    @if(count($patientScanTests)>0)
+                                                                        <?php $i=0; ?>
+                                                                        <h4 class="m-t-0 m-b-30">Scan Test</h4>
+                                                                        @foreach($patientScanTests as $patientScanTestValue)
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-4 control-label">{{$patientScanTestValue->scan_name}} </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <input type="hidden" class="form-control" name="labTests[scanTests][{{$i}}][id]" value="{{$patientScanTestValue->id}}" required="required" />
+                                                                                    <div class="radio radio-info radio-inline">
+
+                                                                                        <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[scanTests][{{$i}}][fees]" value="0" required="required" />
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <?php $i++; ?>
+                                                                        @endforeach
+                                                                    @endif
+
+                                                                    <?php $patientUltraTests=$labTestDetails['ultraSoundTests']; ?>
+                                                                    @if(count($patientUltraTests)>0)
+                                                                        <?php $i=0; ?>
+                                                                        <h4 class="m-t-0 m-b-30">Ultra Sound Test</h4>
+                                                                        @foreach($patientUltraTests as $patientUltraTestValue)
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-4 control-label">{{$patientUltraTestValue->examination_name}} </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <input type="hidden" class="form-control" name="labTests[ultraSoundTests][{{$i}}][id]" value="{{$patientUltraTestValue->id}}" required="required" />
+                                                                                    <div class="radio radio-info radio-inline">
+
+                                                                                        <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[ultraSoundTests][{{$i}}][fees]" value="0" required="required" />
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <?php $i++; ?>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    <div class="form-group">
+                                                                        <h4 class="m-t-0 m-b-30">Total Fee</h4>
+                                                                        <div class="col-sm-4">Total Fee</div>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="number" name="sum" class="form-control totalprice" value="0" disabled />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-4"></div>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="hidden" class="form-control" name="patientId" value="{{$labTestDetails['patientDetails']->patient_id}}" required="required" />
+                                                                            <input type="hidden" class="form-control" name="hospitalId" value="{{$labTestDetails['hospitalDetails']->hospital_id}}" required="required" />
+                                                                            <input type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+
+
+                                                    </div> <!-- panel-body -->
+                                                </div> <!-- panel -->
+                                            </div> <!-- col -->
+                                        </div> <!-- End row -->
+
+                                    </div><!-- container -->
+
+
 
                                 </div> <!-- panel-body -->
                             </div> <!-- panel -->
@@ -156,207 +293,18 @@ $profile_menu="0";
 @section('scripts')
 
     <script>
-        function ajaxloadgeneraldetails(pid,date) {
 
-            $("#patientgeneraldiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/generalexamination';
 
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientgeneraldiv").html(data);
-                    }
+        $('input#fee').each(function () {
+            var sum = 0;
+            $(this).change(function () {
+                var sum = 0;
+                $('.testprice').each(function(){
+                    sum += parseFloat(this.value);
                 });
-            }
-            else
-            {
-                $("#patientgeneraldiv").html("");
-            }
-
-        }
-
-        function ajaxloadfamilydetails(pid,date) {
-
-            $("#patientfamilydiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/familyillness';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientfamilydiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientfamilydiv").html("");
-            }
-
-        }
-
-
-        function ajaxloadpastdetails(pid,date) {
-
-            $("#patientpastdiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/pastillness';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientpastdiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientpastdiv").html("");
-            }
-
-        }
-
-
-        function ajaxloadpersonaldetails(pid,date) {
-
-            $("#patientpersonaldiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/patienthistory';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientpersonaldiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientpersonaldiv").html("");
-            }
-
-        }
-
-        function ajaxloadscandetails(pid,date) {
-
-            $("#patientscandiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/scandetails';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientscandiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientscandiv").html("");
-            }
-
-        }
-
-        function ajaxloaddrugdetails(pid,date) {
-
-            $("#patientdrugdiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/drughistory';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientdrugdiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientdrugdiv").html("");
-            }
-
-        }
-
-        function ajaxloadpregnancydetails(pid,date) {
-
-            $("#patientpregnancydiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/pregnancydetails';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientpregnancydiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientpregnancydiv").html("");
-            }
-
-        }
-
-        function ajaxloadsymptomdetails(pid,date) {
-
-            $("#patientsymptomdiv").html("LOADING...");
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/symptomdetails';
-
-            if(date!=0)
-            {
-                $.ajax({
-                    url: callurl,
-                    type: "get",
-                    data: {"id": pid, "examinationDate": date, "status": status},
-                    success: function (data) {
-                        $("#patientsymptomdiv").html(data);
-                    }
-                });
-            }
-            else
-            {
-                $("#patientsymptomdiv").html("");
-            }
-
-        }
+                $('input.totalprice').val(sum);
+            });
+        });
 
         function printDiv()
         {
