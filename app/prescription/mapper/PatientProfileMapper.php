@@ -60,7 +60,7 @@ class PatientProfileMapper
         //dd($profile->appointmentTime);
         //$profileVM->setAppointmentTime($profile->appointmentTime);
         //$profileVM->setAppointmentDate($profile->appointmentDate);
-        $profileVM->setAppointmentTime(property_exists($profile, 'appointmentDate') ? $profile->appointmentDate : null);
+        $profileVM->setAppointmentDate(property_exists($profile, 'appointmentDate') ? $profile->appointmentDate : null);
         $profileVM->setAppointmentTime(property_exists($profile, 'appointmentTime') ? $profile->appointmentTime : null);
         $profileVM->setBriefHistory(property_exists($profile, 'briefHistory') ? $profile->briefHistory : null);
         //$profileVM->setAppointmentDate($profile->appointmentDate);
