@@ -559,10 +559,12 @@ $profile_menu="0";
                                                 <div class="tab-pane" id="drug">
                                                     <p>
                                                     <div class="col-md-12">
-                                                        <label style="float: left;margin: 10px;">Choose Data</label>
+                                                         <label style="float: left;margin: 10px;">Choose Data</label>
                                                         <select class="form-control" id="selectdrug" onchange="javascript:ajaxloaddrugdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
-                                                            <option value="1">GET SYMPTOM</option>
+                                                            @foreach($patientExaminations['symptomDates'] as $symptomDates)
+                                                                <option value="{{$symptomDates->patient_symptom_date}}">{{$symptomDates->patient_symptom_date}}</option>
+                                                            @endforeach
                                                         </select>
 
                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-drug" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Past Drug History </b></button></a>
@@ -575,6 +577,7 @@ $profile_menu="0";
                                                     <p>
                                                     <div class="col-md-12">
                                                         <label style="float: left;margin: 10px;">Choose Date</label>
+
                                                         <select class="form-control" id="selectpregnancy" onchange="javascript:ajaxloadpregnancydetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
                                                             @foreach($patientExaminations['pregnancyDates'] as $pregnancyDates)

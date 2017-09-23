@@ -97,9 +97,9 @@ $profile_menu="0";
                                                     &nbsp;&nbsp;
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/edit" title="Edit Profile"><i class="fa fa-edit"></i></a>
                                                     &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/addappointment" title="Book Appointment"><i class="fa fa-stethoscope"></i> </a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/addpatientwithappointment?patientId={{$patient->patient_id}}" title="Book Appointment"><i class="fa fa-stethoscope"></i> </a>
                                                     &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/print" title="Book Appointment"><i class="fa fa-print"></i> </a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/print" title="Print Medical Profile"><i class="fa fa-print"></i> </a>
 
 
 
