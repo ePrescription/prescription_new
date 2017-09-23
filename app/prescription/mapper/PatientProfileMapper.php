@@ -58,9 +58,12 @@ class PatientProfileMapper
         $profileVM->setDoctorId(property_exists($profile, 'doctorId') ? $profile->doctorId : null);
 
         //dd($profile->appointmentTime);
-        $profileVM->setAppointmentTime($profile->appointmentTime);
+        //$profileVM->setAppointmentTime($profile->appointmentTime);
+        //$profileVM->setAppointmentDate($profile->appointmentDate);
+        $profileVM->setAppointmentTime(property_exists($profile, 'appointmentDate') ? $profile->appointmentDate : null);
+        $profileVM->setAppointmentTime(property_exists($profile, 'appointmentTime') ? $profile->appointmentTime : null);
         $profileVM->setBriefHistory(property_exists($profile, 'briefHistory') ? $profile->briefHistory : null);
-        $profileVM->setAppointmentDate($profile->appointmentDate);
+        //$profileVM->setAppointmentDate($profile->appointmentDate);
         $profileVM->setAppointmentCategory(property_exists($profile, 'appointmentCategory') ? $profile->appointmentCategory : null);
         $profileVM->setReferralType(property_exists($profile, 'referralType') ? $profile->referralType : null);
         $profileVM->setReferralDoctor(property_exists($profile, 'referralDoctor') ? $profile->referralDoctor : null);
