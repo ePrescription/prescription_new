@@ -59,6 +59,7 @@ interface HospitalInterface {
     public function getPrescriptionDetails($prescriptionId);
     public function savePatientPrescription(PatientPrescriptionViewModel $patientPrescriptionVM);
     public function savePatientProfile(PatientProfileViewModel $patientProfileVM);
+    public function editPatientProfile(PatientProfileViewModel $patientProfileVM);
 
     public function checkIsNewPatient($hospitalId, $doctorId, $patientId);
 

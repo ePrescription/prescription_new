@@ -237,6 +237,40 @@ class HospitalService {
     }
 
     /**
+     * Edit patient profile
+     * @param $patientProfileVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function editPatientProfile($patientProfileVM)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($patientProfileVM, &$status)
+            {
+                $status = $this->hospitalRepo->editPatientProfile($patientProfileVM);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
      * Check if a patient is a new patient or follow up patient
      * @param $hospitalId, $doctorId, $patientId
      * @throws $hospitalException

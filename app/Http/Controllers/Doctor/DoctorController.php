@@ -25,6 +25,7 @@ use App\prescription\model\entities\HospitalDoctor;
 use App\Http\Requests\DoctorLoginRequest;
 use App\Http\Requests\PatientProfileRequest;
 use App\Http\Requests\EditPatientProfileRequest;
+use App\Http\Requests\PatientProfileWebRequest;
 use App\Http\Requests\NewAppointmentRequest;
 use App\Http\Requests\FeeReceiptRequest;
 
@@ -1207,6 +1208,7 @@ class DoctorController extends Controller
         return $responseJson;
     }
 
+
     /**
      * Save new appointment for the patient
      * @param $patientProfileRequest
@@ -2332,13 +2334,14 @@ class DoctorController extends Controller
     }
 
 
-    public function savePatientWithAppointmentByHospitalForFront(Request $patientProfileRequest)
+    public function savePatientWithAppointmentByHospitalForFront(PatientProfileWebRequest $patientProfileRequest)
     {
         //dd('HI');
         //return "HI";
         $patientProfileVM = null;
         $status = true;
-        $jsonResponse = null;
+        //$jsonResponse = null;
+        $msg = null;
         //return $patientProfileRequest->all();
 
         try
@@ -2351,12 +2354,12 @@ class DoctorController extends Controller
                 //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
 
                 $msg = "Patient Profile Added Successfully.";
-                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('success',$msg);
+                //return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('success',$msg);
             }
             else
             {
                 $msg = "Patient Details Invalid / Incorrect! Try Again.";
-                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg);
+                //return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg);
             }
 
         }
@@ -2376,8 +2379,10 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        $msg = "Patient Details Invalid / Incorrect! Try Again.";
         return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg);
+
+        //$msg = "Patient Details Invalid / Incorrect! Try Again.";
+        //return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg);
         //return $jsonResponse;
 
     }
@@ -2775,6 +2780,7 @@ class DoctorController extends Controller
 
         return $responseJson;
     }
+
     public function PatientDetailsByHospitalForFront($hid,$patientId)
     {
         $patientDetails = null;
@@ -2848,19 +2854,19 @@ class DoctorController extends Controller
 
     }
 
-    public function updatePatientsByHospitalForFront(Request $patientProfileRequest)
+    public function updatePatientsByHospitalForFront(EditPatientProfileRequest $patientProfileRequest)
     {
         //dd('HI');
         //return "HI";
         $patientProfileVM = null;
         $status = true;
-        $jsonResponse = null;
+        //$jsonResponse = null;
         //return $patientProfileRequest->all();
 
         try
         {
             $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
-            $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
+            $status = HospitalServiceFacade::editPatientProfile($patientProfileVM);
 
             if($status)
             {

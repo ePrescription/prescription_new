@@ -30,6 +30,23 @@ abstract class BasePrescriptionRequest extends Request
         ];
     }*/
 
+    public function validator($factory)
+    {
+        return $factory->make(
+            $this->sanitizeInput(), $this->container->call([$this, 'rules']), $this->messages()
+        );
+    }
+
+    protected function sanitizeInput()
+    {
+        if (method_exists($this, 'sanitize'))
+        {
+            return $this->container->call([$this, 'sanitize']);
+        }
+
+        return $this->all();
+    }
+
     public function wantsJson()
     {
         return true;

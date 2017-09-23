@@ -1776,6 +1776,90 @@ class HospitalImpl implements HospitalInterface{
         //return $patient;
     }
 
+    /**
+     * Edit patient profile
+     * @param $patientProfileVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function editPatientProfile(PatientProfileViewModel $patientProfileVM)
+    {
+        //dd('Inside save profile');
+        $status = true;
+        $user = null;
+        $patientId = null;
+        $patient = null;
+        $patientUser = null;
+
+        $patientUserId = null;
+
+        try
+        {
+            $patientId = $patientProfileVM->getPatientId();
+            //$hospitalId = $patientProfileVM->getHospitalId();
+            //$doctorId = $patientProfileVM->getDoctorId();
+
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                $status = false;
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_EXIST);
+            }
+
+            $patient = Patient::where('patient_id', '=', $patientId)->first();
+
+            if(!is_null($patient))
+            {
+                $patient->name = $patientProfileVM->getName();
+                $patient->address = $patientProfileVM->getAddress();
+                $patient->city = $patientProfileVM->getCity();
+                $patient->country = $patientProfileVM->getCountry();
+                $patient->telephone = $patientProfileVM->getTelephone();
+                $patient->relationship = $patientProfileVM->getRelationship();
+                $patient->patient_spouse_name = $patientProfileVM->getSpouseName();
+                $patient->patient_photo = $patientProfileVM->getPatientPhoto();
+                $patient->dob = $patientProfileVM->getDob();
+                $patient->age = $patientProfileVM->getAge();
+                $patient->nationality = $patientProfileVM->getNationality();
+                $patient->gender = $patientProfileVM->getGender();
+                $patient->married = $patientProfileVM->getMaritalStatus();
+
+                $patient->created_by = $patientProfileVM->getCreatedBy();
+                $patient->created_at = $patientProfileVM->getCreatedAt();
+                $patient->updated_by = $patientProfileVM->getUpdatedBy();
+                $patient->updated_at = $patientProfileVM->getUpdatedAt();
+
+                $patient->save();
+            }
+            //$user->patient()->save($patient);
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            $status = false;
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+        //return $patient;
+    }
+
     private function savePatientAppointment(PatientProfileViewModel $patientProfileVM, User $doctorUser, $patientUserId)
     {
         //$appointments = $patientProfileVM->getAppointment();

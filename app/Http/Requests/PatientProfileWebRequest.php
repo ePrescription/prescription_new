@@ -3,33 +3,21 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
-use App\prescription\common\ResponsePrescription;
-use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
-use App\prescription\common\ResponseJson;
-use App\prescription\utilities\ErrorEnum\ErrorEnum;
 
 use Illuminate\Validation\Factory;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-//class PatientProfileRequest extends Request
-class PatientProfileRequest extends BasePrescriptionRequest
+class PatientProfileWebRequest extends Request
 {
-
-    public function sanitize()
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
     {
-        //dd('Inside sanitize');
-        $input = $this->all();
-        //dd($input);
-        $date = date("Y-m-d", strtotime($input['appointmentDate']));
-        //dd($date);
-        $time = date( "H:i:s", strtotime($input['appointmentTime']));
-        //dd($time);
-        $input['appointmentDate'] = $date;
-        $input['appointmentTime'] = $time;
-        $this->replace($input);
-        return $this->all();
+        return true;
     }
 
     public function __construct(Factory $validationFactory)
@@ -228,36 +216,12 @@ class PatientProfileRequest extends BasePrescriptionRequest
     }
 
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /*protected function getValidatorInstance()
-    {
-        $factory = $this->container->make('Illuminate\Validation\Factory');
-
-        if (method_exists($this, 'validator'))
-        {
-            return $this->container->call([$this, 'validator'], compact('factory'));
-        }
-        return $factory->make(
-            $this->json()->all(), $this->container->call([$this, 'rules']), $this->messages(), $this->attributes()
-        );
-    }*/
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
-
         $profile = (object) $this->all();
         //$profile1 = $this->get('appointment');
         //$profile1 = json_encode($profile);
@@ -325,29 +289,4 @@ class PatientProfileRequest extends BasePrescriptionRequest
         //dd($rules);
         return $rules;
     }
-
-    /*public function wantsJson()
-    {
-        return true;
-    }*/
-
-    /*public function response(array $errors)
-    {
-        if (($this->ajax() && ! $this->pjax()) || $this->wantsJson()) {
-            //return new JsonResponse($errors, 422);
-
-            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::VALIDATION_ERRORS));
-            $responseJson->setObj($errors);
-            $responseJson->sendValidationErrors();
-
-            return $responseJson;
-
-
-
-        }
-
-        return $this->redirector->to($this->getRedirectUrl())
-            ->withInput($this->except($this->dontFlash))
-            ->withErrors($errors, $this->errorBag);
-    }*/
 }
