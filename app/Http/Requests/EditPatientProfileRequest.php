@@ -26,8 +26,8 @@ class EditPatientProfileRequest extends Request
         $rules = [];
 
         $rules['name'] = 'required';
-        $rules['address'] = 'required';
-        $rules['dob'] = 'date_format:Y-m-d';
+        //$rules['address'] = 'required';
+        //$rules['dob'] = 'date_format:Y-m-d';
         //$rules['doctorId'] = 'required';
         //$rules['hospitalId'] = 'required';
 
@@ -38,8 +38,8 @@ class EditPatientProfileRequest extends Request
             $rules['email'] = 'email | unique:users,email';
         }*/
         //$rules['dob'] = 'date_format:Y-m-d';
-        //$rules['age'] = 'required | numeric';
-        //$rules['gender'] = 'required';
+        $rules['age'] = 'required | numeric';
+        $rules['gender'] = 'required';
 
         return $rules;
     }

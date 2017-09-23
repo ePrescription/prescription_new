@@ -2898,8 +2898,8 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        $msg = "Patient Details Invalid / Incorrect! Try Again.";
-        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatient')->with('message',$msg);
+        //$msg = "Patient Details Invalid / Incorrect! Try Again.";
+        //return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatient')->with('message',$msg);
         //return $jsonResponse;
 
     }
