@@ -456,6 +456,12 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Ultra Sound</span>
                                                     </a>
                                                 </li>
+                                                <li class="">
+                                                    <a href="#scan" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                        <span class="hidden-xs">Scan</span>
+                                                    </a>
+                                                </li>
                                             </ul>
 
                                             <div class="tab-content">
@@ -526,6 +532,23 @@ $profile_menu="0";
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientultradiv"></div>
+                                                    </p>
+                                                </div>
+                                                <div class="tab-pane" id="scan">
+                                                    <p>
+                                                    <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
+                                                        <select class="form-control" id="selectscan" onchange="javascript:ajaxloadscandetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['scanDates'] as $scanDates)
+                                                                <option value="{{$scanDates->scan_date}}">{{$scanDates->scan_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <a href="#" data-href="#{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-bloodtests" onclick="javascript:ajaxloadscanform({{Auth::user()->id}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Scan Test </b></button></a>
+                                                    </div>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientscandiv"></div>
                                                     </p>
                                                 </div>
                                             </div>
@@ -660,6 +683,32 @@ $profile_menu="0";
 
         }
 
+
+        function ajaxloadscandetails(pid,date) {
+
+            $("#patientscandiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/scandetails';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientscandiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientscandiv").html("");
+            }
+
+        }
+
         function ajaxloadbloodform(hid,pid) {
             $("#patientblooddiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
@@ -716,6 +765,21 @@ $profile_menu="0";
                 data: {"id": pid, "status": status},
                 success: function (data) {
                     $("#patientultradiv").html(data);
+                }
+            });
+        }
+
+        function ajaxloadscanform(hid,pid) {
+            $("#patientblooddiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-scantests';
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientscandiv").html(data);
                 }
             });
         }

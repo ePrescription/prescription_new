@@ -4815,6 +4815,20 @@ class DoctorController extends Controller
             //dd($patientHistoryVM);
             $status = $this->hospitalService->savePatientScanDetails($patientScanVM);
 
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$scanRequest->patientId.'/lab-details#scan')->with('success',trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_SUCCESS));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$scanRequest->patientId.'/lab-details#scan')->with('success',trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_ERROR));
+            }
+        /*
             if($status)
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_SUCCESS));
@@ -4827,6 +4841,7 @@ class DoctorController extends Controller
                 $responseJson->sendSuccessResponse();
                 return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$scanRequest->patientId.'/medical-details#scan')->with('success',trans('messages.'.ErrorEnum::PATIENT_SCAN_SAVE_ERROR));
             }
+        */
         }
         catch(HospitalException $hospitalExc)
         {
@@ -4843,7 +4858,7 @@ class DoctorController extends Controller
         //return $responseJson;
 
 
-        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$scanRequest->patientId.'/add-medical-scan');
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$scanRequest->patientId.'/add-lab-scan');
 
     }
 
@@ -5847,6 +5862,41 @@ class DoctorController extends Controller
         return view('portal.hospital-patient-lab-add-ultrasound',compact('patientUltraSoundTests','patientDetails','hid'));
 
     }
+
+
+
+    public function AddPatientLabScanTestsByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientBloodTests = null;
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+
+            $patientScans = DB::select('select * from scans where status = ?', [1]);
+            //dd($blood_examination);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-lab-add-scan',compact('patientScans','patientDetails','hid'));
+
+    }
+
 
 
     /**
