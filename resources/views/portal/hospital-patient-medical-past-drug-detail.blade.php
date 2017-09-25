@@ -6,16 +6,16 @@
 <div class="col-sm-12">
 <div class="panel panel-primary">
 <div class="panel-body">
-<h4 class="m-t-0 m-b-30">Past Drug & Surgery Detail</h4>
+<h4 class="m-t-0 m-b-30">Past Drug Details</h4>
 
 <!-- form start -->
     <form role="form" method="POST" class="form-horizontal ">
     <div class="form-group">
 
         <div class="row">
-            <div class="col-sm-4">Drug Name</div>
-            <div class="col-sm-4">Drug Dosage</div>
-            <div class="col-sm-4">Drug Timing</div>
+            <div class="col-sm-4"><strong>Drug Name</strong></div>
+            <div class="col-sm-4"><strong>Drug Dosage</strong></div>
+            <div class="col-sm-4"><strong>Drug Timing</strong></div>
         </div>
         @foreach($drugSurgeryHistory['drugHistory'] as $drugHistory)
         <div class="row">
@@ -28,17 +28,14 @@
 
     </form>
 
-    <h4 class="m-t-0 m-b-30">Past Drug & Surgery Detail</h4>
+    <h4 class="m-t-0 m-b-30">Past Surgery Details</h4>
 
     <!-- form start -->
     <form role="form" method="POST" class="form-horizontal ">
         <div class="form-group">
             <div class="row">
-                <h4 class="m-t-0 m-b-30">Surgery Details</h4>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">Surgery Name</div>
-                <div class="col-sm-6">Surgery Date</div>
+                <div class="col-sm-6"><strong>Surgery Name</strong></div>
+                <div class="col-sm-6"><strong>Surgery Date</strong></div>
             </div>
             @foreach($drugSurgeryHistory['surgeryHistory'] as $surgeryHistory)
                 <div class="row">

@@ -538,12 +538,12 @@ $profile_menu="0";
                                                 <div class="tab-pane" id="drug">
                                                     <p>
                                                     <div class="col-md-12">
-                                                        {{dd($patientExaminations)}}
+
                                                          <label style="float: left;margin: 10px;">Choose Data</label>
                                                         <select class="form-control" id="selectdrug" onchange="javascript:ajaxloaddrugdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['symptomDates'] as $symptomDates)
-                                                                <option value="{{$symptomDates->patient_symptom_date}}">{{$symptomDates->patient_symptom_date}}</option>
+                                                            @foreach($patientExaminations['drugTestDates'] as $drugTestDates)
+                                                                <option value="{{$drugTestDates->drug_history_date}}">{{$drugTestDates->drug_history_date}}</option>
                                                             @endforeach
                                                         </select>
 

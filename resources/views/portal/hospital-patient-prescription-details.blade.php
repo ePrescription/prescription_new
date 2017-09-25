@@ -27,7 +27,7 @@ $profile_menu="0";
 
             <div class="hidden">
                 <div class="page-header-title">
-                    <h4 class="page-title">Patient Details</h4>
+                    <h4 class="page-title">Patient Prescription Details</h4>
                 </div>
             </div>
 
@@ -41,7 +41,7 @@ $profile_menu="0";
                                 <div class="panel-body">
 
                                     <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
-                                    <h4 class="m-t-0 m-b-30">Patient Details</h4>
+                                    <h4 class="m-t-0 m-b-30">Patient Prescription Details</h4>
 
                                     <div class="row">
 
