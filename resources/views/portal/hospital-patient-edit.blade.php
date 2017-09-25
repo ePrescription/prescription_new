@@ -82,19 +82,19 @@ $profile_menu="0";
                                             <div class="form-group col-md-12">
                                                 <label class="col-sm-3 control-label">Email</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="email" value="{{$patientDetails[0]->email}}" required="required" />
+                                                    <input type="email" class="form-control" name="email" value="{{$patientDetails[0]->email}}" required="required" />
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-12">
                                                 <label class="col-sm-3 control-label">Mobile</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="telephone" value="{{$patientDetails[0]->telephone}}" required="required" />
+                                                    <input type="number" min="0" class="form-control" name="telephone" value="{{$patientDetails[0]->telephone}}" required="required" />
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-12">
                                                 <label class="col-sm-3 control-label">Age</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="age" value="{{$patientDetails[0]->age}}" required="required" />
+                                                    <input type="number" min="0" class="form-control" name="age" value="{{$patientDetails[0]->age}}" required="required" />
                                                 </div>
                                             </div>
 

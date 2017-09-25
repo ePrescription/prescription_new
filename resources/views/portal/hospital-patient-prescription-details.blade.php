@@ -39,12 +39,6 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <div style="float:right;margin:0px 10px;">
-
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/edit" title="Edit Profile">
-                                            <button class="btn btn-success waves-effect waves-light" ><i class="fa fa-edit"></i>Edit Profile</button>
-                                        </a>
-                                    </div>
 
                                     <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
                                     <h4 class="m-t-0 m-b-30">Patient Details</h4>
@@ -109,25 +103,30 @@ $profile_menu="0";
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <ul class="nav nav-tabs navtab-bg">
-                                                <li class="active">
+
+                                                <li  class="active">
+                                                    <a href="#messages" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
+                                                        <span class="hidden-xs">Prescription</span>
+                                                    </a>
+                                                </li>
+
+                                                <?php /* ?>
+                                                <li class="">
                                                     <a href="#home" data-toggle="tab" aria-expanded="true">
                                                         <span class="visible-xs"><i class="fa fa-home"></i></span>
                                                         <span class="hidden-xs">Info</span>
                                                     </a>
                                                 </li>
+
                                                 <li class="">
                                                     <a href="#profile" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-user"></i></span>
                                                         <span class="hidden-xs">Appointment</span>
                                                     </a>
                                                 </li>
-                                                <?php /* ?>
-                                                <li class="">
-                                                    <a href="#messages" data-toggle="tab" aria-expanded="false">
-                                                        <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
-                                                        <span class="hidden-xs">Prescription</span>
-                                                    </a>
-                                                </li>
+
+
                                                 <li class="">
                                                     <a href="#settings" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
@@ -137,6 +136,43 @@ $profile_menu="0";
                                                 <?php */ ?>
                                             </ul>
                                             <div class="tab-content">
+                                                <div class="tab-pane active" id="messages">
+                                                    <p>
+                                                    <div>
+                                                        PRID ( Prescription Identification) - PID ( Patient Identification)
+                                                    </div>
+                                                    <table id="example2" class="table table-bordered table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>PRID</th>
+                                                            <th>PID</th>
+                                                            <th>PATIENT</th>
+                                                            <th>DATE</th>
+                                                            <th></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @foreach($patientPrescriptions as $prescription)
+                                                            <tr>
+                                                                <td>{{$prescription->unique_id}}</td>
+                                                                <td>{{$prescription->pid}}</td>
+                                                                <td>{{$prescription->name}}</td>
+                                                                <td>{{$prescription->prescription_date}}</td>
+                                                                <td>
+
+                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
+
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        </tbody>
+
+                                                    </table>
+
+                                                    </p>
+                                                </div>
+
+                                                <?php /* ?>
                                                 <div class="tab-pane active" id="home">
                                                     <p>
                                                     <div class="form-group col-md-6">
@@ -189,6 +225,7 @@ $profile_menu="0";
                                                     </div>
                                                     </p>
                                                 </div>
+
                                                 <div class="tab-pane" id="profile">
                                                     <p>
                                                     <table id="example2" class="table table-bordered table-hover">
@@ -216,42 +253,7 @@ $profile_menu="0";
                                                     </table>
                                                     </p>
                                                 </div>
-                                                <?php /* ?>
-                                                <div class="tab-pane" id="messages">
-                                                    <p>
-                                                    <div>
-                                                        PRID ( Prescription Identification) - PID ( Patient Identification)
-                                                    </div>
-                                                    <table id="example2" class="table table-bordered table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>PRID</th>
-                                                            <th>PID</th>
-                                                            <th>PATIENT</th>
-                                                            <th>DATE</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($patientPrescriptions as $prescription)
-                                                            <tr>
-                                                                <td>{{$prescription->unique_id}}</td>
-                                                                <td>{{$prescription->pid}}</td>
-                                                                <td>{{$prescription->name}}</td>
-                                                                <td>{{$prescription->prescription_date}}</td>
-                                                                <td>
 
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-
-                                                    </table>
-
-                                                    </p>
-                                                </div>
                                                 <div class="tab-pane" id="settings">
                                                     <p>
                                                     <div>

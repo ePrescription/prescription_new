@@ -164,6 +164,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     Route::get('rest/api/{hospitalId}/doctorlist', array('as' => 'hospital.doctors', 'uses' => 'DoctorController@getDoctorsForFront'));
 
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/prescription-details', array('as' => 'hospital.patientdetails', 'uses' => 'DoctorController@PatientPrescriptionDetailsByHospitalForFront'));
 
     //Fee Receipts
     Route::get('rest/api/{hospitalId}/doctor/{doctorId}/feereceipts', array('as' => 'hospital.feereceipts', 'uses' => 'DoctorController@getFeeReceiptsForFront'));
