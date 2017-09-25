@@ -4297,7 +4297,7 @@ class DoctorController extends Controller
         }
 
         //return $responseJson;
-        return view('portal.hospital-patient-medical-scan-detail',compact('scanDetails'));
+        return view('portal.hospital-patient-lab-scan-detail',compact('scanDetails'));
 
     }
 
