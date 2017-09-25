@@ -13,6 +13,9 @@ class PatientLabReceiptViewModel
 {
     private $patientId;
     private $hospitalId;
+    private $doctorId;
+    private $totalFees;
+    private $labReceiptDate;
     private $bloodTests;
     private $motionTests;
     private $urineTests;
@@ -53,6 +56,54 @@ class PatientLabReceiptViewModel
     public function getHospitalId()
     {
         return $this->hospitalId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDoctorId()
+    {
+        return $this->doctorId;
+    }
+
+    /**
+     * @param mixed $doctorId
+     */
+    public function setDoctorId($doctorId)
+    {
+        $this->doctorId = $doctorId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalFees()
+    {
+        return $this->totalFees;
+    }
+
+    /**
+     * @param mixed $totalFees
+     */
+    public function setTotalFees($totalFees)
+    {
+        $this->totalFees = $totalFees;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLabReceiptDate()
+    {
+        return $this->labReceiptDate;
+    }
+
+    /**
+     * @param mixed $labReceiptDate
+     */
+    public function setLabReceiptDate($labReceiptDate)
+    {
+        $this->labReceiptDate = $labReceiptDate;
     }
 
     /**
