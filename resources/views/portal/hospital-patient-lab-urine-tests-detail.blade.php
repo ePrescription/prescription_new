@@ -1,3 +1,9 @@
+<style>
+    div.control-label {
+        text-align: left !important;
+    }
+</style>
+
 <div class="container">
 
 <div class="row">
@@ -8,10 +14,10 @@
     <form action="#" role="form" method="POST" class="form-horizontal ">
         <?php $i=0; ?>
         @foreach($urineTests as $urineTestsValue)
-            <div class="form-group">
+            <div class="form-group col-sm-6">
 
-                <label class="col-sm-4 control-label">{{$urineTestsValue->examinationName}}</label>
-                <div class="col-sm-6">
+                <label class="col-sm-6 control-label">{{$urineTestsValue->examinationName}}</label>
+                <div class="col-sm-6 control-label">
                     @if($urineTestsValue->isValueSet==1) Yes @else No @endif
                 </div>
             </div>
