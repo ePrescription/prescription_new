@@ -443,12 +443,7 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Personal History</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
-                                                    <a href="#scan" data-toggle="tab" aria-expanded="false">
-                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                        <span class="hidden-xs">Scan</span>
-                                                    </a>
-                                                </li>
+
                                                 <li class="">
                                                     <a href="#drug" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
@@ -539,26 +534,11 @@ $profile_menu="0";
                                                     <div style="width:100%;" id="patientpersonaldiv"></div>
                                                     </p>
                                                 </div>
-                                                <div class="tab-pane" id="scan">
-                                                    <p>
-                                                    <div class="col-md-12">
-                                                        <label style="float: left;margin: 10px;">Choose Date</label>
-                                                        <select class="form-control" id="selectscan" onchange="javascript:ajaxloadscandetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
-                                                            <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['scanDates'] as $scanDates)
-                                                                <option value="{{$scanDates->scan_date}}">{{$scanDates->scan_date}}</option>
-                                                            @endforeach
-                                                        </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-scan" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Scan History </b></button></a>
-                                                    </div>
-                                                    <br/>
-                                                    <div style="width:100%;" id="patientscandiv"></div>
-                                                    </p>
-                                                </div>
                                                 <div class="tab-pane" id="drug">
                                                     <p>
                                                     <div class="col-md-12">
+                                                        {{dd($patientExaminations)}}
                                                          <label style="float: left;margin: 10px;">Choose Data</label>
                                                         <select class="form-control" id="selectdrug" onchange="javascript:ajaxloaddrugdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>

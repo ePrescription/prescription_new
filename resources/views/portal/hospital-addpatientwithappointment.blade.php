@@ -99,6 +99,8 @@ $time_array=array(
                             <div class="panel panel-primary">
                                 <div class="panel-body">
                                     <h4 class="m-t-0 m-b-30">New Patient Appointment</h4>
+                                    <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
+
 
 
                                     @if (session()->has('message'))
@@ -139,12 +141,14 @@ $time_array=array(
                                                                         <option value="{{$specialty->id}}">{{$specialty->specialty_name}}</option>
                                                                     @endforeach
                                                                 </select>
+
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-md-12">
                                                             <label class="col-sm-3 control-label">Doctor Name</label>
                                                             <div class="col-sm-9">
                                                                 <input type="text" class="form-control" name="doctorName" value="" required="required" />
+
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-md-12">
@@ -215,24 +219,28 @@ $time_array=array(
                                                     <label class="col-sm-3 control-label">Name</label>
                                                     <div class="col-sm-9">
                                                         <input type="text" class="form-control" id="name" name="name" value="" required="required" />
+                                                        @if ($errors->has('name'))<p class="error" style="">{!!$errors->first('name')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Email</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="email" name="email" value="" required="required" />
+                                                        <input type="email" class="form-control" id="email" name="email" value="" required="required" />
+                                                        @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Mobile</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="telephone" name="telephone" value="" required="required" />
+                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" />
+                                                        @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Age</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="age" name="age" value="" required="required" />
+                                                        <input type="number" min="0" class="form-control" id="age" name="age" value="" required="required" />
+                                                        @if ($errors->has('age'))<p class="error" style="">{!!$errors->first('age')!!}</p>@endif
                                                     </div>
                                                 </div>
 
@@ -242,6 +250,7 @@ $time_array=array(
                                                         <input type="radio" class="form-controlx" id="gender1" name="gender" value="1" required="required" />&nbsp;&nbsp;Male
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <input type="radio" class="form-controlx" id="gender2" name="gender" value="2" required="required" />&nbsp;&nbsp;Female
+                                                        @if ($errors->has('gender'))<p class="error" style="">{!!$errors->first('gender')!!}</p>@endif
                                                     </div>
                                                 </div>
 
@@ -257,6 +266,7 @@ $time_array=array(
                                                             <option value="Special">Special</option>
                                                             <option value="Pregnancy">Pregnancy</option>
                                                         </select>
+                                                        @if ($errors->has('appointmentCategory'))<p class="error" style="">{!!$errors->first('appointmentCategory')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -269,13 +279,14 @@ $time_array=array(
                                                                 <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
                                                             @endforeach
                                                         </select>
-
+                                                        @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Appointment Date</label>
                                                     <div class="col-sm-9">
                                                         <input type="date" data-date-format="YYYY-MM-DD" min="{{date('Y-m-d')}}" class="form-control" name="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); "/>
+                                                        @if ($errors->has('appointmentDate'))<p class="error" style="">{!!$errors->first('appointmentDate')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -290,13 +301,14 @@ $time_array=array(
                                                             @endforeach
 
                                                         </select>
-
+                                                        @if ($errors->has('appointmentTime'))<p class="error" style="">{!!$errors->first('appointmentTime')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Brief History</label>
                                                     <div class="col-sm-9">
                                                         <textarea class="form-control" name="briefHistory" required="required"></textarea>
+                                                        @if ($errors->has('briefHistory'))<p class="error" style="">{!!$errors->first('briefHistory')!!}</p>@endif
                                                     </div>
                                                 </div>
 
@@ -372,7 +384,7 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Amount</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="fee" name="fee" value="" required="required" />
+                                                        <input type="number" min="0" class="form-control" id="fee" name="fee" value="" required="required" />
                                                     </div>
                                                 </div>
                                                 </div>

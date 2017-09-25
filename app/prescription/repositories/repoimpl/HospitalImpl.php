@@ -4115,6 +4115,8 @@ class HospitalImpl implements HospitalInterface{
         $examinationDates = null;
         $generalExaminationDates = null;
         $pastIllnessDates = null;
+        //$drugDates = null;
+
         $familyIllnessDates = null;
         $personalHistoryDates = null;
         $pregnancyDates = null;
@@ -4124,6 +4126,7 @@ class HospitalImpl implements HospitalInterface{
         $bloodTestDates = null;
         $urineTestDates = null;
         $motionTestDates = null;
+        $drugTestDates = null;
 
         $patientLabTests = null;
 
@@ -4352,6 +4355,10 @@ class HospitalImpl implements HospitalInterface{
             $motionTestDates = $motionDatesQuery->distinct()->get();
             //$motionTestDates = $motionDatesQuery->distinct()->take(2147483647)->skip(1)->get();
 
+            $drugDatesQuery = DB::table('patient_drug_history as pdh')->where('pdh.patient_id', '=', $patientId);
+            $drugDatesQuery->select('pdh.drug_history_date')->orderBy('pdh.drug_history_date', 'DESC');
+            $drugTestDates = $drugDatesQuery->distinct()->get();
+
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
                 'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
             $patientQuery->where('p.patient_id', '=', $patientId);
@@ -4383,6 +4390,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["pastIllnessDates"] = $pastIllnessDates;
             $examinationDates["familyIllnessDates"] = $familyIllnessDates;
             $examinationDates["personalHistoryDates"] = $personalHistoryDates;
+            $examinationDates["drugTestDates"] = $drugTestDates;
             $examinationDates["pregnancyDates"] = $pregnancyDates;
             $examinationDates["scanDates"] = $scanDates;
             $examinationDates["symptomDates"] = $symptomDates;
