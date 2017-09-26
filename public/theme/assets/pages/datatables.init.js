@@ -29,7 +29,10 @@
     },
     DataTable.prototype.init = function() {
         //creating demo tabels
-        $('#datatable').dataTable();
+        $('#datatableX').dataTable();
+        $('#datatable').dataTable({
+            "order": [[ 0, "desc"]]
+        });
         $('#datatable-keytable').DataTable({keys: true});
         $('#datatable-responsive').DataTable();
         $('#datatable-scroller').DataTable({

@@ -71,6 +71,7 @@ $profile_menu="0";
                                     <table id="datatable" class="table table-striped table-bordered">
                                         <thead>
                                         <tr>
+                                            <th>ID</th>
                                             <th>Patient ID</th>
                                             <th>Name in Full</th>
                                             <th>Mobile No</th>
@@ -82,6 +83,7 @@ $profile_menu="0";
                                         <tbody>
                                         @foreach($patients as $patient)
                                             <tr>
+                                                <td>{{$patient->id}}</td>
                                                 <td>{{$patient->pid}}</td>
                                                 <td>{{$patient->name}}</td>
                                                 <td>{{$patient->telephone}}</td>

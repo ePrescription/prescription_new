@@ -218,7 +218,7 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Name</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="name" name="name" value="" required="required" />
+                                                        <input type="text" pattern="[a-zA-Z\s]+" title="Please Enter Characters Onlky" class="form-control" id="name" name="name" value="" required="required" />
                                                         @if ($errors->has('name'))<p class="error" style="">{!!$errors->first('name')!!}</p>@endif
                                                     </div>
                                                 </div>
