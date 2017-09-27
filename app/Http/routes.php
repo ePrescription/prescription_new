@@ -268,6 +268,9 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
 
     Route::get('rest/api/{hospitalId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'DoctorApiController@getDashboardDetails'));
     Route::get('rest/api/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorApiController@getPatientsByAppointmentCategory'));
+
+    Route::get('rest/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForFront'));
+
     Route::get('rest/api/{hospitalId}/patients/{patientId}/appointmentdates', array('as' => 'patient.appointmentdates', 'uses' => 'DoctorApiController@getPatientAppointmentDates'));
 
     Route::get('rest/api/{hospitalId}/patients/{patientId}/labtests', array('as' => 'patient.alllabtests', 'uses' => 'DoctorController@getPatientLabTests'));
@@ -322,7 +325,7 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
    Route::put('rest/api/profile', array('as' => 'patient.profile', 'uses' => 'DoctorController@editPatientProfile'));
 
    Route::get('rest/api/pidorname', array('as' => 'patient.searchpatient', 'uses' => 'DoctorController@searchByPatientByPidOrName'));
-   Route::get('rest/api/{hospitalId}/patients', array('as' => 'patient.searchpatientbyhospital', 'uses' => 'DoctorController@searchPatientByHospitalAndName'));
+   Route::get('rest/api/{hospitalId}/patientnames', array('as' => 'patient.searchpatientbyhospital', 'uses' => 'DoctorController@searchPatientByHospitalAndName'));
 
    Route::post('rest/api/appointment', array('as' => 'patient.appointment', 'uses' => 'DoctorController@saveNewAppointment'));
 

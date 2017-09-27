@@ -345,8 +345,9 @@ class HospitalImpl implements HospitalInterface{
 
         try
         {
-            $query = DB::table('hospital_patient as hp')->select('p.id', 'p.patient_id', 'p.pid', 'p.name', 'p.age', 'p.gender', 'p.telephone',
-                            'h.hospital_id', 'h.hospital_name');
+            $query = DB::table('hospital_patient as hp')->select('p.id', 'p.patient_id', 'p.pid', 'p.name', 'p.age',
+                    'p.gender', 'p.telephone',
+                    'h.hospital_id', 'h.hospital_name');
             $query->join('hospital as h', 'h.hospital_id', '=', 'hp.hospital_id');
             $query->join('patient as p', 'p.patient_id', '=', 'hp.patient_id');
             $query->where('hp.hospital_id', '=', $hospitalId);
@@ -1465,8 +1466,11 @@ class HospitalImpl implements HospitalInterface{
             $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
             $query->where('usr.delete_status', '=', 1);
             $query->where('da.appointment_category', '=', $categoryType);
+            $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.id', 'p.patient_id', 'p.name as name', 'p.address','p.pid', 'p.telephone', 'p.email', 'p.relationship',
-                    'da.appointment_category', 'da.appointment_date');
+                    'da.appointment_category', 'da.appointment_date', 'da.appointment_time');
+
+            //dd($query->toSql());
 
             $patients = $query->get();
             //dd($patients);
@@ -1600,7 +1604,8 @@ class HospitalImpl implements HospitalInterface{
             $patient->address = $patientProfileVM->getAddress();
             $patient->city = $patientProfileVM->getCity();
             $patient->country = $patientProfileVM->getCountry();
-            $patient->pid = 'PID'.crc32(uniqid(rand()));
+            $pid = $this->generateRandomString();
+            $patient->pid = 'PID'.$pid;
             //$patient->pid = 'PID'.md5(uniqid(rand()));
             $patient->telephone = $patientProfileVM->getTelephone();
             $patient->email = $patientProfileVM->getEmail();
@@ -1697,7 +1702,9 @@ class HospitalImpl implements HospitalInterface{
                 $user = $this->registerNewPatient($patientProfileVM);
                 $this->attachPatientRole($user);
                 $patient = new Patient();
-                $patient->pid = 'PID'.crc32(uniqid(rand()));
+                $pid = $this->generateRandomString();
+                $patient->pid = 'PID'.$pid;
+                //$patient->pid = 'PID'.crc32(uniqid(rand()));
                 $patient->email = $patientProfileVM->getEmail();
 
                 $patientUserId = $user->id;
@@ -3890,6 +3897,8 @@ class HospitalImpl implements HospitalInterface{
             //dd($motionExamQuery->toSql());
             $motionExaminations = $motionExamQuery->get();
 
+            DB::connection()->enableQueryLog();
+
             $scanExamQuery = DB::table('patient_scan as ps');
             $scanExamQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
             $scanExamQuery->where('ps.patient_id', '=', $patientId);
@@ -3908,6 +3917,10 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($scanExamQuery->toSql());
             $scanExaminations = $scanExamQuery->get();
+
+            $query = DB::getQueryLog();
+            dd($query);
+            //dd($scanExaminations);
 
             $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus');
             $ultraSoundExamQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
@@ -5924,6 +5937,7 @@ class HospitalImpl implements HospitalInterface{
             $query = DB::table('lab_fee_receipt as lfr')->join('patient as p', 'p.patient_id', '=', 'lfr.patient_id');
             $query->where('lfr.patient_id', '=', $patientId);
             $query->where('lfr.hospital_id', '=', $hospitalId);
+            $query->orderBy('lft.created_at', 'DESC');
 
             $query->select('lfr.id as receiptId', 'lfr.patient_id', 'p.name', 'p.pid', 'lfr.total_fees', 'lfr.lab_receipt_date');
 
@@ -5948,4 +5962,14 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /*Symptom section -- End */
+
+    private function generateRandomString($length = 9) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
 }

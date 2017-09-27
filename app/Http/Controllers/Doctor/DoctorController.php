@@ -6384,6 +6384,52 @@ class DoctorController extends Controller
         //return $responseJson;
     }
 
+    /**
+     * Get patients by appointment category
+     * @param $hospitalId, $categoryType
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientsByAppointmentCategoryForFront($hospitalId, Request $appointmentRequest)
+    {
+        $patients = null;
+        $categoryType = $appointmentRequest->get('appointmentCategory');
+        //dd($hospitalId);
+
+        try
+        {
+            $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId, $categoryType);
+
+            if(!is_null($patients) && !empty($patients))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_SUCCESS));
+                $responseJson->setCount(sizeof($patients));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_LIST_BY_CATEGORY));
+            }
+
+            $responseJson->setObj($patients);
+            $responseJson->sendSuccessResponse();
+            //dd($appointments);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
 
     /**
      * Save doctor referral
