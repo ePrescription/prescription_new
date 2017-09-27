@@ -68,7 +68,9 @@ $time_array=array(
 
 );
 ?>
-
+<style>
+    span.red {color:red;margin:0 10px;}
+</style>
 @section('content')
 <div class="wrapper">
     @include('portal.hospital-header')
@@ -128,7 +130,7 @@ $time_array=array(
                                             <div class="modal-content">
                                                 <span class="close">&times;</span>
                                                 <!-- form start -->
-                                                <form action="{{URL::to('/')}}/fronthospital/rest/api/referraldoctor" role="form" method="POST">
+                                                <form action="{{URL::to('/')}}/fronthospital/rest/api/referraldoctor" role="form" id="referraldoctor" method="POST">
                                                     <div class="col-md-12">
                                                         <style>.control-label{line-height:32px;}</style>
 
@@ -179,14 +181,14 @@ $time_array=array(
                                         </div>
 
                                             <!-- form start -->
-                                        <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/savepatientwithappointment" role="form" method="POST">
+                                        <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/savepatientwithappointment" id="appointment" role="form" method="POST">
                                             <input type="hidden" name="hospitalId" value="{{Auth::user()->id}}" required="required" />
                                             <input type="hidden" name="patientId" id="patientId" value="0" required="required" />
                                             <div class="col-md-12">
                                                 <style>.control-label{line-height:32px;}</style>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Patient Visiting</label>
+                                                    <label class="col-sm-3 control-label">Patient Visiting <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" name="visiting" value="1" required="required" checked onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;First time
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
@@ -216,28 +218,28 @@ $time_array=array(
                                                 <h4 class="m-t-0 m-b-30">Patient Info</h4>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Name</label>
+                                                    <label class="col-sm-3 control-label">Name <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="text" pattern="[a-zA-Z\s]+" title="Please Enter Characters Onlky" class="form-control" id="name" name="name" value="" required="required" />
                                                         @if ($errors->has('name'))<p class="error" style="">{!!$errors->first('name')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Email</label>
+                                                    <label class="col-sm-3 control-label">Email <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="email" class="form-control" id="email" name="email" value="" required="required" />
                                                         @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Mobile</label>
+                                                    <label class="col-sm-3 control-label">Mobile <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" />
                                                         @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Age</label>
+                                                    <label class="col-sm-3 control-label">Age <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="number" min="0" class="form-control" id="age" name="age" value="" required="required" />
                                                         @if ($errors->has('age'))<p class="error" style="">{!!$errors->first('age')!!}</p>@endif
@@ -245,7 +247,7 @@ $time_array=array(
                                                 </div>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Gender</label>
+                                                    <label class="col-sm-3 control-label">Gender <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" id="gender1" name="gender" value="1" required="required" />&nbsp;&nbsp;Male
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
@@ -258,9 +260,9 @@ $time_array=array(
                                                 <h4 class="m-t-0 m-b-30">Appointment Info</h4>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Appointment Type</label>
+                                                    <label class="col-sm-3 control-label">Appointment Type <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <select name="appointmentCategory" class="form-control" required="required" >
+                                                        <select name="appointmentCategory" id="appointmentCategory" class="form-control" required="required" >
                                                             <option value="">--CHOOSE--</option>
                                                             <option value="Normal">Normal</option>
                                                             <option value="Special">Special</option>
@@ -270,10 +272,10 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Doctor Name</label>
+                                                    <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
                                                     <div class="col-sm-9">
 
-                                                        <select name="doctorId" class="form-control" required="required" >
+                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" >
                                                             <option value="">--CHOOSE--</option>
                                                             @foreach($doctors as $doctor)
                                                                 <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
@@ -283,16 +285,16 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Appointment Date</label>
+                                                    <label class="col-sm-3 control-label">Appointment Date <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="date" data-date-format="YYYY-MM-DD" min="{{date('Y-m-d')}}" class="form-control" name="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); "/>
+                                                        <input type="text" class="form-control" name="appointmentDate" id="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); "/>
                                                         @if ($errors->has('appointmentDate'))<p class="error" style="">{!!$errors->first('appointmentDate')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Appointment Time</label>
+                                                    <label class="col-sm-3 control-label">Appointment Time <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" name="appointmentTime" required="required">
+                                                        <select class="form-control" name="appointmentTime" id="appointmentTime" required="required">
 
                                                             <option value=""> --:-- -- </option>
                                                             @foreach($time_array as $time_value)
@@ -305,7 +307,7 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Brief History</label>
+                                                    <label class="col-sm-3 control-label">Brief History <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <textarea class="form-control" name="briefHistory" required="required"></textarea>
                                                         @if ($errors->has('briefHistory'))<p class="error" style="">{!!$errors->first('briefHistory')!!}</p>@endif
@@ -315,7 +317,7 @@ $time_array=array(
 
                                                 <h4 class="m-t-0 m-b-30">Referral Info</h4>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Referral Type</label>
+                                                    <label class="col-sm-3 control-label">Referral Type <span class="red">*</span></label>
                                                     <div class="col-sm-9">
 
                                                         <div class="col-sm-9">
@@ -329,7 +331,7 @@ $time_array=array(
 
                                                 <div id="referralTypeInfo" style="display:none;">
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Doctor Specialization</label>
+                                                    <label class="col-sm-3 control-label">Doctor Specialization <span class="red">*</span></label>
                                                     <div class="col-sm-6">
 
                                                         <select name="referralSpecialty" id="referralSpecialty" class="form-control"  onchange="javascript:getDoctors(this.value);">
@@ -346,7 +348,7 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Referred By</label>
+                                                    <label class="col-sm-3 control-label">Referred By <span class="red">*</span></label>
                                                     <div class="col-sm-9">
 
 
@@ -357,13 +359,13 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Hospital Name</label>
+                                                    <label class="col-sm-3 control-label">Hospital Name </label>
                                                     <div class="col-sm-9">
                                                         <input type="text" class="form-control" name="referralHospital" id="referralHospital" value="" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Hospital Location</label>
+                                                    <label class="col-sm-3 control-label">Hospital Location </label>
                                                     <div class="col-sm-9">
                                                         <input type="text" class="form-control" name="hospitalLocation" id="hospitalLocation" value="" readonly />
                                                     </div>
@@ -374,7 +376,7 @@ $time_array=array(
                                                 <h4 class="m-t-0 m-b-30">Payment Info</h4>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Payment Type</label>
+                                                    <label class="col-sm-3 control-label">Payment Type <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" required="required" />&nbsp;&nbsp;Cash
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
@@ -382,7 +384,7 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Amount</label>
+                                                    <label class="col-sm-3 control-label">Amount <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="number" min="0" class="form-control" id="fee" name="fee" value="" required="required" />
                                                     </div>
@@ -699,4 +701,91 @@ $time_array=array(
             }
         }
     </script>
+
+
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+
+    <script>
+        // Wait for the DOM to be ready
+        $(function() {
+
+            jQuery.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-z\s]+$/i.test(value);
+            });
+
+            // Initialize form validation on the registration form.
+            // It has the name attribute "registration"
+            $("form#appointment").validate({
+                // Specify validation rules
+                rules: {
+                    // The key name on the left side is the name attribute
+                    // of an input field. Validation rules are defined
+                    // on the right side
+                    role: "required",
+                    name: {
+                        required: true,
+                        lettersonly: true
+                    },
+                    email: {
+                        required: true,
+                        // Specify that email should be validated
+                        // by the built-in "email" rule
+                        email: true
+                    },
+                    telephone: {
+                        required: true,
+                        number: true,
+                        minlength: 10,
+                        maxlength: 11
+                    },
+                    age: {
+                        required: true,
+                        number: true,
+                        minlength: 1,
+                        maxlength: 3
+                    },
+                    appointmentDate: {
+                        required: true
+                    },
+                    fee: {
+                        number: true
+                    }
+                },
+                // Specify validation error messages
+                messages: {
+                    role: "Please choose role",
+                    name: {
+                        required: "Please enter your name",
+                        lettersonly: "Your name must be characters"
+                    },
+                    email: "Please enter a valid email address",
+                    telephone: {
+                        required: "Please provide a valid mobile number",
+                        minlength: "Your mobile number must be 10 characters long",
+                        maxlength: "Your mobile number must be 11 characters long"
+                    },
+                    age: "Please provide a valid age",
+                    appointmentDate: "Please provide a valid Date",
+                    fee: "Please provide a valid Amounr"
+                },
+                // Make sure the form is submitted to the destination defined
+                // in the "action" attribute of the form when valid
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $( function() {
+            $( "#appointmentDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+        } );
+    </script>
+
+
+
 @stop

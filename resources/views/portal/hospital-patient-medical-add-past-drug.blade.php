@@ -135,7 +135,7 @@ $profile_menu="0";
                                                                 <input type="text" class="form-control" name="surgeryHistory[0][surgeryName]" placeholder="Surgery Name" required="required" />
                                                             </div>
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <input type="date" class="form-control" name="surgeryHistory[0][operationDate]" placeholder="Operation Date (YYYY-MM-DD)" required="required" style="width:80%;float: left;" />
+                                                                <input type="text" class="form-control datepicker" name="surgeryHistory[0][operationDate]" placeholder="Operation Date (YYYY-MM-DD)" required="required" style="width:80%;float: left;" />
                                                                 <input type="hidden" class="form-control" name="surgeryHistory[0][surgeryInputDate]" value="{{date('Y-m-d')}}" required="required" />
                                                                 <div class="btn btn-primary addButton">+</div>
                                                             </div>
@@ -147,7 +147,7 @@ $profile_menu="0";
                                                                 <input type="text" class="form-control" name="surgery_name" placeholder="Surgery Name" />
                                                             </div>
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <input type="date" class="form-control" name="operation_date" placeholder="Operation Date (YYYY-MM-DD)" style="width:80%;float: left;" />
+                                                                <input type="text" class="form-control datepicker" name="operation_date" placeholder="Operation Date (YYYY-MM-DD)" style="width:80%;float: left;" />
                                                                 <input type="hidden" class="form-control" name="surgery_date" value="{{date('Y-m-d')}}" />
                                                                 <div class="btn btn-default removeButton min-button" value="-">-</div>
                                                             </div>
@@ -190,6 +190,25 @@ $profile_menu="0";
 @endsection
 
 @section('scripts')
+
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <script>
+/*
+                $( function() {
+                    $( ".datepicker" ).datepicker({ maxDate: new Date() });
+                } );
+*/
+
+                $('body').on('focus', '.datepicker', function(){
+                    $(this).datepicker({ dateFormat: 'yy-mm-dd',maxDate: new Date() } );
+                }).on('click', '.datepicker', function(){
+                    $(this).datepicker({ dateFormat: 'yy-mm-dd',maxDate: new Date() } );
+                });
+            </script>
+
+
         <script>
 
             $(document).ready(function() {
@@ -256,4 +275,5 @@ $profile_menu="0";
                 });
 
             </script>
+
 @stop
