@@ -62,7 +62,7 @@ $profile_menu="0";
 
                                     <div class="row">
                                         <div class="col-xs-12">
-
+                                            <div style="float:right;margin:10px;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
                                             <!--
                                             <div class="invoice-title">
                                                 <h4 class="pull-right">Order # 12345</h4>

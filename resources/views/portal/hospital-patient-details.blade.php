@@ -55,50 +55,50 @@ $profile_menu="0";
 
 
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">PID</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">PID</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->pid}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Name</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Name</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->name}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Number</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Number</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->telephone}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">E-Mail</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">E-Mail</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->email}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Age</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Age</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->age}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Gender</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Gender</label>
+                                                <div class="col-sm-9">
                                                     @if($patientDetails[0]->gender==1) Male @else Female @endif
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Relationship</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Relationship</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->relationship}}
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Relation Name</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 control-label">Relation Name</label>
+                                                <div class="col-sm-9">
                                                     {{$patientDetails[0]->spouseName}}
                                                 </div>
                                             </div>

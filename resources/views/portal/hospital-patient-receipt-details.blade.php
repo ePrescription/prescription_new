@@ -44,11 +44,7 @@ $profile_menu="0";
                                     <div style="float:right;display:none">
                                         <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>
-                                        <div style="float:right;">
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
-                                                <button class="btn btn-info waves-effect waves-light">Back</button>
-                                            </a>
-                                        </div>
+
                                     <?php */ ?>
 
                                     <div id='DivIdToPrint' style="display:block;">
@@ -316,7 +312,14 @@ $profile_menu="0";
                                                                         <div class="col-sm-6">
                                                                             <input type="hidden" class="form-control" name="patientId" value="{{$labTestDetails['patientDetails']->patient_id}}" required="required" />
                                                                             <input type="hidden" class="form-control" name="hospitalId" value="{{$labTestDetails['hospitalDetails']->hospital_id}}" required="required" />
-                                                                            <input type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success" onclick="javascript:window.print();"/>
+                                                                            <input style="float:left;" type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success" onclick="javascript:window.print();"/>
+
+
+                                                                            <div style="float:left;margin:0px 20px;">
+                                                                                <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/lab-details">
+                                                                                    <button type="button" class="btn btn-warning waves-effect waves-light">Cancel</button>
+                                                                                </a>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </form>

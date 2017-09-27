@@ -64,7 +64,7 @@ $profile_menu="0";
                                                     <label class="col-sm-4 control-label">Height (in Cm)</label>
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[0][generalExaminationId]" value="1" required="required" />
-                                                        <input type="text" class="form-control" name="generalExamination[0][generalExaminationValue]" value="" required="required" id="height_value" />
+                                                        <input type="text" class="form-control" name="generalExamination[0][generalExaminationValue]" value="0" required="required" id="height_value" />
                                                         <input type="hidden" class="form-control" name="generalExamination[0][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[0][isValueSet]" value="1" required="required" />
                                                      </div>
@@ -73,7 +73,7 @@ $profile_menu="0";
                                                     <label class="col-sm-4 control-label">Weight (in Kg)</label>
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[1][generalExaminationId]" value="2" required="required" />
-                                                        <input type="text" class="form-control" name="generalExamination[1][generalExaminationValue]" value="" required="required" id="weight_value" onchange="javascript:getbmi();" />
+                                                        <input type="text" class="form-control" name="generalExamination[1][generalExaminationValue]" value="0" required="required" id="weight_value" onchange="javascript:getbmi();" />
                                                         <input type="hidden" class="form-control" name="generalExamination[1][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[1][isValueSet]" value="1" required="required" />                                                    </div>
                                                 </div>
@@ -81,7 +81,7 @@ $profile_menu="0";
                                                     <label class="col-sm-4 control-label">BMI</label>
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[2][generalExaminationId]" value="3" required="required" />
-                                                        <input type="text" class="form-control" name="generalExamination[2][generalExaminationValue]" value="" required="required" id="bmi_value" readonly />
+                                                        <input type="text" class="form-control" name="generalExamination[2][generalExaminationValue]" value="0" required="required" id="bmi_value" readonly />
                                                         <input type="hidden" class="form-control" name="generalExamination[2][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[2][isValueSet]" value="1" required="required" />
                                                     </div>
@@ -204,7 +204,7 @@ $profile_menu="0";
                                                     <label class="col-sm-4 control-label">Temperature (C/F)</label>
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[10][generalExaminationId]" value="11" required="required" />
-                                                        <input type="text" class="form-control" name="generalExamination[10][generalExaminationValue]" value="" required="required" />
+                                                        <input type="text" class="form-control" name="generalExamination[10][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[10][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[10][isValueSet]" value="1" required="required" />
                                                     </div>
@@ -213,7 +213,7 @@ $profile_menu="0";
                                                     <label class="col-sm-4 control-label">Pulse rate per minute</label>
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[11][generalExaminationId]" value="12" required="required" />
-                                                        <input type="text" class="form-control" name="generalExamination[11][generalExaminationValue]" value="" required="required" />
+                                                        <input type="text" class="form-control" name="generalExamination[11][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[11][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[11][isValueSet]" value="1" required="required" />
                                                     </div>
@@ -222,7 +222,7 @@ $profile_menu="0";
                                                     <label class="col-sm-4 control-label">Respiration (count for a full minute) rate</label>
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[12][generalExaminationId]" value="13" required="required" />
-                                                        <input type="text" class="form-control" name="generalExamination[12][generalExaminationValue]" value="" required="required" />
+                                                        <input type="text" class="form-control" name="generalExamination[12][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[12][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[12][isValueSet]" value="1" required="required" />
                                                         <!--
@@ -240,7 +240,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
 
                                                         <input type="hidden" class="form-control" name="generalExamination[13][generalExaminationId]" value="14" required="required" />
-                                                        <input type="text" class="form-control" name="generalExamination[13][generalExaminationValue]" value="" required="required" />
+                                                        <input type="text" class="form-control" name="generalExamination[13][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[13][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[13][isValueSet]" value="1" required="required" />
 
@@ -259,7 +259,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
 
                                                         <input type="hidden" class="form-control" name="generalExamination[14][generalExaminationId]" value="15" required="required" />
-                                                        <input type="text" class="form-control" name="generalExamination[14][generalExaminationValue]" value="" required="required" />
+                                                        <input type="text" class="form-control" name="generalExamination[14][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[14][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[14][isValueSet]" value="1" required="required" />
 
@@ -316,7 +316,8 @@ $profile_menu="0";
     var hv=$("#height_value").val();
     var wv=$("#weight_value").val();
     var bmi=parseInt(wv)/((parseInt(hv)/100)*(parseInt(hv)/100));
-    $("#bmi_value").val(Math.round(bmi));
+    //$("#bmi_value").val(Math.round(bmi));
+        $("#bmi_value").val(parseFloat(bmi).toFixed(2));
     }
 </script>
 
