@@ -143,6 +143,7 @@ interface HospitalInterface {
 
     public function getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate = null);
     public function saveLabReceiptDetailsForPatient(PatientLabReceiptViewModel $labReceiptsVM);
+    public function getLabReceiptsByPatient($patientId, $hospitalId);
 
     public function getAllSpecialties();
     public function getDoctorsBySpecialty($specialtyId);

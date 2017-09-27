@@ -266,4 +266,5 @@
 
         "868" => "Unable to save patient lab receipt details",
         "869" => "Successfully saved patient lab receipt details",
+        "870" => "Unable to get patient lab receipts",
     ];
