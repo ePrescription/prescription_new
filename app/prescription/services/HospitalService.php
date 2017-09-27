@@ -1994,6 +1994,34 @@ class HospitalService {
     }
 
     /**
+     * Get lab receipts for the patient
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabReceiptsByPatient($patientId, $hospitalId)
+    {
+        $labReceipts = null;
+
+        try
+        {
+            $labReceipts = $this->hospitalRepo->getLabReceiptsByPatient($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_LIST_ERROR, $exc);
+        }
+
+        return $labReceipts;
+    }
+
+    /**
      * Get all specialties
      * @param none
      * @throws $hospitalException

@@ -310,4 +310,6 @@ class ErrorEnum extends Enum{
 
     const PATIENT_LAB_RECEIPTS_SAVE_ERROR = 868;
     const PATIENT_LAB_RECEIPTS_SAVE_SUCCESS = 869;
+    const PATIENT_LAB_RECEIPTS_LIST_ERROR = 870;
+    //const PA
 }

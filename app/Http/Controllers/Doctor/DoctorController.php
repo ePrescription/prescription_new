@@ -5607,6 +5607,44 @@ class DoctorController extends Controller
         }
     }
 
+    /**
+     * Get lab receipts for the patient
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabReceiptsByPatient($hospitalId, $patientId)
+    {
+        $labReceipts = null;
+        //$labTestType = $labDetailsRequest->get('testType');
+        //dd($patientId);
+
+        try
+        {
+            $labReceipts = $this->hospitalService->getLabReceiptsByPatient($patientId, $hospitalId);
+            //dd($labReceipts);
+            //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+    }
+
     public function AddPatientMedicalScanByHospitalForFront($hid,$patientId)
     {
         $patientDetails = null;

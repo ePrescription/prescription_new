@@ -1398,14 +1398,23 @@ class HospitalImpl implements HospitalInterface{
             $currentDate = Carbon::now()->format('Y-m-d');
             //dd($currentDate);
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
-            $query->whereDate('da.appointment_date', '<', $currentDate);
+            $query->whereDate('da.appointment_date', '<=', $currentDate);
+            $query->whereNotNull('da.appointment_date');
             $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
             $query->groupBy('da.appointment_category');
+
+            //DB::connection()->enableQueryLog();
+            //$appointments = $query->get();
+            //$query = DB::getQueryLog();
+            //$lastQuery = end($query);
+            //dd($query);
+
+            //dd($query->toSql());
 
             $appointments = $query->get();
 
             $dashBoardQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
-            $dashBoardQuery->whereDate('da.appointment_date', '=', $selectedDate);
+            $dashBoardQuery->whereDate('da.appointment_date', '=', $currentDate);
             $dashBoardQuery->where(function($dashBoardQuery){
                 $dashBoardQuery->where('da.appointment_time', '>=', '07:00:00');
                 $dashBoardQuery->where('da.appointment_time', '<=', '19:00:00');
@@ -5857,8 +5866,6 @@ class HospitalImpl implements HospitalInterface{
             }
             //dd($bloodTests);
 
-
-
         }
         catch(QueryException $queryEx)
         {
@@ -5881,6 +5888,7 @@ class HospitalImpl implements HospitalInterface{
         return $status;
     }
 
+
     private function saveLabFeeReceipt(PatientLabReceiptViewModel $labReceiptsVM)
     {
         $labFeeReceipt = new LabFeeReceipt();
@@ -5897,7 +5905,46 @@ class HospitalImpl implements HospitalInterface{
 
         return $labFeeReceipt;
 
+    }
 
+    /**
+     * Get lab receipts for the patient
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabReceiptsByPatient($patientId, $hospitalId)
+    {
+        $labReceipts = null;
+
+        try
+        {
+            $query = DB::table('lab_fee_receipt as lfr')->join('patient as p', 'p.patient_id', '=', 'lfr.patient_id');
+            $query->where('lfr.patient_id', '=', $patientId);
+            $query->where('lfr.hospital_id', '=', $hospitalId);
+
+            $query->select('lfr.id as receiptId', 'lfr.patient_id', 'p.name', 'p.pid', 'lfr.total_fees', 'lfr.lab_receipt_date');
+
+            //dd($query->toSql());
+            $labReceipts = $query->get();
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_LIST_ERROR, $exc);
+        }
+
+        return $labReceipts;
     }
 
     /*Symptom section -- End */
