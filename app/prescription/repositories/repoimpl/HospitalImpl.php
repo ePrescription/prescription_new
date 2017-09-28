@@ -3897,7 +3897,7 @@ class HospitalImpl implements HospitalInterface{
             //dd($motionExamQuery->toSql());
             $motionExaminations = $motionExamQuery->get();
 
-            DB::connection()->enableQueryLog();
+            //DB::connection()->enableQueryLog();
 
             $scanExamQuery = DB::table('patient_scan as ps');
             $scanExamQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
@@ -3918,8 +3918,8 @@ class HospitalImpl implements HospitalInterface{
             //dd($scanExamQuery->toSql());
             $scanExaminations = $scanExamQuery->get();
 
-            $query = DB::getQueryLog();
-            dd($query);
+            //$query = DB::getQueryLog();
+            //dd($query);
             //dd($scanExaminations);
 
             $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus');
