@@ -144,6 +144,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::post('rest/api/{hospitalId}/savepatientwithappointment', array('as' => 'hospital.savepatientwithappointment', 'uses' => 'DoctorController@savePatientWithAppointmentByHospitalForFront'));
 
     Route::post('rest/api/referraldoctor', array('as' => 'specialties.savereferraldoctor', 'uses' => 'DoctorController@saveReferralDoctor'));
+    Route::get('rest/api/appointmenttimes', array('as' => 'hospital.appointmenttimes', 'uses' => 'DoctorController@getAppointmentTimes'));
 
     Route::get('rest/api/{hospitalId}/patient/{patientId}/addappointment', array('as' => 'hospital.addappointment', 'uses' => 'DoctorController@addAppointmentByHospitalForFront'));
     Route::post('rest/api/{hospitalId}/patient/{patientId}/saveappointment', array('as' => 'hospital.saveappointment', 'uses' => 'DoctorController@saveAppointmentByHospitalForFront'));

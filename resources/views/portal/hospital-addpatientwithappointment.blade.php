@@ -629,6 +629,36 @@ $time_array=array(
                 $('input#fee').attr('required', true);
 
             }
+
+
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/appointmenttimes';
+
+
+            var d = new Date();
+            var h = (d.getHours()<10?'0':'') + d.getHours();
+            var m = (d.getMinutes()<10?'0':'') + d.getMinutes();
+            var s = (d.getSeconds()<10?'0':'') + d.getSeconds();
+            var t = h+":"+m+":"+s;
+            var timeValue = h+":"+m;
+
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"date": dateValue, "time": timeValue, "status": status},
+                success: function (data) {
+                    console.log(data);
+                    var terms = '<option value="">--Choose Time--</option>';
+                    $.each(data.result, function (index, value) {
+                        terms += '<option value="'+index+'">'+value+'</option>';
+                    });
+                    $("#appointmentTime").html(terms);
+
+                }
+            });
+
+
         }
     </script>
 
