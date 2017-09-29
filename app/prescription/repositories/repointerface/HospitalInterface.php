@@ -9,6 +9,7 @@
 use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientDentalViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
@@ -132,12 +133,16 @@ interface HospitalInterface {
     public function getPatientUltraSoundTests($patientId, $ultraSoundDate);
     public function savePatientUltraSoundTests(PatientUrineExaminationViewModel $patientUltraSoundVM);
 
+    public function getPatientDentalTests($patientId, $dentalDate);
+    public function savePatientDentalTests(PatientDentalViewModel $patientDentalVM);
+
     public function getAllFamilyIllness();
     public function getAllPastIllness();
     public function getAllGeneralExaminations();
     public function getAllPersonalHistory();
     public function getAllPregnancy();
     public function getAllScans();
+    public function getAllDentalItems();
 
     public function getPatientLabTests($hospitalId, $patientId, $feeStatus = null);
     public function getLabTestDetailsByPatient($labTestType, $labTestId);

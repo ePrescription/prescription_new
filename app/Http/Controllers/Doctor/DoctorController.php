@@ -5586,6 +5586,7 @@ class DoctorController extends Controller
 
         try
         {
+            //dd($hid);
             //$hospitalId = $receiptRequest->get('hospitalId');
             $hospitalId = $hid;
 
@@ -5595,6 +5596,7 @@ class DoctorController extends Controller
             }
 
             $labTestDetails = $this->hospitalService->getLabTestDetailsForReceipt($patientId, $hospitalId, $generatedDate);
+            //dd($labTestDetails);
             $patientDetails = $this->hospitalService->getPatientProfile($patientId);
 
             //dd($labTestDetails);
@@ -5618,9 +5620,7 @@ class DoctorController extends Controller
         }
     }
 
-    //public function saveLabReceiptDetailsForPatient(Request $labReceiptRequest) {}
-    //public function saveLabReceiptDetailsForPatient() {}
-
+    //public function saveLabReceiptDetailsForPatient()
     public function saveLabReceiptDetailsForPatient(Request $labReceiptRequest)
     {
         //dd('Hi');
@@ -5662,6 +5662,18 @@ class DoctorController extends Controller
                 )
                 );
             */
+
+
+            /*$labTestsPayments = array(
+                'patientId' => 57,
+                'hospitalId' => 1,
+                'labTests' => array('dentalTests' =>
+                    array(
+                        array('id' => 1, 'item_id' => 1, 'fees' => 8000),
+                        array('id' => 1, 'item_id' => 2, 'fees' => 9000)
+                        )
+                    )
+                );*/
 
             $labTestsPayments = $labReceiptRequest;
             $labReceiptsVM = PatientProfileMapper::setPatientLabReceipts($labTestsPayments);
@@ -5766,6 +5778,45 @@ class DoctorController extends Controller
 
         return view('portal.hospital-patient-medical-add-scan',compact('patientScans','patientDetails'));
 
+    }
+
+    /**
+     * Get all dental examinations
+     * @param $hid, $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function addPatientDentalTestsForFront($hid, $patientId)
+    {
+        $patientDetails = null;
+        $dentalExaminations = null;
+
+        try
+        {
+
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $dentalExaminations = HospitalServiceFacade::getAllDentalItems();
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        //return view('portal.hospital-patient-medical-add-scan',compact('patientScans','patientDetails'));
     }
 
     public function AddPatientMedicalDrugByHospitalForFront($hid,$patientId)

@@ -1707,6 +1707,34 @@ class HospitalService {
     }
 
     /**
+     * Get patient dental tests
+     * @param $patientId, $ultraSoundDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientDentalTests($patientId, $dentalDate)
+    {
+        $dentalTests = null;
+
+        try
+        {
+            $dentalTests = $this->hospitalRepo->getPatientDentalTests($patientId, $dentalDate);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_DETAILS_ERROR, $exc);
+        }
+
+        return $dentalTests;
+    }
+
+    /**
      * Get all family illness
      * @param none
      * @throws $hospitalException
@@ -1872,6 +1900,34 @@ class HospitalService {
         }
 
         return $scans;
+    }
+
+    /**
+     * Get all dental examinations
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllDentalItems()
+    {
+        $dentalExaminations = null;
+
+        try
+        {
+            $dentalExaminations = $this->hospitalRepo->getAllDentalItems();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DENTAL_LIST_ERROR, $exc);
+        }
+
+        return $dentalExaminations;
     }
 
     /**
@@ -2564,6 +2620,40 @@ class HospitalService {
 
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_ULTRASOUND_DETAILS_SAVE_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save patient dental tests
+     * @param $patientDentalVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientDentalTests($patientDentalVM)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($patientDentalVM, &$status)
+            {
+                $status = $this->hospitalRepo->savePatientDentalTests($patientDentalVM);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR, $ex);
         }
 
         return $status;

@@ -11,6 +11,7 @@ namespace App\prescription\mapper;
 use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientDentalViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
@@ -497,6 +498,36 @@ class PatientProfileMapper
         return $patientUltraSoundVM;
     }
 
+    public static function setPatientDentalExamination(Request $examinationRequest)
+    {
+        $patientDentalVM = new PatientDentalViewModel();
+
+        $dentalObj = (object) $examinationRequest->all();
+        $patientDentalVM->setPatientId($dentalObj->patientId);
+        //$patientUltraSoundVM->setDoctorId($examinationObj->doctorId);
+        $patientDentalVM->setDoctorId(property_exists($dentalObj, 'doctorId') ? $dentalObj->doctorId : null);
+        $patientDentalVM->setHospitalId(property_exists($dentalObj, 'hospitalId') ? $dentalObj->hospitalId : null);
+        $patientDentalVM->setExaminationDate(property_exists($dentalObj, 'examinationDate') ? $dentalObj->examinationDate : null);
+        //$patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
+        $examinationDetails = $dentalObj->dentalExaminations;
+        //dd($candidateEmployments);
+
+        foreach($examinationDetails as $examination)
+        {
+            $patientDentalVM->setPatientDentalTests($examination);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientDentalVM->setCreatedBy($userName);
+        $patientDentalVM->setUpdatedBy($userName);
+        $patientDentalVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientDentalVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientDentalVM;
+    }
+
     public static function setReferralDoctor(Request $doctorReferralRequest)
     {
         $doctorReferralsVM = new DoctorReferralsViewModel();
@@ -548,6 +579,10 @@ class PatientProfileMapper
         if(array_key_exists('ultraSoundTests', $labTests))
         {
             $labReceiptsVM->setUltraSoundTests($labTests['ultraSoundTests']);
+        }
+        if(array_key_exists('dentalTests', $labTests))
+        {
+            $labReceiptsVM->setDentalTests($labTests['dentalTests']);
         }
 
         $userName = 'Admin';

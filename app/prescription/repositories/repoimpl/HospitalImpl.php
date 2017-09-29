@@ -11,6 +11,7 @@ namespace App\prescription\repositories\repoimpl;
 use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientDentalViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
@@ -34,6 +35,8 @@ use App\prescription\model\entities\Hospital;
 use App\prescription\model\entities\LabFeeReceipt;
 use App\prescription\model\entities\LabTestDetails;
 use App\prescription\model\entities\Patient;
+use App\prescription\model\entities\PatientDentalExamination;
+use App\prescription\model\entities\PatientDentalExaminationItems;
 use App\prescription\model\entities\PatientDrugHistory;
 use App\prescription\model\entities\PatientLabTests;
 use App\prescription\model\entities\PatientPrescription;
@@ -1428,6 +1431,21 @@ class HospitalImpl implements HospitalInterface{
             $dashBoardQuery->select(DB::raw("SUM(da.fee) as totalAmount"));
             //dd($dashBoardQuery->toSql());
             $totalAmount = $dashBoardQuery->get();
+
+            /*$bloodExamQuery = DB::table('patient_blood_examination as pbe')->where('pbe.hospital_id', '=', $hospitalId);
+            $bloodExamQuery->whereDate('pbe.examination_date', '=', $currentDate);
+            $bloodExamQuery->where(function($bloodExamQuery){
+                $bloodExamQuery->where('da.appointment_time', '>=', '07:00:00');
+                $bloodExamQuery->where('da.appointment_time', '<=', '19:00:00');
+            });*/
+
+            /*$hospitalQuery->join('hospital as h', function($join) {
+                $join->on('h.hospital_id', '=', 'users.id');
+                $join->on('h.hospital_id', '=', DB::raw('?'));
+            })->setBindings(array_merge($doctorQuery->getBindings(), array($hospitalId)));*/
+            //$bloodExamQuery->select(DB::raw("SUM(da.fee) as totalAmount"));
+            //dd($dashBoardQuery->toSql());
+            //$totalAmount = $dashBoardQuery->get();
 
 
             $dashboardDetails["appointmentCategory"] = $appointments;
@@ -3373,6 +3391,67 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get patient dental tests
+     * @param $patientId, $ultraSoundDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientDentalTests($patientId, $dentalDate)
+    {
+        $dentalTests = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $query = DB::table('patient_dental_examination_item as pdei')->select('dei.id as examinationId',
+                'dei.examination_name as examinationName',
+                'pdei.id as patientExaminationId', 'pde.examination_date as examinationDate');
+            $query->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
+            $query->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
+            $query->where('pde.patient_id', '=', $patientId);
+            $query->where('pde.examination_date', '=', $dentalDate);
+
+            //$query->rightJoin('scans as s', function($join){
+            /*$query->join('ultra_sound as us', function($join){
+                $join->on('us.id', '=', 'pus.ultra_sound_id');
+                $join->on('pus.patient_id', '=', DB::raw('?'));
+                $join->on('pus.examination_date', '=', DB::raw('?'));
+            })->setBindings(array_merge($query->getBindings(), array($patientId, $ultraSoundDate)));*/
+            //$query->where('us.status', '=', 1);
+
+            //dd($query->toSql());
+
+            $dentalTests = $query->get();
+            //dd($pregnancyDetails);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_DETAILS_ERROR, $exc);
+        }
+
+        return $dentalTests;
+    }
+
+    /**
      * Get all family illness
      * @param none
      * @throws $hospitalException
@@ -3568,6 +3647,40 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $scans;
+    }
+
+    /**
+     * Get all dental examinations
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllDentalItems()
+    {
+        $dentalExaminations = null;
+
+        try
+        {
+            $query = DB::table('dental_examination_items as dei')->where('dei.examination_status', '=', 1);
+            $query->join('dental_category as dc', 'dc.id', '=', 'dei.dental_category_id');
+            $query->select('dei.id', 'dei.examination_name', 'dc.id as category_id', 'dc.category_name');
+
+            $dentalExaminations = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::DENTAL_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::DENTAL_LIST_ERROR, $exc);
+        }
+
+        return $dentalExaminations;
     }
 
     /**
@@ -3941,6 +4054,27 @@ class HospitalImpl implements HospitalInterface{
             //dd($ultraSoundExamQuery->toSql());
             $ultraSoundExaminations = $ultraSoundExamQuery->get();
 
+            $dentalExamQuery = DB::table('patient_dental_examination_item as pdei');
+            $dentalExamQuery->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
+            $dentalExamQuery->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
+            $dentalExamQuery->where('pde.patient_id', '=', $patientId);
+            $dentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            //$dentalExamQuery->where('pus.is_value_set', '=', 1);
+            $dentalExamQuery->where(function($query){
+                $query->where('pdei.is_fees_paid', '=', 0);
+                $query->orWhereNull('pdei.is_fees_paid');
+            });
+            //$ultraSoundExamQuery->where('pus.is_fees_paid', '=', 0);
+            if(!is_null($receiptDate))
+            {
+                $dentalExamQuery->whereDate('pde.created_at', '=', $receiptDate);
+            }
+            $dentalExamQuery->select('pde.id as examination_id', 'pde.patient_id', 'pde.hospital_id', 'dei.examination_name',
+                'pdei.id as examination_item_id', 'pde.examination_date');
+
+            //dd($ultraSoundExamQuery->toSql());
+            $dentalExaminations = $dentalExamQuery->get();
+
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
                 'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
             $patientQuery->where('p.patient_id', '=', $patientId);
@@ -3960,6 +4094,7 @@ class HospitalImpl implements HospitalInterface{
             $patientLabTests['motionTests'] = $motionExaminations;
             $patientLabTests['scanTests'] = $scanExaminations;
             $patientLabTests['ultraSoundTests'] = $ultraSoundExaminations;
+            $patientLabTests['dentalTests'] = $dentalExaminations;
 
             //dd($patientLabTests);
 
@@ -4150,6 +4285,7 @@ class HospitalImpl implements HospitalInterface{
         $urineTestDates = null;
         $motionTestDates = null;
         $drugTestDates = null;
+        $dentalTestDates = null;
 
         $patientLabTests = null;
 
@@ -4309,6 +4445,24 @@ class HospitalImpl implements HospitalInterface{
                 'pdh.drug_name', 'pdh.dosage', 'pdh.timings', 'pdh.drug_history_date');
             $latestDrugHistory = $latestDrugHistoryQuery->get();
 
+            $latestDentalExamQuery = DB::table('patient_dental_examination_item as pdei');
+            $latestDentalExamQuery->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
+            $latestDentalExamQuery->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
+            $latestDentalExamQuery->join('dental_category as dc', 'dc.id', '=', 'dei.dental_category_id');
+            $latestDentalExamQuery->where('pde.examination_date', function($query) use($patientId){
+                $query->select(DB::raw('MAX(pde.examination_date)'));
+                $query->from('patient_dental_examination as pde')->where('pde.patient_id', '=', $patientId);
+            });
+            $latestDentalExamQuery->where('pde.patient_id', '=', $patientId);
+            //$latestDentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
+            $latestDentalExamQuery->select('pdei.id', 'pde.patient_id',
+                'pde.hospital_id', 'dc.id as category_id', 'dc.category_name',
+                'dei.id as examination_id', 'dei.examination_name', 'pde.examination_date');
+            //dd($latestDentalExamQuery->toSql());
+            $dentalExaminations = $latestDentalExamQuery->get();
+            //dd($dentalExaminations);
+
             /*$drugQuery = DB::table('patient_drug_history as pdh')->select('pdh.id as id', 'pdh.patient_id as patientId',
                 'pdh.drug_name as drugName', 'pdh.dosage', 'pdh.timings');
             $drugQuery->where('pdh.patient_id', $patientId);*/
@@ -4376,6 +4530,10 @@ class HospitalImpl implements HospitalInterface{
             $motionDatesQuery = DB::table('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
             $motionDatesQuery->select('pme.examination_date')->orderBy('pme.examination_date', 'DESC');
             $motionTestDates = $motionDatesQuery->distinct()->get();
+
+            $dentalDatesQuery = DB::table('patient_dental_examination as pde')->where('pde.patient_id', '=', $patientId);
+            $dentalDatesQuery->select('pde.examination_date')->orderBy('pde.examination_date', 'DESC');
+            $dentalTestDates = $dentalDatesQuery->distinct()->get();
             //$motionTestDates = $motionDatesQuery->distinct()->take(2147483647)->skip(1)->get();
 
             $drugDatesQuery = DB::table('patient_drug_history as pdh')->where('pdh.patient_id', '=', $patientId);
@@ -4408,6 +4566,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates['recentUrineExaminations'] = $latestUrineExaminations;
             $examinationDates['recentMotionExaminations'] = $latestMotionExaminations;
             $examinationDates['recentDrugHistory'] = $latestDrugHistory;
+            $examinationDates['dentalExaminations'] = $dentalExaminations;
 
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;
             $examinationDates["pastIllnessDates"] = $pastIllnessDates;
@@ -4421,6 +4580,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["bloodTestDates"] = $bloodTestDates;
             $examinationDates["urineTestDates"] = $urineTestDates;
             $examinationDates["motionTestDates"] = $motionTestDates;
+            $examinationDates["dentalTestDates"] = $dentalTestDates;
 
             //dd($examinationDates);
 
@@ -5695,6 +5855,107 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Save patient dental tests
+     * @param $patientDentalVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientDentalTests(PatientDentalViewModel $patientDentalVM)
+    {
+        $status = true;
+        $patientExaminationDate = null;
+        $patientDentalExamination = null;
+
+        try
+        {
+            //dd('test');
+            $patientId = $patientDentalVM->getPatientId();
+            $doctorId = $patientDentalVM->getDoctorId();
+            //dd($doctorId);
+            $hospitalId = $patientDentalVM->getHospitalId();
+            $patientUser = User::find($patientId);
+
+            $dentalExaminations = $patientDentalVM->getPatientDentalTests();
+            $examinationDate = $patientDentalVM->getExaminationDate();
+            //dd($examinationDate);
+
+            if (!is_null($patientUser))
+            {
+                //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+               //dd($patientDentalVM->getExaminationDate());
+                $examinationDt = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
+                //dd($examinationDt);
+
+                if(!is_null($examinationDate))
+                {
+                    $patientExaminationDate = date('Y-m-d', strtotime($examinationDate));
+                }
+                else
+                {
+                    $patientExaminationDate = null;
+                }
+
+                //dd($patientExaminationDate);
+
+                $dentalExamination = new PatientDentalExamination();
+                $dentalExamination->patient_id = $patientId;
+                $dentalExamination->hospital_id = $hospitalId;
+                $dentalExamination->doctor_id = $patientDentalVM->getDoctorId();
+                $dentalExamination->examination_date = $patientExaminationDate;
+                $dentalExamination->created_by = $patientDentalVM->getCreatedBy();
+                $dentalExamination->modified_by = $patientDentalVM->getUpdatedBy();
+                $dentalExamination->created_at = $patientDentalVM->getCreatedAt();
+                $dentalExamination->updated_at = $patientDentalVM->getUpdatedAt();
+                $patientDentalExamination = $dentalExamination->save();
+
+                foreach($dentalExaminations as $examination)
+                {
+                    //dd($patientHistory);
+                    //$examinationId = $examination->examinationId;
+                    //$examinationName = $examination->examinationName;
+                    //$pregnancyDate = $pregnancy->pregnancyDate;
+                    $dentalExaminationItems = new PatientDentalExaminationItems();
+                    $dentalExaminationItems->dental_examination_item_id = $examination->dentalExaminationId;
+                    //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
+                    $dentalExaminationItems->dental_examination_name = property_exists($examination->dentalExaminationName, 'dentalExaminationName') ? $examination->dentalExaminationName : null;
+                    //$dentalExaminationItems->dental_examination_name = $examination->dentalExaminationName;
+                    $dentalExaminationItems->created_by = $patientDentalVM->getCreatedBy();
+                    $dentalExaminationItems->modified_by = $patientDentalVM->getUpdatedBy();
+                    $dentalExaminationItems->created_at = $patientDentalVM->getCreatedAt();
+                    $dentalExaminationItems->updated_at = $patientDentalVM->getUpdatedAt();
+                    $dentalExamination->dentalexaminationitems()->save($dentalExaminationItems);
+                }
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
      * Save patient drug and surgery history
      * @param $drugHistoryVM
      * @throws $hospitalException
@@ -5807,8 +6068,12 @@ class HospitalImpl implements HospitalInterface{
             $motionTests = $labReceiptsVM->getMotionTests();
             $scanTests = $labReceiptsVM->getScanTests();
             $ultraSoundTests = $labReceiptsVM->getUltraSoundTests();
+            $dentalTests = $labReceiptsVM->getDentalTests();
+
+            //dd($dentalTests[0]['id']);
 
             $labFeeReceipt = $this->saveLabFeeReceipt($labReceiptsVM);
+            //dd($labFeeReceipt->id);
 
             if(!is_null($labFeeReceipt))
             {
@@ -5876,6 +6141,34 @@ class HospitalImpl implements HospitalInterface{
                         $query->update($updateValues);
                     }
                 }
+
+                if(!is_null($dentalTests) && !empty($dentalTests))
+                {
+                    //dd($dentalTests);
+                    $examinationId = $dentalTests[0]['id'];
+
+                    $dentalExamination = PatientDentalExamination::where('id', '=', $examinationId)->first();
+                    //dd($dentalExamination);
+
+                    if(!is_null($dentalExamination))
+                    {
+                        $dentalExamination->fee_receipt_id = $labFeeReceipt->id;
+                        $dentalExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                        //dd($dentalExamination);
+                        $dentalExamination->save();
+                    }
+                    //dd($dentalExamination);
+
+                    foreach($dentalTests as $dentalTest)
+                    {
+                        $updateValues = array('pdei.fees' => $dentalTest['fees'], 'pdei.is_fees_paid' => 1,
+                            'pdei.created_at' => $labReceiptsVM->getCreatedAt(), 'pdei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                        $query = DB::table('patient_dental_examination_item as pdei')->where('pdei.id', '=', $dentalTest['item_id']);
+                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                        $query->update($updateValues);
+                    }
+                }
             }
             //dd($bloodTests);
 
@@ -5915,6 +6208,8 @@ class HospitalImpl implements HospitalInterface{
         $labFeeReceipt->modified_by = $labReceiptsVM->getUpdatedBy();
         $labFeeReceipt->created_at = $labReceiptsVM->getCreatedAt();
         $labFeeReceipt->updated_at = $labReceiptsVM->getUpdatedAt();
+
+        $labFeeReceipt->save();
 
         return $labFeeReceipt;
 

@@ -241,6 +241,17 @@
         "792" => "Successfully retrieved patient lab tests",
         "793" => "No patient lab test available",
 
+        "794" => "Unable to retrieve dental test details",
+        "795" => "Successfully retrieved dental test details",
+        "796" => "No dental test available",
+
+        "797" => "Unable to save patient dental examination details",
+        "798" => "Successfully saved patient dental examination details",
+
+        "799" => "Unable to retrieve patient dental examination details",
+        "800" => "Successfully retrieved patient dental examination details",
+        "801" => "No dental examination details available for the patient",
+
         "851" => "Unable to retrieve specialties list",
         "852" => "Successfully retrieved specialties list",
         "853" => "No specialties list available",

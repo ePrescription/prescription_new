@@ -21,6 +21,7 @@ class PatientLabReceiptViewModel
     private $urineTests;
     private $scanTests;
     private $ultraSoundTests;
+    private $dentalTests;
 
     private $createdBy;
     private $updatedBy;
@@ -195,6 +196,22 @@ class PatientLabReceiptViewModel
     public function setUltraSoundTests($ultraSoundTests)
     {
         $this->ultraSoundTests = $ultraSoundTests;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDentalTests()
+    {
+        return $this->dentalTests;
+    }
+
+    /**
+     * @param mixed $dentalTests
+     */
+    public function setDentalTests($dentalTests)
+    {
+        $this->dentalTests = $dentalTests;
     }
 
     /**
