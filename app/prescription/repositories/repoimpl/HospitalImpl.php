@@ -1321,6 +1321,14 @@ class HospitalImpl implements HospitalInterface{
             $query->where('pl.id', '=', $labTestId);
             $labTestDetails = $query->get();
 
+            /*$query = DB::table('patient_blood_examination as pbe')->select('pbe.id',
+                'be.id', DB::raw('TRIM(UPPER(be.examination_name)) as examination_name'),
+                'pbe.examination_date');
+            $query->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            $query->join('labtest as l', 'l.id', '=', 'ld.labtest_id');
+            $query->where('pl.id', '=', $labTestId);
+            $labTestDetails = $query->get();*/
+
             if(!empty($labTestDetails))
             {
                 $patientLabTests["LabTestInfo"] = $labTestInfo;
@@ -4523,6 +4531,16 @@ class HospitalImpl implements HospitalInterface{
                 'pdh.drug_name', 'pdh.dosage', 'pdh.timings', 'pdh.drug_history_date');
             $latestDrugHistory = $latestDrugHistoryQuery->get();
 
+            $latestSurgeryHistoryQuery = DB::table('patient_surgeries as ps');
+            $latestSurgeryHistoryQuery->where('ps.surgery_input_date', function($query) use($patientId){
+                $query->select(DB::raw('MAX(ps.surgery_input_date)'));
+                $query->from('patient_surgeries as ps')->where('ps.patient_id', '=', $patientId);
+            });
+            $latestSurgeryHistoryQuery->where('ps.patient_id', '=', $patientId);
+            $latestSurgeryHistoryQuery->select('ps.id', 'ps.patient_id',
+                'ps.patient_surgeries', 'ps.surgery_input_date');
+            $latestSurgeryHistory = $latestSurgeryHistoryQuery->get();
+
             $latestDentalExamQuery = DB::table('patient_dental_examination_item as pdei');
             $latestDentalExamQuery->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
             $latestDentalExamQuery->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
@@ -4618,6 +4636,10 @@ class HospitalImpl implements HospitalInterface{
             $drugDatesQuery->select('pdh.drug_history_date')->orderBy('pdh.drug_history_date', 'DESC');
             $drugTestDates = $drugDatesQuery->distinct()->get();
 
+            $surgeryDatesQuery = DB::table('patient_surgeries as ps')->where('ps.patient_id', '=', $patientId);
+            $surgeryDatesQuery->select('ps.surgery_input_date')->orderBy('ps.surgery_input_date', 'DESC');
+            $surgeryTestDates = $surgeryDatesQuery->distinct()->get();
+
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
                 'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
             $patientQuery->where('p.patient_id', '=', $patientId);
@@ -4644,6 +4666,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates['recentUrineExaminations'] = $latestUrineExaminations;
             $examinationDates['recentMotionExaminations'] = $latestMotionExaminations;
             $examinationDates['recentDrugHistory'] = $latestDrugHistory;
+            $examinationDates['recentSurgeryHistory'] = $latestSurgeryHistory;
             $examinationDates['dentalExaminations'] = $dentalExaminations;
 
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;
@@ -4651,6 +4674,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["familyIllnessDates"] = $familyIllnessDates;
             $examinationDates["personalHistoryDates"] = $personalHistoryDates;
             $examinationDates["drugTestDates"] = $drugTestDates;
+            $examinationDates["surgeryTestDates"] = $surgeryTestDates;
             $examinationDates["pregnancyDates"] = $pregnancyDates;
             $examinationDates["scanDates"] = $scanDates;
             $examinationDates["symptomDates"] = $symptomDates;
