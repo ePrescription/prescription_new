@@ -32,7 +32,7 @@ class EditPatientProfileRequest extends Request
         //$rules['hospitalId'] = 'required';
 
         $rules['telephone'] = 'required | numeric | digits:10';
-        $rules['email'] = 'required | email';
+        $rules['email'] = 'required | email | unique:users,email';
         /*if($profile->patientId == 0)
         {
             $rules['email'] = 'email | unique:users,email';
