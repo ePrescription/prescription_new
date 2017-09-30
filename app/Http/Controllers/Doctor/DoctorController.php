@@ -6544,6 +6544,7 @@ class DoctorController extends Controller
         {
             $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId, $categoryType);
 
+            /*
             if(!is_null($patients) && !empty($patients))
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_SUCCESS));
@@ -6557,6 +6558,7 @@ class DoctorController extends Controller
             $responseJson->setObj($patients);
             $responseJson->sendSuccessResponse();
             //dd($appointments);
+            */
         }
         catch(HospitalException $hospitalExc)
         {
@@ -6569,7 +6571,9 @@ class DoctorController extends Controller
             $responseJson->sendErrorResponse($exc);
         }
 
-        return $responseJson;
+
+        return view('portal.hospital-patients-appointment',compact('patients'));
+        //return $responseJson;
     }
 
 

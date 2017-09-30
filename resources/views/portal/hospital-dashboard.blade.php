@@ -40,6 +40,7 @@ $profile_menu="0";
                         @foreach($dashboardDetails['appointmentCategory'] as $appointmentCategory)
                         <div class="col-sm-6 col-lg-3">
                             <div class="panel">
+                                <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$appointmentCategory->appointment_category}}">
                                 <div class="panel-heading">
                                     <h4 class="panel-title text-purple m-t-10 font-light">{{$appointmentCategory->appointment_category}} Appointments</h4>
                                 </div>
@@ -49,6 +50,7 @@ $profile_menu="0";
                                         {{$appointmentCategory->noAppointments}}
                                     </h2>
                                 </div>
+                                </a>
                             </div>
                         </div>
                         @endforeach

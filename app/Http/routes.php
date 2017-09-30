@@ -127,6 +127,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('{id}/dashboard', array('as' => 'patient.dashboard', 'uses' => 'DoctorController@getDashboardDetailsForFront'));
 
 
+    Route::get('rest/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForFront'));
 
     Route::get('rest/api/{hospitalId}/patientnames', array('as' => 'hospital.searchnames', 'uses' => 'DoctorController@getPatientNamesForHospital'));
     Route::get('rest/api/{patientId}/details', array('as' => 'hospital.details', 'uses' => 'DoctorController@getPatientDetailsById'));
