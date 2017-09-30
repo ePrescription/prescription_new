@@ -6493,6 +6493,8 @@ class DoctorController extends Controller
         //dd($hospitalId);
 
         $selectedDate = date("Y-m-d");
+        //$selectedDate = '2017-09-20';
+        //dd($selectedDate);
         try
         {
             $dashboardDetails = $this->hospitalService->getDashboardDetails($hospitalId, $selectedDate);
