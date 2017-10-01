@@ -462,6 +462,12 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Scan</span>
                                                     </a>
                                                 </li>
+                                                <li class="">
+                                                    <a href="#dental" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                        <span class="hidden-xs">Dental</span>
+                                                    </a>
+                                                </li>
                                             </ul>
 
                                             <div class="tab-content">
@@ -551,6 +557,24 @@ $profile_menu="0";
                                                     <div style="width:100%;" id="patientscandiv"></div>
                                                     </p>
                                                 </div>
+
+                                                <div class="tab-pane" id="dental">
+                                                    <p>
+                                                    <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
+                                                        <select class="form-control" id="selectdental" onchange="javascript:ajaxloaddentaldetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['dentalTestDates'] as $dentalTestDates)
+                                                                <option value="{{$dentalTestDates->examination_date}}">{{$dentalTestDates->examination_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <a href="#" data-href="#{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-bloodtests" onclick="javascript:ajaxloaddentalform({{Auth::user()->id}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Dental Test </b></button></a>
+                                                    </div>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientdentaldiv"></div>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -581,6 +605,10 @@ $profile_menu="0";
 
 
 @section('scripts')
+
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
         function ajaxloadblooddetails(pid,date) {
@@ -709,6 +737,31 @@ $profile_menu="0";
 
         }
 
+        function ajaxloaddentaldetails(pid,date) {
+
+            $("#patientdentaldiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/dentaltests';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientdentaldiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientdentaldiv").html("");
+            }
+
+        }
+
         function ajaxloadbloodform(hid,pid) {
             $("#patientblooddiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
@@ -720,6 +773,7 @@ $profile_menu="0";
                     data: {"id": pid, "status": status},
                     success: function (data) {
                         $("#patientblooddiv").html(data);
+                        $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
                     }
                 });
         }
@@ -735,6 +789,7 @@ $profile_menu="0";
                 data: {"id": pid, "status": status},
                 success: function (data) {
                     $("#patientmotiondiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
                 }
             });
         }
@@ -750,6 +805,7 @@ $profile_menu="0";
                 data: {"id": pid, "status": status},
                 success: function (data) {
                     $("#patienturinediv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
                 }
             });
         }
@@ -765,12 +821,13 @@ $profile_menu="0";
                 data: {"id": pid, "status": status},
                 success: function (data) {
                     $("#patientultradiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
                 }
             });
         }
 
         function ajaxloadscanform(hid,pid) {
-            $("#patientblooddiv").html("LOADING...");
+            $("#patientscandiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
             var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-scantests';
@@ -780,6 +837,23 @@ $profile_menu="0";
                 data: {"id": pid, "status": status},
                 success: function (data) {
                     $("#patientscandiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                }
+            });
+        }
+
+        function ajaxloaddentalform(hid,pid) {
+            $("#patientdentaldiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-dentaltests';
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientdentaldiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
                 }
             });
         }
@@ -794,5 +868,26 @@ $profile_menu="0";
             setTimeout(function(){newWin.close();},10);
         }
 
+
+        function UpdateTestDates(dateValue) {
+
+            for (var i = 0; i < $('input#TestDates').length; i++) {
+                $('input#TestDates').val(dateValue);
+            }
+
+        }
+
     </script>
+
+
+
+
+    <script>
+        /*
+        $( function() {
+            $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+        } );
+        */
+    </script>
+
 @stop

@@ -514,7 +514,10 @@ class PatientProfileMapper
 
         foreach($examinationDetails as $examination)
         {
-            $patientDentalVM->setPatientDentalTests($examination);
+            if(count($examination)==3)
+            {
+                $patientDentalVM->setPatientDentalTests($examination);
+            }
         }
 
         //$userName = Session::get('DisplayName');

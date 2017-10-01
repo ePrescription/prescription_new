@@ -27,13 +27,20 @@
 @if(count($patientUrineTests)>0)
 
 <form action="{{URL::to('/')}}/fronthospital/rest/api/urinetests" role="form" method="POST" class="form-horizontal ">
+<div class="form-group">
+<label class="col-sm-4 control-label">Test Date</label>
+<div class="col-sm-6">
+<input type="text" class="form-control" name="examinationDate" id="TestDate" value="{{date('Y-m-d')}}" required="required" onchange="javascript:UpdateTestDates(this.value);" />
+@if ($errors->has('examinationDate'))<p class="error" style="">{!!$errors->first('examinationDate')!!}</p>@endif
+</div>
+</div>
 <?php $i=0; ?>
 @foreach($patientUrineTests as $patientUrineTestsValue)
-<div class="form-group">
-<label class="col-sm-4 control-label">{{$patientUrineTestsValue->examination_name}}</label>
-<div class="col-sm-6">
+<div class="col-sm-6 form-group">
+<label class="col-sm-8 control-label">{{$patientUrineTestsValue->examination_name}}</label>
+<div class="col-sm-4">
 <input type="hidden" class="form-control" name="urineExaminations[{{$i}}][examinationId]" value="{{$patientUrineTestsValue->id}}" required="required" />
-<input type="hidden" class="form-control" name="urineExaminations[{{$i}}][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+<input type="hidden" class="form-control" name="urineExaminations[{{$i}}][examinationDate]" id="TestDates" value="{{date('Y-m-d')}}" required="required" />
 <div class="radio radio-info radio-inline">
 <input type="radio" id="urineExaminations{{$patientUrineTestsValue->id}}1" value="1" name="urineExaminations[{{$i}}][isValueSet]">
 <label for="urineExaminations{{$patientUrineTestsValue->id}}1"> Yes </label>
@@ -46,7 +53,7 @@
 </div>
 <?php $i++; ?>
 @endforeach
-<div class="form-group">
+<div class="col-sm-12 form-group">
 <div class="col-sm-4"></div>
 <div class="col-sm-6">
 <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />

@@ -4922,6 +4922,60 @@ class DoctorController extends Controller
 
     }
 
+
+    /**
+     * Save patient dental tests
+     * @param $dentalRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientDentalTests(Request $dentalRequest)
+    {
+        //dd($dentalRequest);
+        $patientDentalVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($personalHistoryRequest->all());
+            $patientDentalVM = PatientProfileMapper::setPatientDentalExamination($dentalRequest);
+            //dd($patientMotionVM);
+            $status = $this->hospitalService->savePatientDentalTests($patientDentalVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$dentalRequest->patientId.'/lab-details#dental')->with('success',trans('messages.'.ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_SUCCESS));
+
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$dentalRequest->patientId.'/lab-details#dental')->with('success',trans('messages.'.ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR));
+
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$dentalRequest->patientId.'/add-lab-dental');
+    }
+
     /**
      * Save patient scan details
      * @param $scanRequest
@@ -5792,13 +5846,17 @@ class DoctorController extends Controller
     {
         $patientDetails = null;
         $dentalExaminations = null;
-
+        $dentalExaminationCategory = null;
         try
         {
 
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $dentalExaminations = HospitalServiceFacade::getAllDentalItems();
 
+            foreach($dentalExaminations as $dentalExamination)
+            {
+                $dentalExaminationCategory[$dentalExamination->category_id] = $dentalExamination->category_name;
+            }
         }
         catch(HospitalException $hospitalExc)
         {
@@ -5816,7 +5874,8 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        //return view('portal.hospital-patient-medical-add-scan',compact('patientScans','patientDetails'));
+        return view('portal.hospital-patient-lab-add-dental',compact('dentalExaminationCategory','dentalExaminations','patientDetails','hid'));
+
     }
 
     public function AddPatientMedicalDrugByHospitalForFront($hid,$patientId)
@@ -6115,8 +6174,6 @@ class DoctorController extends Controller
 
     }
 
-
-
     /**
      * Get patient urine tests
      * @param $patientId, $patientSearchRequest
@@ -6348,6 +6405,59 @@ class DoctorController extends Controller
 
 
 
+    /**
+     * Get patient ultrasound tests
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientDentalTests($patientId, Request $patientSearchRequest)
+    {
+        $dentalTests = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $examinationDate = date('Y-m-d', strtotime($examinationDate));
+            $dentalTests = $this->hospitalService->getPatientDentalTests($patientId, $examinationDate);
+            //dd($familyIllness);
+
+            if(!is_null($dentalTests) && !empty($dentalTests))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_DENTAL_TESTS_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($dentalTests));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_DENTAL_TESTS_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($dentalTests);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DENTAL_TESTS_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //dd($dentalTests);
+        //return $responseJson;
+        return view('portal.hospital-patient-lab-dental-tests-detail',compact('dentalTests'));
+    }
+
     /* DOCTOR VIEW & EDIT PATIENTS */
 
 
@@ -6499,6 +6609,7 @@ class DoctorController extends Controller
         {
             $dashboardDetails = $this->hospitalService->getDashboardDetails($hospitalId, $selectedDate);
 
+
             if(!is_null($dashboardDetails) && !empty($dashboardDetails))
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_SUCCESS));
@@ -6524,6 +6635,7 @@ class DoctorController extends Controller
             $responseJson->sendErrorResponse($exc);
         }
 
+        //dd($dashboardDetails);
         return view('portal.hospital-dashboard',compact('dashboardDetails'));
         //return $responseJson;
     }
