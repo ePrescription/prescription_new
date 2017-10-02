@@ -1031,6 +1031,58 @@ class DoctorApiController extends Controller
     }
 
     /**
+     * Get patient xray tests
+     * @param $patientId, $xrayDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientXrayTests($patientId, Request $patientSearchRequest)
+    {
+        $patientXrayTests = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $examinationDate = date('Y-m-d', strtotime($examinationDate));
+            $patientXrayTests = $this->hospitalService->getPatientXrayTests($patientId, $examinationDate);
+            //dd($familyIllness);
+
+            if(!is_null($patientXrayTests) && !empty($patientXrayTests))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($patientXrayTests));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_XRAY_TESTS_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($patientXrayTests);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+
+    /**
      * Get all family illness
      * @param none
      * @throws $hospitalException
@@ -1318,6 +1370,14 @@ class DoctorApiController extends Controller
         return $responseJson;
     }
 
+    /**
+     * Get all dental examinations
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
     public function getAllDentalItems()
     {
         $dentalExaminations = null;
@@ -1357,6 +1417,55 @@ class DoctorApiController extends Controller
 
         return $responseJson;
     }
+
+    /**
+     * Get all xray examinations
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllXRayItems()
+    {
+        $xrayExaminations = null;
+        $responseJson = null;
+        //dd('Inside doctor api controller');
+
+        try
+        {
+            //dd($this->hospitalService);
+            $xrayExaminations = $this->hospitalService->getAllXRayItems();
+            //dd($familyIllness);
+
+            if(!is_null($xrayExaminations) && !empty($xrayExaminations))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::XRAY_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($xrayExaminations));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_XRAY_LIST_FOUND));
+            }
+
+            $responseJson->setObj($xrayExaminations);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::XRAY_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
 
     /**
      * Get patient examination dates
@@ -2264,6 +2373,53 @@ class DoctorApiController extends Controller
         {
             //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Save patient XRAY tests
+     * @param $xrayRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientXRayTests(Request $xrayRequest)
+    {
+        $patientXRayVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($personalHistoryRequest->all());
+            $patientXRayVM = PatientProfileMapper::setPatientXRayExamination($xrayRequest);
+            //dd($patientMotionVM);
+            $status = $this->hospitalService->savePatientXRayTests($patientXRayVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 

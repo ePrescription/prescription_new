@@ -252,6 +252,17 @@
         "800" => "Successfully retrieved patient dental examination details",
         "801" => "No dental examination details available for the patient",
 
+        "802" => "Unable to retrieve XRAY tests",
+        "803" => "Successfully retrieved XRAY tests",
+        "804" => "No XRAY tests available",
+
+        "805" => "Unable to retrieve patient XRAY examination details",
+        "806" => "Successfully retrieved patient XRAY examination details",
+        "807" => "No XRAY examination details available for the patient",
+
+        "808" => "Unable to save patient xray examination details",
+        "809" => "Successfully saved patient xray examination details",
+
         "851" => "Unable to retrieve specialties list",
         "852" => "Successfully retrieved specialties list",
         "853" => "No specialties list available",

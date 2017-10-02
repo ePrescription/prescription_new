@@ -304,7 +304,7 @@ $profile_menu="0";
                                                                         <h4 class="m-t-0 m-b-30">Total Fee</h4>
                                                                         <div class="col-sm-4">Total Fee</div>
                                                                         <div class="col-sm-6">
-                                                                            <input type="number" name="total_fees" class="form-control totalprice" value="0" readonly />
+                                                                            <input type="number" name="totalFees" class="form-control totalprice" value="0" readonly />
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">

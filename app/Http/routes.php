@@ -476,6 +476,9 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/{patientId}/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorApiController@getPatientDentalTests'));
         Route::post('rest/api/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorApiController@savePatientDentalTests'));
 
+        Route::get('rest/api/{patientId}/xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorApiController@getPatientXrayTests'));
+        Route::post('rest/api/xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorApiController@savePatientXRayTests'));
+
         Route::get('rest/api/familyillness', array('as' => 'doctor.allfamilyillness', 'uses' => 'DoctorApiController@getAllFamilyIllness'));
         Route::get('rest/api/pastillness', array('as' => 'doctor.allpastillness', 'uses' => 'DoctorApiController@getAllPastIllness'));
         Route::get('rest/api/generalexaminations', array('as' => 'doctor.allgeneralexaminations', 'uses' => 'DoctorApiController@getAllGeneralExaminations'));
@@ -483,6 +486,7 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/pregnancy', array('as' => 'doctor.allpregnancydetails', 'uses' => 'DoctorApiController@getAllPregnancy'));
         Route::get('rest/api/scans', array('as' => 'doctor.allscandetails', 'uses' => 'DoctorApiController@getAllScans'));
         Route::get('rest/api/dentaltests', array('as' => 'doctor.alldentaltests', 'uses' => 'DoctorApiController@getAllDentalItems'));
+        Route::get('rest/api/xraytests', array('as' => 'doctor.allxraytests', 'uses' => 'DoctorApiController@getAllXRayItems'));
 
 
     });

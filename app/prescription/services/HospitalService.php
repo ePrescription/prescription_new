@@ -1735,6 +1735,34 @@ class HospitalService {
     }
 
     /**
+     * Get patient xray tests
+     * @param $patientId, $xrayDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientXrayTests($patientId, $xrayDate)
+    {
+        $patientXrayTests = null;
+
+        try
+        {
+            $patientXrayTests = $this->hospitalRepo->getPatientXrayTests($patientId, $xrayDate);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_XRAY_TESTS_DETAILS_ERROR, $exc);
+        }
+
+        return $patientXrayTests;
+    }
+
+    /**
      * Get all family illness
      * @param none
      * @throws $hospitalException
@@ -1928,6 +1956,34 @@ class HospitalService {
         }
 
         return $dentalExaminations;
+    }
+
+    /**
+     * Get all XRAY examinations
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllXRayItems()
+    {
+        $xrayExaminations = null;
+
+        try
+        {
+            $xrayExaminations = $this->hospitalRepo->getAllXRayItems();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::XRAY_LIST_ERROR, $exc);
+        }
+
+        return $xrayExaminations;
     }
 
     /**
@@ -2654,6 +2710,40 @@ class HospitalService {
 
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save patient XRAY tests
+     * @param $patientXRayVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientXRayTests($patientXRayVM)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($patientXRayVM, &$status)
+            {
+                $status = $this->hospitalRepo->savePatientXRayTests($patientXRayVM);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR, $ex);
         }
 
         return $status;

@@ -24,6 +24,7 @@ use App\Http\ViewModels\PatientPregnancyViewModel;
 use App\Http\ViewModels\PatientScanViewModel;
 use App\Http\ViewModels\PatientSymptomsViewModel;
 use App\Http\ViewModels\PatientUrineExaminationViewModel;
+use App\Http\ViewModels\PatientXRayViewModel;
 
 interface HospitalInterface {
     public function getHospitals();
@@ -136,6 +137,9 @@ interface HospitalInterface {
     public function getPatientDentalTests($patientId, $dentalDate);
     public function savePatientDentalTests(PatientDentalViewModel $patientDentalVM);
 
+    public function getPatientXrayTests($patientId, $dentalDate);
+    public function savePatientXRayTests(PatientXRayViewModel $patientXRayVM);
+
     public function getAllFamilyIllness();
     public function getAllPastIllness();
     public function getAllGeneralExaminations();
@@ -143,6 +147,7 @@ interface HospitalInterface {
     public function getAllPregnancy();
     public function getAllScans();
     public function getAllDentalItems();
+    public function getAllXRayItems();
 
     public function getPatientLabTests($hospitalId, $patientId, $feeStatus = null);
     public function getLabTestDetailsByPatient($labTestType, $labTestId);

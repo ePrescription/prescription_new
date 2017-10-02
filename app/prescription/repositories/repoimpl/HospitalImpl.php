@@ -27,6 +27,7 @@ use App\Http\ViewModels\PatientSymptomsViewModel;
 use App\Http\ViewModels\PatientUltraSoundExaminationViewModel;
 use App\Http\ViewModels\PatientUrineExaminationViewModel;
 
+use App\Http\ViewModels\PatientXRayViewModel;
 use App\prescription\model\entities\Doctor;
 use App\prescription\model\entities\DoctorAppointments;
 use App\prescription\model\entities\DoctorReferral;
@@ -42,6 +43,8 @@ use App\prescription\model\entities\PatientLabTests;
 use App\prescription\model\entities\PatientPrescription;
 use App\prescription\model\entities\PatientSurgeries;
 use App\prescription\model\entities\PatientSymptoms;
+use App\prescription\model\entities\PatientXRayExamination;
+use App\prescription\model\entities\PatientXRayExaminationItems;
 use App\prescription\model\entities\PrescriptionDetails;
 use App\prescription\repositories\repointerface\HospitalInterface;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
@@ -3478,7 +3481,7 @@ class HospitalImpl implements HospitalInterface{
 
     /**
      * Get patient dental tests
-     * @param $patientId, $ultraSoundDate
+     * @param $patientId, $dentalDate
      * @throws $hospitalException
      * @return array | null
      * @author Baskar
@@ -3535,6 +3538,59 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $dentalTests;
+    }
+
+    /**
+     * Get patient xray tests
+     * @param $patientId, $xrayDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientXrayTests($patientId, $xrayDate)
+    {
+        $patientXrayTests = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $query = DB::table('patient_xray_examination_item as pxei')->select('xe.id as examinationId',
+                'xe.examination_name as examinationName',
+                'pxei.id as patientExaminationId', 'pxe.examination_date as examinationDate');
+            $query->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+            $query->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+            $query->where('pxe.patient_id', '=', $patientId);
+            $query->where('pxe.examination_date', '=', $xrayDate);
+
+            //dd($query->toSql());
+
+            $patientXrayTests = $query->get();
+            //dd($patientXrayTests);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_XRAY_TESTS_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_XRAY_TESTS_DETAILS_ERROR, $exc);
+        }
+
+        return $patientXrayTests;
     }
 
     /**
@@ -3767,6 +3823,39 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $dentalExaminations;
+    }
+
+    /**
+     * Get all XRAY examinations
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllXRayItems()
+    {
+        $xrayExaminations = null;
+
+        try
+        {
+            $query = DB::table('xray_examination as xe')->where('xe.status', '=', 1);
+            $query->select('xe.id', 'xe.examination_name', 'xe.category');
+
+            $xrayExaminations = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::XRAY_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::XRAY_LIST_ERROR, $exc);
+        }
+
+        return $xrayExaminations;
     }
 
     /**
@@ -6052,6 +6141,104 @@ class HospitalImpl implements HospitalInterface{
             //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save patient XRAY tests
+     * @param $patientXRayVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientXRayTests(PatientXRayViewModel $patientXRayVM)
+    {
+        $status = true;
+        $patientExaminationDate = null;
+        //$patientXRayExamination = null;
+
+        try
+        {
+            //dd('test');
+            $patientId = $patientXRayVM->getPatientId();
+            $doctorId = $patientXRayVM->getDoctorId();
+            //dd($doctorId);
+            $hospitalId = $patientXRayVM->getHospitalId();
+            $xrayExaminations = $patientXRayVM->getPatientXRayTests();
+            $examinationDate = $patientXRayVM->getExaminationDate();
+            //dd($xrayExaminations);
+
+            $patientUser = User::find($patientId);
+
+            if (!is_null($patientUser))
+            {
+                //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                //dd($patientDentalVM->getExaminationDate());
+                $examinationDt = property_exists($patientXRayVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
+                //dd($examinationDt);
+
+                if(!is_null($examinationDate))
+                {
+                    $patientExaminationDate = date('Y-m-d', strtotime($examinationDate));
+                }
+                else
+                {
+                    $patientExaminationDate = null;
+                }
+
+                //dd($patientExaminationDate);
+
+                $xrayExamination = new PatientXRayExamination();
+                $xrayExamination->patient_id = $patientId;
+                $xrayExamination->hospital_id = $hospitalId;
+                $xrayExamination->doctor_id = $patientXRayVM->getDoctorId();
+                $xrayExamination->examination_date = $patientExaminationDate;
+                $xrayExamination->created_by = $patientXRayVM->getCreatedBy();
+                $xrayExamination->modified_by = $patientXRayVM->getUpdatedBy();
+                $xrayExamination->created_at = $patientXRayVM->getCreatedAt();
+                $xrayExamination->updated_at = $patientXRayVM->getUpdatedAt();
+                $xrayExamination->save();
+
+                foreach($xrayExaminations as $examination)
+                {
+                    //dd($examination);
+                    $xrayExaminationItems = new PatientXRayExaminationItems();
+                    $xrayExaminationItems->xray_examination_id = $examination->xrayExaminationId;
+                    //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
+                    $xrayExaminationItems->xray_examination_name = property_exists($examination->xrayExaminationName, 'xrayExaminationName') ? $examination->xrayExaminationName : null;
+                    //$dentalExaminationItems->dental_examination_name = $examination->dentalExaminationName;
+                    $xrayExaminationItems->created_by = $patientXRayVM->getCreatedBy();
+                    $xrayExaminationItems->modified_by = $patientXRayVM->getUpdatedBy();
+                    $xrayExaminationItems->created_at = $patientXRayVM->getCreatedAt();
+                    $xrayExaminationItems->updated_at = $patientXRayVM->getUpdatedAt();
+                    $xrayExamination->xrayexaminationitems()->save($xrayExaminationItems);
+                }
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR, $exc);
         }
 
         return $status;

@@ -5730,6 +5730,7 @@ class DoctorController extends Controller
                 );*/
 
             $labTestsPayments = $labReceiptRequest;
+            //dd($labTestsPayments);
             $labReceiptsVM = PatientProfileMapper::setPatientLabReceipts($labTestsPayments);
             //dd($labReceiptsVM);
             $status = $this->hospitalService->saveLabReceiptDetailsForPatient($labReceiptsVM);
@@ -5751,14 +5752,14 @@ class DoctorController extends Controller
         }
         catch(HospitalException $hospitalExc)
         {
-            dd($hospitalExc);
+            //dd($hospitalExc);
             $errorMsg = $hospitalExc->getMessageForCode();
             $msg = AppendMessage::appendMessage($hospitalExc);
             Log::error($msg);
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);

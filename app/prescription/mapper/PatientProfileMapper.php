@@ -23,6 +23,7 @@ use App\Http\ViewModels\PatientPregnancyViewModel;
 use App\Http\ViewModels\PatientScanViewModel;
 use App\Http\ViewModels\PatientSymptomsViewModel;
 use App\Http\ViewModels\PatientUrineExaminationViewModel;
+use App\Http\ViewModels\PatientXRayViewModel;
 use Illuminate\Http\Request;
 use App\Http\Requests\FeeReceiptRequest;
 use Session;
@@ -529,6 +530,40 @@ class PatientProfileMapper
         $patientDentalVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $patientDentalVM;
+    }
+
+    public static function setPatientXRayExamination(Request $examinationRequest)
+    {
+        $patientXRayVM = new PatientXRayViewModel();
+
+        $xRayObj = (object) $examinationRequest->all();
+        $patientXRayVM->setPatientId($xRayObj->patientId);
+        //$patientUltraSoundVM->setDoctorId($examinationObj->doctorId);
+        $patientXRayVM->setDoctorId(property_exists($xRayObj, 'doctorId') ? $xRayObj->doctorId : null);
+        $patientXRayVM->setHospitalId(property_exists($xRayObj, 'hospitalId') ? $xRayObj->hospitalId : null);
+        $patientXRayVM->setExaminationDate(property_exists($xRayObj, 'examinationDate') ? $xRayObj->examinationDate : null);
+        //$patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
+        $examinationDetails = $xRayObj->xrayExaminations;
+        //dd($candidateEmployments);
+
+        foreach($examinationDetails as $examination)
+        {
+            $patientXRayVM->setPatientXRayTests($examination);
+            /*if(count($examination)==3)
+            {
+                $patientDentalVM->setPatientDentalTests($examination);
+            }*/
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientXRayVM->setCreatedBy($userName);
+        $patientXRayVM->setUpdatedBy($userName);
+        $patientXRayVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientXRayVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientXRayVM;
     }
 
     public static function setReferralDoctor(Request $doctorReferralRequest)
