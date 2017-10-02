@@ -2043,6 +2043,34 @@ class HospitalService {
     }
 
     /**
+     * Get lab receipt details for the patient
+     * @param $patientId, $hospitalId, $feeReceiptId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientReceiptDetails($hospitalId, $patientId, $feeReceiptId)
+    {
+        $labReceiptDetails = null;
+
+        try
+        {
+            $labReceiptDetails = $this->hospitalRepo->getPatientReceiptDetails($hospitalId, $patientId, $feeReceiptId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $exc);
+        }
+
+        return $labReceiptDetails;
+    }
+
+    /**
      * Get lab test details to generate receipt
      * @param $patientId, $hospitalId, $generatedDate
      * @throws $hospitalException

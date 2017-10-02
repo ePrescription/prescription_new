@@ -289,4 +289,7 @@
         "868" => "Unable to save patient lab receipt details",
         "869" => "Successfully saved patient lab receipt details",
         "870" => "Unable to get patient lab receipts",
+
+        "871" => "Unable to retrieve the lab test receipt details for the patient",
+        "872" => "Successfully retrieved the lab test receipt details for the patient",
     ];

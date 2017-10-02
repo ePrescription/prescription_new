@@ -5624,6 +5624,52 @@ class DoctorController extends Controller
     }
 
     /**
+     * Get lab receipt details for the patient
+     * @param $patientId, $hospitalId, $receiptRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientReceiptDetails($hospitalId, $patientId, Request $receiptRequest)
+    {
+        $labReceiptDetails = null;
+        $feeReceiptId = null;
+        //dd($hospitalId);
+
+        try
+        {
+            if($receiptRequest->has('feereceipt'))
+            {
+                $feeReceiptId = $receiptRequest->get('feereceipt');
+            }
+
+            $labReceiptDetails = $this->hospitalService->getPatientReceiptDetails($hospitalId, $patientId, $feeReceiptId);
+            //dd($labReceiptDetails);
+            $patientDetails = $this->hospitalService->getPatientProfile($patientId);
+
+            //dd($labTestDetails);
+            //return view('portal.hospital-patient-receipt-details', compact('labTestDetails','patientDetails'));
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+    }
+
+    /**
      * Get lab test details to generate receipt
      * @param $patientId, $hospitalId, $generatedDate
      * @throws $hospitalException

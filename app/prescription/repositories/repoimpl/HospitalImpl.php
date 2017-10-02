@@ -4097,6 +4097,175 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get lab receipt details for the patient
+     * @param $patientId, $hospitalId, $feeReceiptId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientReceiptDetails($hospitalId, $patientId, $feeReceiptId)
+    {
+        $labReceiptDetails = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+            //DB::connection()->enableQueryLog();
+
+            $bloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            $bloodExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pbe.fee_receipt_id');
+            $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
+            $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
+            $bloodExamQuery->where('pbe.fee_receipt_id', '=', $feeReceiptId);
+            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date',
+                    'pbe.fees');
+
+            //dd($bloodExamQuery->toSql());
+            $bloodExaminations = $bloodExamQuery->get();
+
+            $motionExamQuery = DB::table('patient_motion_examination as pme');
+            $motionExamQuery->join('motion_examination as me', 'me.id', '=', 'pme.motion_examination_id');
+            $motionExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pme.fee_receipt_id');
+            $motionExamQuery->where('pme.patient_id', '=', $patientId);
+            $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
+            $motionExamQuery->where('pme.fee_receipt_id', '=', $feeReceiptId);
+            $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'me.examination_name', 'pme.examination_date',
+                'pme.fees');
+
+            //dd($bloodExamQuery->toSql());
+            $motionExaminations = $motionExamQuery->get();
+            //$query = DB::getQueryLog();
+            //dd($query);
+            //dd($bloodExaminations);
+
+            $urineExamQuery = DB::table('patient_urine_examination as pue');
+            $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'pue.urine_examination_id');
+            $urineExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pue.fee_receipt_id');
+            $urineExamQuery->where('pue.patient_id', '=', $patientId);
+            $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
+            $urineExamQuery->where('pue.fee_receipt_id', '=', $feeReceiptId);
+            $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date',
+                'pue.fees');
+
+            //dd($bloodExamQuery->toSql());
+            $urineExaminations = $urineExamQuery->get();
+
+            $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus');
+            $ultraSoundExamQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
+            $ultraSoundExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pus.fee_receipt_id');
+            $ultraSoundExamQuery->where('pus.patient_id', '=', $patientId);
+            $ultraSoundExamQuery->where('pus.hospital_id', '=', $hospitalId);
+            $ultraSoundExamQuery->where('pus.fee_receipt_id', '=', $feeReceiptId);
+            $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date',
+                'pus.fees');
+
+            //dd($bloodExamQuery->toSql());
+            $ultraSoundExaminations = $ultraSoundExamQuery->get();
+
+            $scanExamQuery = DB::table('patient_scan as ps');
+            $scanExamQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
+            $scanExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'ps.fee_receipt_id');
+            $scanExamQuery->where('ps.patient_id', '=', $patientId);
+            $scanExamQuery->where('ps.hospital_id', '=', $hospitalId);
+            $scanExamQuery->where('ps.fee_receipt_id', '=', $feeReceiptId);
+            $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 's.scan_name', 'ps.scan_date',
+                'ps.fees');
+
+            //dd($bloodExamQuery->toSql());
+            $scanExaminations = $scanExamQuery->get();
+
+            $dentalExamQuery = DB::table('patient_dental_examination as pde');
+            $dentalExamQuery->join('patient_dental_examination_item as pdei', 'pdei.patient_dental_examination_id', '=', 'pde.id');
+            $dentalExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pde.fee_receipt_id');
+            $dentalExamQuery->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
+            $dentalExamQuery->where('pde.patient_id', '=', $patientId);
+            $dentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            $dentalExamQuery->where('pde.fee_receipt_id', '=', $feeReceiptId);
+            $dentalExamQuery->select('pde.id', 'pde.patient_id', 'pde.hospital_id', 'dei.examination_name', 'pde.examination_date',
+                'pdei.fees');
+
+            //dd($bloodExamQuery->toSql());
+            $dentalExaminations = $dentalExamQuery->get();
+
+            $xrayExamQuery = DB::table('patient_xray_examination as pxe');
+            $xrayExamQuery->join('patient_xray_examination_item as pxei', 'pxei.patient_xray_examination_id', '=', 'pxe.id');
+            $xrayExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pxe.fee_receipt_id');
+            $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+            $xrayExamQuery->where('pxe.patient_id', '=', $patientId);
+            $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
+            $xrayExamQuery->where('pxe.fee_receipt_id', '=', $feeReceiptId);
+            $xrayExamQuery->select('pxe.id', 'pxe.patient_id', 'pxe.hospital_id', 'xe.examination_name', 'pxe.examination_date',
+                'pxei.fees');
+
+            //dd($bloodExamQuery->toSql());
+            $xrayExaminations = $xrayExamQuery->get();
+
+            $labReceiptQuery = DB::table('lab_fee_receipt as lfr')->where('lfr.patient_id', '=', $patientId);
+            $labReceiptQuery->where('lfr.hospital_id', '=', $hospitalId);
+            $labReceiptQuery->where('lfr.id', '=', $feeReceiptId);
+            $labReceiptQuery->select('lfr.id', 'lfr.patient_id', 'lfr.hospital_id', 'lfr.lab_receipt_date', 'lfr.total_fees');
+
+            $labTotalFees = $labReceiptQuery->get();
+
+            //DB::connection()->enableQueryLog();
+
+            //$query = DB::getQueryLog();
+            //dd($query);
+            //dd($scanExaminations);
+
+            $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
+                'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
+            $patientQuery->where('p.patient_id', '=', $patientId);
+            $patientDetails = $patientQuery->first();
+
+            $hospitalQuery = DB::table('hospital as h')->select('h.id', 'h.hospital_id', 'h.hospital_name', 'h.address', 'c.city_name',
+                'co.name');
+            $hospitalQuery->join('cities as c', 'c.id', '=', 'h.city');
+            $hospitalQuery->join('countries as co', 'co.id', '=', 'h.country');
+            $hospitalQuery->where('h.hospital_id', '=', $hospitalId);
+            $hospitalDetails = $hospitalQuery->first();
+
+            $labReceiptDetails['patientDetails'] = $patientDetails;
+            $labReceiptDetails['hospitalDetails'] = $hospitalDetails;
+            $labReceiptDetails['bloodTests'] = $bloodExaminations;
+            $labReceiptDetails['urineTests'] = $urineExaminations;
+            $labReceiptDetails['motionTests'] = $motionExaminations;
+            $labReceiptDetails['scanTests'] = $scanExaminations;
+            $labReceiptDetails['ultraSoundTests'] = $ultraSoundExaminations;
+            $labReceiptDetails['dentalTests'] = $dentalExaminations;
+            $labReceiptDetails['xrayTests'] = $xrayExaminations;
+            $labReceiptDetails['labTotalFees'] = $labTotalFees;
+
+            //dd($patientLabTests);
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $exc);
+        }
+
+        return $labReceiptDetails;
+    }
+
+    /**
      * Get lab test details to generate receipt
      * @param $patientId, $hospitalId, $generatedDate
      * @throws $hospitalException
@@ -4646,6 +4815,22 @@ class HospitalImpl implements HospitalInterface{
                 'dei.id as examination_id', 'dei.examination_name', 'pde.examination_date');
             //dd($latestDentalExamQuery->toSql());
             $dentalExaminations = $latestDentalExamQuery->get();
+
+            $latestXrayExamQuery = DB::table('patient_xray_examination_item as pxei');
+            $latestXrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+            $latestXrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+            $latestXrayExamQuery->where('pxe.examination_date', function($query) use($patientId){
+                $query->select(DB::raw('MAX(pxe.examination_date)'));
+                $query->from('patient_xray_examination as pxe')->where('pxe.patient_id', '=', $patientId);
+            });
+            $latestXrayExamQuery->where('pxe.patient_id', '=', $patientId);
+            //$latestDentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
+            $latestXrayExamQuery->select('pxei.id', 'pxe.patient_id',
+                'pxe.hospital_id', 'xe.id as examination_id', 'xe.examination_name', 'xe.category',
+                'pxe.examination_date');
+            //dd($latestDentalExamQuery->toSql());
+            $xrayExaminations = $latestXrayExamQuery->get();
             //dd($dentalExaminations);
 
             /*$drugQuery = DB::table('patient_drug_history as pdh')->select('pdh.id as id', 'pdh.patient_id as patientId',
@@ -4719,6 +4904,10 @@ class HospitalImpl implements HospitalInterface{
             $dentalDatesQuery = DB::table('patient_dental_examination as pde')->where('pde.patient_id', '=', $patientId);
             $dentalDatesQuery->select('pde.examination_date')->orderBy('pde.examination_date', 'DESC');
             $dentalTestDates = $dentalDatesQuery->distinct()->get();
+
+            $xrayDatesQuery = DB::table('patient_xray_examination as pxe')->where('pxe.patient_id', '=', $patientId);
+            $xrayDatesQuery->select('pxe.examination_date')->orderBy('pxe.examination_date', 'DESC');
+            $xrayTestDates = $xrayDatesQuery->distinct()->get();
             //$motionTestDates = $motionDatesQuery->distinct()->take(2147483647)->skip(1)->get();
 
             $drugDatesQuery = DB::table('patient_drug_history as pdh')->where('pdh.patient_id', '=', $patientId);
@@ -4757,6 +4946,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates['recentDrugHistory'] = $latestDrugHistory;
             $examinationDates['recentSurgeryHistory'] = $latestSurgeryHistory;
             $examinationDates['dentalExaminations'] = $dentalExaminations;
+            $examinationDates['xrayExaminations'] = $xrayExaminations;
 
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;
             $examinationDates["pastIllnessDates"] = $pastIllnessDates;
@@ -4772,6 +4962,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["urineTestDates"] = $urineTestDates;
             $examinationDates["motionTestDates"] = $motionTestDates;
             $examinationDates["dentalTestDates"] = $dentalTestDates;
+            $examinationDates["xrayTestDates"] = $xrayTestDates;
 
             //dd($examinationDates);
 
