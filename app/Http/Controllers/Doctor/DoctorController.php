@@ -5775,6 +5775,17 @@ class DoctorController extends Controller
                     )
                 );*/
 
+            /*$labTestsPayments = array(
+                'patientId' => 57,
+                'hospitalId' => 1,
+                'labTests' => array('xrayTests' =>
+                    array(
+                        array('id' => 1, 'item_id' => 1, 'fees' => 8000),
+                        array('id' => 1, 'item_id' => 2, 'fees' => 9000)
+                        )
+                    )
+                );*/
+
             $labTestsPayments = $labReceiptRequest;
             //dd($labTestsPayments);
             $labReceiptsVM = PatientProfileMapper::setPatientLabReceipts($labTestsPayments);

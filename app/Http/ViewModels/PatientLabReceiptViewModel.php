@@ -22,6 +22,7 @@ class PatientLabReceiptViewModel
     private $scanTests;
     private $ultraSoundTests;
     private $dentalTests;
+    private $xrayTests;
 
     private $createdBy;
     private $updatedBy;
@@ -212,6 +213,22 @@ class PatientLabReceiptViewModel
     public function setDentalTests($dentalTests)
     {
         $this->dentalTests = $dentalTests;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getXrayTests()
+    {
+        return $this->xrayTests;
+    }
+
+    /**
+     * @param mixed $xrayTests
+     */
+    public function setXrayTests($xrayTests)
+    {
+        $this->xrayTests = $xrayTests;
     }
 
     /**

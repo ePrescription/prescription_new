@@ -622,6 +622,10 @@ class PatientProfileMapper
         {
             $labReceiptsVM->setDentalTests($labTests['dentalTests']);
         }
+        if(array_key_exists('xrayTests', $labTests))
+        {
+            $labReceiptsVM->setXrayTests($labTests['xrayTests']);
+        }
 
         $userName = 'Admin';
 

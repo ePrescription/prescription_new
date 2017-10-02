@@ -4419,6 +4419,27 @@ class HospitalImpl implements HospitalInterface{
             //dd($ultraSoundExamQuery->toSql());
             $dentalExaminations = $dentalExamQuery->get();
 
+            $xrayExamQuery = DB::table('patient_xray_examination_item as pxei');
+            $xrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+            $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+            $xrayExamQuery->where('pxe.patient_id', '=', $patientId);
+            $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
+            //$dentalExamQuery->where('pus.is_value_set', '=', 1);
+            $xrayExamQuery->where(function($query){
+                $query->where('pxei.is_fees_paid', '=', 0);
+                $query->orWhereNull('pxei.is_fees_paid');
+            });
+            //$ultraSoundExamQuery->where('pus.is_fees_paid', '=', 0);
+            if(!is_null($receiptDate))
+            {
+                $xrayExamQuery->whereDate('pxe.created_at', '=', $receiptDate);
+            }
+            $xrayExamQuery->select('pxe.id as examination_id', 'pxe.patient_id', 'pxe.hospital_id', 'xe.examination_name',
+                'pxei.id as examination_item_id', 'pde.examination_date');
+
+            //dd($ultraSoundExamQuery->toSql());
+            $xrayExaminations = $xrayExamQuery->get();
+
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
                 'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
             $patientQuery->where('p.patient_id', '=', $patientId);
@@ -4439,6 +4460,7 @@ class HospitalImpl implements HospitalInterface{
             $patientLabTests['scanTests'] = $scanExaminations;
             $patientLabTests['ultraSoundTests'] = $ultraSoundExaminations;
             $patientLabTests['dentalTests'] = $dentalExaminations;
+            $patientLabTests['xrayTests'] = $xrayExaminations;
 
             //dd($patientLabTests);
 
@@ -6549,6 +6571,7 @@ class HospitalImpl implements HospitalInterface{
             $scanTests = $labReceiptsVM->getScanTests();
             $ultraSoundTests = $labReceiptsVM->getUltraSoundTests();
             $dentalTests = $labReceiptsVM->getDentalTests();
+            $xrayTests = $labReceiptsVM->getXrayTests();
 
             //dd($dentalTests[0]['id']);
 
@@ -6649,6 +6672,34 @@ class HospitalImpl implements HospitalInterface{
                         $query->update($updateValues);
                     }
                 }
+
+                if(!is_null($xrayTests) && !empty($xrayTests))
+                {
+                    //dd($dentalTests);
+                    $examinationId = $xrayTests[0]['id'];
+
+                    $xrayExamination = PatientXRayExamination::where('id', '=', $examinationId)->first();
+                    //dd($dentalExamination);
+
+                    if(!is_null($xrayExamination))
+                    {
+                        $xrayExamination->fee_receipt_id = $labFeeReceipt->id;
+                        $xrayExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                        //dd($dentalExamination);
+                        $xrayExamination->save();
+                    }
+                    //dd($dentalExamination);
+
+                    foreach($xrayTests as $xrayTest)
+                    {
+                        $updateValues = array('pxei.fees' => $xrayTest['fees'], 'pxei.is_fees_paid' => 1,
+                            'pxei.created_at' => $labReceiptsVM->getCreatedAt(), 'pxei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                        $query = DB::table('patient_xray_examination_item as pxei')->where('pxei.id', '=', $xrayTest['item_id']);
+                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                        $query->update($updateValues);
+                    }
+                }
             }
             //dd($bloodTests);
 
@@ -6673,7 +6724,6 @@ class HospitalImpl implements HospitalInterface{
 
         return $status;
     }
-
 
     private function saveLabFeeReceipt(PatientLabReceiptViewModel $labReceiptsVM)
     {
