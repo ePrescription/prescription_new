@@ -304,7 +304,7 @@ $profile_menu="0";
                                                                         <h4 class="m-t-0 m-b-30">Total Fee</h4>
                                                                         <div class="col-sm-4">Total Fee</div>
                                                                         <div class="col-sm-6">
-                                                                            <input type="number" name="sum" class="form-control totalprice" value="0" disabled />
+                                                                            <input type="number" name="total_fees" class="form-control totalprice" value="0" readonly />
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
@@ -312,7 +312,7 @@ $profile_menu="0";
                                                                         <div class="col-sm-6">
                                                                             <input type="hidden" class="form-control" name="patientId" value="{{$labTestDetails['patientDetails']->patient_id}}" required="required" />
                                                                             <input type="hidden" class="form-control" name="hospitalId" value="{{$labTestDetails['hospitalDetails']->hospital_id}}" required="required" />
-                                                                            <input style="float:left;" type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success" onclick="javascript:window.print();"/>
+                                                                            <input style="float:left;" type="submit" name="addreceipt" value="Save Receipt" class="btn btn-success" onclickX="javascript:window.print();"/>
 
 
                                                                             <div style="float:left;margin:0px 20px;">

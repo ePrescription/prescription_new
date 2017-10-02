@@ -6334,7 +6334,7 @@ class HospitalImpl implements HospitalInterface{
             $query = DB::table('lab_fee_receipt as lfr')->join('patient as p', 'p.patient_id', '=', 'lfr.patient_id');
             $query->where('lfr.patient_id', '=', $patientId);
             $query->where('lfr.hospital_id', '=', $hospitalId);
-            $query->orderBy('lft.created_at', 'DESC');
+            $query->orderBy('lfr.created_at', 'DESC');
 
             $query->select('lfr.id as receiptId', 'lfr.patient_id', 'p.name', 'p.pid', 'lfr.total_fees', 'lfr.lab_receipt_date');
 

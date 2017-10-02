@@ -31,7 +31,7 @@ $profile_menu="0";
 
             <div class="hidden">
                 <div class="page-header-title">
-                    <h4 class="page-title">Hospital Patients List</h4>
+                    <h4 class="page-title">Patient Receipts List</h4>
 
                 </div>
             </div>
@@ -41,14 +41,16 @@ $profile_menu="0";
                     <div class="row">
                         <div class="col-md-12">
 
-                           <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/addpatientwithappointment" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Appointment</b></button></a>
-<!--
-                           <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/addpatient" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Create New Patient</b></button></a>
--->
+                            <div style="float:right;margin: 10px;">
+                                <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
+                                    <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
+                                </a>
+                            </div>
+
                             <div class="panel panel-primary">
                                 <div class="panel-body">
 
-                                    <h4 class="m-b-30 m-t-0">Hospital Patients List</h4>
+                                    <h4 class="m-b-30 m-t-0">Patient Receipts List</h4>
 
                                     @if (session()->has('message'))
                                         <div class="col_full login-title">
@@ -74,42 +76,22 @@ $profile_menu="0";
                                             <th>ID</th>
                                             <th>Patient ID</th>
                                             <th>Name in Full</th>
-                                            <th>Mobile No</th>
-                                            <th>Age</th>
-                                            <th>Gender</th>
+                                            <th>Fee Amount</th>
+                                            <th>Receipt Date</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($patients as $patient)
+                                        @foreach($labReceipts as $labReceipt)
                                             <tr>
-                                                <td>{{$patient->id}}</td>
-                                                <td>{{$patient->pid}}</td>
-                                                <td>{{$patient->name}}</td>
-                                                <td>{{$patient->telephone}}</td>
-                                                <td>{{$patient->age}}</td>
-                                                <td>@if($patient->gender==1) Male @else Female @endif</td>
+                                                <td>{{$labReceipt->receiptId}}</td>
+                                                <td>{{$labReceipt->pid}}</td>
+                                                <td>{{$labReceipt->name}}</td>
+                                                <td>{{$labReceipt->total_fees}}</td>
+                                                <td>{{$labReceipt->lab_receipt_date}}</td>
                                                 <td>
 
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i> </a>
-                                                    &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/medical-details" title="Medical Profile"><i class="fa fa-medkit"></i></a>
-                                                    &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/prescription-details" title="Medical Prescription"><i class="fa fa-file-text-o"></i> </a>
-                                                    &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i> </a>
-
-                                                    <!--
-                                                    &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/edit" title="Edit Profile"><i class="fa fa-edit"></i></a>
-                                                    &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/addpatientwithappointment?patientId={{$patient->patient_id}}" title="Book Appointment"><i class="fa fa-stethoscope"></i> </a>
-                                                    -->
-                                                    &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/labreceipts" title="Lab Receipts"><i class="fa fa-money"></i> </a>
-                                                    &nbsp;&nbsp;
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/print" title="Print Medical Profile"><i class="fa fa-print"></i> </a>
-
+                                                    <a href="#{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$labReceipt->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-eye"></i> </a>
 
                                                 </td>
                                             </tr>

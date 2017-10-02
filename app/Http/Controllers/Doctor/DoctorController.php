@@ -5680,10 +5680,10 @@ class DoctorController extends Controller
         //dd('Hi');
         $labReceiptsVM = null;
         $status = true;
-
+        //dd($labReceiptRequest);
         try
         {
-            //dd($labReceiptRequest);
+
             /*
             $labTestsPayments = array(
                 'patientId' => 57,
@@ -5751,13 +5751,14 @@ class DoctorController extends Controller
         }
         catch(HospitalException $hospitalExc)
         {
+            dd($hospitalExc);
             $errorMsg = $hospitalExc->getMessageForCode();
             $msg = AppendMessage::appendMessage($hospitalExc);
             Log::error($msg);
         }
         catch(Exception $exc)
         {
-            ////dd($exc);
+            dd($exc);
             //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
@@ -5782,7 +5783,7 @@ class DoctorController extends Controller
         {
             $labReceipts = $this->hospitalService->getLabReceiptsByPatient($patientId, $hospitalId);
             //dd($labReceipts);
-            //return view('portal.ho-hospitalregister', compact('patientLabTests', 'patientLabTests'));
+            return view('portal.hospital-patient-receipts', compact('labReceipts'));
 
         }
         catch(HospitalException $hospitalExc)
