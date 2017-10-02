@@ -193,7 +193,7 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentUltrasound'])>0)
                                             <hr/>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label">Ultra Test - {{$patientExaminations['recentUltrasound'][0]->examination_date}}</label>
+                                                <label class="col-sm-12 control-label">Ultra Sound Test - {{$patientExaminations['recentUltrasound'][0]->examination_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12">
                                                 @foreach($patientExaminations['recentUltrasound'] as $recentTest)

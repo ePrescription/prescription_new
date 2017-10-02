@@ -38,11 +38,12 @@ $profile_menu="0";
                             <div class="panel panel-default">
                                 <!-- <div class="panel-heading">
                                     <h4>Invoice</h4>
-                                </div> -->
+                                </div> --><div style="float:right;margin:10px;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
                                 <div class="panel-body">
 
                                     <div class="row">
                                         <div class="col-xs-12">
+
                                             <div class="invoice-title">
                                                 <h4 class="pull-right">PRID # {{$prescriptionDetails['PrescriptionInfo'][0]->PRID}}</h4>
                                                 <h3 class="m-t-0">Prescriptions Details</h3>
@@ -126,10 +127,12 @@ $profile_menu="0";
                                                         @endforeach
                                                     </address>
                                                 </div>
-                                                <div class="col-xs-6 text-right hidden">
+                                                <div class="col-xs-6 text-rightX">
                                                     <address>
-                                                        <strong>Order Date:</strong><br>
-                                                        October 7, 2016<br><br>
+                                                        <strong>Current Illness:</strong><br>
+                                                        @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
+                                                            {{$prescriptioninfo->illness}}
+                                                        @endforeach
                                                     </address>
                                                 </div>
                                             </div>

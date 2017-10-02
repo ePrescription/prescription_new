@@ -256,6 +256,14 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Address</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea class="form-control" id="address" name="address"></textarea>
+                                                        @if ($errors->has('address'))<p class="error" style="">{!!$errors->first('address')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
 
                                                 <h4 class="m-t-0 m-b-30">Appointment Info</h4>
 

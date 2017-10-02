@@ -94,11 +94,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[3][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[3][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="generalExaminationValue41" value="Yes" name="generalExamination[3][generalExaminationValue]">
+                                                            <input type="radio" id="generalExaminationValue41" value="Yes" name="generalExamination[3][generalExaminationValue]" required="required" />
                                                             <label for="generalExaminationValue41"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="generalExaminationValue42" value="No" name="generalExamination[3][generalExaminationValue]" checked="checked">
+                                                            <input type="radio" id="generalExaminationValue42" value="No" name="generalExamination[3][generalExaminationValue]" checked="checked" required="required" />
                                                             <label for="generalExaminationValue42"> No </label>
                                                         </div>
 
@@ -111,11 +111,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[4][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[4][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="generalExaminationValue51" value="Yes" name="generalExamination[4][generalExaminationValue]">
+                                                            <input type="radio" id="generalExaminationValue51" value="Yes" name="generalExamination[4][generalExaminationValue]"required="required" />
                                                             <label for="generalExaminationValue51"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="generalExaminationValue52" value="No" name="generalExamination[4][generalExaminationValue]" checked="checked">
+                                                            <input type="radio" id="generalExaminationValue52" value="No" name="generalExamination[4][generalExaminationValue]" checked="checked"required="required" />
                                                             <label for="generalExaminationValue52"> No </label>
                                                         </div>
                                                     </div>
@@ -127,11 +127,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[5][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[5][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="generalExaminationValue61" value="Yes" name="generalExamination[5][generalExaminationValue]">
+                                                            <input type="radio" id="generalExaminationValue61" value="Yes" name="generalExamination[5][generalExaminationValue]" required="required" />
                                                             <label for="generalExaminationValue61"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="generalExaminationValue62" value="No" name="generalExamination[5][generalExaminationValue]" checked="checked">
+                                                            <input type="radio" id="generalExaminationValue62" value="No" name="generalExamination[5][generalExaminationValue]" checked="checked" required="required" />
                                                             <label for="generalExaminationValue62"> No </label>
                                                         </div>
                                                     </div>
@@ -143,11 +143,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[6][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[6][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="generalExaminationValue71" value="Yes" name="generalExamination[6][generalExaminationValue]">
+                                                            <input type="radio" id="generalExaminationValue71" value="Yes" name="generalExamination[6][generalExaminationValue]" required="required" />
                                                             <label for="generalExaminationValue71"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="generalExaminationValue72" value="No" name="generalExamination[6][generalExaminationValue]" checked="checked">
+                                                            <input type="radio" id="generalExaminationValue72" value="No" name="generalExamination[6][generalExaminationValue]" checked="checked" required="required" />
                                                             <label for="generalExaminationValue72"> No </label>
                                                         </div>
                                                     </div>
@@ -159,11 +159,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[7][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[7][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="generalExaminationValue81" value="Yes" name="generalExamination[7][generalExaminationValue]">
+                                                            <input type="radio" id="generalExaminationValue81" value="Yes" name="generalExamination[7][generalExaminationValue]" required="required" />
                                                             <label for="generalExaminationValue81"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="generalExaminationValue82" value="No" name="generalExamination[7][generalExaminationValue]" checked="checked">
+                                                            <input type="radio" id="generalExaminationValue82" value="No" name="generalExamination[7][generalExaminationValue]" checked="checked" required="required" />
                                                             <label for="generalExaminationValue82"> No </label>
                                                         </div>
                                                     </div>
@@ -175,11 +175,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[8][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[8][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="generalExaminationValue91" value="Yes" name="generalExamination[8][generalExaminationValue]">
+                                                            <input type="radio" id="generalExaminationValue91" value="Yes" name="generalExamination[8][generalExaminationValue]" required="required" />
                                                             <label for="generalExaminationValue91"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="generalExaminationValue92" value="No" name="generalExamination[8][generalExaminationValue]" checked="checked">
+                                                            <input type="radio" id="generalExaminationValue92" value="No" name="generalExamination[8][generalExaminationValue]" checked="checked" required="required" />
                                                             <label for="generalExaminationValue92"> No </label>
                                                         </div>
                                                     </div>
@@ -191,11 +191,11 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[9][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[9][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
-                                                            <input type="radio" id="generalExaminationValue101" value="Yes" name="generalExamination[9][generalExaminationValue]">
+                                                            <input type="radio" id="generalExaminationValue101" value="Yes" name="generalExamination[9][generalExaminationValue]" required="required" />
                                                             <label for="generalExaminationValue101"> Yes </label>
                                                         </div>
                                                         <div class="radio radio-inline">
-                                                            <input type="radio" id="generalExaminationValue102" value="No" name="generalExamination[9][generalExaminationValue]" checked="checked">
+                                                            <input type="radio" id="generalExaminationValue102" value="No" name="generalExamination[9][generalExaminationValue]" checked="checked" required="required" />
                                                             <label for="generalExaminationValue102"> No </label>
                                                         </div>
                                                     </div>

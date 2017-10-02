@@ -604,7 +604,7 @@ class HospitalImpl implements HospitalInterface{
             $query->where('pp.id', '=', $prescriptionId);*/
 
             $prescriptionQuery = DB::table('patient_prescription as pp')->select('pp.id as prescriptionId', 'pp.unique_id as PRID',
-                                    'pp.brief_description as notes', 'pp.prescription_date');
+                                    'pp.brief_description as notes', 'pp.drug_history as illness', 'pp.prescription_date');
             $prescriptionQuery->where('pp.id', '=', $prescriptionId);
             $prescriptionInfo = $prescriptionQuery->get();
 
