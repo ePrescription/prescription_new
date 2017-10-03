@@ -4683,6 +4683,8 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($hospitalId);
 
+            //DB::connection()->enableQueryLog();
+
             $latestGeneralExamQuery = DB::table('patient_general_examination as pge');
             $latestGeneralExamQuery->join('general_examination as ge', 'ge.id', '=', 'pge.general_examination_id');
             $latestGeneralExamQuery->where('pge.general_examination_date', function($query) use($patientId){
@@ -4695,6 +4697,8 @@ class HospitalImpl implements HospitalInterface{
                 'pge.general_examination_date');
             $generalExaminations = $latestGeneralExamQuery->get();
             //dd($generalExaminations);
+            //$query = DB::getQueryLog();
+            //dd($query);
 
             $latestPastIllnessQuery = DB::table('patient_past_illness as ppi');
             $latestPastIllnessQuery->join('past_illness as pii', 'pii.id', '=', 'ppi.past_illness_id');
@@ -5220,6 +5224,7 @@ class HospitalImpl implements HospitalInterface{
                     //dd($patientHistory);
                     $personalHistoryId = $patientHistory->personalHistoryId;
                     $personalHistoryItemId = $patientHistory->personalHistoryItemId;
+                    $isValueSet = property_exists($patientHistory, 'isValueSet') ? $patientHistory->isValueSet : null;
                     //$personalHistoryDate = \DateTime::createFromFormat('Y-m-d', $patientHistory->personalHistoryDate);
                     //$historyDate = $patientHistory->personalHistoryDate;
 
@@ -5240,6 +5245,7 @@ class HospitalImpl implements HospitalInterface{
                         array('personal_history_item_id' => $personalHistoryItemId,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
+                            'is_value_set' => $isValueSet,
                             'personal_history_date' => $personalHistoryDate,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
@@ -5333,6 +5339,8 @@ class HospitalImpl implements HospitalInterface{
                     //dd($patientHistory);
                     $generalExaminationId = $examination->generalExaminationId;
                     $generalExaminationValue = $examination->generalExaminationValue;
+                    $isValueSet = property_exists($examination, 'isValueSet') ? $examination->isValueSet : null;
+                    //$isValueSet = $examination->isValueSet;
                     //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examination->generalExaminationDate);
                     //$examinationDate = $examination->examinationDate;
 
@@ -5353,6 +5361,7 @@ class HospitalImpl implements HospitalInterface{
 
                     $patientUser->patientgeneralexaminations()->attach($generalExaminationId,
                         array('general_examination_value' => $generalExaminationValue,
+                            'is_value_set' => $isValueSet,
                             'general_examination_date' => $generalExaminationDate,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
