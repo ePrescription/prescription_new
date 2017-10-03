@@ -244,6 +244,26 @@ $profile_menu="0";
                                         @endif
                                         <hr/>
 
+
+                                        @if(count($patientExaminations['xrayExaminations'])>0)
+                                            <hr/>
+                                            <div class="form-group">
+                                                <label class="col-sm-12 control-label">X-Ray Examination - {{$patientExaminations['xrayExaminations'][0]->examination_date}}</label>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                @foreach($patientExaminations['xrayExaminations'] as $recentTest)
+                                                    <div class="col-sm-6" style="width:50%;float:left;">
+
+                                                        {{$recentTest->examination_name}}
+
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <br/><br/>
+                                        @endif
+                                        <hr/>
+
+
                                         </div>
                                     </div>
 
@@ -364,6 +384,12 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Dental</span>
                                                     </a>
                                                 </li>
+                                                <li class="">
+                                                    <a href="#xray" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                        <span class="hidden-xs">X-Ray</span>
+                                                    </a>
+                                                </li>
                                             </ul>
 
                                             <div class="tab-content">
@@ -469,6 +495,24 @@ $profile_menu="0";
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientdentaldiv"></div>
+                                                    </p>
+                                                </div>
+
+                                                <div class="tab-pane" id="xray">
+                                                     <p>
+                                                    <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
+                                                        <select class="form-control" id="selectxray" onchange="javascript:ajaxloadxraydetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['xrayTestDates'] as $xrayTestDates)
+                                                                <option value="{{$xrayTestDates->examination_date}}">{{$xrayTestDates->examination_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <a href="#" data-href="#{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-bloodtests" onclick="javascript:ajaxloadxrayform({{Auth::user()->id}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add X-Ray Test </b></button></a>
+                                                    </div>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientxraydiv"></div>
                                                     </p>
                                                 </div>
                                             </div>
@@ -658,6 +702,32 @@ $profile_menu="0";
 
         }
 
+        function ajaxloadxraydetails(pid,date) {
+
+            $("#patientxraydiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/xraytests';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientxraydiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientxraydiv").html("");
+            }
+
+        }
+
+
         function ajaxloadbloodform(hid,pid) {
             $("#patientblooddiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
@@ -749,6 +819,23 @@ $profile_menu="0";
                 data: {"id": pid, "status": status},
                 success: function (data) {
                     $("#patientdentaldiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                }
+            });
+        }
+
+
+        function ajaxloadxrayform(hid,pid) {
+            $("#patientxraydiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + hid + '/patient/' + pid + '/add-lab-xraytests';
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientxraydiv").html(data);
                     $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
                 }
             });

@@ -236,6 +236,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-bloodtests', array('as' => 'hospital.patientlabbloodtests', 'uses' => 'DoctorController@AddPatientLabBloodTestsByHospitalForFront'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-scantests', array('as' => 'hospital.patientlabscantests', 'uses' => 'DoctorController@AddPatientLabScanTestsByHospitalForFront'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-dentaltests', array('as' => 'hospital.patientlabdentaltests', 'uses' => 'DoctorController@addPatientDentalTestsForFront'));
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-xraytests', array('as' => 'hospital.patientlabxraytests', 'uses' => 'DoctorController@addPatientXrayTestsForFront'));
 
     Route::post('rest/api/ultrasoundtests', array('as' => 'doctor.saveultrasoundtests', 'uses' => 'DoctorController@savePatientUltraSoundTests'));
     Route::post('rest/api/urinetests', array('as' => 'doctor.saveurinetests', 'uses' => 'DoctorController@savePatientUrineTests'));
@@ -243,6 +244,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorController@savePatientBloodTests'));
     Route::post('rest/api/scandetails', array('as' => 'doctor.savescandetails', 'uses' => 'DoctorController@savePatientScanDetails'));
     Route::post('rest/api/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@savePatientDentalTests'));
+    Route::post('rest/api/xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorController@savePatientXrayTests'));
 
     Route::get('rest/api/{patientId}/ultrasoundtests', array('as' => 'doctor.ultrasoundtests', 'uses' => 'DoctorController@getPatientUltraSoundTests'));
     Route::get('rest/api/{patientId}/urinetests', array('as' => 'doctor.urinetests', 'uses' => 'DoctorController@getPatientUrineTests'));
@@ -250,6 +252,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('rest/api/{patientId}/bloodtests', array('as' => 'doctor.bloodtests', 'uses' => 'DoctorController@getPatientBloodTests'));
     Route::get('rest/api/{patientId}/scandetails', array('as' => 'doctor.scandetails', 'uses' => 'DoctorController@getPatientScanDetails'));
     Route::get('rest/api/{patientId}/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@getPatientDentalTests'));
+    Route::get('rest/api/{patientId}/xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorController@getPatientXrayTests'));
 
     //RECEIPT
 
@@ -261,6 +264,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('rest/api/{hospitalId}/patient/{patientId}/labreceipts', array('as' => 'patient.labreceipts', 'uses' => 'DoctorController@getLabReceiptsByPatient'));
     //Route::get('rest/api/savelabreceipts', array('as' => 'patient.savelabreceipts', 'uses' => 'DoctorController@saveLabReceiptDetailsForPatient'));
 
+    //Route::get('rest/api/{hospitalId}/patient/{patientId}/receiptdetails', array('as' => 'patient.receiptdetails', 'uses' => 'DoctorController@getPatientReceiptDetails'));
 });
 
 Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()

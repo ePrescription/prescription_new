@@ -91,7 +91,7 @@ $profile_menu="0";
                                                 <td>{{$labReceipt->lab_receipt_date}}</td>
                                                 <td>
 
-                                                    <a href="#{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$labReceipt->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-eye"></i> </a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$labReceipt->patient_id}}/receiptdetails?feereceipt={{$labReceipt->receiptId}}" title="Lab Profile"><i class="fa fa-eye"></i> </a>
 
                                                 </td>
                                             </tr>

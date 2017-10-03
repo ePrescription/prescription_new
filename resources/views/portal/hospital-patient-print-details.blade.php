@@ -141,7 +141,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
-
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -159,6 +159,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -178,7 +179,8 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <br/><br/><br/><br/>
+                                            <hr/>
+                                            <br/><br/>
                                         @endif
 
 
@@ -196,6 +198,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -214,6 +217,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -232,9 +236,28 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
+
+                                        @if(count($patientExaminations['xrayExaminations'])>0)
+                                            <hr/>
+                                            <div class="form-group">
+                                                <label class="col-sm-12 control-label">X-Ray Examination - {{$patientExaminations['xrayExaminations'][0]->examination_date}}</label>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                @foreach($patientExaminations['xrayExaminations'] as $recentTest)
+                                                    <div class="col-sm-6" style="width:50%;float:left;">
+
+                                                        {{$recentTest->examination_name}}
+
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <hr/>
+                                            <br/><br/>
+                                        @endif
 
                                         @if(count($patientExaminations['recentGeneralTests'])>0)
                                             <hr/>
@@ -250,6 +273,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -268,6 +292,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -286,6 +311,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -304,6 +330,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -322,6 +349,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -340,6 +368,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 
@@ -359,6 +388,7 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <hr/>
                                             <br/><br/>
                                         @endif
 

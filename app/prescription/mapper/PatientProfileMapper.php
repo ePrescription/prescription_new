@@ -548,7 +548,12 @@ class PatientProfileMapper
 
         foreach($examinationDetails as $examination)
         {
-            $patientXRayVM->setPatientXRayTests($examination);
+            if(count($examination)==3)
+            {
+                $patientXRayVM->setPatientXRayTests($examination);
+            }
+
+
             /*if(count($examination)==3)
             {
                 $patientDentalVM->setPatientDentalTests($examination);

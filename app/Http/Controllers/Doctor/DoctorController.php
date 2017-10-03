@@ -4922,6 +4922,70 @@ class DoctorController extends Controller
 
     }
 
+    /**
+     * Save patient XRAY tests
+     * @param $xrayRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientXRayTests(Request $xrayRequest)
+    {
+        $patientXRayVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($xrayRequest);
+            //dd($personalHistoryRequest->all());
+            $patientXRayVM = PatientProfileMapper::setPatientXRayExamination($xrayRequest);
+            //dd($patientMotionVM);
+            $status = $this->hospitalService->savePatientXRayTests($patientXRayVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$xrayRequest->patientId.'/lab-details#xray')->with('success',trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_SUCCESS));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$xrayRequest->patientId.'/lab-details#xray')->with('success',trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR));
+            }
+
+
+            /*
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+            }
+            */
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$dentalRequest->patientId.'/add-lab-xray');
+    }
 
     /**
      * Save patient dental tests
@@ -5649,7 +5713,7 @@ class DoctorController extends Controller
             $patientDetails = $this->hospitalService->getPatientProfile($patientId);
 
             //dd($labTestDetails);
-            //return view('portal.hospital-patient-receipt-details', compact('labTestDetails','patientDetails'));
+            return view('portal.hospital-patient-print-receipt-details', compact('labReceiptDetails','patientDetails'));
 
         }
         catch(HospitalException $hospitalExc)
@@ -5934,6 +5998,53 @@ class DoctorController extends Controller
         }
 
         return view('portal.hospital-patient-lab-add-dental',compact('dentalExaminationCategory','dentalExaminations','patientDetails','hid'));
+
+    }
+
+
+
+    /**
+     * Get all dental examinations
+     * @param $hid, $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function addPatientXrayTestsForFront($hid, $patientId)
+    {
+        $patientDetails = null;
+        $xrayExaminations = null;
+        $xrayExaminationCategory = null;
+        try
+        {
+
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $xrayExaminations = $this->hospitalService->getAllXRayItems();
+
+            foreach($xrayExaminations as $xrayExamination)
+            {
+                $xrayExaminationCategory[$xrayExamination->category] = $xrayExamination->category;
+            }
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-lab-add-xray',compact('xrayExaminationCategory','xrayExaminations','patientDetails','hid'));
 
     }
 
@@ -6516,6 +6627,62 @@ class DoctorController extends Controller
         //return $responseJson;
         return view('portal.hospital-patient-lab-dental-tests-detail',compact('dentalTests'));
     }
+
+
+
+
+    /**
+     * Get patient xray tests
+     * @param $patientId, $xrayDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientXrayTests($patientId, Request $patientSearchRequest)
+    {
+        $patientXrayTests = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $examinationDate = date('Y-m-d', strtotime($examinationDate));
+            $patientXrayTests = $this->hospitalService->getPatientXrayTests($patientId, $examinationDate);
+            //dd($patientXrayTests);
+
+            if(!is_null($patientXrayTests) && !empty($patientXrayTests))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($patientXrayTests));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_XRAY_TESTS_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($patientXrayTests);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_XRAY_TESTS_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return view('portal.hospital-patient-lab-xray-tests-detail',compact('patientXrayTests'));
+    }
+
 
     /* DOCTOR VIEW & EDIT PATIENTS */
 
