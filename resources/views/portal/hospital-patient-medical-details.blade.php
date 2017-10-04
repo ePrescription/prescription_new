@@ -49,7 +49,6 @@ $profile_menu="0";
                                         </a>
                                     </div>
                                     <h4 class="m-t-0 m-b-30">Patient Medical Details</h4>
-                                    {{dd($patientExaminations)}}
 
                                     <div id='DivIdToPrint' style="display:none;">
 
