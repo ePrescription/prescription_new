@@ -230,7 +230,37 @@ $profile_menu="0";
 
                                                                     @endif
 
-                                                                    <?php $patientScanTests=$labReceiptDetails['scanTests']; ?>
+                                                                    <?php $patientUltraTests=$labReceiptDetails['ultraSoundTests']; ?>
+                                                                    @if(count($patientUltraTests)>0)
+                                                                        <?php $i=0; ?>
+                                                                        <h4 class="m-t-0 m-b-30">Ultra Sound Test</h4>
+                                                                        <div class="table-responsive">
+                                                                            <table class="table">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th>TEST NAME</th>
+                                                                                    <th>TEST DATE</th>
+                                                                                    <th>TEST AMOUNT</th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                @foreach($patientUltraTests as $patientUltraTestValue)
+                                                                                    <tr>
+                                                                                        <td>{{$patientUltraTestValue->examination_name}}</td>
+                                                                                        <td>{{$patientUltraTestValue->examination_date}} </td>
+                                                                                        <td>{{$patientUltraTestValue->fees}}</td>
+                                                                                    </tr>
+
+                                                                                    <?php $i++; ?>
+                                                                                @endforeach
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+
+                                                                    @endif
+
+
+                                                                <?php $patientScanTests=$labReceiptDetails['scanTests']; ?>
                                                                     @if(count($patientScanTests)>0)
                                                                         <?php $i=0; ?>
                                                                         <h4 class="m-t-0 m-b-30">Scan Test</h4>
@@ -258,10 +288,42 @@ $profile_menu="0";
                                                                             </div>
                                                                     @endif
 
-                                                                    <?php $patientUltraTests=$labReceiptDetails['ultraSoundTests']; ?>
-                                                                    @if(count($patientUltraTests)>0)
+
+
+                                                                    <?php $patientDentalTests=$labReceiptDetails['dentalTests']; ?>
+                                                                    @if(count($patientDentalTests)>0)
                                                                         <?php $i=0; ?>
-                                                                        <h4 class="m-t-0 m-b-30">Ultra Sound Test</h4>
+                                                                        <h4 class="m-t-0 m-b-30">Dental Test</h4>
+                                                                        <div class="table-responsive">
+                                                                            <table class="table">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th>TEST NAME</th>
+                                                                                    <th>TEST DATE</th>
+                                                                                    <th>TEST AMOUNT</th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                @foreach($patientDentalTests as $patientDentalTestValue)
+                                                                                    <tr>
+                                                                                        <td>{{$patientDentalTestValue->examination_name}}</td>
+                                                                                        <td>{{$patientDentalTestValue->examination_date}} </td>
+                                                                                        <td>{{$patientDentalTestValue->fees}}</td>
+                                                                                    </tr>
+
+                                                                                    <?php $i++; ?>
+                                                                                @endforeach
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+
+                                                                    @endif
+
+
+                                                                <?php $patientXrayTests=$labReceiptDetails['xrayTests']; ?>
+                                                                    @if(count($patientXrayTests)>0)
+                                                                        <?php $i=0; ?>
+                                                                        <h4 class="m-t-0 m-b-30">X-Ray Test</h4>
                                                                             <div class="table-responsive">
                                                                                 <table class="table">
                                                                                     <thead>
@@ -272,11 +334,11 @@ $profile_menu="0";
                                                                                     </tr>
                                                                                     </thead>
                                                                                     <tbody>
-                                                                                    @foreach($patientUltraTests as $patientUltraTestValue)
+                                                                                    @foreach($patientXrayTests as $patientXrayTestValue)
                                                                                         <tr>
-                                                                                            <td>{{$patientUltraTestValue->examination_name}}</td>
-                                                                                            <td>{{$patientUltraTestValue->examination_date}} </td>
-                                                                                            <td>{{$patientUltraTestValue->fees}}</td>
+                                                                                            <td>{{$patientXrayTestValue->examination_name}}</td>
+                                                                                            <td>{{$patientXrayTestValue->examination_date}} </td>
+                                                                                            <td>{{$patientXrayTestValue->fees}}</td>
                                                                                         </tr>
 
                                                                                         <?php $i++; ?>
@@ -286,6 +348,9 @@ $profile_menu="0";
                                                                             </div>
 
                                                                     @endif
+
+
+
                                                                     <?php $labTotalFees=$labReceiptDetails['labTotalFees']; ?>
                                                                     <div class="form-group">
                                                                         <h4 class="m-t-0 m-b-30">Total Fee</h4>

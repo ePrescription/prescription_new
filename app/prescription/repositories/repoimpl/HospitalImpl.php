@@ -4414,7 +4414,7 @@ class HospitalImpl implements HospitalInterface{
                 $dentalExamQuery->whereDate('pde.created_at', '=', $receiptDate);
             }
             $dentalExamQuery->select('pde.id as examination_id', 'pde.patient_id', 'pde.hospital_id', 'dei.examination_name',
-                'pdei.id as examination_item_id', 'pde.examination_date');
+                'pdei.id as examination_item_id','pdei.id as id', 'pde.examination_date');
 
             //dd($ultraSoundExamQuery->toSql());
             $dentalExaminations = $dentalExamQuery->get();
@@ -4435,7 +4435,7 @@ class HospitalImpl implements HospitalInterface{
                 $xrayExamQuery->whereDate('pxe.created_at', '=', $receiptDate);
             }
             $xrayExamQuery->select('pxe.id as examination_id', 'pxe.patient_id', 'pxe.hospital_id', 'xe.examination_name',
-                'pxei.id as examination_item_id', 'pxe.examination_date');
+                'pxei.id as examination_item_id','pxei.id as id', 'pxe.examination_date');
 
             //dd($ultraSoundExamQuery->toSql());
             $xrayExaminations = $xrayExamQuery->get();
