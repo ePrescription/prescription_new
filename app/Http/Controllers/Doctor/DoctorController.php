@@ -4984,7 +4984,7 @@ class DoctorController extends Controller
         }
 
         //return $responseJson;
-        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$dentalRequest->patientId.'/add-lab-xray');
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$xrayRequest->patientId.'/add-lab-xray');
     }
 
     /**
@@ -5006,7 +5006,7 @@ class DoctorController extends Controller
         {
             //dd($personalHistoryRequest->all());
             $patientDentalVM = PatientProfileMapper::setPatientDentalExamination($dentalRequest);
-            //dd($patientMotionVM);
+            //dd($patientDentalVM);
             $status = $this->hospitalService->savePatientDentalTests($patientDentalVM);
 
             if($status)
@@ -5819,6 +5819,11 @@ class DoctorController extends Controller
                             array('id' => 4, 'fees' => 300)
                     ),
                     'ultraSoundTests' =>
+                        array(
+                            array('id' => 3, 'fees' => 200),
+                            array('id' => 4, 'fees' => 300)
+                    ),
+                    'dentalTests' =>
                         array(
                             array('id' => 3, 'fees' => 200),
                             array('id' => 4, 'fees' => 300)

@@ -27,6 +27,7 @@ use App\Http\ViewModels\PatientXRayViewModel;
 use Illuminate\Http\Request;
 use App\Http\Requests\FeeReceiptRequest;
 use Session;
+use Exception;
 
 class PatientProfileMapper
 {
@@ -501,6 +502,8 @@ class PatientProfileMapper
 
     public static function setPatientDentalExamination(Request $examinationRequest)
     {
+        $patientDentalVM = null;
+
         $patientDentalVM = new PatientDentalViewModel();
 
         $dentalObj = (object) $examinationRequest->all();
@@ -515,10 +518,11 @@ class PatientProfileMapper
 
         foreach($examinationDetails as $examination)
         {
-            if(count($examination)==3)
+            $patientDentalVM->setPatientDentalTests($examination);
+            /*if(count($examination)==3)
             {
                 $patientDentalVM->setPatientDentalTests($examination);
-            }
+            }*/
         }
 
         //$userName = Session::get('DisplayName');
@@ -528,6 +532,19 @@ class PatientProfileMapper
         $patientDentalVM->setUpdatedBy($userName);
         $patientDentalVM->setCreatedAt(date("Y-m-d H:i:s"));
         $patientDentalVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        /*try
+        {
+            //dd($examinationRequest);
+
+
+            //dd($patientDentalVM);
+        }
+        catch(Exception $ex)
+        {
+            dd($ex);
+        }*/
+
 
         return $patientDentalVM;
     }
@@ -548,10 +565,11 @@ class PatientProfileMapper
 
         foreach($examinationDetails as $examination)
         {
-            if(count($examination)==3)
+            $patientXRayVM->setPatientXRayTests($examination);
+            /*if(count($examination)==3)
             {
                 $patientXRayVM->setPatientXRayTests($examination);
-            }
+            }*/
 
 
             /*if(count($examination)==3)

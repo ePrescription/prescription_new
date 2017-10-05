@@ -6325,20 +6325,27 @@ class HospitalImpl implements HospitalInterface{
 
                 foreach($dentalExaminations as $examination)
                 {
-                    //dd($patientHistory);
+                    //dd($examination);
                     //$examinationId = $examination->examinationId;
                     //$examinationName = $examination->examinationName;
                     //$pregnancyDate = $pregnancy->pregnancyDate;
                     $dentalExaminationItems = new PatientDentalExaminationItems();
                     $dentalExaminationItems->dental_examination_item_id = $examination->dentalExaminationId;
                     //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
-                    $dentalExaminationItems->dental_examination_name = property_exists($examination->dentalExaminationName, 'dentalExaminationName') ? $examination->dentalExaminationName : null;
+
+                    //$dentalExaminationItems->dental_examination_name = property_exists($examination->dentalExaminationName, 'dentalExaminationName') ? $examination->dentalExaminationName : null;
+                    $dentalExaminationItems->dental_examination_name = (isset($examination->dentalExaminationName)) ? $examination->dentalExaminationName : null;
+
                     //$dentalExaminationItems->dental_examination_name = $examination->dentalExaminationName;
                     $dentalExaminationItems->created_by = $patientDentalVM->getCreatedBy();
                     $dentalExaminationItems->modified_by = $patientDentalVM->getUpdatedBy();
                     $dentalExaminationItems->created_at = $patientDentalVM->getCreatedAt();
                     $dentalExaminationItems->updated_at = $patientDentalVM->getUpdatedAt();
-                    $dentalExamination->dentalexaminationitems()->save($dentalExaminationItems);
+                    if(!is_null($dentalExaminationItems->dental_examination_name))
+                    {
+                        $dentalExamination->dentalexaminationitems()->save($dentalExaminationItems);
+                    }
+
                 }
 
             }
@@ -6430,13 +6437,20 @@ class HospitalImpl implements HospitalInterface{
                     $xrayExaminationItems = new PatientXRayExaminationItems();
                     $xrayExaminationItems->xray_examination_id = $examination->xrayExaminationId;
                     //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
-                    $xrayExaminationItems->xray_examination_name = property_exists($examination->xrayExaminationName, 'xrayExaminationName') ? $examination->xrayExaminationName : null;
+
+                    //$xrayExaminationItems->xray_examination_name = property_exists($examination->xrayExaminationName, 'xrayExaminationName') ? $examination->xrayExaminationName : null;
+                    $xrayExaminationItems->xray_examination_name = (isset($examination->xrayExaminationName)) ? $examination->xrayExaminationName : null;
+
                     //$dentalExaminationItems->dental_examination_name = $examination->dentalExaminationName;
                     $xrayExaminationItems->created_by = $patientXRayVM->getCreatedBy();
                     $xrayExaminationItems->modified_by = $patientXRayVM->getUpdatedBy();
                     $xrayExaminationItems->created_at = $patientXRayVM->getCreatedAt();
                     $xrayExaminationItems->updated_at = $patientXRayVM->getUpdatedAt();
-                    $xrayExamination->xrayexaminationitems()->save($xrayExaminationItems);
+                    if(!is_null($xrayExaminationItems->xray_examination_name))
+                    {
+                        $xrayExamination->xrayexaminationitems()->save($xrayExaminationItems);
+                    }
+
                 }
 
             }
