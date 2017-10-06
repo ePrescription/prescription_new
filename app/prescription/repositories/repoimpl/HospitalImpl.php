@@ -1379,6 +1379,7 @@ class HospitalImpl implements HospitalInterface{
             $query->where('da.patient_id', $patientId);
             $query->select('p.id', 'p.patient_id', 'p.pid', 'p.name as patient_name', 'h.hospital_id', 'h.hospital_name',
                 'd.doctor_id', 'd.name', 'da.appointment_date', 'da.appointment_time', 'da.brief_history as notes');
+            $query->orderBy('da.appointment_date', 'DESC');
 
             $appointments = $query->paginate();
         }
