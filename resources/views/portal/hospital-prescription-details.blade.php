@@ -119,15 +119,7 @@ $profile_menu="0";
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-xs-6">
-                                                    <address>
-                                                        <strong>Notes:</strong><br>
-                                                        @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
-                                                            {{$prescriptioninfo->notes}}
-                                                        @endforeach
-                                                    </address>
-                                                </div>
-                                                <div class="col-xs-6 text-rightX">
+                                                <div class="col-xs-12">
                                                     <address>
                                                         <strong>Current Illness:</strong><br>
                                                         @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
@@ -174,7 +166,16 @@ $profile_menu="0";
                                                             </tbody>
 
                                                         </table>
+                                                    </
+                                                    <div class="col-xs-12">
+                                                        <address>
+                                                            <strong>Notes:</strong><br>
+                                                            @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
+                                                                {{$prescriptioninfo->notes}}
+                                                            @endforeach
+                                                        </address>
                                                     </div>
+
 
                                                     <div class="hidden-print">
                                                         <div class="pull-right">

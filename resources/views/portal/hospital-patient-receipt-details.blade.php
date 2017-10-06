@@ -136,7 +136,7 @@ $profile_menu="0";
 
                                                             <!-- form start -->
 
-                                                                <form action="{{URL::to('/')}}/fronthospital/rest/api/savelabreceipts" role="form" method="POST" class="form-horizontal ">
+                                                                <form action="{{URL::to('/')}}/fronthospital/rest/api/savelabreceipts" role="form" method="POST" class="form-horizontal " id="myform">
 
                                                                 <?php $fi=0; ?>
 
@@ -372,7 +372,7 @@ $profile_menu="0";
                                                                         <h4 class="m-t-0 m-b-30">Total Fee</h4>
                                                                         <div class="col-sm-4">Total Fee</div>
                                                                         <div class="col-sm-6">
-                                                                            <input type="number" name="totalFees" class="form-control totalprice" value="0" readonly />
+                                                                            <input id="totalprice" type="number" name="totalFees" class="form-control totalprice" value="0" readonly />
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
@@ -452,5 +452,70 @@ $profile_menu="0";
             setTimeout(function(){newWin.close();},10);
         }
 
+    </script>
+<?php /* ?>
+    <link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script>
+        // just for the demos, avoids form submit
+        jQuery.validator.setDefaults({
+            debug: true,
+            success: "valid"
+        });
+        $( "#myform" ).validate({
+            rules: {
+                totalFees: {
+                    required: true,
+                    min: 1
+                }
+            }
+        });
+    </script>
+    <?php */ ?>
+
+
+
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+
+    <script>
+        // Wait for the DOM to be ready
+        $(function() {
+
+            jQuery.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-z\s]+$/i.test(value);
+            });
+
+            jQuery.validator.addMethod('minStrict', function (value, el, param) {
+                return value > param;
+            });
+
+            // Initialize form validation on the registration form.
+            // It has the name attribute "registration"
+            $("form#myform").validate({
+                // Specify validation rules
+                rules: {
+                    role: "required",
+                    totalFees: {
+                        required: true,
+                        minStrict: 0,
+                        number: true
+                    }
+                },
+                // Specify validation error messages
+                messages: {
+                    role: "provide a valid Amount",
+                    totalFees: "Please provide a valid Amount",
+                    minStrict:"Please provide a valid Amount"
+                },
+                // Make sure the form is submitted to the destination defined
+                // in the "action" attribute of the form when valid
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+        });
     </script>
 @stop
