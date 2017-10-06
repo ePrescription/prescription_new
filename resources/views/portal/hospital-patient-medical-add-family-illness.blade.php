@@ -79,6 +79,8 @@ $profile_menu="0";
                                                             </div>
                                                             @if($patientFamilyIllnessValue->illness_name=="Others")
                                                                 <input type="text" class="form-control" name="familyIllness[{{$i}}][familyIllnessName]" value="None" required="required" id="family{{$i}}" style="display: none;" />
+                                                            @elseif($patientFamilyIllnessValue->illness_name=="Any other herideitory diseases")
+                                                                <input type="text" class="form-control" name="familyIllness[{{$i}}][familyIllnessName]" value="None" required="required" id="family{{$i}}" style="display: none;" />
                                                             @else
                                                                 <input type="hidden" class="form-control" name="familyIllness[{{$i}}][familyIllnessName]" value="{{$patientFamilyIllnessValue->illness_name}}" required="required" />
                                                             @endif
@@ -144,6 +146,13 @@ $profile_menu="0";
     function enableBox(cssvalue) {
         //alert(cssvalue);
         $('select#'+cssvalue).removeAttr('disabled');
+
+        if(cssvalue=='family9')
+        {
+            $('input#'+cssvalue).show();
+            $('input#'+cssvalue).val('');
+        }
+
         if(cssvalue=='family11')
         {
             $('input#'+cssvalue).show();
@@ -154,6 +163,13 @@ $profile_menu="0";
     function disableBox(cssvalue) {
         //alert(cssvalue);
         $('select#'+cssvalue).val('');
+
+        if(cssvalue=='family9')
+        {
+            $('input#'+cssvalue).hide();
+            $('input#'+cssvalue).val('None');
+        }
+
         if(cssvalue=='family11')
         {
             $('input#'+cssvalue).hide();

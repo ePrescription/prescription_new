@@ -187,6 +187,15 @@ $profile_menu="0";
                                                             {{$patientDetails[0]->spouseName}}
                                                         </div>
                                                     </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label class="col-sm-6 control-label">Patient Address</label>
+                                                        <div class="col-sm-6">
+                                                            {{$patientDetails[0]->address}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+
+                                                    </div>
                                                     </p>
                                                 </div>
                                                 <div class="tab-pane" id="profile">

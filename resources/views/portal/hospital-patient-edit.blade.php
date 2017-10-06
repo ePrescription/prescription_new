@@ -133,6 +133,13 @@ $profile_menu="0";
                                                     <input type="text" class="form-control" name="spouseName" value="{{$patientDetails[0]->spouseName}}" required="required" />
                                                 </div>
                                             </div>
+
+                                            <div class="form-group col-md-12">
+                                                <label class="col-sm-3 control-label">Address</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="address" value="{{$patientDetails[0]->address}}" required="required" />
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="box-footer">

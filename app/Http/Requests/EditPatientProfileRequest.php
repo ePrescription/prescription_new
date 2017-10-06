@@ -41,6 +41,7 @@ class EditPatientProfileRequest extends Request
         $rules['age'] = 'required | numeric';
         $rules['gender'] = 'required';
 
+        //dd($rules);
         return $rules;
     }
 }

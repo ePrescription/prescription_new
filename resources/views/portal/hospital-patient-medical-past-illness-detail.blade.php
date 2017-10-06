@@ -75,14 +75,14 @@
         <div class="form-group col-sm-6">
             <label class="col-sm-6 control-label">Surgeries</label>
             <div class="col-sm-6 control-label">
-                @if($pastIllness[10]->isValueSet==1) Yes @else No @endif
+                @if($pastIllness[10]->isValueSet==1) {{$pastIllness[10]->otherIllnessName}} - Yes @else No @endif
             </div>
         </div>
         <div class="form-group col-sm-6">
             <label class="col-sm-6 control-label">Others</label>
             <div class="col-sm-6 control-label">
-                {{$pastIllness[11]->otherIllnessName}} -
-                @if($pastIllness[11]->isValueSet==1) Yes @else No @endif
+
+                @if($pastIllness[11]->isValueSet==1) {{$pastIllness[11]->otherIllnessName}} - Yes @else No @endif
             </div>
         </div>
 

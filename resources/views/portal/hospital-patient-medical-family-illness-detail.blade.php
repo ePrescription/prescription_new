@@ -69,7 +69,8 @@
         <div class="form-group col-sm-6">
             <label class="col-sm-6 control-label">Any other herideitory diseases</label>
             <div class="col-sm-6 control-label">
-                @if($familyIllness[9]->relation!="") Yes -  {{$familyIllness[9]->relation}} @else No @endif
+
+                @if($familyIllness[9]->relation!="") {{$familyIllness[9]->otherIllnessName}} - Yes -  {{$familyIllness[9]->relation}} @else No @endif
             </div>
         </div>
         <div class="form-group col-sm-6">
@@ -81,8 +82,8 @@
         <div class="form-group col-sm-6">
             <label class="col-sm-6 control-label">Others</label>
             <div class="col-sm-6 control-label">
-                {{$familyIllness[11]->otherIllnessName}} -
-                @if($familyIllness[11]->relation!="") Yes - {{$familyIllness[11]->relation}} @else No @endif
+
+                @if($familyIllness[11]->relation!="") {{$familyIllness[11]->otherIllnessName}} - Yes - {{$familyIllness[11]->relation}} @else No @endif
             </div>
         </div>
     </form>

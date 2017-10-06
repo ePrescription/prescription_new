@@ -70,14 +70,16 @@ $profile_menu="0";
                                                             <input type="hidden" class="form-control" name="pastIllness[{{$i}}][pastIllnessId]" value="{{$patientPastIllnessValue->id}}" required="required" />
                                                             <input type="hidden" class="form-control" name="pastIllness[{{$i}}][pastIllnessDate]" value="{{date('Y-m-d')}}" required="required" />
                                                             <div class="radio radio-info radio-inline">
-                                                                <input type="radio" id="pastIllness{{$patientPastIllnessValue->id}}1" value="1" name="pastIllness[{{$i}}][isValueSet]" @if($patientPastIllnessValue->illness_name=="Others") onclick="javascript:enableBox('past{{$i}}')" class="past{{$i}}" @endif />
+                                                                <input type="radio" id="pastIllness{{$patientPastIllnessValue->id}}1" value="1" name="pastIllness[{{$i}}][isValueSet]" @if($patientPastIllnessValue->illness_name=="Others") onclick="javascript:enableBox('past{{$i}}')" class="past{{$i}}" @endif @if($patientPastIllnessValue->illness_name=="Surgeries") onclick="javascript:enableBox('past{{$i}}')" class="past{{$i}}" @endif />
                                                                 <label for="pastIllness{{$patientPastIllnessValue->id}}1"> Yes </label>
                                                             </div>
                                                             <div class="radio radio-inline">
-                                                                <input type="radio" id="pastIllness{{$patientPastIllnessValue->id}}2" value="0" name="pastIllness[{{$i}}][isValueSet]" checked="checked" @if($patientPastIllnessValue->illness_name=="Others") onclick="javascript:disableBox('past{{$i}}')" class="past{{$i}}" @endif />
+                                                                <input type="radio" id="pastIllness{{$patientPastIllnessValue->id}}2" value="0" name="pastIllness[{{$i}}][isValueSet]" checked="checked" @if($patientPastIllnessValue->illness_name=="Others") onclick="javascript:disableBox('past{{$i}}')" class="past{{$i}}" @endif @if($patientPastIllnessValue->illness_name=="Surgeries") onclick="javascript:disableBox('past{{$i}}')" class="past{{$i}}" @endif />
                                                                 <label for="pastIllness{{$patientPastIllnessValue->id}}2"> No </label>
                                                             </div>
                                                             @if($patientPastIllnessValue->illness_name=="Others")
+                                                                <input type="text" class="form-control" name="pastIllness[{{$i}}][pastIllnessName]" value="None" required="required" id="past{{$i}}" style="display: none;" />
+                                                            @elseif($patientPastIllnessValue->illness_name=="Surgeries")
                                                                 <input type="text" class="form-control" name="pastIllness[{{$i}}][pastIllnessName]" value="None" required="required" id="past{{$i}}" style="display: none;" />
                                                             @else
                                                                 <input type="hidden" class="form-control" name="pastIllness[{{$i}}][pastIllnessName]" value="{{$patientPastIllnessValue->illness_name}}" required="required" />
