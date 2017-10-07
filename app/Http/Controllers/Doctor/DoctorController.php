@@ -5790,7 +5790,7 @@ class DoctorController extends Controller
         //dd('Hi');
         $labReceiptsVM = null;
         $status = true;
-        dd($labReceiptRequest);
+        //dd($labReceiptRequest);
         try
         {
 
