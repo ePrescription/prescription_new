@@ -1416,10 +1416,12 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($currentDate);
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
-            $query->whereDate('da.appointment_date', '<=', $currentDate);
+            //$query->whereDate('da.appointment_date', '<=', $currentDate);
             $query->whereNotNull('da.appointment_date');
             $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
             $query->groupBy('da.appointment_category');
+
+            //dd($query->toSql());
 
             //DB::connection()->enableQueryLog();
             //$appointments = $query->get();
@@ -6578,6 +6580,8 @@ class HospitalImpl implements HospitalInterface{
         $patientDrugHistory = null;
         $bloodTests = null;
         $labFeeReceipt = null;
+        $isXrayTest = false;
+        $isDentalTest = false;
 
         try
         {
@@ -6597,9 +6601,13 @@ class HospitalImpl implements HospitalInterface{
             $dentalTests = $labReceiptsVM->getDentalTests();
             $xrayTests = $labReceiptsVM->getXrayTests();
 
+            //dd($dentalTests);
+            //dd($isDentalTest);
+
             //dd($dentalTests[0]['id']);
 
             $labFeeReceipt = $this->saveLabFeeReceipt($labReceiptsVM);
+
             //dd($labFeeReceipt->id);
 
             if(!is_null($labFeeReceipt))
@@ -6608,12 +6616,16 @@ class HospitalImpl implements HospitalInterface{
                 {
                     foreach($bloodTests as $bloodTest)
                     {
-                        $updateValues = array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1,
-                            'pbe.fee_receipt_id' => $labFeeReceipt->id,
-                            'pbe.created_at' => $labReceiptsVM->getCreatedAt(), 'pbe.updated_at' => $labReceiptsVM->getUpdatedAt());
-                        $query = DB::table('patient_blood_examination as pbe')->where('pbe.id', '=', $bloodTest['id']);
-                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-                        $query->update($updateValues);
+                        if($bloodTest['fees'] > 0)
+                        {
+                            $updateValues = array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1,
+                                'pbe.fee_receipt_id' => $labFeeReceipt->id,
+                                'pbe.created_at' => $labReceiptsVM->getCreatedAt(), 'pbe.updated_at' => $labReceiptsVM->getUpdatedAt());
+                            $query = DB::table('patient_blood_examination as pbe')->where('pbe.id', '=', $bloodTest['id']);
+                            //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                            $query->update($updateValues);
+                        }
+
                     }
                 }
 
@@ -6621,12 +6633,16 @@ class HospitalImpl implements HospitalInterface{
                 {
                     foreach($urineTests as $urineTest)
                     {
-                        $updateValues = array('pue.fees' => $urineTest['fees'], 'pue.is_fees_paid' => 1,
-                            'pue.fee_receipt_id' => $labFeeReceipt->id,
-                            'pue.created_at' => $labReceiptsVM->getCreatedAt(), 'pue.updated_at' => $labReceiptsVM->getUpdatedAt());
-                        $query = DB::table('patient_urine_examination as pue')->where('pue.id', '=', $urineTest['id']);
-                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-                        $query->update($updateValues);
+                        if($urineTest['fees'] > 0)
+                        {
+                            $updateValues = array('pue.fees' => $urineTest['fees'], 'pue.is_fees_paid' => 1,
+                                'pue.fee_receipt_id' => $labFeeReceipt->id,
+                                'pue.created_at' => $labReceiptsVM->getCreatedAt(), 'pue.updated_at' => $labReceiptsVM->getUpdatedAt());
+                            $query = DB::table('patient_urine_examination as pue')->where('pue.id', '=', $urineTest['id']);
+                            //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                            $query->update($updateValues);
+                        }
+
                     }
                 }
 
@@ -6634,12 +6650,16 @@ class HospitalImpl implements HospitalInterface{
                 {
                     foreach($motionTests as $motionTest)
                     {
-                        $updateValues = array('pme.fees' => $motionTest['fees'], 'pme.is_fees_paid' => 1,
-                            'pme.fee_receipt_id' => $labFeeReceipt->id,
-                            'pme.created_at' => $labReceiptsVM->getCreatedAt(), 'pme.updated_at' => $labReceiptsVM->getUpdatedAt());
-                        $query = DB::table('patient_motion_examination as pme')->where('pme.id', '=', $motionTest['id']);
-                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-                        $query->update($updateValues);
+                        if($motionTest['fees'] > 0)
+                        {
+                            $updateValues = array('pme.fees' => $motionTest['fees'], 'pme.is_fees_paid' => 1,
+                                'pme.fee_receipt_id' => $labFeeReceipt->id,
+                                'pme.created_at' => $labReceiptsVM->getCreatedAt(), 'pme.updated_at' => $labReceiptsVM->getUpdatedAt());
+                            $query = DB::table('patient_motion_examination as pme')->where('pme.id', '=', $motionTest['id']);
+                            //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                            $query->update($updateValues);
+                        }
+
                     }
                 }
 
@@ -6647,12 +6667,16 @@ class HospitalImpl implements HospitalInterface{
                 {
                     foreach($scanTests as $scanTest)
                     {
-                        $updateValues = array('ps.fees' => $scanTest['fees'], 'ps.is_fees_paid' => 1,
-                            'ps.fee_receipt_id' => $labFeeReceipt->id,
-                            'ps.created_at' => $labReceiptsVM->getCreatedAt(), 'ps.updated_at' => $labReceiptsVM->getUpdatedAt());
-                        $query = DB::table('patient_scan as ps')->where('ps.id', '=', $scanTest['id']);
-                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-                        $query->update($updateValues);
+                        if($scanTest['fees'] > 0)
+                        {
+                            $updateValues = array('ps.fees' => $scanTest['fees'], 'ps.is_fees_paid' => 1,
+                                'ps.fee_receipt_id' => $labFeeReceipt->id,
+                                'ps.created_at' => $labReceiptsVM->getCreatedAt(), 'ps.updated_at' => $labReceiptsVM->getUpdatedAt());
+                            $query = DB::table('patient_scan as ps')->where('ps.id', '=', $scanTest['id']);
+                            //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                            $query->update($updateValues);
+                        }
+
                     }
                 }
 
@@ -6660,12 +6684,16 @@ class HospitalImpl implements HospitalInterface{
                 {
                     foreach($ultraSoundTests as $ultraSoundTest)
                     {
-                        $updateValues = array('pus.fees' => $ultraSoundTest['fees'], 'pus.is_fees_paid' => 1,
-                            'pus.fee_receipt_id' => $labFeeReceipt->id,
-                            'pus.created_at' => $labReceiptsVM->getCreatedAt(), 'pus.updated_at' => $labReceiptsVM->getUpdatedAt());
-                        $query = DB::table('patient_ultra_sound as pus')->where('pus.id', '=', $ultraSoundTest['id']);
-                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-                        $query->update($updateValues);
+                        if($ultraSoundTest['fees'] > 0)
+                        {
+                            $updateValues = array('pus.fees' => $ultraSoundTest['fees'], 'pus.is_fees_paid' => 1,
+                                'pus.fee_receipt_id' => $labFeeReceipt->id,
+                                'pus.created_at' => $labReceiptsVM->getCreatedAt(), 'pus.updated_at' => $labReceiptsVM->getUpdatedAt());
+                            $query = DB::table('patient_ultra_sound as pus')->where('pus.id', '=', $ultraSoundTest['id']);
+                            //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                            $query->update($updateValues);
+                        }
+
                     }
                 }
 
@@ -6674,27 +6702,44 @@ class HospitalImpl implements HospitalInterface{
                     //dd($dentalTests);
                     $examinationId = $dentalTests[0]['id'];
 
-                    $dentalExamination = PatientDentalExamination::where('id', '=', $examinationId)->first();
-                    //dd($dentalExamination);
-
-                    if(!is_null($dentalExamination))
-                    {
-                        $dentalExamination->fee_receipt_id = $labFeeReceipt->id;
-                        $dentalExamination->updated_at = $labReceiptsVM->getUpdatedAt();
-
-                        //dd($dentalExamination);
-                        $dentalExamination->save();
-                    }
-                    //dd($dentalExamination);
-
                     foreach($dentalTests as $dentalTest)
                     {
-                        $updateValues = array('pdei.fees' => $dentalTest['fees'], 'pdei.is_fees_paid' => 1,
-                            'pdei.created_at' => $labReceiptsVM->getCreatedAt(), 'pdei.updated_at' => $labReceiptsVM->getUpdatedAt());
-                        $query = DB::table('patient_dental_examination_item as pdei')->where('pdei.id', '=', $dentalTest['item_id']);
-                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-                        $query->update($updateValues);
+                        if($dentalTest['fees'] > 0)
+                        {
+                            $isDentalTest = true;
+                            break;
+                        }
                     }
+
+                    if($isDentalTest)
+                    {
+                        $dentalExamination = PatientDentalExamination::where('id', '=', $examinationId)->first();
+                        //dd($dentalExamination);
+
+                        if(!is_null($dentalExamination))
+                        {
+                            $dentalExamination->fee_receipt_id = $labFeeReceipt->id;
+                            $dentalExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                            //dd($dentalExamination);
+                            $dentalExamination->save();
+                        }
+                        //dd($dentalExamination);
+
+                        foreach($dentalTests as $dentalTest)
+                        {
+                            if($dentalTest['fees'] > 0)
+                            {
+                                $updateValues = array('pdei.fees' => $dentalTest['fees'], 'pdei.is_fees_paid' => 1,
+                                    'pdei.created_at' => $labReceiptsVM->getCreatedAt(), 'pdei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_dental_examination_item as pdei')->where('pdei.id', '=', $dentalTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                                $query->update($updateValues);
+                            }
+
+                        }
+                    }
+
                 }
 
                 if(!is_null($xrayTests) && !empty($xrayTests))
@@ -6702,27 +6747,45 @@ class HospitalImpl implements HospitalInterface{
                     //dd($dentalTests);
                     $examinationId = $xrayTests[0]['id'];
 
-                    $xrayExamination = PatientXRayExamination::where('id', '=', $examinationId)->first();
-                    //dd($dentalExamination);
-
-                    if(!is_null($xrayExamination))
-                    {
-                        $xrayExamination->fee_receipt_id = $labFeeReceipt->id;
-                        $xrayExamination->updated_at = $labReceiptsVM->getUpdatedAt();
-
-                        //dd($dentalExamination);
-                        $xrayExamination->save();
-                    }
-                    //dd($dentalExamination);
-
                     foreach($xrayTests as $xrayTest)
                     {
-                        $updateValues = array('pxei.fees' => $xrayTest['fees'], 'pxei.is_fees_paid' => 1,
-                            'pxei.created_at' => $labReceiptsVM->getCreatedAt(), 'pxei.updated_at' => $labReceiptsVM->getUpdatedAt());
-                        $query = DB::table('patient_xray_examination_item as pxei')->where('pxei.id', '=', $xrayTest['item_id']);
-                        //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-                        $query->update($updateValues);
+                        if($xrayTest['fees'] > 0)
+                        {
+                            $isXrayTest = true;
+                            break;
+                        }
                     }
+
+                    if($isXrayTest)
+                    {
+                        $xrayExamination = PatientXRayExamination::where('id', '=', $examinationId)->first();
+                        //dd($dentalExamination);
+
+                        if(!is_null($xrayExamination))
+                        {
+                            $xrayExamination->fee_receipt_id = $labFeeReceipt->id;
+                            $xrayExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                            //dd($dentalExamination);
+                            $xrayExamination->save();
+                        }
+                        //dd($dentalExamination);
+
+                        foreach($xrayTests as $xrayTest)
+                        {
+                            if($xrayTest['fees'] > 0)
+                            {
+                                $updateValues = array('pxei.fees' => $xrayTest['fees'], 'pxei.is_fees_paid' => 1,
+                                    'pxei.created_at' => $labReceiptsVM->getCreatedAt(), 'pxei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_xray_examination_item as pxei')->where('pxei.id', '=', $xrayTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                                $query->update($updateValues);
+                            }
+
+                        }
+                    }
+
+
                 }
             }
             //dd($bloodTests);

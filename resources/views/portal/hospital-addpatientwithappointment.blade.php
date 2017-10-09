@@ -234,7 +234,7 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Mobile <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" />
+                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" maxlength="10"/>
                                                         @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
                                                     </div>
                                                 </div>
@@ -813,6 +813,21 @@ $time_array=array(
                 }
             });
         });
+
+        $("#telephone1").keyup(function() {
+            var a = $("#telephone").val();
+            var filter = /^[7-9][0-9]{9}$/;
+
+            if (filter.test(a)) {
+                return true;
+                //alert("valid");
+            }
+            else {
+                alert(a+"Please enter the mobile number starting with 7 or 8 or 9");
+            }
+        });
+
+
     </script>
 
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
