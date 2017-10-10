@@ -442,7 +442,7 @@ class HospitalImpl implements HospitalInterface{
             $query = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name as name', 'p.address','p.pid', 'c.city_name',
                             'co.name as country','p.telephone', 'p.email', 'p.relationship', 'p.patient_spouse_name as spouseName',
                             'p.dob', 'p.age', 'p.place_of_birth', 'p.nationality', 'p.gender'
-                            ,'da.appointment_date', 'da.appointment_time', 'da.brief_history');
+                            ,'da.appointment_date', 'da.appointment_time', 'da.brief_history', 'da.fee');
             $query->leftJoin('doctor_appointment as da', 'da.patient_id', '=', 'p.patient_id');
             $query->leftJoin('cities as c', 'c.id', '=', 'p.city');
             $query->leftJoin('countries as co', 'co.id', '=', 'p.country');
@@ -639,6 +639,8 @@ class HospitalImpl implements HospitalInterface{
             $query->join('brands as b', 'b.id', '=', 'pd.brand_id');
             $query->join('drugs as d', 'd.id', '=', 'pd.drug_id');
             $query->where('pp.id', '=', $prescriptionId);
+
+            //dd($query->toSql());
             $prescriptionDetails = $query->get();
 
             if(!empty($prescriptionDetails))
@@ -1520,6 +1522,19 @@ class HospitalImpl implements HospitalInterface{
 
             $dentalTestFees = $dentalExamQuery->get();
 
+            $xrayExamQuery = DB::table('patient_xray_examination_item as pxei');
+            $xrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+            $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
+            $xrayExamQuery->whereDate('pxei.created_at', '=', $currentDate);
+            $xrayExamQuery->where(function($xrayExamQuery){
+                $xrayExamQuery->where(DB::raw('TIME(pxei.created_at)'), '>=', '07:00:00');
+                $xrayExamQuery->where(DB::raw('TIME(pxei.created_at)'), '<=', '19:00:00');
+            });
+
+            $xrayExamQuery->select(DB::raw("SUM(pxei.fees) as xrayTestAmount"));
+
+            $xRayFees = $xrayExamQuery->get();
+
             //$query = DB::getQueryLog();
             //dd($query);
 
@@ -1530,12 +1545,15 @@ class HospitalImpl implements HospitalInterface{
             AND TIME(da.`created_at`) <= '19:00:00'
             */
 
-            $totalAmount = $appFees + $bloodTestFees + $motionTestFees + $urineTestFees + $scanTestFees + $ultraSoundTestFees + $dentalTestFees;
-
+            $totalAmount = $appFees + $bloodTestFees + $motionTestFees + $urineTestFees + $scanTestFees + $ultraSoundTestFees + $dentalTestFees + $xRayFees;
+            $labAmount = $bloodTestFees + $motionTestFees + $urineTestFees + $scanTestFees + $ultraSoundTestFees + $dentalTestFees + $xRayFees;
 
 
             $dashboardDetails["appointmentCategory"] = $appointments;
             $dashboardDetails["totalAmountCollected"] = $totalAmount;
+            $dashboardDetails["totalLabFees"] = $labAmount;
+            $dashboardDetails["consultingFees"] = $appFees;
+
             //dd($dashboardDetails);
         }
         catch(QueryException $queryEx)
@@ -2822,7 +2840,8 @@ class HospitalImpl implements HospitalInterface{
 
             $patientHistoryQuery->select('pph.id', 'pph.patient_id as patientId', 'ph.id as personalHistoryId',
                 'ph.personal_history_name as personalHistoryName', 'phi.id as personalHistoryItemId',
-                'phi.personal_history_item_name as personalHistoryItemName');
+                'phi.personal_history_item_name as personalHistoryItemName',
+                'pph.personal_history_value as personalHistoryValue');
 
             //dd($patientHistoryQuery->toSql());
             $patientHistory = $patientHistoryQuery->get();
@@ -2857,8 +2876,9 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_ERROR, $exc);
         }
 
-        //dd($feeReceiptDetails);
+        //dd($personalHistoryDetails);
         return $personalHistoryDetails;
+
     }
 
     /**
@@ -4759,6 +4779,7 @@ class HospitalImpl implements HospitalInterface{
             $latestScanQuery->where('ps.patient_id', '=', $patientId);
             $latestScanQuery->where('ps.is_value_set', '=', 1);
             $latestScanQuery->select('ps.id', 'ps.patient_id', 's.scan_name', 'ps.scan_date');
+            //dd($latestScanQuery->toSql());
             $latestScans = $latestScanQuery->get();
 
             $latestSymptomsQuery = DB::table('patient_symptoms as ps');
@@ -4860,6 +4881,28 @@ class HospitalImpl implements HospitalInterface{
                 'pxe.examination_date');
             //dd($latestDentalExamQuery->toSql());
             $xrayExaminations = $latestXrayExamQuery->get();
+
+            $latestPresQuery = DB::table('prescription_details as pd')->select('b.id as trade_id',
+                DB::raw('TRIM(UPPER(b.brand_name)) as trade_name'),
+                //'d.id as formulation_id',
+                //DB::raw('TRIM(UPPER(d.drug_name)) as formulation_name'),
+                'b.id as formulation_id',
+                DB::raw('TRIM(UPPER(b.brand_name)) as formulation_name'),
+                'pd.dosage', 'pd.no_of_days', 'pd.intake_form',
+                'pd.morning', 'pd.afternoon', 'pd.night', 'pd.drug_status');
+            $latestPresQuery->join('patient_prescription as pp', 'pp.id', '=', 'pd.patient_prescription_id');
+            $latestPresQuery->join('brands as b', 'b.id', '=', 'pd.brand_id');
+            $latestPresQuery->join('drugs as d', 'd.id', '=', 'pd.drug_id');
+            $latestPresQuery->where('pp.prescription_date', function($latestPresQuery) use($patientId){
+                $latestPresQuery->select(DB::raw('MAX(pp.prescription_date)'));
+                $latestPresQuery->from('patient_prescription as pp')->where('pp.patient_id', '=', $patientId);
+            });
+            $latestPresQuery->where('pp.patient_id', '=', $patientId);
+
+            $latestPrescription = $latestPresQuery->get();
+
+            //$latestPresQuery =
+
             //dd($dentalExaminations);
 
             /*$drugQuery = DB::table('patient_drug_history as pdh')->select('pdh.id as id', 'pdh.patient_id as patientId',
@@ -4976,6 +5019,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates['recentSurgeryHistory'] = $latestSurgeryHistory;
             $examinationDates['dentalExaminations'] = $dentalExaminations;
             $examinationDates['xrayExaminations'] = $xrayExaminations;
+            $examinationDates['latestPrescription'] = $latestPrescription;
 
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;
             $examinationDates["pastIllnessDates"] = $pastIllnessDates;
@@ -4993,7 +5037,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["dentalTestDates"] = $dentalTestDates;
             $examinationDates["xrayTestDates"] = $xrayTestDates;
 
-            //dd($examinationDates);
+            dd($examinationDates);
 
         }
         catch(QueryException $queryEx)
@@ -5228,6 +5272,7 @@ class HospitalImpl implements HospitalInterface{
                     $personalHistoryId = $patientHistory->personalHistoryId;
                     $personalHistoryItemId = $patientHistory->personalHistoryItemId;
                     $isValueSet = property_exists($patientHistory, 'isValueSet') ? $patientHistory->isValueSet : null;
+                    $personalHistoryValue = (isset($patientHistory->personalHistoryItemValue)) ? $patientHistory->personalHistoryItemValue : null;
                     //$personalHistoryDate = \DateTime::createFromFormat('Y-m-d', $patientHistory->personalHistoryDate);
                     //$historyDate = $patientHistory->personalHistoryDate;
 
@@ -5243,11 +5288,14 @@ class HospitalImpl implements HospitalInterface{
                     }
                     //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
 
+                    //$dentalExaminationItems->dental_examination_name = (isset($examination->dentalExaminationName)) ? $examination->dentalExaminationName : null;
+
 
                     $patientUser->personalhistory()->attach($personalHistoryId,
                         array('personal_history_item_id' => $personalHistoryItemId,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
+                            'personal_history_value' => $personalHistoryValue,
                             'is_value_set' => $isValueSet,
                             'personal_history_date' => $personalHistoryDate,
                             'created_by' => 'Admin',
