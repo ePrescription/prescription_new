@@ -11,18 +11,18 @@
 <div class="col-sm-12">
 <div class="panel panel-primary">
 <div class="panel-body">
-
-    <form action="#" role="form" method="POST" class="form-horizontal ">
+    <style>
+        form.display label.control-label{ text-align:left; }
+    </style>
+    <form role="form" method="POST" class="display form-horizontal">
         <?php $i=0; ?>
         @foreach($motionTests as $motionTestsValue)
+            @if($motionTestsValue->isValueSet==1)
             <div class="form-group col-sm-6">
-
-                <label class="col-sm-6 control-label">{{$motionTestsValue->examinationName}}</label>
-                <div class="col-sm-6 control-label">
-                    @if($motionTestsValue->isValueSet==1) Yes @else No @endif
-                </div>
+                <label class="col-sm-12 control-label">{{$motionTestsValue->examinationName}}</label>
             </div>
             <?php $i++; ?>
+            @endif
         @endforeach
     </form>
 

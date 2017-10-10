@@ -256,6 +256,33 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
+
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Relationship</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="relationship" id="relationship">
+                                                            <option value="" selected></option>
+                                                            <option value="Brother">Brother</option>
+                                                            <option value="Sister">Sister</option>
+                                                            <option value="Husband">Husband</option>
+                                                            <option value="Wife">Wife</option>
+                                                            <option value="Father">Father</option>
+                                                            <option value="Mother">Mother</option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                        @if ($errors->has('relationship'))<p class="error" style="">{!!$errors->first('relationship')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Relation Name</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="spouseName" id="spouseName" value="" />
+                                                        @if ($errors->has('spouseName'))<p class="error" style="">{!!$errors->first('spouseName')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Address</label>
                                                     <div class="col-sm-9">
@@ -492,6 +519,9 @@ $time_array=array(
                 $('input#age').attr('readonly', false);
                 $('input#gender1').attr('disabled', false);
                 $('input#gender2').attr('disabled', false);
+                $('select#relationship').attr('disabled', false);
+                $('input#spouseName').attr('disabled', false);
+                $('textarea#address').attr('disabled', false);
 
             }
             else
@@ -504,6 +534,9 @@ $time_array=array(
                 $('input#age').attr('readonly', true);
                 $('input#gender1').attr('disabled', true);
                 $('input#gender2').attr('disabled', true);
+                $('select#relationship').attr('disabled', true);
+                $('input#spouseName').attr('disabled', true);
+                $('textarea#address').attr('disabled', true);
             }
         }
 
@@ -536,6 +569,10 @@ $time_array=array(
                     {
                         $("input#gender2").attr('checked', 'checked');
                     }
+
+                    $("select#relationship").val(data.result[0].relationship);
+                    $("input#spouseName").val(data.result[0].spouseName);
+                    $("textarea#address").val(data.result[0].address);
 
                     $("input#prev_appointment_date").val(data.result[0].appointment_date);
                 }

@@ -1549,6 +1549,7 @@ class HospitalImpl implements HospitalInterface{
             $labAmount = $bloodTestFees + $motionTestFees + $urineTestFees + $scanTestFees + $ultraSoundTestFees + $dentalTestFees + $xRayFees;
 
 
+
             $dashboardDetails["appointmentCategory"] = $appointments;
             $dashboardDetails["totalAmountCollected"] = $totalAmount;
             $dashboardDetails["totalLabFees"] = $labAmount;

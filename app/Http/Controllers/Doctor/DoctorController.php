@@ -5432,6 +5432,7 @@ class DoctorController extends Controller
         try
         {
             $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+            //dd($patientExaminations);
         }
         catch(HospitalException $hospitalExc)
         {
