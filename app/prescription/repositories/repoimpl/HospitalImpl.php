@@ -5037,7 +5037,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["dentalTestDates"] = $dentalTestDates;
             $examinationDates["xrayTestDates"] = $xrayTestDates;
 
-            dd($examinationDates);
+            //dd($examinationDates);
 
         }
         catch(QueryException $queryEx)
