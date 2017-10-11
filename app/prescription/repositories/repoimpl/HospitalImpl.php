@@ -1445,6 +1445,9 @@ class HospitalImpl implements HospitalInterface{
             $dashBoardQuery->select(DB::raw("SUM(da.fee) as appAmount"));
             //dd($dashBoardQuery->toSql());
             $appFees = $dashBoardQuery->get();
+            $appTotalFees = $appFees[0]->appAmount;
+
+            //dd($totalFees);
 
             /*$hospitalQuery->join('hospital as h', function($join) {
                 $join->on('h.hospital_id', '=', 'users.id');
@@ -1462,6 +1465,8 @@ class HospitalImpl implements HospitalInterface{
             //dd($bloodExamQuery->toSql());
 
             $bloodTestFees = $bloodExamQuery->get();
+            $bloodTotalFees = $bloodTestFees[0]->bloodTestAmount;
+            //dd($bloodTestFees);
 
             $motionExamQuery = DB::table('patient_motion_examination as pme')->where('pme.hospital_id', '=', $hospitalId);
             $motionExamQuery->whereDate('pme.created_at', '=', $currentDate);
@@ -1472,8 +1477,9 @@ class HospitalImpl implements HospitalInterface{
 
             $motionExamQuery->select(DB::raw("SUM(pme.fees) as motionTestAmount"));
             //dd($bloodExamQuery->toSql());
-
             $motionTestFees = $motionExamQuery->get();
+            $motionTotalFees = $motionTestFees[0]->motionTestAmount;
+
 
             $urineExamQuery = DB::table('patient_urine_examination as pue')->where('pue.hospital_id', '=', $hospitalId);
             $urineExamQuery->whereDate('pue.created_at', '=', $currentDate);
@@ -1484,8 +1490,8 @@ class HospitalImpl implements HospitalInterface{
 
             $urineExamQuery->select(DB::raw("SUM(pue.fees) as urineTestAmount"));
             //dd($bloodExamQuery->toSql());
-
             $urineTestFees = $urineExamQuery->get();
+            $urineTotalFees = $urineTestFees[0]->urineTestAmount;
 
             $scanExamQuery = DB::table('patient_scan as ps')->where('ps.hospital_id', '=', $hospitalId);
             $scanExamQuery->whereDate('ps.created_at', '=', $currentDate);
@@ -1497,6 +1503,7 @@ class HospitalImpl implements HospitalInterface{
             $scanExamQuery->select(DB::raw("SUM(ps.fees) as scanTestAmount"));
 
             $scanTestFees = $scanExamQuery->get();
+            $scanTotalFees = $scanTestFees[0]->scanTestAmount;
 
             $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus')->where('pus.hospital_id', '=', $hospitalId);
             $ultraSoundExamQuery->whereDate('pus.created_at', '=', $currentDate);
@@ -1508,6 +1515,7 @@ class HospitalImpl implements HospitalInterface{
             $ultraSoundExamQuery->select(DB::raw("SUM(pus.fees) as ultraSoundTestAmount"));
 
             $ultraSoundTestFees = $ultraSoundExamQuery->get();
+            $ultraSoundTotalFees = $ultraSoundTestFees[0]->ultraSoundTestAmount;
 
             $dentalExamQuery = DB::table('patient_dental_examination_item as pdei');
             $dentalExamQuery->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
@@ -1521,6 +1529,7 @@ class HospitalImpl implements HospitalInterface{
             $dentalExamQuery->select(DB::raw("SUM(pdei.fees) as dentalTestAmount"));
 
             $dentalTestFees = $dentalExamQuery->get();
+            $dentalTotalFees = $dentalTestFees[0]->dentalTestAmount;
 
             $xrayExamQuery = DB::table('patient_xray_examination_item as pxei');
             $xrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
@@ -1534,6 +1543,7 @@ class HospitalImpl implements HospitalInterface{
             $xrayExamQuery->select(DB::raw("SUM(pxei.fees) as xrayTestAmount"));
 
             $xRayFees = $xrayExamQuery->get();
+            $xRayTotalFees = $xRayFees[0]->xrayTestAmount;
 
             //$query = DB::getQueryLog();
             //dd($query);
@@ -1545,15 +1555,15 @@ class HospitalImpl implements HospitalInterface{
             AND TIME(da.`created_at`) <= '19:00:00'
             */
 
-            $totalAmount = $appFees + $bloodTestFees + $motionTestFees + $urineTestFees + $scanTestFees + $ultraSoundTestFees + $dentalTestFees + $xRayFees;
-            $labAmount = $bloodTestFees + $motionTestFees + $urineTestFees + $scanTestFees + $ultraSoundTestFees + $dentalTestFees + $xRayFees;
-
+            $totalAmount = $appTotalFees + $bloodTotalFees + $motionTotalFees + $urineTotalFees + $scanTotalFees + $ultraSoundTotalFees + $dentalTotalFees + $xRayTotalFees;
+            $labAmount = $bloodTotalFees + $motionTotalFees + $urineTotalFees + $scanTotalFees + $ultraSoundTotalFees + $dentalTotalFees + $xRayTotalFees;
+            $appTotalFees = $appTotalFees + 0;
 
 
             $dashboardDetails["appointmentCategory"] = $appointments;
             $dashboardDetails["totalAmountCollected"] = $totalAmount;
             $dashboardDetails["totalLabFees"] = $labAmount;
-            $dashboardDetails["consultingFees"] = $appFees;
+            $dashboardDetails["consultingFees"] = $appTotalFees;
 
             //dd($dashboardDetails);
         }
