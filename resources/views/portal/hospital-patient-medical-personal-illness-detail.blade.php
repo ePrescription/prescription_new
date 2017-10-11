@@ -46,18 +46,24 @@
 <div class="form-group col-sm-6">
 <label class="col-sm-6 control-label">Known Allergies</label>
 <div class="col-sm-6 control-label">
-    {{$personalHistoryDetails['patientHistory'][5]->personalHistoryItemName}}
+    @if($personalHistoryDetails['patientHistory'][5]->personalHistoryItemName=="Yes")
+        {{$personalHistoryDetails['patientHistory'][5]->personalHistoryValue}}
+    @else
+        No
+    @endif
 </div>
 </div>
 <div class="form-group col-sm-6">
 <label class="col-sm-6 control-label">Habits / Addictions</label>
 <div class="col-sm-6 control-label">
-    {{$personalHistoryDetails['patientHistory'][6]->personalHistoryItemName}}
+    @if($personalHistoryDetails['patientHistory'][6]->personalHistoryItemName=="Yes")
+        {{$personalHistoryDetails['patientHistory'][6]->personalHistoryValue}}
+    @else
+        No
+    @endif
 </div>
 </div>
 </form>
-
-
 
 
 </div> <!-- panel-body -->
