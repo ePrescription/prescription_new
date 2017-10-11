@@ -2873,7 +2873,7 @@ class DoctorController extends Controller
         {
             //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
             $appointmentDetails = HospitalServiceFacade::getAppointmentDetails($appointmentId);
-            dd($appointmentDetails);
+            //dd($appointmentDetails);
             //dd($patientAppointment);
         }
         catch(HospitalException $hospitalExc)
