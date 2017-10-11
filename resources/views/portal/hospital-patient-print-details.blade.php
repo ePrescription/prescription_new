@@ -126,6 +126,47 @@ $profile_menu="0";
                                             </div>
                                         </div>
                                         <div id="ExaminationInfoPrint" class="">
+
+                                            <?php $latestPrescription=$patientExaminations['latestPrescription']; ?>
+                                            @if(count($latestPrescription)>0)
+                                                <?php $i=0; ?>
+                                                <h4 class="m-t-0 m-b-30">Prescription Details</h4>
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>BRAND</th>
+                                                            <th>MEDICINE</th>
+                                                            <th>DOSAGE</th>
+                                                            <th>DAYS</th>
+                                                            <th>TIMING</th>
+                                                            <th>INTAKE FORM</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @foreach($latestPrescription as $latestPrescriptionValue)
+                                                            <tr>
+                                                                <td>{{$latestPrescriptionValue->trade_name}}</td>
+                                                                <td>{{$latestPrescriptionValue->formulation_name}} </td>
+                                                                <td>{{$latestPrescriptionValue->dosage}}</td>
+                                                                <td>{{$latestPrescriptionValue->no_of_days}}</td>
+                                                                <td>
+                                                                    @if($latestPrescriptionValue->morning==1) Morning @endif
+                                                                    @if($latestPrescriptionValue->afternoon==1) After Noon @endif
+                                                                    @if($latestPrescriptionValue->night==1) Night @endif
+                                                                </td>
+                                                                <td>{{$latestPrescriptionValue->intake_form}}</td>
+                                                            </tr>
+
+                                                            <?php $i++; ?>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            @endif
+
+
                                         @if(count($patientExaminations['recentBloodTests'])>0)
                                             <hr/>
 
