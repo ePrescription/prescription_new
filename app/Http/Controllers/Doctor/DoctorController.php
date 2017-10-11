@@ -2892,7 +2892,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        //return view('portal.hospital-patient-prescription-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+        return view('portal.hospital-patient-appointment-details',compact('appointmentDetails'));
     }
 
     public function PatientEditByHospitalForFront($hid,$patientId)

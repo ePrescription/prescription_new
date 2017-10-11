@@ -217,7 +217,12 @@ $profile_menu="0";
                                                                 <td>{{$appointment->hospital_name}}</td>
                                                                 <td>{{$appointment->name}}</td>
                                                                 <td>{{$appointment->appointment_date}} {{$appointment->appointment_time}}</td>
-                                                                <td>Open</td>
+                                                                <td>
+
+
+                                                                    <a href="{{URL::to('/')}}/fronthospital/patients/appointments/{{$appointment->appointment_id}}/details"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
+
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
