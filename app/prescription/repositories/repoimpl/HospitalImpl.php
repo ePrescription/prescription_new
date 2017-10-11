@@ -1667,6 +1667,7 @@ class HospitalImpl implements HospitalInterface{
     {
         $appointments = null;
 
+
         try
         {
             $query = DB::table('doctor_appointment as da')->join('hospital as h', 'h.hospital_id', '=', 'da.hospital_id');
@@ -1691,6 +1692,63 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $appointments;
+    }
+
+    /**
+     * Get patient appointment details
+     * @param $appointmentId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAppointmentDetails($appointmentId)
+    {
+        $appointments = null;
+        $appointmentDetails = null;
+
+        try
+        {
+            $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.pid',
+                'p.telephone', 'p.email');
+            $patientQuery->join('doctor_appointment as da', 'da.patient_id', '=', 'p.patient_id');
+            $patientQuery->where('da.id', '=', $appointmentId);
+            $patientDetails = $patientQuery->get();
+
+            $doctorQuery = DB::table('doctor as d')->select('d.id', 'd.doctor_id', 'd.name', 'd.did', 'd.telephone', 'd.email');
+            $doctorQuery->join('doctor_appointment as da', 'da.doctor_id', '=', 'd.doctor_id');
+            $doctorQuery->where('da.id', '=', $appointmentId);
+            $doctorDetails = $doctorQuery->get();
+
+            $hospitalQuery = DB::table('hospital as h')->select('h.id', 'h.hospital_id', 'h.hospital_name', 'h.hid', 'h.telephone', 'h.email');
+            $hospitalQuery->join('doctor_appointment as da', 'da.hospital_id', '=', 'h.hospital_id');
+            $hospitalQuery->where('da.id', '=', $appointmentId);
+            $hospitalDetails = $hospitalQuery->get();
+
+            $query = DB::table('doctor_appointment as da')->join('hospital as h', 'h.hospital_id', '=', 'da.hospital_id');
+            $query->where('da.id', $appointmentId);
+            $query->select('da.appointment_category', 'da.appointment_date', 'da.appointment_time',
+                'da.brief_history as notes', 'da.fee', 'da.referral_type', 'da.referral_doctor',
+                'da.referral_hospital', 'da.referral_hospital_location');
+
+            //
+            $appointments = $query->get();
+
+            $appointmentDetails["patientProfile"] = $patientDetails;
+            $appointmentDetails["doctorProfile"] = $doctorDetails;
+            $appointmentDetails["hospitalProfile"] = $hospitalDetails;
+            $appointmentDetails["appointmentDetails"] = $appointments;
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINT_DETAILS_ERROR, $queryEx);
+        }
+        catch(Exception $ex)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINT_DETAILS_ERROR, $ex);
+        }
+
+        return $appointmentDetails;
     }
 
 

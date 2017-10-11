@@ -90,6 +90,7 @@
         "311" => "Successfully retrieved patient appointment dates",
         "312" => "No patient appointment dates found",
         "313" => "No dashboard details available",
+        "314" => "Unable to get appointment details",
 
         "1001" => "Prescription delivered successfully through SMS",
         "1002" => "Unable to deliver prescription through SMS",

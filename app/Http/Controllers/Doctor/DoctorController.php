@@ -2856,6 +2856,45 @@ class DoctorController extends Controller
 
     }
 
+    /**
+     * Get patient appointment details
+     * @param $appointmentId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAppointmentDetails($appointmentId)
+    {
+        $appointmentDetails = null;
+        //dd($appointmentId);
+
+        try
+        {
+            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
+            $appointmentDetails = HospitalServiceFacade::getAppointmentDetails($appointmentId);
+            dd($appointmentDetails);
+            //dd($patientAppointment);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        //return view('portal.hospital-patient-prescription-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+    }
+
     public function PatientEditByHospitalForFront($hid,$patientId)
     {
         $patientDetails = null;
