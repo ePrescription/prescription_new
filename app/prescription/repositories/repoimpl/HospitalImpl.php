@@ -4747,6 +4747,7 @@ class HospitalImpl implements HospitalInterface{
 
         $patientLabTests = null;
 
+        $latestPrescription= null;
         try
         {
             $patientUser = User::find($patientId);
