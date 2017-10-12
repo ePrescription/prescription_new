@@ -4826,7 +4826,7 @@ class HospitalImpl implements HospitalInterface{
             $latestPersonalHistoryQuery->where('pph.patient_id', '=', $patientId);
             $latestPersonalHistoryQuery->where('pph.is_value_set', '=', 1);
             $latestPersonalHistoryQuery->select('pph.id', 'pph.patient_id', 'ph.personal_history_name',
-                'phi.personal_history_item_name','pph.personal_history_date');
+                'phi.personal_history_item_name','pph.personal_history_date', 'pp.personal_history_value');
             $latestPersonalHistory = $latestPersonalHistoryQuery->get();
 
             $latestPregnancyQuery = DB::table('patient_pregnancy as pp');
