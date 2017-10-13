@@ -2884,7 +2884,8 @@ class HospitalImpl implements HospitalInterface{
 
         $personalHistory = null;
         $patientHistory = null;
-        $personalHistoryDetails = null;
+        //$personalHistoryDetails = null;
+        $personalHistoryDetails = array();
 
         //$personalHistoryQuery
 
@@ -2903,7 +2904,8 @@ class HospitalImpl implements HospitalInterface{
                 $join->on('pph.personal_history_id', '=', 'ph.id');
                 $join->on('pph.personal_history_id', '=', 'ph.id');
             });*/
-            $patientHistoryQuery = DB::table('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId)->where('pph.personal_history_date', '=', $personalHistoryDate);
+
+            /*$patientHistoryQuery = DB::table('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId)->where('pph.personal_history_date', '=', $personalHistoryDate);
             $patientHistoryQuery->join('personal_history as ph', 'ph.id', '=', 'pph.personal_history_id');
             $patientHistoryQuery->join('personal_history_item as phi', 'phi.id', '=', 'pph.personal_history_item_id');
 
@@ -2911,23 +2913,95 @@ class HospitalImpl implements HospitalInterface{
                 'ph.personal_history_name as personalHistoryName', 'phi.id as personalHistoryItemId',
                 'phi.personal_history_item_name as personalHistoryItemName',
                 'pph.personal_history_value as personalHistoryValue');
+            $patientHistoryQuery->orderBy('pph.created_at', 'DESC');
 
             //dd($patientHistoryQuery->toSql());
-            $patientHistory = $patientHistoryQuery->get();
+            $patientHistory = $patientHistoryQuery->get();*/
             //dd($patientHistory);
 
-            $personalHistoryQuery = DB::table('personal_history as ph')->join('personal_history_item as phi', 'phi.personal_history_id', '=', 'ph.id');
+            /*$personalHistoryQuery = DB::table('personal_history as ph')->join('personal_history_item as phi', 'phi.personal_history_id', '=', 'ph.id');
             $personalHistoryQuery->select('ph.id as personalHistoryId', 'ph.personal_history_name as personalHistoryName',
                 'phi.id as personalHistoryItemId', 'phi.personal_history_item_name as personalHistoryItemName');
-            $personalHistory = $personalHistoryQuery->get();
+            $personalHistory = $personalHistoryQuery->get();*/
 
             /*if(!is_null($patientFeedback) && !empty($patientFeedback))
             {
 
             }*/
 
-            $personalHistoryDetails["patientHistory"] = $patientHistory;
-            $personalHistoryDetails["personalHistory"] = $personalHistory;
+            /*$patientHistoryQuery = DB::table('patient_personal_history as pph');
+            $patientHistoryQuery->join('personal_history as ph', 'ph.id', '=', 'pph.personal_history_id');
+            $patientHistoryQuery->join('personal_history_item as phi', 'phi.id', '=', 'pph.personal_history_item_id');
+            $patientHistoryQuery->whereIn('pph.personal_history_date', function($query) use($patientId, $personalHistoryDate){
+                $query->select('pph.personal_history_date');
+                $query->from('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
+                $query->where('pph.personal_history_date', '=', $personalHistoryDate);
+            });
+            $patientHistoryQuery->where('pph.patient_id', '=', $patientId);
+            $patientHistoryQuery->where('pph.personal_history_date', '=', $personalHistoryDate);
+            //$patientHistoryQuery->where('pph.is_value_set', '=', 1);
+            $patientHistoryQuery->select('pph.id', 'pph.patient_id', 'ph.personal_history_name',
+                'phi.personal_history_item_name','pph.personal_history_date', 'pph.personal_history_value',
+                'pph.examination_time', 'pph.is_value_set');
+            $patientHistoryQuery->orderBy('pph.id', '=', 'ASC');
+            //dd($patientHistoryQuery->toSql());
+            $personalHistoryDetails = $patientHistoryQuery->get();*/
+
+
+            $patientHistoryQuery = DB::table('patient_personal_history as pph');
+            $patientHistoryQuery->join('personal_history as ph', 'ph.id', '=', 'pph.personal_history_id');
+            $patientHistoryQuery->join('personal_history_item as phi', 'phi.id', '=', 'pph.personal_history_item_id');
+            $patientHistoryQuery->where('pph.patient_id', '=', $patientId);
+            $patientHistoryQuery->where('pph.personal_history_date', '=', $personalHistoryDate);
+            $patientHistoryQuery->where('pph.is_value_set', '=', 1);
+            $patientHistoryQuery->select('pph.id', 'pph.patient_id', 'ph.personal_history_name',
+                'phi.personal_history_item_name','pph.personal_history_date', 'pph.personal_history_value',
+                'pph.examination_time', 'pph.is_value_set');
+
+            //dd($patientHistoryQuery->toSql());
+            $patientHistory = $patientHistoryQuery->get();
+
+            //dd($bloodTests);
+            //$bloodTests = $latestBloodExamQuery->get();
+            //dd($patientHistoryQuery->toSql());
+            //$personalHistoryDetails = $query->get();
+
+            $timeQuery = DB::table('patient_personal_history as pph');
+            $timeQuery->where('pph.patient_id', '=', $patientId);
+            $timeQuery->where('pph.personal_history_date', '=', $personalHistoryDate);
+            $timeQuery->where('pph.is_value_set', '=', 1);
+            $timeQuery->select('pph.examination_time');
+            $timeQuery->groupBy('pph.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            //dd($examinationTime);
+            //$accommodations = null;
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                //$accommodations = array();
+                $historyRecord = array_filter($patientHistory, function($e) use ($patientHistory, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($personalHistoryDetails, $historyRecord);
+
+                //dd($bloodTestRecord);
+                //$patientBloodTests[$time->examination_time] = $accommodations;
+                //reset($accommodations);
+            }
+
+            //dd($personalHistoryDetails);
+
+            //$personalHistoryDetails["patientHistory"] = $patientHistory;
+            //$personalHistoryDetails["personalHistory"] = $personalHistory;
         }
         catch(QueryException $queryEx)
         {
@@ -2961,6 +3035,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientPastIllness($patientId, $pastIllnessDate)
     {
         $pastIllness = null;
+        $pastIllnessDetails = array();
 
         //dd($patientId);
 
@@ -2973,19 +3048,63 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('past_illness as pii')->select('ppi.id as patientPastIllnessId', 'pii.id as patientIllnessId', 'pii.illness_name as illnessName',
+            /*$query = DB::table('past_illness as pii')->select('ppi.id as patientPastIllnessId', 'pii.id as patientIllnessId', 'pii.illness_name as illnessName',
                 'ppi.past_illness_name as otherIllnessName', 'ppi.relation', 'ppi.is_value_set as isValueSet');
-            //$query->leftJoin('patient_past_illness as ppi', function($join){
             $query->join('patient_past_illness as ppi', function($join){
                 $join->on('ppi.past_illness_id', '=', 'pii.id');
                 $join->on('ppi.patient_id', '=', DB::raw('?'));
                 $join->on('ppi.past_illness_date', '=', DB::raw('?'));
             })->setBindings(array_merge($query->getBindings(), array($patientId, $pastIllnessDate)));
-            $query->where('pii.status', '=', 1);
-            //dd($query->toSql());
+            $query->where('pii.status', '=', 1);*/
 
+            $query = DB::table('past_illness as pii');
+            $query->join('patient_past_illness as ppi', 'ppi.past_illness_id', '=', 'pii.id');
+            $query->where('ppi.patient_id', '=', $patientId);
+            $query->where('ppi.past_illness_date', '=', $pastIllnessDate);
+            $query->where('pii.status', '=', 1);
+            //$query->orderBy('pge.id', 'DESC');
+            //$query->where('pbe.is_value_set', '=', 1);
+            $query->select( 'ppi.patient_id', 'ppi.hospital_id', 'ppi.id as patientPastIllnessId',
+                'pii.id as patientIllnessId', 'pii.illness_name as illnessName', 'ppi.past_illness_name as otherIllnessName',
+                'ppi.relation', 'ppi.is_value_set as isValueSet',
+                'ppi.past_illness_date as examinationDate',
+                'ppi.examination_time');
+            $query->orderBy('ppi.id');
+
+            //dd($query->toSql());
             $pastIllness = $query->get();
             //dd($pastIllness);
+
+            $timeQuery = DB::table('patient_past_illness as ppi');
+            $timeQuery->where('ppi.patient_id', '=', $patientId);
+            $timeQuery->where('ppi.past_illness_date', '=', $pastIllnessDate);
+            //$timeQuery->where('pbe.is_value_set', '=', 1);
+            $timeQuery->select('ppi.examination_time');
+            $timeQuery->groupBy('ppi.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $pastIllnessTestRecord = array_filter($pastIllness, function($e) use ($pastIllness, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($pastIllnessDetails, $pastIllnessTestRecord);
+
+                //dd($bloodTestRecord);
+                //$patientBloodTests[$time->examination_time] = $accommodations;
+                //reset($accommodations);
+            }
+
+            //dd($pastIllnessDetails);
         }
         catch(QueryException $queryEx)
         {
@@ -3017,6 +3136,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientFamilyIllness($patientId, $familyIllnessDate)
     {
         $familyIllness = null;
+        $familyIllnessDetails = array();
 
         try
         {
@@ -3027,7 +3147,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('family_illness as fi')->select('fi.id as familyIllnessId', 'fi.illness_name as familyIllnessName',
+            /*$query = DB::table('family_illness as fi')->select('fi.id as familyIllnessId', 'fi.illness_name as familyIllnessName',
                 'pfi.id as patientIllnessId', 'pfi.family_illness_name as otherIllnessName', 'pfi.relation', 'pfi.is_value_set as isValueSet');
             //$query->leftJoin('patient_family_illness as pfi', function($join){
             $query->join('patient_family_illness as pfi', function($join){
@@ -3035,10 +3155,52 @@ class HospitalImpl implements HospitalInterface{
                 $join->on('pfi.patient_id', '=', DB::raw('?'));
                 $join->on('pfi.family_illness_date', '=', DB::raw('?'));
             })->setBindings(array_merge($query->getBindings(), array($patientId, $familyIllnessDate)));
-            $query->where('fi.status', '=', 1);
+            $query->where('fi.status', '=', 1);*/
 
+            $query = DB::table('family_illness as fi');
+            $query->join('patient_family_illness as pfi', 'pfi.family_illness_id', '=', 'fi.id');
+            $query->where('pfi.patient_id', '=', $patientId);
+            $query->where('pfi.family_illness_date', '=', $familyIllnessDate);
+            $query->where('fi.status', '=', 1);
+            //$query->orderBy('pge.id', 'DESC');
+            //$query->where('pbe.is_value_set', '=', 1);
+            $query->select( 'pfi.patient_id', 'pfi.hospital_id', 'fi.id as familyIllnessId',
+                'fi.illness_name as familyIllnessName', 'pfi.id as patientIllnessId', 'pfi.family_illness_name as otherIllnessName',
+                'pfi.relation', 'pfi.is_value_set as isValueSet',
+                'pfi.family_illness_date as examinationDate',
+                'pfi.examination_time');
+            $query->orderBy('pfi.id');
+
+            //dd($query->toSql());
             $familyIllness = $query->get();
             //dd($pastIllness);
+
+            $timeQuery = DB::table('patient_family_illness as pfi');
+            $timeQuery->where('pfi.patient_id', '=', $patientId);
+            $timeQuery->where('pfi.family_illness_date', '=', $familyIllnessDate);
+            //$timeQuery->where('pbe.is_value_set', '=', 1);
+            $timeQuery->select('pfi.examination_time');
+            $timeQuery->groupBy('pfi.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $familyIllnessTestRecord = array_filter($familyIllness, function($e) use ($familyIllness, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($familyIllnessDetails, $familyIllnessTestRecord);
+            }
+
+            //dd($familyIllnessDetails);
         }
         catch(QueryException $queryEx)
         {
@@ -3056,7 +3218,8 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_FAMILY_ILLNESS_DETAILS_ERROR, $exc);
         }
 
-        return $familyIllness;
+        //dd($familyIllnessDetails);
+        return $familyIllnessDetails;
     }
 
     /**
@@ -3069,7 +3232,8 @@ class HospitalImpl implements HospitalInterface{
 
     public function getPatientGeneralExamination($patientId, $generalExaminationDate)
     {
-        $generalExamination = null;
+        $generalExaminations = null;
+        $generalExaminationDetails = array();
 
         try
         {
@@ -3080,7 +3244,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_general_examination as pge')->select('ge.id', 'ge.general_examination_name as generalExaminationName',
+            /*$query = DB::table('patient_general_examination as pge')->select('ge.id', 'ge.general_examination_name as generalExaminationName',
                 'pge.id as patientExaminationId', 'pge.general_examination_value as generalExaminationValue');
             //$query->rightJoin('general_examination as ge', function($join){
             $query->join('general_examination as ge', function($join){
@@ -3088,10 +3252,61 @@ class HospitalImpl implements HospitalInterface{
                 $join->on('pge.patient_id', '=', DB::raw('?'));
                 $join->on('pge.general_examination_date', '=', DB::raw('?'));
             })->setBindings(array_merge($query->getBindings(), array($patientId, $generalExaminationDate)));
-            $query->where('ge.status', '=', 1);
+            $query->where('ge.status', '=', 1);*/
 
-            $generalExamination = $query->get();
-            //dd($pastIllness);
+            $query = DB::table('patient_general_examination as pge');
+            $query->join('general_examination as ge', 'ge.id', '=', 'pge.general_examination_id');
+            $query->where('pge.patient_id', '=', $patientId);
+            $query->where('pge.general_examination_date', '=', $generalExaminationDate);
+            $query->where('ge.status', '=', 1);
+            //$query->orderBy('pge.id', 'DESC');
+            //$query->where('pbe.is_value_set', '=', 1);
+            $query->select( 'pge.patient_id', 'pge.hospital_id', 'ge.id', 'ge.general_examination_name as generalExaminationName',
+                'pge.id as patientExaminationId',
+                'pge.general_examination_value as generalExaminationValue',
+                'pge.general_examination_date as examinationDate',
+                'pge.examination_time');
+
+
+            //dd('ge query');
+            //$bloodTests = $query->get();
+            //dd($query->toSql());
+            $generalExaminations = $query->get();
+            //dd($generalExaminations);
+
+            $timeQuery = DB::table('patient_general_examination as pge');
+            $timeQuery->where('pge.patient_id', '=', $patientId);
+            $timeQuery->where('pge.general_examination_date', '=', $generalExaminationDate);
+            //$timeQuery->where('pbe.is_value_set', '=', 1);
+            $timeQuery->select('pge.examination_time');
+            $timeQuery->groupBy('pge.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $examinationTestRecord = array_filter($generalExaminations, function($e) use ($generalExaminations, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($generalExaminationDetails, $examinationTestRecord);
+
+                //dd($bloodTestRecord);
+                //$patientBloodTests[$time->examination_time] = $accommodations;
+                //reset($accommodations);
+            }
+
+            //dd($query->toSql());
+
+
+            //dd($generalExaminationDetails);
         }
         catch(QueryException $queryEx)
         {
@@ -3109,7 +3324,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_GENERAL_EXAMINATION_DETAILS_ERROR, $exc);
         }
 
-        return $generalExamination;
+        return $generalExaminationDetails;
     }
 
     /**
@@ -3122,7 +3337,8 @@ class HospitalImpl implements HospitalInterface{
 
     public function getPregnancyDetails($patientId, $pregnancyDate)
     {
-        $pregnancyDetails = null;
+        $pregnancy = null;
+        $pregnancyDetails = array();
 
         try
         {
@@ -3133,7 +3349,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_pregnancy as pp')->select('p.id as pregnancyId', 'p.pregnancy_details as pregnancyDetails',
+            /*$query = DB::table('patient_pregnancy as pp')->select('p.id as pregnancyId', 'p.pregnancy_details as pregnancyDetails',
                 'pp.id as patientPregnancyId', 'pp.pregnancy_value as pregnancyValue',
                 'pp.pregnancy_date as pregnancyExaminationDate', 'pp.is_value_set as isValueSet');
             $query->join('pregnancy as p', function($join){
@@ -3142,11 +3358,50 @@ class HospitalImpl implements HospitalInterface{
                 $join->on('pp.patient_id', '=', DB::raw('?'));
                 $join->on('pp.pregnancy_date', '=', DB::raw('?'));
             })->setBindings(array_merge($query->getBindings(), array($patientId, $pregnancyDate)));
+            $query->where('p.status', '=', 1);*/
+
+            $query = DB::table('patient_pregnancy as pp');
+            $query->join('pregnancy as p', 'p.id', '=', 'pp.pregnancy_id');
+            $query->where('pp.patient_id', '=', $patientId);
+            $query->where('pp.pregnancy_date', '=', $pregnancyDate);
             $query->where('p.status', '=', 1);
+            //$query->orderBy('pge.id', 'DESC');
+            //$query->where('pbe.is_value_set', '=', 1);
+            $query->select( 'pp.patient_id', 'pp.hospital_id', 'p.id as pregnancyId',
+                'p.pregnancy_details as pregnancyDetails', 'pp.id as patientPregnancyId', 'pp.pregnancy_value as pregnancyValue',
+                'pp.pregnancy_date as pregnancyExaminationDate', 'pp.is_value_set as isValueSet',
+                'pp.examination_time');
+            $query->orderBy('pp.id');
 
             //dd($query->toSql());
+            $pregnancy = $query->get();
+            //dd($pastIllness);
 
-            $pregnancyDetails = $query->get();
+            $timeQuery = DB::table('patient_pregnancy as pp');
+            $timeQuery->where('pp.patient_id', '=', $patientId);
+            $timeQuery->where('pp.pregnancy_date', '=', $pregnancyDate);
+            //$timeQuery->where('pbe.is_value_set', '=', 1);
+            $timeQuery->select('pp.examination_time');
+            $timeQuery->groupBy('pp.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $pregnancyTestRecord = array_filter($pregnancy, function($e) use ($pregnancy, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($pregnancyDetails, $pregnancyTestRecord);
+            }
+
             //dd($pregnancyDetails);
         }
         catch(QueryException $queryEx)
@@ -3473,6 +3728,11 @@ class HospitalImpl implements HospitalInterface{
     {
         $bloodTests = null;
 
+        //$bloodTestRecord = null;
+
+        //$accommodations = array();
+        $patientBloodTests = array();
+
         try
         {
             $patientUser = User::find($patientId);
@@ -3482,7 +3742,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_blood_examination as pbe')->select('be.id as examinationId', 'be.examination_name as examinationName',
+            /*$query = DB::table('patient_blood_examination as pbe')->select('be.id as examinationId', 'be.examination_name as examinationName',
                 'pbe.id as patientExaminationId', 'pbe.is_value_set as isValueSet', 'pbe.examination_date as examinationDate');
             //$query->rightJoin('scans as s', function($join){
             $query->join('blood_examination as be', function($join){
@@ -3490,12 +3750,119 @@ class HospitalImpl implements HospitalInterface{
                 $join->on('pbe.patient_id', '=', DB::raw('?'));
                 $join->on('pbe.examination_date', '=', DB::raw('?'));
             })->setBindings(array_merge($query->getBindings(), array($patientId, $bloodTestDate)));
-            $query->where('be.status', '=', 1);
+            $query->where('be.status', '=', 1);*/
 
-            //dd($query->toSql());
+            /*$query = DB::table('patient_blood_examination as pbe');
+            $query->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            $query->whereIn('pbe.examination_date', function($query) use($patientId, $bloodTestDate){
+                $query->select('pbe.examination_date');
+                $query->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+                $query->where('pbe.examination_date', '=', $bloodTestDate);
+            });
+            $query->where('pbe.patient_id', '=', $patientId);
+            $query->where('pbe.examination_date', '=', $bloodTestDate);
+            //$patientHistoryQuery->where('pph.is_value_set', '=', 1);
+            $query->select('be.id as examinationId', 'be.examination_name as examinationName', 'pbe.id as patientExaminationId',
+                'pbe.is_value_set as isValueSet','pbe.examination_date as examinationDate');
+            $query->orderBy('pbe.id', '=', 'ASC');*/
 
-            $bloodTests = $query->get();
-            //dd($pregnancyDetails);
+            /*$latestBloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            $latestBloodExamQuery->whereIn('pbe.examination_date', function($query) use($patientId, $bloodTestDate){
+                $query->select('pbe.examination_date');
+                $query->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+                $query->where('pbe.examination_date', '=', $bloodTestDate);
+            });
+            $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
+            $latestBloodExamQuery->where('pbe.examination_date', '=', $bloodTestDate);
+            $latestBloodExamQuery->where('pbe.is_value_set', '=', 1);
+            $latestBloodExamQuery->select('pbe.id as patientExaminationId', 'pbe.patient_id', 'pbe.hospital_id',
+                'be.id as examinationId','be.examination_name as examinationName', 'pbe.examination_date as examinationDate',
+                'pbe.examination_time',
+                'pbe.is_value_set as isValueSet');
+
+            $bloodTests = $latestBloodExamQuery->get();*/
+
+
+            $latestBloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
+            $latestBloodExamQuery->where('pbe.examination_date', '=', $bloodTestDate);
+            $latestBloodExamQuery->where('pbe.is_value_set', '=', 1);
+            $latestBloodExamQuery->select('pbe.id as patientExaminationId', 'pbe.patient_id', 'pbe.hospital_id',
+                'be.id as examinationId','be.examination_name as examinationName', 'pbe.examination_date as examinationDate',
+                'pbe.examination_time',
+                'pbe.is_value_set as isValueSet');
+
+            $bloodTests = $latestBloodExamQuery->get();
+
+            //dd($bloodTests);
+            //$bloodTests = $latestBloodExamQuery->get();
+            //dd($patientHistoryQuery->toSql());
+            //$personalHistoryDetails = $query->get();
+
+            $timeQuery = DB::table('patient_blood_examination as pbe');
+            $timeQuery->where('pbe.patient_id', '=', $patientId);
+            $timeQuery->where('pbe.examination_date', '=', $bloodTestDate);
+            $timeQuery->where('pbe.is_value_set', '=', 1);
+            $timeQuery->select('pbe.examination_time');
+            $timeQuery->groupBy('pbe.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            /*if(!is_null($examinationTime) && !empty($examinationTime))
+            {
+                foreach($examinationTime as $time)
+                {
+                    $latestBloodExamQuery = DB::table('patient_blood_examination as pbe');
+                    $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+                    $latestBloodExamQuery->whereIn('pbe.examination_date', function($query) use($patientId, $bloodTestDate){
+                        $query->select('pbe.examination_date');
+                        $query->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+                        $query->where('pbe.examination_date', '=', $bloodTestDate);
+                    });
+                    $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
+                    $latestBloodExamQuery->where('pbe.examination_date', '=', $bloodTestDate);
+                    $latestBloodExamQuery->where('pbe.is_value_set', '=', 1);
+                    $latestBloodExamQuery->where('pbe.examination_time', '=', $time->examination_time);
+                    $latestBloodExamQuery->select('pbe.id as patientExaminationId', 'pbe.patient_id', 'pbe.hospital_id',
+                        'be.id as examinationId','be.examination_name as examinationName', 'pbe.examination_date as examinationDate',
+                        'pbe.examination_time',
+                        'pbe.is_value_set as isValueSet');
+
+                    $bloodTests = $latestBloodExamQuery->get();
+
+                    array_push($accommodations, $bloodTests);
+                }
+            }*/
+
+
+            //dd($examinationTime);
+            //$accommodations = null;
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $accommodations = array();
+                $bloodTestRecord = array_filter($bloodTests, function($e) use ($bloodTests, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($patientBloodTests, $bloodTestRecord);
+
+                //dd($bloodTestRecord);
+                //$patientBloodTests[$time->examination_time] = $accommodations;
+                //reset($accommodations);
+            }
+
+            //dd($patientBloodTests);
+
+
         }
         catch(QueryException $queryEx)
         {
@@ -3514,6 +3881,10 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $bloodTests;
+    }
+
+    private function filterArray($value){
+        //return ($value == 2);
     }
 
     /**
@@ -4826,7 +5197,7 @@ class HospitalImpl implements HospitalInterface{
             $latestPersonalHistoryQuery->where('pph.patient_id', '=', $patientId);
             $latestPersonalHistoryQuery->where('pph.is_value_set', '=', 1);
             $latestPersonalHistoryQuery->select('pph.id', 'pph.patient_id', 'ph.personal_history_name',
-                'phi.personal_history_item_name','pph.personal_history_date', 'pp.personal_history_value');
+                'phi.personal_history_item_name','pph.personal_history_date', 'pph.personal_history_value');
             $latestPersonalHistory = $latestPersonalHistoryQuery->get();
 
             $latestPregnancyQuery = DB::table('patient_pregnancy as pp');
@@ -5319,6 +5690,7 @@ class HospitalImpl implements HospitalInterface{
     public function savePersonalHistory(PatientPersonalHistoryViewModel $patientHistoryVM)
     {
         $status = true;
+        $personalHistoryIds = null;
 
         try
         {
@@ -5332,6 +5704,16 @@ class HospitalImpl implements HospitalInterface{
             $patientPersonalHistory = $patientHistoryVM->getPatientPersonalHistory();
             //dd($patientPersonalHistory);
 
+            /*if(!is_null($patientPersonalHistory) && !empty($patientPersonalHistory))
+            {
+                foreach($patientPersonalHistory as $patientHistory)
+                {
+                    $personalHistoryIds[] = $patientHistory->personalHistoryId;
+                }
+                //dd($personalHistoryIds);
+
+            }*/
+
             if (!is_null($patientUser))
             {
                 //DB::table('patient_personal_history')->where('patient_id', $patientId)->delete();
@@ -5343,6 +5725,7 @@ class HospitalImpl implements HospitalInterface{
                     $personalHistoryItemId = $patientHistory->personalHistoryItemId;
                     $isValueSet = property_exists($patientHistory, 'isValueSet') ? $patientHistory->isValueSet : null;
                     $personalHistoryValue = (isset($patientHistory->personalHistoryItemValue)) ? $patientHistory->personalHistoryItemValue : null;
+                    $personalHistoryTime = (isset($patientHistory->personalHistoryTime)) ? $patientHistory->personalHistoryTime : null;
                     //$personalHistoryDate = \DateTime::createFromFormat('Y-m-d', $patientHistory->personalHistoryDate);
                     //$historyDate = $patientHistory->personalHistoryDate;
 
@@ -5368,6 +5751,7 @@ class HospitalImpl implements HospitalInterface{
                             'personal_history_value' => $personalHistoryValue,
                             'is_value_set' => $isValueSet,
                             'personal_history_date' => $personalHistoryDate,
+                            'examination_time' => $personalHistoryTime,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
@@ -5420,7 +5804,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PERSONAL_HISTORY_SAVE_ERROR, $exc);
         }
@@ -5461,6 +5845,7 @@ class HospitalImpl implements HospitalInterface{
                     $generalExaminationId = $examination->generalExaminationId;
                     $generalExaminationValue = $examination->generalExaminationValue;
                     $isValueSet = property_exists($examination, 'isValueSet') ? $examination->isValueSet : null;
+                    $examinationTime = (isset($examination->$examinationTime)) ? $examination->$examinationTime : null;
                     //$isValueSet = $examination->isValueSet;
                     //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examination->generalExaminationDate);
                     //$examinationDate = $examination->examinationDate;
@@ -5484,6 +5869,7 @@ class HospitalImpl implements HospitalInterface{
                         array('general_examination_value' => $generalExaminationValue,
                             'is_value_set' => $isValueSet,
                             'general_examination_date' => $generalExaminationDate,
+                            'examination_time' => $examinationTime,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
                             'created_by' => 'Admin',
@@ -5582,6 +5968,7 @@ class HospitalImpl implements HospitalInterface{
                     //$pastIllnessDate = \DateTime::createFromFormat('Y-m-d', $illness->pastIllnessDate);
                     //$relation = $illness->relation;
                     $isValueSet = property_exists($illness, 'isValueSet') ? $illness->isValueSet : null;
+                    $examinationTime = (isset($illness->$examinationTime)) ? $illness->$examinationTime : null;
                     //$illnessDate = $illness->pastIllnessDate;
                     //dd($examinationDate);
                     //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
@@ -5601,6 +5988,7 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientpastillness()->attach($pastIllnessId,
                         array('past_illness_name' => $pastIllnessName,
                             'past_illness_date' => $pastIllnessDate,
+                            'examination_time' => $examinationTime,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
                             //'relation' => $relation,
@@ -5819,6 +6207,7 @@ class HospitalImpl implements HospitalInterface{
                     $isValueSet = $pregnancy->isValueSet;
                     //$pregnancyDate = $pregnancy->pregnancyDate;
                     $pregnancyDate = property_exists($pregnancy, 'pregnancyDate') ? $pregnancy->pregnancyDate : null;
+                    $examinationTime = (isset($pregnancy->$examinationTime)) ? $pregnancy->$examinationTime : null;
 
                     if(!is_null($pregnancyDate))
                     {
@@ -5834,6 +6223,7 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientpregnancy()->attach($pregnancyId,
                         array('pregnancy_value' => $pregnancyValue,
                             'pregnancy_date' => $patientPregnancyDate,
+                            'examination_time' => $examinationTime,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
                             'is_value_set' => $isValueSet,

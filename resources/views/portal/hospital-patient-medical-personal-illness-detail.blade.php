@@ -11,6 +11,9 @@
 <div class="panel-body">
 
 <!-- form start -->
+    {{print_r($personalHistoryDetails)}}
+
+
 
 <form role="form" method="POST" class="form-horizontal ">
 <div class="form-group col-sm-6">
