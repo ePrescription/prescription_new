@@ -9,6 +9,31 @@
 <div class="col-sm-12">
 <div class="panel panel-primary">
 <div class="panel-body">
+
+    @if(count($generalExamination)>0)
+        <h4 class="m-t-0 m-b-30">General Examination Details</h4>
+        @foreach($generalExamination as $recentTest)
+            <?php $displaySet=0; ?>
+            <div class="form-group">
+                @foreach($recentTest as $recentTestDate)
+                    @if($displaySet==0)
+                        <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
+                        <?php $displaySet=1; ?>
+                    @endif
+                @endforeach
+            </div>
+            <div class="form-group col-sm-12">
+                @foreach($recentTest as $recentTestValue)
+                    <div class="col-sm-6" style="width:50%;float:left;">
+                        {{$recentTestValue->generalExaminationName}} - {{$recentTestValue->generalExaminationValue}}
+                    </div>
+                @endforeach
+            </div>
+        @endforeach
+    @endif
+
+
+<?php /* ?>
 <!-- form start -->
 <form role="form" method="POST" class="form-horizontal ">
 <div class="form-group col-sm-6">
@@ -101,11 +126,8 @@
     {{$generalExamination[14]->generalExaminationValue}}
 </div>
 </div>
-
-
-
 </form>
-
+<?php */ ?>
 
 
 

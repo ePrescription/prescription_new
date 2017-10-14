@@ -168,6 +168,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     Route::get('rest/api/{hospitalId}/doctorlist', array('as' => 'hospital.doctors', 'uses' => 'DoctorController@getDoctorsForFront'));
 
+    //Prescription
     Route::get('rest/api/{hospitalId}/patient/{patientId}/prescription-details', array('as' => 'hospital.patientdetails', 'uses' => 'DoctorController@PatientPrescriptionDetailsByHospitalForFront'));
 
     //Fee Receipts
@@ -432,16 +433,6 @@ Route::group(['prefix' => 'doctor'], function()
     {
 
 
-        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patients', array('as' => 'doctor.patients', 'uses' => 'DoctorController@getPatientsByDoctorForFront'));
-        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/details', array('as' => 'doctor.patientdetails', 'uses' => 'DoctorController@PatientDetailsByDoctorForFront'));
-
-
-        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/edit', array('as' => 'doctor.patientdetailsedit', 'uses' => 'DoctorController@PatientEditByDoctorForFront'));
-        Route::post('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/update', array('as' => 'doctor.savepatient', 'uses' => 'DoctorController@updatePatientsByDoctorForFront'));
-
-
-
-
         Route::get('rest/api/mainsymptoms', array('as' => 'doctor.symptoms', 'uses' => 'DoctorApiController@getMainSymptoms'));
 
         Route::get('rest/api/{mainsymptomId}/subsymptoms', array('as' => 'doctor.subsymptoms', 'uses' => 'DoctorApiController@getSubSymptomsForMainSymptoms'));
@@ -494,6 +485,17 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/scans', array('as' => 'doctor.allscandetails', 'uses' => 'DoctorApiController@getAllScans'));
         Route::get('rest/api/dentaltests', array('as' => 'doctor.alldentaltests', 'uses' => 'DoctorApiController@getAllDentalItems'));
         Route::get('rest/api/xraytests', array('as' => 'doctor.allxraytests', 'uses' => 'DoctorApiController@getAllXRayItems'));
+
+
+        //WEBSITE
+
+
+        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patients', array('as' => 'doctor.patients', 'uses' => 'DoctorController@getPatientsByDoctorForFront'));
+        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/details', array('as' => 'doctor.patientdetails', 'uses' => 'DoctorController@PatientDetailsByDoctorForFront'));
+
+
+        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/edit', array('as' => 'doctor.patientdetailsedit', 'uses' => 'DoctorController@PatientEditByDoctorForFront'));
+        Route::post('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/update', array('as' => 'doctor.savepatient', 'uses' => 'DoctorController@updatePatientsByDoctorForFront'));
 
 
     });

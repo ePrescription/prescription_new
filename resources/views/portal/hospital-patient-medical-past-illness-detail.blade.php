@@ -10,7 +10,35 @@
 <div class="col-sm-12">
 <div class="panel panel-primary">
 <div class="panel-body">
+{{dd($pastIllness)}}
 
+    @if(count($pastIllness)>0)
+        <h4 class="m-t-0 m-b-30">Past Illness Details</h4>
+        @foreach($pastIllness as $recentTest)
+            <?php $displaySet=0; ?>
+            <div class="form-group">
+                @foreach($recentTest as $recentTestDate)
+                    @if($displaySet==0)
+                        <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
+                        <?php $displaySet=1; ?>
+                    @endif
+                @endforeach
+            </div>
+            <div class="form-group col-sm-12">
+                @foreach($recentTest as $recentTestValue)
+                    <div class="col-sm-6" style="width:50%;float:left;">
+                        {{$recentTestValue->illnessName}} - @if($recentTestValue->isValueSet==1) Yes @else No @endif
+                        @if($recentTestValue->illnessName=="Others")
+                        - {{$recentTestValue->otherIllnessName}}
+                        @endif
+
+                    </div>
+                @endforeach
+            </div>
+        @endforeach
+    @endif
+
+    <?php /* ?>
     <form role="form" method="POST" class="form-horizontal ">
         <div class="form-group col-sm-6">
             <label class="col-sm-6 control-label">Endocrine diseases</label>
@@ -87,6 +115,7 @@
         </div>
 
     </form>
+    <?php */ ?>
 
 
 </div> <!-- panel-body -->

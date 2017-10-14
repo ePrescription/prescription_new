@@ -69,6 +69,7 @@ $profile_menu="0";
                                                             <input type="hidden" class="form-control" name="pregnancyDetails[{{$i}}][pregnancyId]" value="{{$patientPregnancyValue->id}}" required="required" />
                                                             <input type="text" class="form-control" name="pregnancyDetails[{{$i}}][pregnancyValue]" value="" required="required" />
                                                             <input type="hidden" class="form-control" name="pregnancyDetails[{{$i}}][pregnancyDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                            <input type="hidden" class="form-control" name="pregnancyDetails[{{$i}}][examinationTime]" value="{{date('h-i-s')}}" required="required" />
                                                             <input type="hidden" class="form-control" name="pregnancyDetails[{{$i}}][isValueSet]" value="1" required="required" />
                                                         </div>
                                                     </div>

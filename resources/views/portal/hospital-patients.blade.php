@@ -83,7 +83,7 @@ $profile_menu="0";
                                         <tbody>
                                         @foreach($patients as $patient)
                                             <tr>
-                                                <td>{{$patient->id}}</td>
+                                                <td>{{$patient->patient_id}}</td>
                                                 <td>{{$patient->pid}}</td>
                                                 <td>{{$patient->name}}</td>
                                                 <td>{{$patient->telephone}}</td>

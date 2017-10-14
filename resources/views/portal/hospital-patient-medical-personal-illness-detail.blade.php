@@ -11,10 +11,30 @@
 <div class="panel-body">
 
 <!-- form start -->
-    {{print_r($personalHistoryDetails)}}
 
+    @if(count($personalHistoryDetails)>0)
+        <h4 class="m-t-0 m-b-30">Personal Illness Details</h4>
+        @foreach($personalHistoryDetails as $recentTest)
+            <?php $displaySet=0; ?>
+        <div class="form-group">
+            @foreach($recentTest as $recentTestDate)
+                @if($displaySet==0)
+                <label class="col-sm-12 control-label">{{$recentTestDate->personal_history_date}} - {{$recentTestDate->examination_time}} </label>
+                <?php $displaySet=1; ?>
+                @endif
+            @endforeach
+        </div>
+        <div class="form-group col-sm-12">
+            @foreach($recentTest as $recentTestValue)
+                <div class="col-sm-6" style="width:50%;float:left;">
+                    {{$recentTestValue->personal_history_name}} - {{$recentTestValue->personal_history_item_name}} @if($recentTestValue->personal_history_value!="") - {{$recentTestValue->personal_history_value}} @endif
+                </div>
+            @endforeach
+        </div>
+        @endforeach
+    @endif
 
-
+<?php /* ?>
 <form role="form" method="POST" class="form-horizontal ">
 <div class="form-group col-sm-6">
 <label class="col-sm-6 control-label">Marital Status</label>
@@ -67,7 +87,7 @@
 </div>
 </div>
 </form>
-
+<?php */ ?>
 
 </div> <!-- panel-body -->
 </div> <!-- panel -->

@@ -69,6 +69,7 @@ $profile_menu="0";
                                                         <div class="col-sm-3">
                                                             <input type="hidden" class="form-control" name="familyIllness[{{$i}}][familyIllnessId]" value="{{$patientFamilyIllnessValue->id}}" required="required" />
                                                             <input type="hidden" class="form-control" name="familyIllness[{{$i}}][familyIllnessDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                            <input type="hidden" class="form-control" name="familyIllness[{{$i}}][examinationTime]" value="{{date('Y-m-d')}}" required="required" />
                                                             <div class="radio radio-info radio-inline">
                                                                 <input type="radio" id="scanDetails{{$patientFamilyIllnessValue->id}}1" value="1" name="familyIllness[{{$i}}][isValueSet]" onclick="javascript:enableBox('family{{$i}}')" class="family{{$i}}" />
                                                                 <label for="scanDetails{{$patientFamilyIllnessValue->id}}1"> Yes </label>

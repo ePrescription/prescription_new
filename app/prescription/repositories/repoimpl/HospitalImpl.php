@@ -5845,7 +5845,7 @@ class HospitalImpl implements HospitalInterface{
                     $generalExaminationId = $examination->generalExaminationId;
                     $generalExaminationValue = $examination->generalExaminationValue;
                     $isValueSet = property_exists($examination, 'isValueSet') ? $examination->isValueSet : null;
-                    $examinationTime = (isset($examination->$examinationTime)) ? $examination->$examinationTime : null;
+                    $examinationTime = (isset($examination->examinationTime)) ? $examination->examinationTime : null;
                     //$isValueSet = $examination->isValueSet;
                     //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examination->generalExaminationDate);
                     //$examinationDate = $examination->examinationDate;
@@ -5924,7 +5924,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_GENERAL_EXAMINATION_SAVE_ERROR, $exc);
         }
@@ -5968,7 +5968,7 @@ class HospitalImpl implements HospitalInterface{
                     //$pastIllnessDate = \DateTime::createFromFormat('Y-m-d', $illness->pastIllnessDate);
                     //$relation = $illness->relation;
                     $isValueSet = property_exists($illness, 'isValueSet') ? $illness->isValueSet : null;
-                    $examinationTime = (isset($illness->$examinationTime)) ? $illness->$examinationTime : null;
+                    $examinationTime = (isset($illness->examinationTime)) ? $illness->examinationTime : null;
                     //$illnessDate = $illness->pastIllnessDate;
                     //dd($examinationDate);
                     //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
@@ -6086,6 +6086,8 @@ class HospitalImpl implements HospitalInterface{
                     $familyIllnessName = $illness->familyIllnessName;
                     $relation = $illness->relation;
                     $isValueSet = property_exists($illness, 'isValueSet') ? $illness->isValueSet : null;
+                    $examinationTime = (isset($illness->examinationTime)) ? $illness->examinationTime : null;
+
                     //$familyIllnessDate = \DateTime::createFromFormat('Y-m-d', $illness->familyIllnessDate);
                     //$illnessDate = $illness->familyIllnessDate;
                     //dd($examinationDate);
@@ -6207,7 +6209,7 @@ class HospitalImpl implements HospitalInterface{
                     $isValueSet = $pregnancy->isValueSet;
                     //$pregnancyDate = $pregnancy->pregnancyDate;
                     $pregnancyDate = property_exists($pregnancy, 'pregnancyDate') ? $pregnancy->pregnancyDate : null;
-                    $examinationTime = (isset($pregnancy->$examinationTime)) ? $pregnancy->$examinationTime : null;
+                    $examinationTime = (isset($pregnancy->examinationTime)) ? $pregnancy->examinationTime : null;
 
                     if(!is_null($pregnancyDate))
                     {
