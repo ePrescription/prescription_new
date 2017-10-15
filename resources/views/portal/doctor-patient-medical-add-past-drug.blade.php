@@ -7,15 +7,16 @@
 <?php
 $dashboard_menu="0";
 $patient_menu="1";
+$prescription_menu="0";
+$lab_menu="0";
 $profile_menu="0";
 ?>
-
 @section('content')
     <div class="wrapper">
-        @include('portal.hospital-header')
+        @include('portal.doctor-header')
         <!-- Left side column. contains the logo and sidebar -->
         <!-- sidebar: style can be found in sidebar.less -->
-        @include('portal.hospital-sidebar')
+        @include('portal.doctor-sidebar')
         <!-- /.sidebar -->
 
         <!-- Start right Content here -->
@@ -38,7 +39,7 @@ $profile_menu="0";
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
                                         <h4 class="m-t-0 m-b-30">Add Past Drug</h4>
 
 
@@ -60,7 +61,7 @@ $profile_menu="0";
                                                     <!-- form start -->
 
 
-                                            <form action="{{URL::to('/')}}/fronthospital/rest/api/drughistory" role="form" method="POST" class="form-horizontal ">
+                                            <form action="{{URL::to('/')}}/doctor/drughistory" role="form" method="POST" class="form-horizontal ">
 <style>
     .addButton, .removeButton { float:right; }
 </style>
@@ -158,7 +159,9 @@ $profile_menu="0";
                                                 <div class="form-group">
                                                     <div class="col-sm-4"></div>
                                                     <div class="col-sm-6">
-                                                        <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="doctorId" value="{{$doctorId}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="hospitalId" value="{{$hospitalId}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
 
                                                         <input type="submit" name="addpersonal" value="Save" class="btn btn-success">
                                                     </div>

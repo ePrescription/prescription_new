@@ -7,15 +7,17 @@
 <?php
 $dashboard_menu="0";
 $patient_menu="1";
+$prescription_menu="0";
+$lab_menu="0";
 $profile_menu="0";
 ?>
 
 @section('content')
     <div class="wrapper">
-        @include('portal.hospital-header')
+        @include('portal.doctor-header')
         <!-- Left side column. contains the logo and sidebar -->
         <!-- sidebar: style can be found in sidebar.less -->
-        @include('portal.hospital-sidebar')
+        @include('portal.doctor-sidebar')
         <!-- /.sidebar -->
 
         <!-- Start right Content here -->
@@ -38,7 +40,7 @@ $profile_menu="0";
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
                                         <h4 class="m-t-0 m-b-30">Add General Examination</h4>
 
 
@@ -59,15 +61,16 @@ $profile_menu="0";
                                         @endif
                                                     <!-- form start -->
 
-                                            <form action="{{URL::to('/')}}/fronthospital/rest/api/generalexamination" role="form" method="POST" class="form-horizontal ">
+                                            <form action="{{URL::to('/')}}/doctor/generalexamination" role="form" method="POST" class="form-horizontal ">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label">Height (in Cm)</label>
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[0][generalExaminationId]" value="1" required="required" />
                                                         <input type="text" class="form-control" name="generalExamination[0][generalExaminationValue]" value="0" required="required" id="height_value" />
                                                         <input type="hidden" class="form-control" name="generalExamination[0][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[0][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[0][isValueSet]" value="1" required="required" />
-                                                     </div>
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label">Weight (in Kg)</label>
@@ -75,6 +78,7 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[1][generalExaminationId]" value="2" required="required" />
                                                         <input type="text" class="form-control" name="generalExamination[1][generalExaminationValue]" value="0" required="required" id="weight_value" onchange="javascript:getbmi();" />
                                                         <input type="hidden" class="form-control" name="generalExamination[1][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[1][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[1][isValueSet]" value="1" required="required" />                                                    </div>
                                                 </div>
                                                 <div class="form-group">
@@ -83,6 +87,7 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[2][generalExaminationId]" value="3" required="required" />
                                                         <input type="text" class="form-control" name="generalExamination[2][generalExaminationValue]" value="0" required="required" id="bmi_value" readonly />
                                                         <input type="hidden" class="form-control" name="generalExamination[2][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[2][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[2][isValueSet]" value="1" required="required" />
                                                     </div>
                                                 </div>
@@ -92,7 +97,9 @@ $profile_menu="0";
 
                                                         <input type="hidden" class="form-control" name="generalExamination[3][generalExaminationId]" value="4" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[3][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[3][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[3][isValueSet]" value="1" required="required" />
+
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="generalExaminationValue41" value="Yes" name="generalExamination[3][generalExaminationValue]" required="required" />
                                                             <label for="generalExaminationValue41"> Yes </label>
@@ -109,6 +116,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[4][generalExaminationId]" value="5" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[4][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[4][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[4][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="generalExaminationValue51" value="Yes" name="generalExamination[4][generalExaminationValue]"required="required" />
@@ -125,6 +133,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[5][generalExaminationId]" value="6" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[5][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[5][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[5][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="generalExaminationValue61" value="Yes" name="generalExamination[5][generalExaminationValue]" required="required" />
@@ -141,6 +150,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[6][generalExaminationId]" value="7" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[6][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[6][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[6][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="generalExaminationValue71" value="Yes" name="generalExamination[6][generalExaminationValue]" required="required" />
@@ -157,6 +167,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[7][generalExaminationId]" value="8" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[7][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[7][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[7][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="generalExaminationValue81" value="Yes" name="generalExamination[7][generalExaminationValue]" required="required" />
@@ -173,6 +184,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[8][generalExaminationId]" value="9" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[8][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[8][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[8][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="generalExaminationValue91" value="Yes" name="generalExamination[8][generalExaminationValue]" required="required" />
@@ -189,6 +201,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="generalExamination[9][generalExaminationId]" value="10" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[9][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[9][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[9][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="generalExaminationValue101" value="Yes" name="generalExamination[9][generalExaminationValue]" required="required" />
@@ -206,6 +219,7 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[10][generalExaminationId]" value="11" required="required" />
                                                         <input type="text" class="form-control" name="generalExamination[10][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[10][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[10][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[10][isValueSet]" value="1" required="required" />
                                                     </div>
                                                 </div>
@@ -215,6 +229,7 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[11][generalExaminationId]" value="12" required="required" />
                                                         <input type="text" class="form-control" name="generalExamination[11][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[11][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[11][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[11][isValueSet]" value="1" required="required" />
                                                     </div>
                                                 </div>
@@ -224,6 +239,7 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[12][generalExaminationId]" value="13" required="required" />
                                                         <input type="text" class="form-control" name="generalExamination[12][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[12][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[12][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[12][isValueSet]" value="1" required="required" />
                                                         <!--
                                                         <div class="radio radio-info radio-inline">
@@ -242,6 +258,7 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[13][generalExaminationId]" value="14" required="required" />
                                                         <input type="text" class="form-control" name="generalExamination[13][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[13][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[13][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[13][isValueSet]" value="1" required="required" />
 
                                                         <!--
@@ -261,6 +278,7 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="generalExamination[14][generalExaminationId]" value="15" required="required" />
                                                         <input type="text" class="form-control" name="generalExamination[14][generalExaminationValue]" value="0" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[14][examinationDate]" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="generalExamination[14][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="generalExamination[14][isValueSet]" value="1" required="required" />
 
                                                         <!--
@@ -278,13 +296,15 @@ $profile_menu="0";
                                                 <div class="form-group">
                                                     <div class="col-sm-4"></div>
                                                     <div class="col-sm-6">
-                                                        <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
-
+                                                        <input type="hidden" class="form-control" name="doctorId" value="{{$doctorId}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="hospitalId" value="{{$hospitalId}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
                                                         <input type="submit" name="addgeneral" value="Save" class="btn btn-success"/>
                                                     </div>
                                                 </div>
 
                                             </form>
+
 
 
 
@@ -301,7 +321,7 @@ $profile_menu="0";
 
             </div> <!-- content -->
 
-            @include('portal.hospital-footer')
+            @include('portal.doctor-footer')
 
         </div>
         <!-- End Right content here -->

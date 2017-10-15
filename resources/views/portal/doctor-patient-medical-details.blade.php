@@ -41,15 +41,17 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+
+                                    <div style="float:right;">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
+                                            <button class="btn btn-info waves-effect waves-light">Back</button>
+                                        </a>
+                                    </div>
+
                                     <div style="float:right;">
                                         <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>
 
-                                    <div style="float:right;">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
-                                            <button class="btn btn-info waves-effect waves-light">Back</button>
-                                        </a>
-                                    </div>
                                     <h4 class="m-t-0 m-b-30">Patient Medical Details</h4>
 
                                     <div id='DivIdToPrint' style="display:none;">
@@ -414,7 +416,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-general" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add General Examination </b></button></a>
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-general" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add General Examination </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientgeneraldiv"></div>
@@ -431,7 +433,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-family" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Family Illness History </b></button></a>
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-family" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Family Illness History </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientfamilydiv"></div>
@@ -449,7 +451,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-past" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Past Illness History </b></button></a>
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-past" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Past Illness History </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientpastdiv"></div>
@@ -466,7 +468,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-personal" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Personal History </b></button></a>
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-personal" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Personal History </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientpersonaldiv"></div>
@@ -485,7 +487,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-drug" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Past Drug History </b></button></a>
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-drug" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Past Drug History </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientdrugdiv"></div>
@@ -503,7 +505,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-pregnancy" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Pregnancy History </b></button></a>
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-pregnancy" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Pregnancy History </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientpregnancydiv"></div>
@@ -520,7 +522,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-symptom" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Symptoms </b></button></a>
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-symptom" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Symptoms </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientsymptomdiv"></div>
