@@ -15,6 +15,7 @@ class PatientDentalViewModel
     private $doctorId;
     private $hospitalId;
     private $examinationDate;
+    private $examinationTime;
     private $patientDentalTests;
 
     private $createdBy;
@@ -89,6 +90,22 @@ class PatientDentalViewModel
     public function setExaminationDate($examinationDate)
     {
         $this->examinationDate = $examinationDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExaminationTime()
+    {
+        return $this->examinationTime;
+    }
+
+    /**
+     * @param mixed $examinationTime
+     */
+    public function setExaminationTime($examinationTime)
+    {
+        $this->examinationTime = $examinationTime;
     }
 
     /**

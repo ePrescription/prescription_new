@@ -15,6 +15,7 @@ class PatientXRayViewModel
     private $doctorId;
     private $hospitalId;
     private $examinationDate;
+    private $examinationTime;
     private $patientXRayTests;
 
     private $createdBy;
@@ -89,6 +90,22 @@ class PatientXRayViewModel
     public function setExaminationDate($examinationDate)
     {
         $this->examinationDate = $examinationDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExaminationTime()
+    {
+        return $this->examinationTime;
+    }
+
+    /**
+     * @param mixed $examinationTime
+     */
+    public function setExaminationTime($examinationTime)
+    {
+        $this->examinationTime = $examinationTime;
     }
 
     /**

@@ -512,6 +512,7 @@ class PatientProfileMapper
         $patientDentalVM->setDoctorId(property_exists($dentalObj, 'doctorId') ? $dentalObj->doctorId : null);
         $patientDentalVM->setHospitalId(property_exists($dentalObj, 'hospitalId') ? $dentalObj->hospitalId : null);
         $patientDentalVM->setExaminationDate(property_exists($dentalObj, 'examinationDate') ? $dentalObj->examinationDate : null);
+        $patientDentalVM->setExaminationTime(property_exists($dentalObj, 'examinationTime') ? $dentalObj->examinationTime : null);
         //$patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
         $examinationDetails = $dentalObj->dentalExaminations;
         //dd($candidateEmployments);
@@ -559,6 +560,7 @@ class PatientProfileMapper
         $patientXRayVM->setDoctorId(property_exists($xRayObj, 'doctorId') ? $xRayObj->doctorId : null);
         $patientXRayVM->setHospitalId(property_exists($xRayObj, 'hospitalId') ? $xRayObj->hospitalId : null);
         $patientXRayVM->setExaminationDate(property_exists($xRayObj, 'examinationDate') ? $xRayObj->examinationDate : null);
+        $patientXRayVM->setExaminationTime(property_exists($xRayObj, 'examinationTime') ? $xRayObj->examinationTime : null);
         //$patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
         $examinationDetails = $xRayObj->xrayExaminations;
         //dd($candidateEmployments);

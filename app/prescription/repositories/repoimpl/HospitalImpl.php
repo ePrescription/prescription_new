@@ -3433,7 +3433,8 @@ class HospitalImpl implements HospitalInterface{
 
     public function getPatientScanDetails($patientId, $scanDate)
     {
-        $scanDetails = null;
+        $scanTests = null;
+        $scanDetails = array();
         //dd($patientId);
 
         try
@@ -3445,7 +3446,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_scan as ps')->select('s.id as scanId', 's.scan_name as scanName',
+            /*$query = DB::table('patient_scan as ps')->select('s.id as scanId', 's.scan_name as scanName',
                 'ps.id as patientScanId', 'ps.is_value_set as isValueSet', 'ps.scan_date as scanDate');
             //$query->rightJoin('scans as s', function($join){
             $query->join('scans as s', function($join){
@@ -3457,7 +3458,46 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($query->toSql());
 
-            $scanDetails = $query->get();
+            $scanDetails = $query->get();*/
+
+            $scanTestQuery = DB::table('patient_scan as ps');
+            $scanTestQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
+            $scanTestQuery->where('ps.patient_id', '=', $patientId);
+            $scanTestQuery->where('ps.scan_date', '=', $scanDate);
+            $scanTestQuery->where('s.status', '=', 1);
+            $scanTestQuery->select('ps.patient_id', 'ps.hospital_id', 's.id as scanId',
+                's.scan_name as scanName', 'ps.scan_date as scanDate',
+                'ps.id as patientScanId', 'ps.is_value_set as isValueSet',
+                'ps.examination_time');
+
+            $scanTests = $scanTestQuery->get();
+
+            $timeQuery = DB::table('patient_scan as ps');
+            $timeQuery->where('ps.patient_id', '=', $patientId);
+            $timeQuery->where('ps.examination_date', '=', $scanDate);
+            $timeQuery->where('ps.is_value_set', '=', 1);
+            $timeQuery->select('ps.examination_time');
+            $timeQuery->groupBy('ps.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $scanTestRecord = array_filter($scanTests, function($e) use ($scanTests, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($scanDetails, $scanTestRecord);
+
+            }
+
             //dd($scanDetails);
         }
         catch(QueryException $queryEx)
@@ -3617,6 +3657,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientUrineTests($patientId, $urineTestDate)
     {
         $urineTests = null;
+        $urineTestDetails = array();
 
         try
         {
@@ -3627,7 +3668,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_urine_examination as pue')->select('ue.id as examinationId', 'ue.examination_name as examinationName',
+            /*$query = DB::table('patient_urine_examination as pue')->select('ue.id as examinationId', 'ue.examination_name as examinationName',
                 'pue.id as patientExaminationId', 'pue.is_value_set as isValueSet', 'pue.examination_date as examinationDate');
             //$query->rightJoin('scans as s', function($join){
             $query->join('urine_examination as ue', function($join){
@@ -3639,7 +3680,46 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($query->toSql());
 
-            $urineTests = $query->get();
+            $urineTests = $query->get();*/
+
+            $urineTestQuery = DB::table('patient_urine_examination as pue');
+            $urineTestQuery->join('urine_examination as ue', 'ue.id', '=', 'pue.urine_examination_id');
+            $urineTestQuery->where('pue.patient_id', '=', $patientId);
+            $urineTestQuery->where('pue.examination_date', '=', $urineTestDate);
+            $urineTestQuery->where('pue.is_value_set', '=', 1);
+            $urineTestQuery->select('pue.patient_id', 'pue.hospital_id', 'ue.id as examinationId',
+                'ue.examination_name as examinationName', 'pue.examination_date as examinationDate',
+                'pue.id as patientExaminationId', 'pue.is_value_set as isValueSet',
+                'pue.examination_time');
+
+            $urineTests = $urineTestQuery->get();
+
+            $timeQuery = DB::table('patient_urine_examination as pue');
+            $timeQuery->where('pue.patient_id', '=', $patientId);
+            $timeQuery->where('pue.examination_date', '=', $urineTestDate);
+            $timeQuery->where('pue.is_value_set', '=', 1);
+            $timeQuery->select('pue.examination_time');
+            $timeQuery->groupBy('pue.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $urineTestRecord = array_filter($urineTests, function($e) use ($urineTests, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($urineTestDetails, $urineTestRecord);
+
+            }
+
             //dd($pregnancyDetails);
         }
         catch(QueryException $queryEx)
@@ -3658,7 +3738,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_URINE_DETAILS_ERROR, $exc);
         }
 
-        return $urineTests;
+        return $urineTestDetails;
     }
 
     /**
@@ -3672,6 +3752,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientMotionTests($patientId, $motionTestDate)
     {
         $motionTests = null;
+        $motionTestDetails = array();
 
         try
         {
@@ -3682,7 +3763,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_motion_examination as pme')->select('me.id as examinationId', 'me.examination_name as examinationName',
+            /*$query = DB::table('patient_motion_examination as pme')->select('me.id as examinationId', 'me.examination_name as examinationName',
                 'pme.id as patientExaminationId', 'pme.is_value_set as isValueSet', 'pme.examination_date as examinationDate');
             //$query->rightJoin('scans as s', function($join){
             $query->join('motion_examination as me', function($join){
@@ -3694,7 +3775,45 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($query->toSql());
 
-            $motionTests = $query->get();
+            $motionTests = $query->get();*/
+
+            $motionTestQuery = DB::table('patient_motion_examination as pme');
+            $motionTestQuery->join('motion_examination as me', 'me.id', '=', 'pme.motion_examination_id');
+            $motionTestQuery->where('pme.patient_id', '=', $patientId);
+            $motionTestQuery->where('pme.examination_date', '=', $motionTestDate);
+            $motionTestQuery->where('pme.is_value_set', '=', 1);
+            $motionTestQuery->select('pme.patient_id', 'pme.hospital_id', 'me.id as examinationId',
+                'me.examination_name as examinationName', 'pme.examination_date as examinationDate',
+                'pme.id as patientExaminationId', 'pme.is_value_set as isValueSet',
+                'pme.examination_time');
+
+            $motionTests = $motionTestQuery->get();
+
+            $timeQuery = DB::table('patient_motion_examination as pme');
+            $timeQuery->where('pme.patient_id', '=', $patientId);
+            $timeQuery->where('pme.examination_date', '=', $motionTestDate);
+            $timeQuery->where('pme.is_value_set', '=', 1);
+            $timeQuery->select('pme.examination_time');
+            $timeQuery->groupBy('pme.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $motionTestRecord = array_filter($motionTests, function($e) use ($motionTests, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($motionTestDetails, $motionTestRecord);
+
+            }
             //dd($pregnancyDetails);
         }
         catch(QueryException $queryEx)
@@ -3713,7 +3832,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_MOTION_DETAILS_ERROR, $exc);
         }
 
-        return $motionTests;
+        return $motionTestDetails;
     }
 
     /**
@@ -3898,6 +4017,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientUltraSoundTests($patientId, $ultraSoundDate)
     {
         $ultraSound = null;
+        $ultraSoundDetails = array();
 
         try
         {
@@ -3908,7 +4028,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_ultra_sound as pus')->select('us.id as examinationId', 'us.examination_name as examinationName',
+            /*$query = DB::table('patient_ultra_sound as pus')->select('us.id as examinationId', 'us.examination_name as examinationName',
                 'pus.id as patientExaminationId', 'pus.is_value_set as isValueSet', 'pus.examination_date as examinationDate');
             //$query->rightJoin('scans as s', function($join){
             $query->join('ultra_sound as us', function($join){
@@ -3920,7 +4040,46 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($query->toSql());
 
-            $ultraSound = $query->get();
+            $ultraSound = $query->get();*/
+
+            $ultraSoundQuery = DB::table('patient_ultra_sound as pus');
+            $ultraSoundQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
+            $ultraSoundQuery->where('pus.patient_id', '=', $patientId);
+            $ultraSoundQuery->where('pus.examination_date', '=', $ultraSoundDate);
+            $ultraSoundQuery->where('pus.is_value_set', '=', 1);
+            $ultraSoundQuery->select('pus.patient_id', 'pus.hospital_id', 'us.id as examinationId',
+                'us.examination_name as examinationName', 'pus.examination_date as examinationDate',
+                'pus.id as patientExaminationId', 'pus.is_value_set as isValueSet',
+                'pus.examination_time');
+
+            $ultraSound = $ultraSoundQuery->get();
+
+            $timeQuery = DB::table('patient_ultra_sound as pus');
+            $timeQuery->where('pus.patient_id', '=', $patientId);
+            $timeQuery->where('pus.examination_date', '=', $ultraSoundDate);
+            $timeQuery->where('pus.is_value_set', '=', 1);
+            $timeQuery->select('pus.examination_time');
+            $timeQuery->groupBy('pus.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $ultraSoundTestRecord = array_filter($ultraSound, function($e) use ($ultraSound, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($ultraSoundDetails, $ultraSoundTestRecord);
+
+            }
+
             //dd($pregnancyDetails);
         }
         catch(QueryException $queryEx)
@@ -3939,7 +4098,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_ULTRASOUND_DETAILS_ERROR, $exc);
         }
 
-        return $ultraSound;
+        return $ultraSoundDetails;
     }
 
     /**
@@ -3953,6 +4112,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientDentalTests($patientId, $dentalDate)
     {
         $dentalTests = null;
+        $dentalTestDetails = array();
 
         try
         {
@@ -3963,13 +4123,13 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_dental_examination_item as pdei')->select('dei.id as examinationId',
+            /*$query = DB::table('patient_dental_examination_item as pdei')->select('dei.id as examinationId',
                 'dei.examination_name as examinationName',
                 'pdei.id as patientExaminationId', 'pde.examination_date as examinationDate');
             $query->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
             $query->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
             $query->where('pde.patient_id', '=', $patientId);
-            $query->where('pde.examination_date', '=', $dentalDate);
+            $query->where('pde.examination_date', '=', $dentalDate);*/
 
             //$query->rightJoin('scans as s', function($join){
             /*$query->join('ultra_sound as us', function($join){
@@ -3981,8 +4141,46 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($query->toSql());
 
-            $dentalTests = $query->get();
+            //$dentalTests = $query->get();
             //dd($pregnancyDetails);
+
+            $dentalTestQuery = DB::table('patient_dental_examination_item as pdei');
+            $dentalTestQuery->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
+            $dentalTestQuery->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
+            $dentalTestQuery->where('pde.patient_id', '=', $patientId);
+            $dentalTestQuery->where('pde.examination_date', '=', $dentalDate);
+            //$dentalTestQuery->where('pme.is_value_set', '=', 1);
+            $dentalTestQuery->select('pde.patient_id', 'pde.hospital_id', 'dei.id as examinationId',
+                'dei.examination_name as examinationName', 'pde.examination_date as examinationDate',
+                'pdei.id as patientExaminationId', 'pde.examination_time');
+
+            $dentalTests = $dentalTestQuery->get();
+
+            $timeQuery = DB::table('patient_dental_examination as pde');
+            $timeQuery->where('pde.patient_id', '=', $patientId);
+            $timeQuery->where('pde.examination_date', '=', $dentalDate);
+            //$timeQuery->where('pme.is_value_set', '=', 1);
+            $timeQuery->select('pde.examination_time');
+            $timeQuery->groupBy('pde.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $dentalTestRecord = array_filter($dentalTests, function($e) use ($dentalTests, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($dentalTestDetails, $dentalTestRecord);
+
+            }
         }
         catch(QueryException $queryEx)
         {
@@ -4000,7 +4198,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_DETAILS_ERROR, $exc);
         }
 
-        return $dentalTests;
+        return $dentalTestDetails;
     }
 
     /**
@@ -4014,6 +4212,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientXrayTests($patientId, $xrayDate)
     {
         $patientXrayTests = null;
+        $xrayTestDetails = array();
 
         try
         {
@@ -4024,7 +4223,7 @@ class HospitalImpl implements HospitalInterface{
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
-            $query = DB::table('patient_xray_examination_item as pxei')->select('xe.id as examinationId',
+            /*$query = DB::table('patient_xray_examination_item as pxei')->select('xe.id as examinationId',
                 'xe.examination_name as examinationName',
                 'pxei.id as patientExaminationId', 'pxe.examination_date as examinationDate');
             $query->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
@@ -4034,8 +4233,46 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($query->toSql());
 
-            $patientXrayTests = $query->get();
+            $patientXrayTests = $query->get();*/
             //dd($patientXrayTests);
+
+            $xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
+            $xrayTestQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+            $xrayTestQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+            $xrayTestQuery->where('pxe.patient_id', '=', $patientId);
+            $xrayTestQuery->where('pxe.examination_date', '=', $xrayDate);
+            //$dentalTestQuery->where('pme.is_value_set', '=', 1);
+            $xrayTestQuery->select('pxe.patient_id', 'pxe.hospital_id', 'xe.id as examinationId',
+                'xe.examination_name as examinationName', 'pxe.examination_date as examinationDate',
+                'pxei.id as patientExaminationId', 'pxe.examination_time');
+
+            $patientXrayTests = $xrayTestQuery->get();
+
+            $timeQuery = DB::table('patient_xray_examination as pxe');
+            $timeQuery->where('pxe.patient_id', '=', $patientId);
+            $timeQuery->where('pxe.examination_date', '=', $xrayDate);
+            //$timeQuery->where('pme.is_value_set', '=', 1);
+            $timeQuery->select('pxe.examination_time');
+            $timeQuery->groupBy('pxe.examination_time');
+
+            $examinationTime = $timeQuery->get();
+
+            foreach($examinationTime as $time)
+            {
+                //dd($time->examination_time);
+                $xrayTestRecord = array_filter($patientXrayTests, function($e) use ($patientXrayTests, $time){
+                    if($e->examination_time == $time->examination_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                array_push($xrayTestDetails, $xrayTestRecord);
+
+            }
         }
         catch(QueryException $queryEx)
         {
@@ -4053,7 +4290,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_XRAY_TESTS_DETAILS_ERROR, $exc);
         }
 
-        return $patientXrayTests;
+        return $xrayTestDetails;
     }
 
     /**
@@ -5725,7 +5962,7 @@ class HospitalImpl implements HospitalInterface{
                     $personalHistoryItemId = $patientHistory->personalHistoryItemId;
                     $isValueSet = property_exists($patientHistory, 'isValueSet') ? $patientHistory->isValueSet : null;
                     $personalHistoryValue = (isset($patientHistory->personalHistoryItemValue)) ? $patientHistory->personalHistoryItemValue : null;
-                    $personalHistoryTime = (isset($patientHistory->personalHistoryTime)) ? $patientHistory->personalHistoryTime : null;
+                    $examinationTime = (isset($patientHistory->examinationTime)) ? $patientHistory->examinationTime : null;
                     //$personalHistoryDate = \DateTime::createFromFormat('Y-m-d', $patientHistory->personalHistoryDate);
                     //$historyDate = $patientHistory->personalHistoryDate;
 
@@ -5751,7 +5988,7 @@ class HospitalImpl implements HospitalInterface{
                             'personal_history_value' => $personalHistoryValue,
                             'is_value_set' => $isValueSet,
                             'personal_history_date' => $personalHistoryDate,
-                            'examination_time' => $personalHistoryTime,
+                            'examination_time' => $examinationTime,
                             'created_by' => 'Admin',
                             'modified_by' => 'Admin',
                             'created_at' => date("Y-m-d H:i:s"),
@@ -5804,7 +6041,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PERSONAL_HISTORY_SAVE_ERROR, $exc);
         }
@@ -5833,6 +6070,7 @@ class HospitalImpl implements HospitalInterface{
 
 
             $patientGeneralExamination = $patientExaminationVM->getPatientGeneralExamination();
+            //dd($patientGeneralExamination);
 
             if (!is_null($patientUser))
             {
@@ -6297,6 +6535,7 @@ class HospitalImpl implements HospitalInterface{
                     //$pregnancyDate = $pregnancy->pregnancyDate;
 
                     $scanDate = property_exists($scans, 'scanDate') ? $scans->scanDate : null;
+                    $examinationTime = (isset($scans->examinationTime)) ? $scans->examinationTime : null;
 
                     if(!is_null($scanDate))
                     {
@@ -6309,6 +6548,7 @@ class HospitalImpl implements HospitalInterface{
 
                     $patientUser->patientscans()->attach($scanId,
                         array('scan_date' => $patientScanDate,
+                            'examination_time' => $examinationTime,
                             'is_value_set' => $isValueSet,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
@@ -6479,6 +6719,7 @@ class HospitalImpl implements HospitalInterface{
                     //$pregnancyDate = $pregnancy->pregnancyDate;
 
                     $examinationDate = property_exists($examination, 'examinationDate') ? $examination->examinationDate : null;
+                    $examinationTime = (isset($examination->examinationTime)) ? $examination->examinationTime : null;
 
                     if(!is_null($examinationDate))
                     {
@@ -6491,6 +6732,7 @@ class HospitalImpl implements HospitalInterface{
 
                     $patientUser->patienturineexaminations()->attach($examinationId,
                         array('examination_date' => $patientExaminationDate,
+                            'examination_time' => $examinationTime,
                             'is_value_set' => $isValueSet,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
@@ -6562,6 +6804,7 @@ class HospitalImpl implements HospitalInterface{
                     //$pregnancyDate = $pregnancy->pregnancyDate;
 
                     $examinationDate = property_exists($examination, 'examinationDate') ? $examination->examinationDate : null;
+                    $examinationTime = (isset($examination->examinationTime)) ? $examination->examinationTime : null;
 
                     if(!is_null($examinationDate))
                     {
@@ -6574,6 +6817,7 @@ class HospitalImpl implements HospitalInterface{
 
                     $patientUser->patientmotionexaminations()->attach($examinationId,
                         array('examination_date' => $patientExaminationDate,
+                            'examination_time' => $examinationTime,
                             'is_value_set' => $isValueSet,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
@@ -6645,6 +6889,7 @@ class HospitalImpl implements HospitalInterface{
                     //$pregnancyDate = $pregnancy->pregnancyDate;
 
                     $examinationDate = property_exists($examination, 'examinationDate') ? $examination->examinationDate : null;
+                    $examinationTime = (isset($examination->examinationTime)) ? $examination->examinationTime : null;
 
                     if(!is_null($examinationDate))
                     {
@@ -6657,6 +6902,7 @@ class HospitalImpl implements HospitalInterface{
 
                     $patientUser->patientbloodexaminations()->attach($examinationId,
                         array('examination_date' => $patientExaminationDate,
+                            'examination_time' => $examinationTime,
                             'is_value_set' => $isValueSet,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
@@ -6727,6 +6973,7 @@ class HospitalImpl implements HospitalInterface{
                     //dd($patientHistory);
                     $examinationId = $examination->examinationId;
                     $isValueSet = $examination->isValueSet;
+                    $examinationTime = (isset($examination->examinationTime)) ? $examination->examinationTime : null;
                     //$pregnancyDate = $pregnancy->pregnancyDate;
 
                     $examinationDate = property_exists($examination, 'examinationDate') ? $examination->examinationDate : null;
@@ -6742,6 +6989,7 @@ class HospitalImpl implements HospitalInterface{
 
                     $patientUser->patientultrasounds()->attach($examinationId,
                         array('examination_date' => $patientExaminationDate,
+                            'examination_time' => $examinationTime,
                             'is_value_set' => $isValueSet,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
@@ -6805,6 +7053,7 @@ class HospitalImpl implements HospitalInterface{
 
             $dentalExaminations = $patientDentalVM->getPatientDentalTests();
             $examinationDate = $patientDentalVM->getExaminationDate();
+            $examinationTime = $patientDentalVM->getExaminationTime();
             //dd($examinationDate);
 
             if (!is_null($patientUser))
@@ -6830,6 +7079,7 @@ class HospitalImpl implements HospitalInterface{
                 $dentalExamination->hospital_id = $hospitalId;
                 $dentalExamination->doctor_id = $patientDentalVM->getDoctorId();
                 $dentalExamination->examination_date = $patientExaminationDate;
+                $dentalExamination->examination_time = $examinationTime;
                 $dentalExamination->created_by = $patientDentalVM->getCreatedBy();
                 $dentalExamination->modified_by = $patientDentalVM->getUpdatedBy();
                 $dentalExamination->created_at = $patientDentalVM->getCreatedAt();
@@ -6911,6 +7161,7 @@ class HospitalImpl implements HospitalInterface{
             $hospitalId = $patientXRayVM->getHospitalId();
             $xrayExaminations = $patientXRayVM->getPatientXRayTests();
             $examinationDate = $patientXRayVM->getExaminationDate();
+            $examinationTime = $patientXRayVM->getExaminationTime();
             //dd($xrayExaminations);
 
             $patientUser = User::find($patientId);
@@ -6938,6 +7189,7 @@ class HospitalImpl implements HospitalInterface{
                 $xrayExamination->hospital_id = $hospitalId;
                 $xrayExamination->doctor_id = $patientXRayVM->getDoctorId();
                 $xrayExamination->examination_date = $patientExaminationDate;
+                $xrayExamination->examination_time = $patientExaminationDate;
                 $xrayExamination->created_by = $patientXRayVM->getCreatedBy();
                 $xrayExamination->modified_by = $patientXRayVM->getUpdatedBy();
                 $xrayExamination->created_at = $patientXRayVM->getCreatedAt();
