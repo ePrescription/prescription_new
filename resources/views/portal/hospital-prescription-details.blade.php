@@ -38,7 +38,8 @@ $profile_menu="0";
                             <div class="panel panel-default">
                                 <!-- <div class="panel-heading">
                                     <h4>Invoice</h4>
-                                </div> --><div style="float:right;margin:10px;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
+                                </div> -->
+                                <div style="float:right;margin:10px;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
                                 <div class="panel-body">
 
                                     <div class="row">
@@ -166,7 +167,7 @@ $profile_menu="0";
                                                             </tbody>
 
                                                         </table>
-                                                    </
+                                                    </div>
                                                     <div class="col-xs-12">
                                                         <address>
                                                             <strong>Notes:</strong><br>

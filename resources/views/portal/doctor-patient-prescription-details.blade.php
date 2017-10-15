@@ -8,14 +8,16 @@
 <?php
 $dashboard_menu="0";
 $patient_menu="1";
+$prescription_menu="0";
+$lab_menu="0";
 $profile_menu="0";
 ?>
 @section('content')
 <div class="wrapper">
-    @include('portal.hospital-header')
+    @include('portal.doctor-header')
     <!-- Left side column. contains the logo and sidebar -->
     <!-- sidebar: style can be found in sidebar.less -->
-    @include('portal.hospital-sidebar')
+    @include('portal.doctor-sidebar')
     <!-- /.sidebar -->
 
 
@@ -40,7 +42,12 @@ $profile_menu="0";
                             <div class="panel panel-primary">
                                 <div class="panel-body">
 
-                                    <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
+                                    <div style="float:right;">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
+                                            <button class="btn btn-info waves-effect waves-light">Back to Patient List</button>
+                                        </a>
+                                    </div>
+
                                     <h4 class="m-t-0 m-b-30">Patient Prescription Details</h4>
 
                                     <div class="row">
@@ -160,7 +167,7 @@ $profile_menu="0";
                                                                 <td>{{$prescription->prescription_date}}</td>
                                                                 <td>
 
-                                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
+                                                                    <a href="{{URL::to('/')}}/doctor/prescription/{{$prescription->prescription_id}}"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
 
                                                                 </td>
                                                             </tr>
@@ -306,7 +313,7 @@ $profile_menu="0";
 
         </div> <!-- content -->
 
-        @include('portal.hospital-footer')
+        @include('portal.doctor-footer')
 
     </div>
     <!-- End Right content here -->

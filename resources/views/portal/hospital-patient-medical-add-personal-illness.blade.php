@@ -67,7 +67,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="personalHistory[0][personalHistoryId]" value="1" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[0][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
-                                                        <input type="hidden" class="form-control" name="personalHistory[0][personalHistoryTime]" value="{{date('h:i:s')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="personalHistory[0][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[0][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="personalHistory11" value="1" name="personalHistory[0][personalHistoryItemId]" required="required">
@@ -86,7 +86,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="personalHistory[1][personalHistoryId]" value="2" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[1][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
-                                                        <input type="hidden" class="form-control" name="personalHistory[1][personalHistoryTime]" value="{{date('h:i:s')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="personalHistory[1][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[1][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="personalHistory21" value="3" name="personalHistory[1][personalHistoryItemId]" required="required">
@@ -105,7 +105,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="personalHistory[2][personalHistoryId]" value="3" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[2][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
-                                                        <input type="hidden" class="form-control" name="personalHistory[2][personalHistoryTime]" value="{{date('h:i:s')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="personalHistory[2][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[2][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="personalHistory31" value="5" name="personalHistory[2][personalHistoryItemId]" required="required">
@@ -128,7 +128,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="personalHistory[3][personalHistoryId]" value="4" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[3][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
-                                                        <input type="hidden" class="form-control" name="personalHistory[3][personalHistoryTime]" value="{{date('h:i:s')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="personalHistory[3][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[3][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="personalHistory41" value="8" name="personalHistory[3][personalHistoryItemId]" required="required">
@@ -151,7 +151,7 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="personalHistory[4][personalHistoryId]" value="5" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[4][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
-                                                        <input type="hidden" class="form-control" name="personalHistory[4][personalHistoryTime]" value="{{date('h:i:s')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="personalHistory[4][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[4][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="personalHistory51" value="11" name="personalHistory[4][personalHistoryItemId]" required="required">
@@ -170,7 +170,7 @@ $profile_menu="0";
                                                     <div class="col-sm-2">
                                                         <input type="hidden" class="form-control" name="personalHistory[5][personalHistoryId]" value="6" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[5][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
-                                                        <input type="hidden" class="form-control" name="personalHistory[5][personalHistoryTime]" value="{{date('h:i:s')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="personalHistory[5][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[5][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="personalHistory61" value="13" name="personalHistory[5][personalHistoryItemId]" required="required" onclick="javascript:enableBox('personal5')" />
@@ -192,7 +192,7 @@ $profile_menu="0";
                                                     <div class="col-sm-2">
                                                         <input type="hidden" class="form-control" name="personalHistory[6][personalHistoryId]" value="7" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[6][personalHistoryDate]" value="{{date('Y-m-d')}}" required="required" />
-                                                        <input type="hidden" class="form-control" name="personalHistory[6][personalHistoryTime]" value="{{date('h:i:s')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="personalHistory[6][examinationTime]" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="personalHistory[6][isValueSet]" value="1" required="required" />
                                                         <div class="radio radio-info radio-inline">
                                                             <input type="radio" id="personalHistory71" value="15" name="personalHistory[6][personalHistoryItemId]" required="required" onclick="javascript:enableBox('personal6')" />

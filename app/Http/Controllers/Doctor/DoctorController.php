@@ -7015,4 +7015,265 @@ class DoctorController extends Controller
     }
 
 
+
+    //DOCTOR NEW PAGES START
+
+
+    public function PatientPrintDetailsByHospitalForDoctor($doctorId,$hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+            //dd($patientExaminations);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-patient-print-details',compact('patientExaminations'));
+
+    }
+
+
+    public function getAppointmentDetailsForDoctor($appointmentId)
+    {
+        $appointmentDetails = null;
+        //dd($appointmentId);
+
+        try
+        {
+            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
+            $appointmentDetails = HospitalServiceFacade::getAppointmentDetails($appointmentId);
+            //dd($appointmentDetails);
+            //dd($patientAppointment);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-patient-appointment-details',compact('appointmentDetails'));
+    }
+
+
+
+    public function PatientPrescriptionDetailsByHospitalForDoctor($doctorId,$hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
+            $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
+            //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
+            $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
+            //dd($patientAppointment);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-patient-prescription-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+
+    }
+
+
+    public function getLabReceiptsByPatientForDoctor($doctorId, $hospitalId, $patientId)
+    {
+        $labReceipts = null;
+        //$labTestType = $labDetailsRequest->get('testType');
+        //dd($patientId);
+
+        try
+        {
+            $labReceipts = $this->hospitalService->getLabReceiptsByPatient($patientId, $hospitalId);
+            //dd($labReceipts);
+
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+
+        return view('portal.doctor-patient-receipts', compact('labReceipts'));
+    }
+
+
+    public function getPatientReceiptDetailsForDoctor($doctorId, $hospitalId, $patientId, Request $receiptRequest)
+    {
+        $labReceiptDetails = null;
+        $feeReceiptId = null;
+        //dd($hospitalId);
+
+        try
+        {
+            if($receiptRequest->has('feereceipt'))
+            {
+                $feeReceiptId = $receiptRequest->get('feereceipt');
+            }
+
+            $labReceiptDetails = $this->hospitalService->getPatientReceiptDetails($hospitalId, $patientId, $feeReceiptId);
+            //dd($labReceiptDetails);
+            $patientDetails = $this->hospitalService->getPatientProfile($patientId);
+
+            //dd($labTestDetails);
+
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+
+        return view('portal.doctor-patient-print-receipt-details', compact('labReceiptDetails','patientDetails'));
+    }
+
+
+
+    public function PatientMedicalDetailsByHospitalForDoctor($doctorId,$hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-patient-medical-details',compact('patientExaminations','patientDetails'));
+
+    }
+
+
+
+
+
+
+    public function PatientLabDetailsByHospitalForDoctor($doctorId,$hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+            //dd($patientExaminations);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-patient-lab-details',compact('patientExaminations','patientDetails'));
+
+    }
+
+
+
+    //DOCTOR NEW PAGES END
 }

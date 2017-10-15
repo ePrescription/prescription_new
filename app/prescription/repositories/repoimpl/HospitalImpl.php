@@ -3122,7 +3122,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR, $exc);
         }
 
-        return $pastIllness;
+        return $pastIllnessDetails;
     }
 
     /**
@@ -6346,6 +6346,7 @@ class HospitalImpl implements HospitalInterface{
                     $patientUser->patientfamilyillness()->attach($familyIllnessId,
                         array('family_illness_name' => $familyIllnessName,
                             'family_illness_date' => $familyIllnessDate,
+                            'examination_time' => $examinationTime,
                             'doctor_id' => $doctorId,
                             'hospital_id' => $hospitalId,
                             'relation' => $relation,

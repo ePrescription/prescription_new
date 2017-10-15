@@ -13,30 +13,9 @@
 
     @if(count($pastIllness)>0)
         <h4 class="m-t-0 m-b-30">Past Illness Details</h4>
-        <?php $displaySet=0; ?>
+
         @foreach($pastIllness as $recentTest)
-
-            <?php $recentTestDate=$recentTest; ?>
-            <?php $recentTestValue=$recentTest; ?>
-
-            <div class="form-group">
-                    @if($displaySet==0)
-                        <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
-                        <?php $displaySet=1; ?>
-                    @endif
-            </div>
-                <div class="form-group col-sm-12">
-                        <div class="col-sm-6" style="width:50%;float:left;">
-                            {{$recentTestValue->illnessName}} - @if($recentTestValue->isValueSet==1) Yes @else No @endif
-                            @if($recentTestValue->illnessName=="Others")
-                                - {{$recentTestValue->otherIllnessName}}
-                            @endif
-                        </div>
-
-                </div>
-
-            <?php /* ?>
-            <?php $displaySet=0; ?>
+        <?php $displaySet=0; ?>
             <div class="form-group">
                 @foreach($recentTest as $recentTestDate)
                     @if($displaySet==0)
@@ -56,7 +35,7 @@
                     </div>
                 @endforeach
             </div>
-            <?php */ ?>
+
         @endforeach
     @endif
 

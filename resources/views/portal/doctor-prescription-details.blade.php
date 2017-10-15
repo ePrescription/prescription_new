@@ -41,10 +41,13 @@ $profile_menu="0";
                                 <!-- <div class="panel-heading">
                                     <h4>Invoice</h4>
                                 </div> -->
+                                <div style="float:right;margin:10px;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
                                 <div class="panel-body">
 
                                     <div class="row">
                                         <div class="col-xs-12">
+
+
                                             <div class="invoice-title">
                                                 <h4 class="pull-right">Prescription ID # {{$prescriptionDetails['PrescriptionInfo'][0]->PRID}}</h4>
                                                 <h3 class="m-t-0">Prescription Details</h3>
@@ -112,18 +115,12 @@ $profile_menu="0";
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-xs-6">
+                                                <div class="col-xs-12">
                                                     <address>
-                                                        <strong>Notes:</strong><br>
+                                                        <strong>Current Illness:</strong><br>
                                                         @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
-                                                            {{$prescriptioninfo->notes}}
+                                                            {{$prescriptioninfo->illness}}
                                                         @endforeach
-                                                    </address>
-                                                </div>
-                                                <div class="col-xs-6 text-right">
-                                                    <address>
-                                                        <strong>Prescription Date:</strong><br>
-                                                        {{$prescriptionDetails['PrescriptionInfo'][0]->prescription_date}}<br><br>
                                                     </address>
                                                 </div>
                                             </div>
@@ -164,6 +161,14 @@ $profile_menu="0";
                                                             @endforeach
                                                             </tbody>
                                                         </table>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <address>
+                                                            <strong>Notes:</strong><br>
+                                                            @foreach($prescriptionDetails['PrescriptionInfo'] as $prescriptioninfo)
+                                                                {{$prescriptioninfo->notes}}
+                                                            @endforeach
+                                                        </address>
                                                     </div>
 
                                                     <div class="hidden-print">

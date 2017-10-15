@@ -498,6 +498,104 @@ Route::group(['prefix' => 'doctor'], function()
         Route::post('rest/api/{doctorId}/hospital/{hospitalId}/patient/{patientId}/update', array('as' => 'doctor.savepatient', 'uses' => 'DoctorController@updatePatientsByDoctorForFront'));
 
 
+        //NEW By VIMAL
+
+        Route::get('{doctorId}/hospital/{hospitalId}/patients', array('as' => 'doctor.patients', 'uses' => 'DoctorController@getPatientsByDoctorForFront'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/details', array('as' => 'doctor.patientdetails', 'uses' => 'DoctorController@PatientDetailsByDoctorForFront'));
+
+
+        //Appointment
+        Route::get('{doctorId}/hospital/{hospitalId}/addpatientwithappointment', array('as' => 'hospital.addpatientwithappointment', 'uses' => 'DoctorController@addPatientWithAppointmentByHospitalForDoctor'));
+        Route::post('{doctorId}/hospital/{hospitalId}/savepatientwithappointment', array('as' => 'hospital.savepatientwithappointment', 'uses' => 'DoctorController@savePatientWithAppointmentByHospitalForDoctor'));
+
+        Route::get('{doctorId}/hospital/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForFront'));
+        Route::get('patients/appointments/{appointmentId}/details', array('as' => 'patient.appointmentdetails', 'uses' => 'DoctorController@getAppointmentDetailsForDoctor'));
+
+        Route::get('{doctorId}/hospital/{hospitalId}/patientnames', array('as' => 'hospital.searchnames', 'uses' => 'DoctorController@getPatientNamesForHospital'));
+        Route::get('rest/api/{patientId}/details', array('as' => 'hospital.details', 'uses' => 'DoctorController@getPatientDetailsById'));
+        Route::get('rest/api/{specialtyId}/referraldoctors', array('as' => 'hospital.referraldoctors', 'uses' => 'DoctorController@getDoctorsBySpecialty'));
+
+
+        //Medical
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/medical-details', array('as' => 'hospital.patientmedicaldetails', 'uses' => 'DoctorController@PatientMedicalDetailsByHospitalForDoctor'));
+
+        Route::get('{doctorId}/patient/{patientId}/examinationdates', array('as' => 'doctor.examinationdates', 'uses' => 'DoctorController@getExaminationDatesForDoctor'));
+
+        Route::get('{doctorId}/patient/{patientId}/generalexamination', array('as' => 'doctor.generalexamination', 'uses' => 'DoctorController@getPatientGeneralExaminationForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/familyillness', array('as' => 'doctor.familyillness', 'uses' => 'DoctorController@getPatientFamilyIllnessForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/pastillness', array('as' => 'doctor.patientpastillness', 'uses' => 'DoctorController@getPatientPastIllnessForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/patienthistory', array('as' => 'doctor.patienthistory', 'uses' => 'DoctorController@getPersonalHistoryForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/drughistory', array('as' => 'doctor.drughistory', 'uses' => 'DoctorController@getPatientDrugHistoryForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/pregnancydetails', array('as' => 'doctor.pregnancydetails', 'uses' => 'DoctorController@getPregnancyDetailsForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/symptomdetails', array('as' => 'doctor.symptomdetails', 'uses' => 'DoctorController@getPatientSymptomsForDoctor'));
+
+        Route::get('rest/api/getsubsymptom', array('as' => 'doctor.getsubsymptomdetails', 'uses' => 'DoctorController@ajaxGetSubSymptoms'));
+        Route::get('rest/api/getsymptomname', array('as' => 'doctor.getsymptomnamedetails', 'uses' => 'DoctorController@ajaxGetSymptomsName'));
+
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-general', array('as' => 'hospital.patientmedicalgeneral', 'uses' => 'DoctorController@AddPatientMedicalGeneralByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-family', array('as' => 'hospital.patientmedicalfamily', 'uses' => 'DoctorController@AddPatientMedicalFamilyByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-past', array('as' => 'hospital.patientmedicalpast', 'uses' => 'DoctorController@AddPatientMedicalPastByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-personal', array('as' => 'hospital.patientmedicalpersonal', 'uses' => 'DoctorController@AddPatientMedicalPersonalByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-scan', array('as' => 'hospital.patientmedicalscan', 'uses' => 'DoctorController@AddPatientMedicalScanByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-drug', array('as' => 'hospital.patientmedicaldrug', 'uses' => 'DoctorController@AddPatientMedicalDrugByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-pregnancy', array('as' => 'hospital.patientmedicalpregnancy', 'uses' => 'DoctorController@AddPatientMedicalPregnancyByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-symptom', array('as' => 'hospital.patientmedicalsymptom', 'uses' => 'DoctorController@AddPatientMedicalSymptomByHospitalForDoctor'));
+
+        Route::post('personalhistory', array('as' => 'doctor.savepersonalhistory', 'uses' => 'DoctorController@savePersonalHistoryForDoctor'));
+        Route::post('generalexamination', array('as' => 'doctor.savegeneralexamination', 'uses' => 'DoctorController@savePatientGeneralExaminationForDoctor'));
+        Route::post('pastillness', array('as' => 'doctor.savepastillness', 'uses' => 'DoctorController@savePatientPastIllnessForDoctor'));
+        Route::post('familyillness', array('as' => 'doctor.savefamilyillness', 'uses' => 'DoctorController@savePatientFamilyIllnessForDoctor'));
+        Route::post('pregnancydetails', array('as' => 'doctor.savepregnancydetails', 'uses' => 'DoctorController@savePatientPregnancyDetailsForDoctor'));
+        Route::post('drughistory', array('as' => 'doctor.savedrughistory', 'uses' => 'DoctorController@savePatientDrugHistoryForDoctor'));
+        Route::post('symptomdetails', array('as' => 'doctor.savesymptomdetails', 'uses' => 'DoctorController@savePatientSymptomsForDoctor'));
+
+//Prescription
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/prescription-details', array('as' => 'hospital.patientdetails', 'uses' => 'DoctorController@PatientPrescriptionDetailsByHospitalForDoctor'));
+
+
+
+//Lab
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/lab-details', array('as' => 'hospital.patientlabdetails', 'uses' => 'DoctorController@PatientLabDetailsByHospitalForDoctor'));
+
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-lab-ultrasoundtests', array('as' => 'hospital.patientlabultrasoundtests', 'uses' => 'DoctorController@AddPatientLabUltraSoundTestsByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-lab-urinetests', array('as' => 'hospital.patientlaburinetests', 'uses' => 'DoctorController@AddPatientLabUrineTestsByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-lab-motiontests', array('as' => 'hospital.patientlabmotiontests', 'uses' => 'DoctorController@AddPatientLabMotionTestsByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-lab-bloodtests', array('as' => 'hospital.patientlabbloodtests', 'uses' => 'DoctorController@AddPatientLabBloodTestsByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-lab-scantests', array('as' => 'hospital.patientlabscantests', 'uses' => 'DoctorController@AddPatientLabScanTestsByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-lab-dentaltests', array('as' => 'hospital.patientlabdentaltests', 'uses' => 'DoctorController@addPatientDentalTestsForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-lab-xraytests', array('as' => 'hospital.patientlabxraytests', 'uses' => 'DoctorController@addPatientXrayTestsForDoctor'));
+
+        Route::post('ultrasoundtests', array('as' => 'doctor.saveultrasoundtests', 'uses' => 'DoctorController@savePatientUltraSoundTestsForDoctor'));
+        Route::post('urinetests', array('as' => 'doctor.saveurinetests', 'uses' => 'DoctorController@savePatientUrineTestsForDoctor'));
+        Route::post('motiontests', array('as' => 'doctor.savemotiontests', 'uses' => 'DoctorController@savePatientMotionTestsForDoctor'));
+        Route::post('bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorController@savePatientBloodTestsForDoctor'));
+        Route::post('scandetails', array('as' => 'doctor.savescandetails', 'uses' => 'DoctorController@savePatientScanDetailsForDoctor'));
+        Route::post('dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@savePatientDentalTestsForDoctor'));
+        Route::post('xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorController@savePatientXrayTestsForDoctor'));
+
+        Route::get('{doctorId}/patient/{patientId}/ultrasoundtests', array('as' => 'doctor.ultrasoundtests', 'uses' => 'DoctorController@getPatientUltraSoundTestsForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/urinetests', array('as' => 'doctor.urinetests', 'uses' => 'DoctorController@getPatientUrineTestsForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/motiontests', array('as' => 'doctor.motiontests', 'uses' => 'DoctorController@getPatientMotionTestsForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/bloodtests', array('as' => 'doctor.bloodtests', 'uses' => 'DoctorController@getPatientBloodTestsForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/scandetails', array('as' => 'doctor.scandetails', 'uses' => 'DoctorController@getPatientScanDetailsForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@getPatientDentalTestsForDoctor'));
+        Route::get('{doctorId}/patient/{patientId}/xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorController@getPatientXrayTestsForDoctor'));
+
+
+//Receipt
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/labtestreceipts', array('as' => 'patient.labtestreceipts', 'uses' => 'DoctorController@getLabTestDetailsForReceiptForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/receiptdetails', array('as' => 'patient.receiptdetails', 'uses' => 'DoctorController@getPatientReceiptDetailsForDoctor'));
+
+        Route::post('savelabreceipts', array('as' => 'patient.savelabreceipts', 'uses' => 'DoctorController@saveLabReceiptDetailsForPatientForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/labreceipts', array('as' => 'patient.labreceipts', 'uses' => 'DoctorController@getLabReceiptsByPatientForDoctor'));
+
+
+//All Print
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/print', array('as' => 'hospital.patientprintdetails', 'uses' => 'DoctorController@PatientPrintDetailsByHospitalForDoctor'));
+
+
+
+
     });
 
 
@@ -508,6 +606,7 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/prescription', array('as' => 'doctor.searchbyprid', 'uses' => 'PharmacyController@getPrescriptionByPrid'));
 
 
+        Route::get('prescription/{prescriptionId}', array('as' => 'doctor.prescriptiondetails', 'uses' => 'PharmacyController@getPrescriptionDetailsForDoctor'));
         //Route::get('rest/api/patient/{prescriptionId}/mail', array('as' => 'patient.sendemail', 'uses' => 'PharmacyController@forwardPrescriptionDetailsByMail'));
         //Route::get('rest/api/patient/{prescriptionId}/sms', array('as' => 'patient.send sms', 'uses' => 'PharmacyController@forwardPrescriptionDetailsBySMS'));
 

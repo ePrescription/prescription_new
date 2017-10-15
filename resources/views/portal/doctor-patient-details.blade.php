@@ -41,7 +41,13 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
+
+                                    <div style="float:right;">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
+                                            <button class="btn btn-info waves-effect waves-light">Back</button>
+                                        </a>
+                                    </div>
+
                                     <h4 class="m-t-0 m-b-30">Patient Details</h4>
 
                                     <div class="row">
@@ -50,50 +56,50 @@ $profile_menu="0";
 
 
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">PID</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-4 control-label">PID</label>
+                                                <div class="col-sm-8">
                                                     {{$patientDetails[0]->pid}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Name</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-4 control-label">Name</label>
+                                                <div class="col-sm-8">
                                                     {{$patientDetails[0]->name}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Number</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-4 control-label">Number</label>
+                                                <div class="col-sm-8">
                                                     {{$patientDetails[0]->telephone}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">E-Mail</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-4 control-label">E-Mail</label>
+                                                <div class="col-sm-8">
                                                     {{$patientDetails[0]->email}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Age</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-4 control-label">Age</label>
+                                                <div class="col-sm-8">
                                                     {{$patientDetails[0]->age}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Gender</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-4 control-label">Gender</label>
+                                                <div class="col-sm-8">
                                                     @if($patientDetails[0]->gender==1) Male @else Female @endif
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Relationship</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-4 control-label">Relationship</label>
+                                                <div class="col-sm-8">
                                                     {{$patientDetails[0]->relationship}}
                                                 </div>
                                             </div>
                                             <div class="hidden form-group col-md-4">
-                                                <label class="col-sm-6 control-label">Relation Name</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-4 control-label">Relation Name</label>
+                                                <div class="col-sm-8">
                                                     {{$patientDetails[0]->spouseName}}
                                                 </div>
                                             </div>
@@ -111,11 +117,12 @@ $profile_menu="0";
                                                     </a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#profile" data-toggle="tab" aria-expanded="false">
+                                                    <a href="#appointment" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-user"></i></span>
                                                         <span class="hidden-xs">Appointment</span>
                                                     </a>
                                                 </li>
+                                                <?php /* ?>
                                                 <li class="">
                                                     <a href="#messages" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
@@ -128,6 +135,7 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Lab Tests</span>
                                                     </a>
                                                 </li>
+                                                <?php */ ?>
                                             </ul>
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="home">
@@ -180,9 +188,15 @@ $profile_menu="0";
                                                             {{$patientDetails[0]->spouseName}}
                                                         </div>
                                                     </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label class="col-sm-6 control-label">Patient Address</label>
+                                                        <div class="col-sm-6">
+                                                            {{$patientDetails[0]->address}}
+                                                        </div>
+                                                    </div>
                                                     </p>
                                                 </div>
-                                                <div class="tab-pane" id="profile">
+                                                <div class="tab-pane" id="appointment">
                                                     <p>
                                                     <table id="example2" class="table table-bordered table-hover">
                                                         <thead>
@@ -201,7 +215,14 @@ $profile_menu="0";
                                                                 <td>{{$appointment->hospital_name}}</td>
                                                                 <td>{{$appointment->name}}</td>
                                                                 <td>{{$appointment->appointment_date}} {{$appointment->appointment_time}}</td>
-                                                                <td>Open</td>
+                                                                <td>
+
+
+                                                                    <a href="{{URL::to('/')}}/doctor/patients/appointments/{{$appointment->appointment_id}}/details"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
+
+
+
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
@@ -209,6 +230,8 @@ $profile_menu="0";
                                                     </table>
                                                     </p>
                                                 </div>
+
+                                                <?php /* ?>
                                                 <div class="tab-pane" id="messages">
                                                     <p>
                                                     <div>
@@ -278,6 +301,7 @@ $profile_menu="0";
                                                     </table>
                                                     </p>
                                                 </div>
+                                                <?php */ ?>
                                             </div>
                                         </div>
 

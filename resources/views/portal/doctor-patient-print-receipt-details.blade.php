@@ -8,14 +8,16 @@
 <?php
 $dashboard_menu="0";
 $patient_menu="1";
+$prescription_menu="0";
+$lab_menu="0";
 $profile_menu="0";
 ?>
 @section('content')
 <div class="wrapper">
-    @include('portal.hospital-header')
+    @include('portal.doctor-header')
     <!-- Left side column. contains the logo and sidebar -->
     <!-- sidebar: style can be found in sidebar.less -->
-    @include('portal.hospital-sidebar')
+    @include('portal.doctor-sidebar')
     <!-- /.sidebar -->
 
 
@@ -378,7 +380,7 @@ $profile_menu="0";
 
 
                                                 <div style="float:left;margin:0px 20px;">
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/labreceipts">
+                                                    <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/labreceipts">
                                                         <button type="button" class="btn btn-warning waves-effect waves-light">Cancel</button>
                                                     </a>
                                                 </div>
@@ -397,7 +399,7 @@ $profile_menu="0";
 
         </div> <!-- content -->
 
-        @include('portal.hospital-footer')
+        @include('portal.doctor-footer')
 
     </div>
     <!-- End Right content here -->

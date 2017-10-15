@@ -14,14 +14,16 @@
 <?php
 $dashboard_menu="0";
 $patient_menu="1";
+$prescription_menu="0";
+$lab_menu="0";
 $profile_menu="0";
 ?>
 @section('content')
 <div class="wrapper">
-    @include('portal.hospital-header')
+    @include('portal.doctor-header')
     <!-- Left side column. contains the logo and sidebar -->
     <!-- sidebar: style can be found in sidebar.less -->
-    @include('portal.hospital-sidebar')
+    @include('portal.doctor-sidebar')
     <!-- /.sidebar -->
 
     <!-- Content Wrapper. Contains page content -->
@@ -41,9 +43,9 @@ $profile_menu="0";
                     <div class="row">
                         <div class="col-md-12">
 
-                            <div style="float:right;margin: 10px;">
-                                <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
-                                    <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
+                            <div style="padding:10px;float:right;">
+                                <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
+                                    <button class="btn btn-info waves-effect waves-light">Back to Patient List</button>
                                 </a>
                             </div>
 
@@ -91,7 +93,7 @@ $profile_menu="0";
                                                 <td>{{$labReceipt->lab_receipt_date}}</td>
                                                 <td>
 
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$labReceipt->patient_id}}/receiptdetails?feereceipt={{$labReceipt->receiptId}}" title="Lab Profile"><i class="fa fa-eye"></i> </a>
+                                                    <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$labReceipt->patient_id}}/receiptdetails?feereceipt={{$labReceipt->receiptId}}" title="Lab Profile"><i class="fa fa-eye"></i> </a>
 
                                                 </td>
                                             </tr>

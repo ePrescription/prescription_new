@@ -8,14 +8,16 @@
 <?php
 $dashboard_menu="0";
 $patient_menu="1";
+$prescription_menu="0";
+$lab_menu="0";
 $profile_menu="0";
 ?>
 @section('content')
 <div class="wrapper">
-    @include('portal.hospital-header')
+    @include('portal.doctor-header')
     <!-- Left side column. contains the logo and sidebar -->
     <!-- sidebar: style can be found in sidebar.less -->
-    @include('portal.hospital-sidebar')
+    @include('portal.doctor-sidebar')
     <!-- /.sidebar -->
 
 
@@ -39,15 +41,18 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+
+                                    <div style="float:right;">
+
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details#appointment">
+                                            <button class="btn btn-info waves-effect waves-light">Back to Profile</button>
+                                        </a>
+                                    </div>
+
                                     <div style="float:right;">
                                         <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>
 
-                                    <div style="float:right;">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details">
-                                            <button class="btn btn-info waves-effect waves-light">Back</button>
-                                        </a>
-                                    </div>
                                     <h4 class="m-t-0 m-b-30">Patient Appointment Details</h4>
 
 
@@ -252,7 +257,7 @@ $profile_menu="0";
 
         </div> <!-- content -->
 
-        @include('portal.hospital-footer')
+        @include('portal.doctor-footer')
 
     </div>
     <!-- End Right content here -->
