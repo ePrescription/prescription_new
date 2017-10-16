@@ -352,7 +352,7 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $query = DB::table('hospital_patient as hp')->select('p.id', 'p.patient_id', 'p.pid', 'p.name', 'p.age',
-                    'p.gender', 'p.telephone',
+                    'p.gender', 'p.telephone', 'p.married', 'p.email', 'p.address',
                     'h.hospital_id', 'h.hospital_name');
             $query->join('hospital as h', 'h.hospital_id', '=', 'hp.hospital_id');
             $query->join('patient as p', 'p.patient_id', '=', 'hp.patient_id');
