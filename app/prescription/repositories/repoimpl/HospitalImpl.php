@@ -3477,7 +3477,7 @@ class HospitalImpl implements HospitalInterface{
 
             $timeQuery = DB::table('patient_scan as ps');
             $timeQuery->where('ps.patient_id', '=', $patientId);
-            $timeQuery->where('ps.examination_date', '=', $scanDate);
+            $timeQuery->where('ps.scan_date', '=', $scanDate);
             $timeQuery->where('ps.is_value_set', '=', 1);
             $timeQuery->select('ps.examination_time');
             $timeQuery->groupBy('ps.examination_time');
@@ -4002,7 +4002,8 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_ERROR, $exc);
         }
 
-        return $bloodTests;
+        //dd($patientBloodTests);
+        return $patientBloodTests;
     }
 
     private function filterArray($value){
@@ -4259,6 +4260,8 @@ class HospitalImpl implements HospitalInterface{
             $timeQuery->groupBy('pxe.examination_time');
 
             $examinationTime = $timeQuery->get();
+
+            //dd($examinationTime);
 
             foreach($examinationTime as $time)
             {
@@ -7235,7 +7238,7 @@ class HospitalImpl implements HospitalInterface{
                 $xrayExamination->hospital_id = $hospitalId;
                 $xrayExamination->doctor_id = $patientXRayVM->getDoctorId();
                 $xrayExamination->examination_date = $patientExaminationDate;
-                $xrayExamination->examination_time = $patientExaminationDate;
+                $xrayExamination->examination_time = $examinationTime;
                 $xrayExamination->created_by = $patientXRayVM->getCreatedBy();
                 $xrayExamination->modified_by = $patientXRayVM->getUpdatedBy();
                 $xrayExamination->created_at = $patientXRayVM->getCreatedAt();

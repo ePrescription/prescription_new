@@ -15,6 +15,32 @@
         form.display label.control-label{ text-align:left; }
     </style>
     <form role="form" method="POST" class="display form-horizontal">
+
+        @if(count($motionTests)>0)
+            <h4 class="m-t-0 m-b-30">Motion Test Details</h4>
+            @foreach($motionTests as $recentTest)
+                <?php $displaySet=0; ?>
+                <div class="form-group">
+                    @foreach($recentTest as $recentTestDate)
+                        @if($displaySet==0)
+                            <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
+                            <?php $displaySet=1; ?>
+                        @endif
+                    @endforeach
+                </div>
+                <div class="form-group col-sm-12">
+                    @foreach($recentTest as $recentTestValue)
+                        @if($recentTestValue->isValueSet==1)
+                        <div class="col-sm-6" style="width:50%;float:left;">
+                            {{$recentTestValue->examinationName}}
+                        </div>
+                        @endif
+                    @endforeach
+                </div>
+            @endforeach
+        @endif
+
+        <?php /* ?>
         <?php $i=0; ?>
         @foreach($motionTests as $motionTestsValue)
             @if($motionTestsValue->isValueSet==1)
@@ -24,6 +50,7 @@
             <?php $i++; ?>
             @endif
         @endforeach
+        <?php */ ?>
     </form>
 
 </div> <!-- panel-body -->

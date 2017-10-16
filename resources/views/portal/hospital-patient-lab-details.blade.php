@@ -520,7 +520,7 @@ $profile_menu="0";
 
                                     </div>
 
-                                </div> <!-- panel-body -->
+                                                            </div> <!-- panel-body -->
                             </div> <!-- panel -->
                         </div> <!-- col -->
                     </div> <!-- End row -->
@@ -550,7 +550,25 @@ $profile_menu="0";
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
     <script>
+
+        $(document).ready(function(){
+            $( "input#TestTime" ).timepicker({
+                timeFormat: 'HH:mm:ss',
+                interval: 60,
+                minTime: '10',
+                maxTime: '6:00pm',
+                defaultTime: '11',
+                startTime: '10:00',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true
+            });
+        });
+
         function ajaxloadblooddetails(pid,date) {
 
             $("#patientblooddiv").html("LOADING...");
@@ -651,7 +669,6 @@ $profile_menu="0";
 
         }
 
-
         function ajaxloadscandetails(pid,date) {
 
             $("#patientscandiv").html("LOADING...");
@@ -727,7 +744,6 @@ $profile_menu="0";
 
         }
 
-
         function ajaxloadbloodform(hid,pid) {
             $("#patientblooddiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
@@ -740,6 +756,15 @@ $profile_menu="0";
                     success: function (data) {
                         $("#patientblooddiv").html(data);
                         $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                        $( "input#TestTime" ).timepicker({
+                            timeFormat: 'HH:mm:ss',
+                            interval: 60,
+                            defaultTime: '{{date('H:i:s')}}',
+                            startTime: '00:00',
+                            dynamic: false,
+                            dropdown: true,
+                            scrollbar: true
+                        });
                     }
                 });
         }
@@ -756,6 +781,15 @@ $profile_menu="0";
                 success: function (data) {
                     $("#patientmotiondiv").html(data);
                     $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
                 }
             });
         }
@@ -772,6 +806,15 @@ $profile_menu="0";
                 success: function (data) {
                     $("#patienturinediv").html(data);
                     $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
                 }
             });
         }
@@ -788,6 +831,15 @@ $profile_menu="0";
                 success: function (data) {
                     $("#patientultradiv").html(data);
                     $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
                 }
             });
         }
@@ -804,6 +856,15 @@ $profile_menu="0";
                 success: function (data) {
                     $("#patientscandiv").html(data);
                     $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
                 }
             });
         }
@@ -820,10 +881,18 @@ $profile_menu="0";
                 success: function (data) {
                     $("#patientdentaldiv").html(data);
                     $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
                 }
             });
         }
-
 
         function ajaxloadxrayform(hid,pid) {
             $("#patientxraydiv").html("LOADING...");
@@ -837,6 +906,15 @@ $profile_menu="0";
                 success: function (data) {
                     $("#patientxraydiv").html(data);
                     $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
                 }
             });
         }
@@ -851,11 +929,18 @@ $profile_menu="0";
             setTimeout(function(){newWin.close();},10);
         }
 
-
         function UpdateTestDates(dateValue) {
 
             for (var i = 0; i < $('input#TestDates').length; i++) {
                 $('input#TestDates').val(dateValue);
+            }
+
+        }
+
+        function UpdateTestTimes(timeValue) {
+
+            for (var i = 0; i < $('input#TestTimes').length; i++) {
+                $('input#TestTimes').val(timeValue);
             }
 
         }

@@ -28,9 +28,13 @@
 <form action="{{URL::to('/')}}/fronthospital/rest/api/xraytests" role="form" method="POST" class="form-horizontal ">
 <div class="form-group">
 <label class="col-sm-4 control-label">Test Date</label>
-<div class="col-sm-6">
+<div class="col-sm-4">
 <input type="text" class="form-control" name="examinationDate" id="TestDate" value="{{date('Y-m-d')}}" required="required" onchange="javascript:UpdateTestDates(this.value);" />
 @if ($errors->has('examinationDate'))<p class="error" style="">{!!$errors->first('examinationDate')!!}</p>@endif
+</div>
+<div class="col-sm-4">
+<input type="text" class="form-control" name="examinationTime" id="TestTIme" value="{{date('h:i:s')}}" required="required" onchange="javascript:UpdateTestTimes(this.value);" />
+@if ($errors->has('examinationTime'))<p class="error" style="">{!!$errors->first('examinationTime')!!}</p>@endif
 </div>
 </div>
 
@@ -49,7 +53,8 @@
 <div class="col-sm-4">
 <input type="hidden" class="form-control" name="xrayExaminations[{{$i}}][xrayExaminationId]" value="{{$xrayExaminationsValue->id}}" required="required" />
 <input type="hidden" class="form-control" name="xrayExaminations[{{$i}}][xrayExaminationDate]" id="TestDates" value="{{date('Y-m-d')}}" required="required" />
-    <input type="checkbox" class="form-controlX" name="xrayExaminations[{{$i}}][xrayExaminationName]" value="{{$xrayExaminationsValue->examination_name}}" style="height: 20px;width: 20px;margin: 8px 0px 0px 0px;" />
+<input type="hidden" class="form-control" name="xrayExaminations[{{$i}}][examinationTime]" id="TestTimes" value="{{date('h:i:s')}}" required="required" />
+<input type="checkbox" class="form-controlX" name="xrayExaminations[{{$i}}][xrayExaminationName]" value="{{$xrayExaminationsValue->examination_name}}" style="height: 20px;width: 20px;margin: 8px 0px 0px 0px;" />
 <?php /* ?>
 <div class="radio radio-info radio-inline">
 <input type="radio" id="xrayExaminations{{$xrayExaminationsValue->id}}1" value="1" name="xrayExaminations[{{$i}}][isValueSet]">
