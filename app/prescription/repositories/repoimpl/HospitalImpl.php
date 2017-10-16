@@ -485,7 +485,8 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $query = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.age',
-                'p.gender', 'p.email', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.telephone', 'p.address');
+                'p.gender', 'p.email', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.careof',
+                'p.telephone', 'p.address');
             $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
             $query->where('p.patient_id', $patientId);
             $query->where('usr.delete_status', '=', 1);
@@ -1902,6 +1903,7 @@ class HospitalImpl implements HospitalInterface{
 
                 $patient->name = $patientProfileVM->getName();
                 $patient->address = $patientProfileVM->getAddress();
+                $patient->careof = $patientProfileVM->getCareOf();
                 $patient->city = $patientProfileVM->getCity();
                 $patient->country = $patientProfileVM->getCountry();
                 $patient->telephone = $patientProfileVM->getTelephone();
@@ -2028,6 +2030,7 @@ class HospitalImpl implements HospitalInterface{
             {
                 $patient->name = $patientProfileVM->getName();
                 $patient->address = $patientProfileVM->getAddress();
+                $patient->careof = $patientProfileVM->getCareOf();
                 $patient->city = $patientProfileVM->getCity();
                 $patient->country = $patientProfileVM->getCountry();
                 $patient->telephone = $patientProfileVM->getTelephone();
