@@ -5546,6 +5546,10 @@ class HospitalImpl implements HospitalInterface{
             $latestBloodExamQuery->where('pbe.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pbe.examination_time)'));
                 $query->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+                $query->where('pbe.examination_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pbe.examination_date)'));
+                    $query1->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+                });
             });
             $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $latestBloodExamQuery->where('pbe.is_value_set', '=', 1);
@@ -5568,6 +5572,10 @@ class HospitalImpl implements HospitalInterface{
             $latestGeneralExamQuery->where('pge.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pge.examination_time)'));
                 $query->from('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
+                $query->where('pge.general_examination_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pge.general_examination_date)'));
+                    $query1->from('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
+                });
             });
             $latestGeneralExamQuery->where('pge.patient_id', '=', $patientId);
             $latestGeneralExamQuery->where('pge.is_value_set', '=', 1);
@@ -5587,6 +5595,10 @@ class HospitalImpl implements HospitalInterface{
             $latestPastIllnessQuery->where('ppi.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(ppi.examination_time)'));
                 $query->from('patient_past_illness as ppi')->where('ppi.patient_id', '=', $patientId);
+                $query->where('ppi.past_illness_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(ppi.past_illness_date)'));
+                    $query1->from('patient_past_illness as ppi')->where('ppi.patient_id', '=', $patientId);
+                });
             });
             $latestPastIllnessQuery->where('ppi.patient_id', '=', $patientId);
             $latestPastIllnessQuery->where('ppi.is_value_set', '=', 1);
@@ -5602,6 +5614,10 @@ class HospitalImpl implements HospitalInterface{
             $latestFamilyIllnessQuery->where('pfi.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pfi.examination_time)'));
                 $query->from('patient_family_illness as pfi')->where('pfi.patient_id', '=', $patientId);
+                $query->where('pfi.family_illness_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pfi.family_illness_date)'));
+                    $query1->from('patient_family_illness as pfi')->where('pfi.patient_id', '=', $patientId);
+                });
             });
             $latestFamilyIllnessQuery->where('pfi.patient_id', '=', $patientId);
             $latestFamilyIllnessQuery->where('pfi.is_value_set', '=', 1);
@@ -5621,6 +5637,10 @@ class HospitalImpl implements HospitalInterface{
             $latestPersonalHistoryQuery->where('pph.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pph.examination_time)'));
                 $query->from('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
+                $query->where('pph.personal_history_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pph.personal_history_date)'));
+                    $query1->from('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
+                });
             });
             $latestPersonalHistoryQuery->where('pph.patient_id', '=', $patientId);
             $latestPersonalHistoryQuery->where('pph.is_value_set', '=', 1);
@@ -5637,6 +5657,10 @@ class HospitalImpl implements HospitalInterface{
             $latestPregnancyQuery->where('pp.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pp.examination_time)'));
                 $query->from('patient_pregnancy as pp')->where('pp.patient_id', '=', $patientId);
+                $query->where('pp.pregnancy_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pp.pregnancy_date)'));
+                    $query1->from('patient_pregnancy as pp')->where('pp.patient_id', '=', $patientId);
+                });
             });
             $latestPregnancyQuery->where('pp.patient_id', '=', $patientId);
             $latestPregnancyQuery->where('pp.is_value_set', '=', 1);
@@ -5652,6 +5676,10 @@ class HospitalImpl implements HospitalInterface{
             $latestScanQuery->where('ps.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(ps.examination_time)'));
                 $query->from('patient_scan as ps')->where('ps.patient_id', '=', $patientId);
+                $query->where('ps.scan_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(ps.scan_date)'));
+                    $query1->from('patient_scan as ps')->where('ps.patient_id', '=', $patientId);
+                });
             });
             $latestScanQuery->where('ps.patient_id', '=', $patientId);
             $latestScanQuery->where('ps.is_value_set', '=', 1);
@@ -5682,6 +5710,10 @@ class HospitalImpl implements HospitalInterface{
             $latestUltrasoundQuery->where('pus.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pus.examination_time)'));
                 $query->from('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
+                $query->where('pus.examination_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pus.examination_date)'));
+                    $query1->from('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
+                });
             });
             $latestUltrasoundQuery->where('pus.patient_id', '=', $patientId);
             $latestUltrasoundQuery->where('pus.is_value_set', '=', 1);
@@ -5697,6 +5729,10 @@ class HospitalImpl implements HospitalInterface{
             $latestUrineExamQuery->where('pue.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pue.examination_time)'));
                 $query->from('patient_urine_examination as pue')->where('pue.patient_id', '=', $patientId);
+                $query->where('pue.examination_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pue.examination_date)'));
+                    $query1->from('patient_urine_examination as pue')->where('pue.patient_id', '=', $patientId);
+                });
             });
             $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
             $latestUrineExamQuery->where('pue.is_value_set', '=', 1);
@@ -5712,6 +5748,10 @@ class HospitalImpl implements HospitalInterface{
             $latestMotionExamQuery->where('pme.examination_time', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pme.examination_time)'));
                 $query->from('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
+                $query->where('pme.examination_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pme.examination_date)'));
+                    $query1->from('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
+                });
             });
             $latestMotionExamQuery->where('pme.patient_id', '=', $patientId);
             $latestMotionExamQuery->where('pme.is_value_set', '=', 1);
