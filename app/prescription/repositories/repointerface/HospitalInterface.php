@@ -9,6 +9,7 @@
 use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientComplaintsViewModel;
 use App\Http\ViewModels\PatientDentalViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
@@ -162,4 +163,9 @@ interface HospitalInterface {
     public function getDoctorsBySpecialty($specialtyId);
     public function saveReferralDoctor(DoctorReferralsViewModel $doctorReferralsVM);
     public function getReferralDoctorDetails($referralId);
+
+    //
+    public function getComplaintTypes();
+    public function getComplaints($complaintTypeId);
+    public function savePatientComplaints(PatientComplaintsViewModel $patientComVM);
 }

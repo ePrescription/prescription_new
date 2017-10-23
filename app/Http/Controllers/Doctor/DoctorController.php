@@ -4084,6 +4084,8 @@ class DoctorController extends Controller
         return $responseJson;
     }
 
+
+
     /**
      * Get personal history for the patient
      * @param $patientId

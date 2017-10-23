@@ -11,6 +11,7 @@ namespace App\prescription\mapper;
 use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientComplaintsViewModel;
 use App\Http\ViewModels\PatientDentalViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
@@ -349,6 +350,36 @@ class PatientProfileMapper
         $patientSymVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $patientSymVM;
+    }
+
+    public static function setPatientComplaintDetails(Request $complaintRequest)
+    {
+        $patientComVM = new PatientComplaintsViewModel();
+
+        $comObj = (object) $complaintRequest->all();
+        $patientComVM->setPatientId($comObj->patientId);
+        $patientComVM->setDoctorId(property_exists($comObj, 'doctorId') ? $comObj->doctorId : null);
+        $patientComVM->setHospitalId(property_exists($comObj, 'hospitalId') ? $comObj->hospitalId : null);
+        $patientComVM->setComplaintDate(property_exists($comObj, 'complaintDate') ? $comObj->complaintDate : null);
+        /*$patientSymVM->setDoctorId($symObj->doctorId);
+        $patientSymVM->setHospitalId($symObj->hospitalId);*/
+        $complaintDetails = $comObj->complaints;
+        //dd($candidateEmployments);
+
+        foreach($complaintDetails as $complaint)
+        {
+            $patientComVM->setPatientComplaints($complaint);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientComVM->setCreatedBy($userName);
+        $patientComVM->setUpdatedBy($userName);
+        $patientComVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientComVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientComVM;
     }
 
     public static function setPatientDrugHistory(Request $drugHistoryRequest)

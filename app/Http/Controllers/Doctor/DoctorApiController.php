@@ -71,6 +71,100 @@ class DoctorApiController extends Controller
     }
 
     /**
+     * Get all the complaint types
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getComplaintTypes()
+    {
+        $complaintTypes = null;
+        $responseJson = null;
+        //dd('Inside doctor api controller');
+
+        try
+        {
+            //dd($this->hospitalService);
+            $complaintTypes = $this->hospitalService->getComplaintTypes();
+
+            if(!is_null($complaintTypes) && !empty($complaintTypes))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::COMPLAINT_TYPES_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($complaintTypes));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_COMPLAINT_TYPES_LIST_FOUND));
+            }
+
+            $responseJson->setObj($complaintTypes);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::COMPLAINT_TYPES_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Get all the complaints
+     * @param $complaintTypeId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getComplaints($complaintTypeId)
+    {
+        $complaints = null;
+        $responseJson = null;
+        //dd('Inside doctor api controller');
+
+        try
+        {
+            //dd($this->hospitalService);
+            $complaints = $this->hospitalService->getComplaints($complaintTypeId);
+
+            if(!is_null($complaints) && !empty($complaints))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::COMPLAINTS_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($complaints));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_COMPLAINTS_LIST_FOUND));
+            }
+
+            $responseJson->setObj($complaints);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::COMPLAINTS_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
      * Get patient appointment counts
      * @param $hospitalId
      * @throws $hospitalException
@@ -2138,6 +2232,53 @@ class DoctorApiController extends Controller
         {
             //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Save patient complaint details
+     * @param $patientSymVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientComplaints(Request $complaintRequest)
+    {
+        $patientComVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($personalHistoryRequest->all());
+            $patientComVM = PatientProfileMapper::setPatientComplaintDetails($complaintRequest);
+            //dd($patientHistoryVM);
+            $status = $this->hospitalService->savePatientComplaints($patientComVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 

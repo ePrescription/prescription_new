@@ -1343,6 +1343,96 @@ class HospitalService {
     }
 
     /**
+     * Get all the complaint types
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getComplaintTypes()
+    {
+        $complaintTypes = null;
+
+        try
+        {
+            $complaintTypes = $this->hospitalRepo->getComplaintTypes();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::COMPLAINT_TYPES_LIST_ERROR, $exc);
+        }
+
+        return $complaintTypes;
+    }
+
+    /**
+     * Get all the complaints
+     * @param $complaintTypeId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getComplaints($complaintTypeId)
+    {
+        $complaints = null;
+
+        try
+        {
+            $complaints = $this->hospitalRepo->getComplaints($complaintTypeId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::COMPLAINTS_LIST_ERROR, $exc);
+        }
+
+        return $complaints;
+    }
+
+    /**
+     * Save patient complaint details
+     * @param $patientSymVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientComplaints($patientComVM)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($patientComVM, &$status)
+            {
+                $status = $this->hospitalRepo->savePatientComplaints($patientComVM);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
      * Get all the sub symptoms for main symptom
      * @param $mainSymptomsId
      * @throws $hospitalException

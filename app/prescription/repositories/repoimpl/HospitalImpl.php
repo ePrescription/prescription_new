@@ -11,6 +11,7 @@ namespace App\prescription\repositories\repoimpl;
 use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
+use App\Http\ViewModels\PatientComplaintsViewModel;
 use App\Http\ViewModels\PatientDentalViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
@@ -36,6 +37,8 @@ use App\prescription\model\entities\Hospital;
 use App\prescription\model\entities\LabFeeReceipt;
 use App\prescription\model\entities\LabTestDetails;
 use App\prescription\model\entities\Patient;
+use App\prescription\model\entities\PatientComplaintDetails;
+use App\prescription\model\entities\PatientComplaints;
 use App\prescription\model\entities\PatientDentalExamination;
 use App\prescription\model\entities\PatientDentalExaminationItems;
 use App\prescription\model\entities\PatientDrugHistory;
@@ -2802,6 +2805,166 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $mainSymptoms;
+    }
+
+    /**
+     * Get all the complaint types
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getComplaintTypes()
+    {
+        $complaintTypes = null;
+
+        try
+        {
+            $query = DB::table('complaint_type as ct')->where('ct.status', '=', 1);
+            $query->select('ct.id', 'ct.complaint_name');
+            $complaintTypes = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::COMPLAINT_TYPES_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::COMPLAINT_TYPES_LIST_ERROR, $exc);
+        }
+
+        return $complaintTypes;
+    }
+
+    /**
+     * Get all the complaints
+     * @param $complaintTypeId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getComplaints($complaintTypeId)
+    {
+        $complaints = null;
+
+        try
+        {
+            $query = DB::table('complaints as c')->where('c.status', '=', 1);
+            if($complaintTypeId > 0)
+            {
+                $query->where('c.complaint_type_id', $complaintTypeId);
+            }
+            $query->select('c.id', 'c.complaint_name', 'c.complaint_type_id');
+            $complaints = $query->get();
+
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::COMPLAINTS_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::COMPLAINTS_LIST_ERROR, $exc);
+        }
+
+        return $complaints;
+    }
+
+    /**
+     * Save patient complaint details
+     * @param $patientSymVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientComplaints(PatientComplaintsViewModel $patientComVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $patientComVM->getPatientId();
+            $doctorId = $patientComVM->getDoctorId();
+            $hospitalId = $patientComVM->getHospitalId();
+
+            $complaintDate = $patientComVM->getComplaintDate();
+
+            if(!is_null($complaintDate))
+            {
+                $patientComplaintDate = date('Y-m-d', strtotime($complaintDate));
+            }
+            else
+            {
+                $patientComplaintDate = null;
+            }
+
+            $patientUser = User::find($patientId);
+
+            $patientComplaints = $patientComVM->getPatientComplaints();
+
+            if (!is_null($patientUser))
+            {
+                //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+
+                $patientComplaint = new PatientComplaints();
+                $patientComplaint->patient_id = $patientId;
+                $patientComplaint->hospital_id = $hospitalId;
+                $patientComplaint->doctor_id = $doctorId;
+                $patientComplaint->complaint_date = $patientComplaintDate;
+                $patientComplaint->created_by = $patientComVM->getCreatedBy();
+                $patientComplaint->modified_by = $patientComVM->getUpdatedBy();
+                $patientComplaint->created_at = $patientComVM->getCreatedAt();
+                $patientComplaint->updated_at = $patientComVM->getUpdatedAt();
+                $patientComplaint->save();
+
+                foreach($patientComplaints as $complaint)
+                {
+                    //dd($patientHistory);
+                    $complaintId = $complaint->complaintId;
+                    $isValueSet = $complaint->isValueSet;
+                    //$pregnancyDate = $pregnancy->pregnancyDate;
+
+                    $patientComplaintDetails = new PatientComplaintDetails();
+                    $patientComplaintDetails->complaint_id = $complaintId;
+                    $patientComplaintDetails->is_value_set = $isValueSet;
+                    $patientComplaintDetails->created_by = $patientComVM->getCreatedBy();
+                    $patientComplaintDetails->modified_by = $patientComVM->getUpdatedBy();
+                    $patientComplaintDetails->created_at = $patientComVM->getCreatedAt();
+                    $patientComplaintDetails->updated_at = $patientComVM->getUpdatedAt();
+
+                    $patientComplaint->patientcomplaintdetails()->save($patientComplaintDetails);
+
+                }
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            $status = false;
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR, $exc);
+        }
+
+        return $status;
     }
 
     /**

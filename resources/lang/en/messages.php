@@ -293,4 +293,16 @@
 
         "871" => "Unable to retrieve the lab test receipt details for the patient",
         "872" => "Successfully retrieved the lab test receipt details for the patient",
+
+        "873" => "Unable to retrieve complaint types",
+        "874" => "Successfully retrieved complaint types",
+        "875" => "No complaint types available",
+
+        "876" => "Unable to retrieve complaints",
+        "877" => "Successfully retrieved complaints",
+        "878" => "No complaints available",
+
+        "879" => "Unable to save patient complaint details",
+        "880" => "Successfully saved patient complaint details",
+
     ];
