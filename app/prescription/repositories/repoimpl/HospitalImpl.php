@@ -1097,12 +1097,28 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             //dd($doctorId);
-            $doctorUser = User::where('id', '=', $doctorId);
+            //DB::connection()->enableQueryLog();
+
+            $doctorQuery = User::join('role_user as ru', 'ru.user_id', '=', 'users.id');
+            $doctorQuery->where('ru.role_id', '=', UserType::USERTYPE_DOCTOR);
+            $doctorQuery->where('users.id', '=', $doctorId);
+            $doctorQuery->where('users.delete_status', '=', 1);
+
+            //DB::connection()->enableQueryLog();
+            //$doctorUser = $doctorQuery->get();
+            //$query = DB::getQueryLog();
+            //$lastQuery = end($query);
+            //dd($query);
+
+            //dd($doctorQuery->toSql());
+
+            $doctorUser = $doctorQuery->first();
+            //dd($doctorUser);
 
             if(is_null($doctorUser))
             {
                 $status = false;
-                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND);
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND);
             }
 
             $doctorAppointment = DoctorAppointments::find($appointmentId);
@@ -1116,6 +1132,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(QueryException $queryEx)
         {
+            //dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR, $queryEx);
         }
@@ -1126,6 +1143,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(Exception $exc)
         {
+            //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR, $exc);
         }
