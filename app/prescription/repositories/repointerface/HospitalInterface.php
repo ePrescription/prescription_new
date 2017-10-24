@@ -11,6 +11,7 @@ use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientComplaintsViewModel;
 use App\Http\ViewModels\PatientDentalViewModel;
+use App\Http\ViewModels\PatientDiagnosisViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
@@ -168,4 +169,6 @@ interface HospitalInterface {
     public function getComplaintTypes();
     public function getComplaints($complaintTypeId);
     public function savePatientComplaints(PatientComplaintsViewModel $patientComVM);
+
+    public function savePatientInvestigationAndDiagnosis(PatientDiagnosisViewModel $patientDiagnosisVM);
 }

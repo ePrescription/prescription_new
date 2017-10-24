@@ -13,6 +13,7 @@ use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientComplaintsViewModel;
 use App\Http\ViewModels\PatientDentalViewModel;
+use App\Http\ViewModels\PatientDiagnosisViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
@@ -41,6 +42,7 @@ use App\prescription\model\entities\PatientComplaintDetails;
 use App\prescription\model\entities\PatientComplaints;
 use App\prescription\model\entities\PatientDentalExamination;
 use App\prescription\model\entities\PatientDentalExaminationItems;
+use App\prescription\model\entities\PatientDiagnosis;
 use App\prescription\model\entities\PatientDrugHistory;
 use App\prescription\model\entities\PatientLabTests;
 use App\prescription\model\entities\PatientPrescription;
@@ -2970,6 +2972,90 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Save patient investigations and diagnosis
+     * @param $patientDiagnosisVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientInvestigationAndDiagnosis(PatientDiagnosisViewModel $patientDiagnosisVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $patientDiagnosisVM->getPatientId();
+            $doctorId = $patientDiagnosisVM->getDoctorId();
+            $hospitalId = $patientDiagnosisVM->getHospitalId();
+            $investigations = $patientDiagnosisVM->getInvestigations();
+            $examinationFindings = $patientDiagnosisVM->getExaminationFindings();
+            $provisionalDiagnosis = $patientDiagnosisVM->getProvisionalDiagnosis();
+            $finalDiagnosis = $patientDiagnosisVM->getFinalDiagnosis();
+
+            $diagnosisDate = $patientDiagnosisVM->getDiagnosisDate();
+
+            if(!is_null($diagnosisDate))
+            {
+                $patientDiagnosistDate = date('Y-m-d', strtotime($diagnosisDate));
+            }
+            else
+            {
+                $patientDiagnosistDate = null;
+            }
+
+            $patientUser = User::find($patientId);
+
+            if (!is_null($patientUser))
+            {
+                //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+
+                $patientDiagnosis = new PatientDiagnosis();
+                $patientDiagnosis->patient_id = $patientId;
+                $patientDiagnosis->hospital_id = $hospitalId;
+                $patientDiagnosis->doctor_id = $doctorId;
+                $patientDiagnosis->investigations = $investigations;
+                $patientDiagnosis->examination_findings = $examinationFindings;
+                $patientDiagnosis->provisional_diagnosis = $provisionalDiagnosis;
+                $patientDiagnosis->final_diagnosis = $finalDiagnosis;
+                $patientDiagnosis->diagnosis_date = $patientDiagnosistDate;
+                $patientDiagnosis->created_by = $patientDiagnosisVM->getCreatedBy();
+                $patientDiagnosis->modified_by = $patientDiagnosisVM->getUpdatedBy();
+                $patientDiagnosis->created_at = $patientDiagnosisVM->getCreatedAt();
+                $patientDiagnosis->updated_at = $patientDiagnosisVM->getUpdatedAt();
+
+                $patientUser->patientdiagnosis()->save($patientDiagnosis);
+                //$patientComplaint->save();
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_DIAGNOSIS_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            $status = false;
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_DIAGNOSIS_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
      * Get all the sub symptoms for main symptom
      * @param $mainSymptomsId
      * @throws $hospitalException
@@ -5828,6 +5914,20 @@ class HospitalImpl implements HospitalInterface{
             //dd($latestDentalExamQuery->toSql());
             $xrayExaminations = $latestXrayExamQuery->get();
 
+            $latestDiagnosisQuery = DB::table('patient_investigations_diagnostics as pid');
+            $latestDiagnosisQuery->where('pid.diagnosis_date', function($query) use($patientId){
+                $query->select(DB::raw('MAX(pid.diagnosis_date)'));
+                $query->from('patient_investigations_diagnostics as pid')->where('pid.patient_id', '=', $patientId);
+            });
+            $latestDiagnosisQuery->where('pid.patient_id', '=', $patientId);
+            //$latestDentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
+            $latestDiagnosisQuery->select('pid.id', 'pid.patient_id',
+                'pid.hospital_id', 'pid.doctor_id', 'pid.investigations', 'pid.examination_findings', 'pid.provisional_diagnosis',
+                'pid.final_diagnosis', 'pid.diagnosis_date');
+            //dd($latestDentalExamQuery->toSql());
+            $diagnosticExaminations = $latestDiagnosisQuery->get();
+
             $latestPresQuery = DB::table('prescription_details as pd')->select('b.id as trade_id',
                 DB::raw('TRIM(UPPER(b.brand_name)) as trade_name'),
                 //'d.id as formulation_id',
@@ -5971,6 +6071,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates['recentSurgeryHistory'] = $latestSurgeryHistory;
             $examinationDates['dentalExaminations'] = $dentalExaminations;
             $examinationDates['xrayExaminations'] = $xrayExaminations;
+            $examinationDates['diagnosticExaminations'] = $diagnosticExaminations;
             $examinationDates['latestPrescription'] = $latestPrescription;
 
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;

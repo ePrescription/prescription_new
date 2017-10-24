@@ -348,5 +348,7 @@ class ErrorEnum extends Enum{
 
     const PATIENT_COMPLAINT_SAVE_ERROR = 879;
     const PATIENT_COMPLAINT_SAVE_SUCCESS = 880;
-    //const PA
+
+    const PATIENT_DIAGNOSIS_SAVE_ERROR = 881;
+    const PATIENT_DIAGNOSIS_SAVE_SUCCESS = 882;
 }

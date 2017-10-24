@@ -452,6 +452,8 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/{complaintTypeId}/complaints', array('as' => 'doctor.complaints', 'uses' => 'DoctorApiController@getComplaints'));
         Route::post('rest/api/complaints', array('as' => 'doctor.savecomplaints', 'uses' => 'DoctorApiController@savePatientComplaints'));
 
+        Route::post('rest/api/investigations', array('as' => 'doctor.saveinvestigations', 'uses' => 'DoctorApiController@savePatientInvestigationAndDiagnosis'));
+
         //Route::get('rest/api/{patientId}/examinations', array('as' => 'doctor.allexaminations', 'uses' => 'DoctorApiController@getPatientExaminations'));
 
         Route::get('rest/api/{patientId}/pregnancydetails', array('as' => 'doctor.pregnancydetails', 'uses' => 'DoctorApiController@getPregnancyDetails'));

@@ -305,4 +305,7 @@
         "879" => "Unable to save patient complaint details",
         "880" => "Successfully saved patient complaint details",
 
+        "881" => "Unable to save patient investigations and diagnosis details",
+        "882" => "Successfully saved patient investigations and diagnosis details",
+
     ];

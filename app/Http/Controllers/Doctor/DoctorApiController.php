@@ -2240,7 +2240,7 @@ class DoctorApiController extends Controller
 
     /**
      * Save patient complaint details
-     * @param $patientSymVM
+     * @param $complaintRequest
      * @throws $hospitalException
      * @return true | false
      * @author Baskar
@@ -2279,6 +2279,53 @@ class DoctorApiController extends Controller
         {
             //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Save patient investigations and diagnosis
+     * @param $diagnosisRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientInvestigationAndDiagnosis(Request $diagnosisRequest)
+    {
+        $patientDiagnosisVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($personalHistoryRequest->all());
+            $patientDiagnosisVM = PatientProfileMapper::setPatientDiagnosisDetails($diagnosisRequest);
+            //dd($patientHistoryVM);
+            $status = $this->hospitalService->savePatientInvestigationAndDiagnosis($patientDiagnosisVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_DIAGNOSIS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DIAGNOSIS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DIAGNOSIS_SAVE_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 

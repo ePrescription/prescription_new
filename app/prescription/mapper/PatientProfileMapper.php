@@ -13,6 +13,7 @@ use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
 use App\Http\ViewModels\PatientComplaintsViewModel;
 use App\Http\ViewModels\PatientDentalViewModel;
+use App\Http\ViewModels\PatientDiagnosisViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
@@ -381,6 +382,33 @@ class PatientProfileMapper
         $patientComVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $patientComVM;
+    }
+
+    public static function setPatientDiagnosisDetails(Request $diagnosisRequest)
+    {
+        $patientDiagnosisVM = new PatientDiagnosisViewModel();
+
+        $diagnosisObj = (object) $diagnosisRequest->all();
+        $patientDiagnosisVM->setPatientId($diagnosisObj->patientId);
+        $patientDiagnosisVM->setDoctorId(property_exists($diagnosisObj, 'doctorId') ? $diagnosisObj->doctorId : null);
+        $patientDiagnosisVM->setHospitalId(property_exists($diagnosisObj, 'hospitalId') ? $diagnosisObj->hospitalId : null);
+        $patientDiagnosisVM->setInvestigations(property_exists($diagnosisObj, 'investigations') ? $diagnosisObj->investigations : null);
+        $patientDiagnosisVM->setExaminationFindings(property_exists($diagnosisObj, 'examinationFindings') ? $diagnosisObj->examinationFindings : null);
+        $patientDiagnosisVM->setProvisionalDiagnosis(property_exists($diagnosisObj, 'provisionalDiagnosis') ? $diagnosisObj->provisionalDiagnosis : null);
+        $patientDiagnosisVM->setFinalDiagnosis(property_exists($diagnosisObj, 'finalDiagnosis') ? $diagnosisObj->finalDiagnosis : null);
+        $patientDiagnosisVM->setDiagnosisDate(property_exists($diagnosisObj, 'diagnosisDate') ? $diagnosisObj->diagnosisDate : null);
+        /*$patientSymVM->setDoctorId($symObj->doctorId);
+        $patientSymVM->setHospitalId($symObj->hospitalId);*/
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $patientDiagnosisVM->setCreatedBy($userName);
+        $patientDiagnosisVM->setUpdatedBy($userName);
+        $patientDiagnosisVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $patientDiagnosisVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $patientDiagnosisVM;
     }
 
     public static function setPatientDrugHistory(Request $drugHistoryRequest)

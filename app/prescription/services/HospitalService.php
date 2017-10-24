@@ -1433,6 +1433,40 @@ class HospitalService {
     }
 
     /**
+     * Save patient investigations and diagnosis
+     * @param $patientDiagnosisVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientInvestigationAndDiagnosis($patientDiagnosisVM)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($patientDiagnosisVM, &$status)
+            {
+                $status = $this->hospitalRepo->savePatientInvestigationAndDiagnosis($patientDiagnosisVM);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_DIAGNOSIS_SAVE_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
      * Get all the sub symptoms for main symptom
      * @param $mainSymptomsId
      * @throws $hospitalException
