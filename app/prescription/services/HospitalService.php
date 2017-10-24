@@ -878,6 +878,74 @@ class HospitalService {
         return $status;
     }
 
+    /**
+     * Cancel the appointment
+     * @param $appointmentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function cancelAppointment($appointmentId)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($appointmentId, &$status)
+            {
+                $status = $this->hospitalRepo->cancelAppointment($appointmentId);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_CANCEL_APPOINTMENT_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Transfer the appointment
+     * @param $appointmentId, $doctorId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function transferAppointment($appointmentId, $doctorId)
+    {
+        $status = true;
+
+        try
+        {
+            DB::transaction(function() use ($appointmentId, $doctorId, &$status)
+            {
+                $status = $this->hospitalRepo->transferAppointment($appointmentId, $doctorId);
+            });
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $status = false;
+            throw $hospitalExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
     //Drugs
     /**
      * Get brand names by keyword

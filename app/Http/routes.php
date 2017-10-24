@@ -340,6 +340,8 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
    Route::get('rest/api/{hospitalId}/patientnames', array('as' => 'patient.searchpatientbyhospital', 'uses' => 'DoctorController@searchPatientByHospitalAndName'));
 
    Route::post('rest/api/appointment', array('as' => 'patient.appointment', 'uses' => 'DoctorController@saveNewAppointment'));
+   Route::put('rest/api/cancelappointment', array('as' => 'patient.cancelappointment', 'uses' => 'DoctorController@cancelAppointment'));
+   Route::put('rest/api/transferappointment', array('as' => 'patient.transferappointment', 'uses' => 'DoctorController@transferAppointment'));
 
    Route::get('rest/api/{hospitalId}/doctors', array('as' => 'hospital.doctors', 'uses' => 'DoctorController@getDoctorsByHospitalId'));
 

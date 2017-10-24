@@ -52,6 +52,7 @@ use App\prescription\model\entities\PatientXRayExamination;
 use App\prescription\model\entities\PatientXRayExaminationItems;
 use App\prescription\model\entities\PrescriptionDetails;
 use App\prescription\repositories\repointerface\HospitalInterface;
+use App\prescription\utilities\AppointmentType;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
 use App\prescription\utilities\Exception\HospitalException;
 use App\Http\ViewModels\PatientPrescriptionViewModel;
@@ -1040,6 +1041,93 @@ class HospitalImpl implements HospitalInterface{
         {
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_NEW_APPOINTMENT_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Cancel the appointment
+     * @param $appointmentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function cancelAppointment($appointmentId)
+    {
+        $status = true;
+
+        try
+        {
+            $doctorAppointment = DoctorAppointments::find($appointmentId);
+
+            if(!is_null($doctorAppointment))
+            {
+                $doctorAppointment->appointment_status_id = AppointmentType::APPOINTMENT_CANCELLED;
+                $doctorAppointment->save();
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_CANCEL_APPOINTMENT_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_CANCEL_APPOINTMENT_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Transfer the appointment
+     * @param $appointmentId, $doctorId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function transferAppointment($appointmentId, $doctorId)
+    {
+        $status = true;
+
+        try
+        {
+            //dd($doctorId);
+            $doctorUser = User::where('id', '=', $doctorId);
+
+            if(is_null($doctorUser))
+            {
+                $status = false;
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND);
+            }
+
+            $doctorAppointment = DoctorAppointments::find($appointmentId);
+
+            if(!is_null($doctorAppointment))
+            {
+                $doctorAppointment->doctor_id = $doctorId;
+                $doctorAppointment->appointment_status_id = AppointmentType::APPOINTMENT_TRANSFERRED;
+                $doctorAppointment->save();
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            $status = false;
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR, $exc);
         }
 
         return $status;
@@ -2086,6 +2174,7 @@ class HospitalImpl implements HospitalInterface{
     {
         //$appointments = $patientProfileVM->getAppointment();
         //dd($doctorUser);
+        $appointmentStatus = AppointmentType::APPOINTMENT_FIXED;
         $doctorAppointment = new DoctorAppointments();
 
         $doctorAppointment->patient_id = $patientUserId;
@@ -2094,6 +2183,7 @@ class HospitalImpl implements HospitalInterface{
         $doctorAppointment->appointment_date = $patientProfileVM->getAppointmentDate();
         $doctorAppointment->appointment_time = $patientProfileVM->getAppointmentTime();
         $doctorAppointment->appointment_category = $patientProfileVM->getAppointmentCategory();
+        $doctorAppointment->appointment_status_id = $appointmentStatus;
         $doctorAppointment->referral_type = $patientProfileVM->getReferralType();
         $doctorAppointment->referral_doctor = $patientProfileVM->getReferralDoctor();
         $doctorAppointment->referral_hospital = $patientProfileVM->getReferralHospital();
@@ -5799,7 +5889,7 @@ class HospitalImpl implements HospitalInterface{
                 $query->from('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
             });
             $latestComplaintsQuery->where('pc.patient_id', '=', $patientId);
-            $latestComplaintsQuery->where('pc.is_value_set', '=', 1);
+            $latestComplaintsQuery->where('pcd.is_value_set', '=', 1);
             $latestComplaintsQuery->select('pc.id', 'pc.patient_id', 'pc.complaint_text','pc.complaint_date',
                 'c.id as complaintId', 'c.complaint_name', 'ct.complaint_name as complaintType');
             $latestComplaints = $latestComplaintsQuery->get();
@@ -5914,10 +6004,10 @@ class HospitalImpl implements HospitalInterface{
             //dd($latestDentalExamQuery->toSql());
             $xrayExaminations = $latestXrayExamQuery->get();
 
-            $latestDiagnosisQuery = DB::table('patient_investigations_diagnostics as pid');
+            $latestDiagnosisQuery = DB::table('patient_investigations_diagnosis as pid');
             $latestDiagnosisQuery->where('pid.diagnosis_date', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pid.diagnosis_date)'));
-                $query->from('patient_investigations_diagnostics as pid')->where('pid.patient_id', '=', $patientId);
+                $query->from('patient_investigations_diagnosis as pid')->where('pid.patient_id', '=', $patientId);
             });
             $latestDiagnosisQuery->where('pid.patient_id', '=', $patientId);
             //$latestDentalExamQuery->where('pde.hospital_id', '=', $hospitalId);

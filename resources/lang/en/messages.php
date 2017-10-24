@@ -308,4 +308,10 @@
         "881" => "Unable to save patient investigations and diagnosis details",
         "882" => "Successfully saved patient investigations and diagnosis details",
 
+        "883" => "Unable to cancel the appointment",
+        "884" => "Successfully cancelled the appointment",
+
+        "885" => "Unable to transfer the doctor appointment",
+        "886" => "Successfully transferred the doctor appointment",
+
     ];
