@@ -360,6 +360,7 @@ class PatientProfileMapper
         $patientComVM->setPatientId($comObj->patientId);
         $patientComVM->setDoctorId(property_exists($comObj, 'doctorId') ? $comObj->doctorId : null);
         $patientComVM->setHospitalId(property_exists($comObj, 'hospitalId') ? $comObj->hospitalId : null);
+        $patientComVM->setComplaintText(property_exists($comObj, 'complaintText') ? $comObj->complaintText : null);
         $patientComVM->setComplaintDate(property_exists($comObj, 'complaintDate') ? $comObj->complaintDate : null);
         /*$patientSymVM->setDoctorId($symObj->doctorId);
         $patientSymVM->setHospitalId($symObj->hospitalId);*/

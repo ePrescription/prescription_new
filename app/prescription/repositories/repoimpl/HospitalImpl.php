@@ -2889,6 +2889,7 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientComVM->getPatientId();
             $doctorId = $patientComVM->getDoctorId();
             $hospitalId = $patientComVM->getHospitalId();
+            $complaintText = $patientComVM->getComplaintText();
 
             $complaintDate = $patientComVM->getComplaintDate();
 
@@ -2913,6 +2914,7 @@ class HospitalImpl implements HospitalInterface{
                 $patientComplaint->patient_id = $patientId;
                 $patientComplaint->hospital_id = $hospitalId;
                 $patientComplaint->doctor_id = $doctorId;
+                $patientComplaint->complaint_text = $complaintText;
                 $patientComplaint->complaint_date = $patientComplaintDate;
                 $patientComplaint->created_by = $patientComVM->getCreatedBy();
                 $patientComplaint->modified_by = $patientComVM->getUpdatedBy();
@@ -5515,6 +5517,7 @@ class HospitalImpl implements HospitalInterface{
         $pregnancyDates = null;
         $scanDates = null;
         $symptomDates = null;
+        $complaintDates = null;
         $ultraSoundDates = null;
         $bloodTestDates = null;
         $urineTestDates = null;
@@ -5701,6 +5704,20 @@ class HospitalImpl implements HospitalInterface{
                 'ss.id as sub_symptom_id', 'ss.sub_symptom_name', 's.id as symptom_id', 's.symptom_name', 'ps.patient_symptom_date');
             $latestSymptoms = $latestSymptomsQuery->get();
 
+            $latestComplaintsQuery = DB::table('patient_complaint_details as pcd');
+            $latestComplaintsQuery->join('patient_complaints as pc', 'pc.id', '=', 'pcd.patient_complaint_id');
+            $latestComplaintsQuery->join('complaints as c', 'c.id', '=', 'pcd.complaint_id');
+            $latestComplaintsQuery->join('complaint_type as ct', 'ct.id', '=', 'c.complaint_type_id');
+            $latestComplaintsQuery->where('pc.complaint_date', function($query) use($patientId){
+                $query->select(DB::raw('MAX(pc.complaint_date)'));
+                $query->from('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
+            });
+            $latestComplaintsQuery->where('pc.patient_id', '=', $patientId);
+            $latestComplaintsQuery->where('pc.is_value_set', '=', 1);
+            $latestComplaintsQuery->select('pc.id', 'pc.patient_id', 'pc.complaint_text','pc.complaint_date',
+                'c.id as complaintId', 'c.complaint_name', 'ct.complaint_name as complaintType');
+            $latestComplaints = $latestComplaintsQuery->get();
+
             $latestUltrasoundQuery = DB::table('patient_ultra_sound as pus');
             $latestUltrasoundQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
             $latestUltrasoundQuery->where('pus.examination_date', function($query) use($patientId){
@@ -5879,6 +5896,11 @@ class HospitalImpl implements HospitalInterface{
             $symptomDatesQuery = DB::table('patient_symptoms as ps')->where('ps.patient_id', '=', $patientId);
             $symptomDatesQuery->select('ps.patient_symptom_date')->orderBy('ps.patient_symptom_date', 'DESC');
             $symptomDates = $symptomDatesQuery->distinct()->get();
+
+            $complaintDatesQuery = DB::table('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
+            $complaintDatesQuery->select('pc.complaint_date')->orderBy('pc.complaint_date', 'DESC');
+            $complaintDates = $complaintDatesQuery->distinct()->get();
+
             //$symptomDates = $symptomDatesQuery->distinct()->take(2147483647)->skip(1)->get();
 
             $ultraSoundDatesQuery = DB::table('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
@@ -5941,6 +5963,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates['recentPregnancy'] = $latestPregnancy;
             $examinationDates['recentScans'] = $latestScans;
             $examinationDates['recentSymptoms'] = $latestSymptoms;
+            $examinationDates['recentComplaints'] = $latestComplaints;
             $examinationDates['recentUltrasound'] = $latestUltrasound;
             $examinationDates['recentUrineExaminations'] = $latestUrineExaminations;
             $examinationDates['recentMotionExaminations'] = $latestMotionExaminations;
@@ -5959,6 +5982,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["pregnancyDates"] = $pregnancyDates;
             $examinationDates["scanDates"] = $scanDates;
             $examinationDates["symptomDates"] = $symptomDates;
+            $examinationDates["complaintDates"] = $complaintDates;
             $examinationDates["ultraSoundDates"] = $ultraSoundDates;
             $examinationDates["bloodTestDates"] = $bloodTestDates;
             $examinationDates["urineTestDates"] = $urineTestDates;
