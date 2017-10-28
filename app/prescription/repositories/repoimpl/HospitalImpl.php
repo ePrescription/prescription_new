@@ -1706,11 +1706,15 @@ class HospitalImpl implements HospitalInterface{
 
         try
         {
+            //DB::connection()->enableQueryLog();
+
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $query->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
             $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
             $query->where('usr.delete_status', '=', 1);
             $query->where('da.appointment_category', '=', $categoryType);
+            $query->where('da.appointment_date', '=', date('Y-m-d'));
+            $query->whereIn('da.appointment_status_id', [AppointmentType::APPOINTMENT_FIXED, AppointmentType::APPOINTMENT_TRANSFERRED]);
             $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.patient_id', 'p.name as name', 'p.address','p.pid', 'p.telephone', 'p.email', 'p.relationship',
                 'da.id' ,'da.appointment_category', 'da.appointment_date', 'da.appointment_time');
@@ -1718,6 +1722,9 @@ class HospitalImpl implements HospitalInterface{
             //dd($query->toSql());
 
             $patients = $query->get();
+
+            //$query1 = DB::getQueryLog();
+            //dd($query1);
             //dd($patients);
         }
         catch(QueryException $queryEx)
