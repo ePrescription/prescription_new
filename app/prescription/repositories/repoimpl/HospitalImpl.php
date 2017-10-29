@@ -2328,7 +2328,7 @@ class HospitalImpl implements HospitalInterface{
 
         $user->name = $patientProfileVM->getName();
         $user->email = $patientProfileVM->getEmail();
-        $user->password = $patientProfileVM->getName();
+        $user->password = bcrypt($patientProfileVM->getName());
         $user->delete_status = 1;
         $user->created_at = $patientProfileVM->getCreatedAt();
         $user->updated_at = $patientProfileVM->getUpdatedAt();
