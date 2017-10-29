@@ -1703,7 +1703,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientsByAppointmentCategory($hospitalId, $categoryType)
     {
         $patients = null;
-
+        //dd($categoryType);
         try
         {
             //DB::connection()->enableQueryLog();
@@ -1712,12 +1712,18 @@ class HospitalImpl implements HospitalInterface{
             $query->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
             $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
             $query->where('usr.delete_status', '=', 1);
-            $query->where('da.appointment_category', '=', $categoryType);
-            $query->where('da.appointment_date', '=', date('Y-m-d'));
+            if($categoryType!="")
+            {
+                $query->where('da.appointment_category', '=', $categoryType);
+            }
+            else
+            {
+                $query->where('da.appointment_date', '=', date('Y-m-d'));
+            }
             $query->whereIn('da.appointment_status_id', [AppointmentType::APPOINTMENT_FIXED, AppointmentType::APPOINTMENT_TRANSFERRED]);
             $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.patient_id', 'p.name as name', 'p.address','p.pid', 'p.telephone', 'p.email', 'p.relationship',
-                'da.id' ,'da.appointment_category', 'da.appointment_date', 'da.appointment_time');
+                'da.id','da.id as appointment_id' ,'da.appointment_category', 'da.appointment_date', 'da.appointment_time');
 
             //dd($query->toSql());
 
