@@ -84,7 +84,9 @@ $profile_menu="0";
                                         @foreach($patients as $patient)
                                             <tr>
                                                 <td>{{$patient->patient_id}}</td>
-                                                <td>{{$patient->pid}}</td>
+                                                <td>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->pid}} </a>
+                                                </td>
                                                 <td>{{$patient->name}}</td>
                                                 <td>{{$patient->telephone}}</td>
                                                 <td>{{$patient->age}}</td>

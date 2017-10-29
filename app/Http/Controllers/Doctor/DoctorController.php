@@ -1958,7 +1958,7 @@ class DoctorController extends Controller
         {
             if (Auth::attempt(['email' => $loginInfo['email'], 'password' => $loginInfo['password']]))
             {
-                //dd(Auth::user());
+                dd(Auth::user());
 
                 /*
                 $userSession = new UserSession();
@@ -7013,11 +7013,11 @@ class DoctorController extends Controller
         $patients = null;
         $categoryType = $appointmentRequest->get('appointmentCategory');
         //dd($hospitalId);
-
+        //dd($categoryType);
         try
         {
             $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId, $categoryType);
-
+            $doctors = $this->hospitalService->getDoctorsByHospitalId($hospitalId);
             /*
             if(!is_null($patients) && !empty($patients))
             {
@@ -7046,7 +7046,7 @@ class DoctorController extends Controller
         }
 
 
-        return view('portal.hospital-patients-appointment',compact('patients'));
+        return view('portal.hospital-patients-appointment',compact('patients','doctors'));
         //return $responseJson;
     }
 
@@ -8507,4 +8507,86 @@ class DoctorController extends Controller
 
 
     //DOCTOR NEW PAGES END
+
+
+    public function cancelAppointmentForFront(Request $appointmentRequest)
+    {
+        $responseJson = null;
+
+        try
+        {
+            $appointmentId = $appointmentRequest->appointmentId;
+            $status = $this->hospitalService->cancelAppointment($appointmentId);
+
+            if($status)
+            {
+                //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_CANCEL_APPOINTMENT_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                return redirect()->back()->with('success',trans('messages.'.ErrorEnum::PATIENT_CANCEL_APPOINTMENT_SUCCESS));
+                //return redirect('fronthospital/rest/'.Auth::user()->id.'/patients/appointments')->with('success',trans('messages.'.ErrorEnum::PATIENT_CANCEL_APPOINTMENT_SUCCESS));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_CANCEL_APPOINTMENT_ERROR));
+                $responseJson->sendSuccessResponse();
+                return redirect()->back()->with('success',trans('messages.'.ErrorEnum::PATIENT_CANCEL_APPOINTMENT_ERROR));
+                //return redirect('fronthospital/rest/'.Auth::user()->id.'/patients/appointments')->with('success',trans('messages.'.ErrorEnum::PATIENT_CANCEL_APPOINTMENT_ERROR));
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_CANCEL_APPOINTMENT_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+    }
+
+
+    public function transferAppointmentForFront(Request $appointmentRequest)
+    {
+        $responseJson = null;
+        //dd($appointmentRequest);
+
+        try
+        {
+            $appointmentId = $appointmentRequest->appointmentId;
+            $doctorId = $appointmentRequest->doctorId;
+            $status = $this->hospitalService->transferAppointment($appointmentId, $doctorId);
+//dd($status);
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                return redirect()->back()->with('success',trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_SUCCESS));
+                //return redirect('fronthospital/rest/'.Auth::user()->id.'/patients/appointments')->with('success',trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_SUCCESS));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR));
+                $responseJson->sendSuccessResponse();
+                return redirect()->back()->with('success',trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR));
+                //return redirect('fronthospital/rest/'.Auth::user()->id.'/patients/appointments')->with('success',trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR));
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_TRANSFERRED_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+    }
+
 }

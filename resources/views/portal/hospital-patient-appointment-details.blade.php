@@ -44,7 +44,7 @@ $profile_menu="0";
                                     </div>
 
                                     <div style="float:right;">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details">
+                                        <a onclick="history.go(-1); return false;" href="#{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details">
                                             <button class="btn btn-info waves-effect waves-light">Back</button>
                                         </a>
                                     </div>

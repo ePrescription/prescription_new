@@ -131,6 +131,11 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     Route::get('patients/appointments/{appointmentId}/details', array('as' => 'patient.appointmentdetails', 'uses' => 'DoctorController@getAppointmentDetails'));
 
+    Route::get('patients/appointments/{appointmentId}/cancelappointment', array('as' => 'patient.cancelappointment', 'uses' => 'DoctorController@cancelAppointmentForFront'));
+    Route::get('patients/appointments/{appointmentId}/transferappointment', array('as' => 'patient.transferappointment', 'uses' => 'DoctorController@transferAppointmentForFront'));
+    Route::get('rest/api/transferappointment', array('as' => 'patient.transferappointment', 'uses' => 'DoctorController@transferAppointmentForFront'));
+
+
     Route::get('rest/api/{hospitalId}/patientnames', array('as' => 'hospital.searchnames', 'uses' => 'DoctorController@getPatientNamesForHospital'));
     Route::get('rest/api/{patientId}/details', array('as' => 'hospital.details', 'uses' => 'DoctorController@getPatientDetailsById'));
 
