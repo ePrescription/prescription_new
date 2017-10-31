@@ -6248,7 +6248,7 @@ class HospitalImpl implements HospitalInterface{
             $xrayExaminations = $latestXrayExamQuery->get();
 
             $latestDiagnosisQuery = DB::table('patient_investigations_diagnosis as pid');
-            $latestXrayExamQuery->join('treatment_type as tt', 'tt.id', '=', 'pid.treatment_plan_id');
+            $latestDiagnosisQuery->join('treatment_type as tt', 'tt.id', '=', 'pid.treatment_plan_id');
             $latestDiagnosisQuery->where('pid.diagnosis_date', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pid.diagnosis_date)'));
                 $query->from('patient_investigations_diagnosis as pid')->where('pid.patient_id', '=', $patientId);
