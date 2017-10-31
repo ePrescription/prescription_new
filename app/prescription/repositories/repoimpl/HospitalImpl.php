@@ -3113,6 +3113,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationFindings = $patientDiagnosisVM->getExaminationFindings();
             $provisionalDiagnosis = $patientDiagnosisVM->getProvisionalDiagnosis();
             $finalDiagnosis = $patientDiagnosisVM->getFinalDiagnosis();
+            $treatmentType = $patientDiagnosisVM->getTreatmentType();
 
             $diagnosisDate = $patientDiagnosisVM->getDiagnosisDate();
 
@@ -3140,6 +3141,7 @@ class HospitalImpl implements HospitalInterface{
                 $patientDiagnosis->provisional_diagnosis = $provisionalDiagnosis;
                 $patientDiagnosis->final_diagnosis = $finalDiagnosis;
                 $patientDiagnosis->diagnosis_date = $patientDiagnosistDate;
+                $patientDiagnosis->treatment_plan_id = $treatmentType;
                 $patientDiagnosis->created_by = $patientDiagnosisVM->getCreatedBy();
                 $patientDiagnosis->modified_by = $patientDiagnosisVM->getUpdatedBy();
                 $patientDiagnosis->created_at = $patientDiagnosisVM->getCreatedAt();
@@ -6246,6 +6248,7 @@ class HospitalImpl implements HospitalInterface{
             $xrayExaminations = $latestXrayExamQuery->get();
 
             $latestDiagnosisQuery = DB::table('patient_investigations_diagnosis as pid');
+            $latestXrayExamQuery->join('treatment_type as tt', 'tt.id', '=', 'pid.treatment_plan_id');
             $latestDiagnosisQuery->where('pid.diagnosis_date', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pid.diagnosis_date)'));
                 $query->from('patient_investigations_diagnosis as pid')->where('pid.patient_id', '=', $patientId);
@@ -6255,7 +6258,7 @@ class HospitalImpl implements HospitalInterface{
             //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
             $latestDiagnosisQuery->select('pid.id', 'pid.patient_id',
                 'pid.hospital_id', 'pid.doctor_id', 'pid.investigations', 'pid.examination_findings', 'pid.provisional_diagnosis',
-                'pid.final_diagnosis', 'pid.diagnosis_date');
+                'pid.final_diagnosis', 'pid.diagnosis_date', 'pid.treatment_plan_id', 'tt.treatment_type', 'tt.treatment_code');
             //dd($latestDentalExamQuery->toSql());
             $diagnosticExaminations = $latestDiagnosisQuery->get();
 

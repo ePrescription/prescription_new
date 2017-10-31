@@ -397,6 +397,7 @@ class PatientProfileMapper
         $patientDiagnosisVM->setProvisionalDiagnosis(property_exists($diagnosisObj, 'provisionalDiagnosis') ? $diagnosisObj->provisionalDiagnosis : null);
         $patientDiagnosisVM->setFinalDiagnosis(property_exists($diagnosisObj, 'finalDiagnosis') ? $diagnosisObj->finalDiagnosis : null);
         $patientDiagnosisVM->setDiagnosisDate(property_exists($diagnosisObj, 'diagnosisDate') ? $diagnosisObj->diagnosisDate : null);
+        $patientDiagnosisVM->setTreatmentType(property_exists($diagnosisObj, 'treatmentType') ? $diagnosisObj->treatmentType : null);
         /*$patientSymVM->setDoctorId($symObj->doctorId);
         $patientSymVM->setHospitalId($symObj->hospitalId);*/
 
