@@ -401,7 +401,8 @@ class HospitalImpl implements HospitalInterface{
 
         try
         {
-            $query = DB::table('hospital_patient as hp')->select('p.id', 'p.patient_id', 'p.pid', 'p.name', 'p.age', 'p.gender', 'p.telephone',
+            //dd($hospitalId. '  '.$doctorId);
+            /*$query = DB::table('hospital_patient as hp')->select('p.id', 'p.patient_id', 'p.pid', 'p.name', 'p.age', 'p.gender', 'p.telephone',
                 'h.hospital_id', 'h.hospital_name');
             $query->join('hospital as h', 'h.hospital_id', '=', 'hp.hospital_id');
             $query->join('patient as p', 'p.patient_id', '=', 'hp.patient_id');
@@ -409,8 +410,21 @@ class HospitalImpl implements HospitalInterface{
             $query->where('hp.hospital_id', '=', $hospitalId);
             $query->where('hd.doctor_id', '=', $doctorId);
 
-            $query->orderBy('hp.created_at', 'DESC');
+            $query->orderBy('hp.created_at', 'DESC');*/
             //$query->where('p.name', 'LIKE', '%'.$keyword.'%');
+
+            $query = DB::table('doctor_appointment as da')->select('p.id', 'p.patient_id', 'p.pid', 'p.name', 'p.age', 'p.gender', 'p.telephone',
+                'h.hospital_id', 'h.hospital_name');
+            $query->join('hospital as h', 'h.hospital_id', '=', 'da.hospital_id');
+            $query->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
+            $query->join('hospital_patient as hp', function($join){
+                $join->on('hp.hospital_id', '=', 'da.hospital_id');
+                $join->on('hp.patient_id', '=', 'da.patient_id');
+            });
+            $query->where('da.hospital_id', '=', $hospitalId);
+            $query->where('da.doctor_id', '=', $doctorId);
+
+            $query->orderBy('da.created_at', 'DESC');
 
             //dd($query->toSql());
             $patients = $query->get();
@@ -3476,6 +3490,8 @@ class HospitalImpl implements HospitalInterface{
 
             $examinationTime = $timeQuery->get();
 
+            //dd($examinationTime);
+
             foreach($examinationTime as $time)
             {
                 //dd($time->examination_time);
@@ -3532,6 +3548,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR, $exc);
         }
 
+        //dd($pastIllnessDetails);
         return $pastIllnessDetails;
     }
 
