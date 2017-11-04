@@ -17,12 +17,14 @@
             <div class="col-sm-4"><strong>Sub Symptom</strong></div>
             <div class="col-sm-4"><strong>Symptom</strong></div>
         </div>
+        <hr/>
         @foreach($symptomDetails as $symptomDetail)
         <div class="row">
             <div class="col-sm-4">{{$symptomDetail->mainSymptomName}}</div>
             <div class="col-sm-4">{{$symptomDetail->subSymptomName}}</div>
             <div class="col-sm-4">{{$symptomDetail->symptomName}}</div>
         </div>
+        <hr/>
         @endforeach
     </div>
 

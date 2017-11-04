@@ -30,7 +30,7 @@ $profile_menu="0";
                     <h4 class="page-title">Online Payment</h4>
                 </div>
             </div>
-
+            <div style="float:right;padding: 10px 15px;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
             <div class="page-content-wrapper ">
 
                 <div class="container">

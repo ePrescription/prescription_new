@@ -61,6 +61,7 @@ $profile_menu="0";
 
 
                                             <form action="{{URL::to('/')}}/fronthospital/rest/api/personalhistory" role="form" method="POST" class="form-horizontal ">
+                                                <br/>
                                                 <div class="form-group">
 
                                                     <label class="col-sm-4 control-label">Marital Status</label>

@@ -606,7 +606,6 @@ $profile_menu="0";
 
         }
 
-
         function ajaxloadpastdetails(pid,date) {
 
             $("#patientpastdiv").html("LOADING...");
@@ -631,7 +630,6 @@ $profile_menu="0";
             }
 
         }
-
 
         function ajaxloadpersonaldetails(pid,date) {
 

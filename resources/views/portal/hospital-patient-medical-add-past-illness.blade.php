@@ -61,6 +61,7 @@ $profile_menu="0";
 
 
                                             <form action="{{URL::to('/')}}/fronthospital/rest/api/pastillness" role="form" method="POST" class="form-horizontal ">
+                                                <br/>
                                                 <?php $i=0; ?>
                                                     @foreach($patientPastIllness as $patientPastIllnessValue)
                                                     <div class="form-group">
