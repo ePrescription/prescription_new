@@ -118,7 +118,7 @@ interface HospitalInterface {
     public function getLatestAppointmentDateForPatient($patientId, $hospitalId);
     //;
 
-    public function getPregnancyDetails($patientId, $pregnancyDate);
+    public function getPregnancyDetails($patientId, $pregnancyDate = null);
     public function savePatientPregnancyDetails(PatientPregnancyViewModel $patientPregnancyVM);
     public function getPatientScanDetails($patientId, $scanDate);
     public function savePatientScanDetails(PatientScanViewModel $patientScanVM);

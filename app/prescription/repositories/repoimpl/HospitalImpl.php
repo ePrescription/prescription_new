@@ -3798,7 +3798,7 @@ class HospitalImpl implements HospitalInterface{
      * @author Baskar
      */
 
-    public function getPregnancyDetails($patientId, $pregnancyDate)
+    public function getPregnancyDetails($patientId, $pregnancyDate = null)
     {
         $pregnancy = null;
         $pregnancyDetails = array();
@@ -3838,14 +3838,30 @@ class HospitalImpl implements HospitalInterface{
             $pregnancy = $query->get();*/
             //dd($pastIllness);
 
+
+            //DB::connection()->enableQueryLog();
+
             $timeQuery = DB::table('patient_pregnancy as pp');
             $timeQuery->where('pp.patient_id', '=', $patientId);
-            $timeQuery->where('pp.pregnancy_date', '=', $pregnancyDate);
+            if(!is_null($pregnancyDate))
+            {
+                $timeQuery->where('pp.pregnancy_date', '=', $pregnancyDate);
+            }
             //$timeQuery->where('pbe.is_value_set', '=', 1);
-            $timeQuery->select('pp.examination_time');
+            $timeQuery->select('pp.pregnancy_date', 'pp.examination_time');
             $timeQuery->groupBy('pp.examination_time');
+            $timeQuery->orderBy('pp.pregnancy_date', 'DESC');
+            $timeQuery->orderBy('pp.examination_time', 'DESC');
+            /*if(is_null($pregnancyDate))
+            {
+                $timeQuery->orderBy('pp.pregnancy_date', 'DESC');
+                $timeQuery->orderBy('pp.examination_time', 'DESC');
+            }*/
 
             $examinationTime = $timeQuery->get();
+            //dd($examinationTime);
+            //$query = DB::getQueryLog();
+            //dd($query);
 
             foreach($examinationTime as $time)
             {
@@ -3861,13 +3877,34 @@ class HospitalImpl implements HospitalInterface{
                     }
                 });*/
 
+                //DB::connection()->enableQueryLog();
+
                 $query = DB::table('patient_pregnancy as pp');
                 $query->join('pregnancy as p', 'p.id', '=', 'pp.pregnancy_id');
                 $query->where('pp.patient_id', '=', $patientId);
-                $query->where('pp.pregnancy_date', '=', $pregnancyDate);
+                if(!is_null($pregnancyDate))
+                {
+                    $query->where('pp.pregnancy_date', '=', $pregnancyDate);
+                }
+                else
+                {
+                    $query->where('pp.pregnancy_date', '=', $time->pregnancy_date);
+                }
+
                 $query->where('pp.examination_time', '=', $time->examination_time);
                 $query->where('p.status', '=', 1);
+                $query->orderBy('pp.pregnancy_date', 'DESC');
                 $query->orderBy('pp.examination_time', 'DESC');
+                /*if(is_null($pregnancyDate))
+                {
+                    $query->orderBy('pp.pregnancy_date', 'DESC');
+                    $query->orderBy('pp.examination_time', 'DESC');
+                }
+                else
+                {
+                    $query->orderBy('pp.examination_time', 'DESC');
+                }*/
+
                 $query->select( 'pp.patient_id', 'pp.hospital_id', 'p.id as pregnancyId',
                     'p.pregnancy_details as pregnancyDetails', 'pp.id as patientPregnancyId', 'pp.pregnancy_value as pregnancyValue',
                     'pp.pregnancy_date as pregnancyExaminationDate', 'pp.is_value_set as isValueSet',
@@ -3876,6 +3913,8 @@ class HospitalImpl implements HospitalInterface{
 
                 //dd($query->toSql());
                 $pregnancy = $query->get();
+                //$query = DB::getQueryLog();
+                //dd($query);
 
                 //array_push($pregnancyDetails, $pregnancyTestRecord);
                 array_push($pregnancyDetails, $pregnancy);

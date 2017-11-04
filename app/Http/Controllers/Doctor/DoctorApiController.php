@@ -641,13 +641,19 @@ class DoctorApiController extends Controller
     {
         $pregnancyDetails = null;
         $responseJson = null;
+        $pregnancyDate = null;
 
         try
         {
             $examinationDate = $patientSearchRequest->get('examinationDate');
             //dd($examinationDate);
             //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
-            $pregnancyDate = date('Y-m-d', strtotime($examinationDate));
+            if(!is_null($examinationDate))
+            {
+                $pregnancyDate = date('Y-m-d', strtotime($examinationDate));
+            }
+
+            //dd($pregnancyDate);
             $pregnancyDetails = $this->hospitalService->getPregnancyDetails($patientId, $pregnancyDate);
             //dd($familyIllness);
 

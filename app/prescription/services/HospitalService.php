@@ -1710,7 +1710,7 @@ class HospitalService {
      * @author Baskar
      */
 
-    public function getPregnancyDetails($patientId, $pregnancyDate)
+    public function getPregnancyDetails($patientId, $pregnancyDate = null)
     {
         $pregnancyDetails = null;
 
