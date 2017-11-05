@@ -358,6 +358,12 @@ $profile_menu="0";
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12">
+                                            <style>
+                                                ul.nav-tabs span.hidden-xs {
+                                                    margin-left: -10px;
+                                                    margin-right: -10px;
+                                                }
+                                            </style>
                                             <ul class="nav nav-tabs navtab-bg">
                                                 <li class="active">
                                                     <a href="#general" data-toggle="tab" aria-expanded="true">
@@ -400,6 +406,18 @@ $profile_menu="0";
                                                     <a href="#symptom" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Symptom</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#complaint" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                        <span class="hidden-xs">Complaint</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#finding" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                        <span class="hidden-xs">Finding</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -526,6 +544,42 @@ $profile_menu="0";
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientsymptomdiv"></div>
+                                                    </p>
+                                                </div>
+
+                                                <div class="tab-pane" id="complaint">
+                                                    <p>
+                                                    <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
+                                                        <select class="form-control" id="selectdrug" onchange="javascript:ajaxloadcomplaintdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['complaintDates'] as $complaintDates)
+                                                                <option value="{{$complaintDates->complaint_date}}">{{$complaintDates->complaint_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-complaint" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Complaints </b></button></a>
+                                                    </div>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientcomplaintdiv"></div>
+                                                    </p>
+                                                </div>
+
+                                                <div class="tab-pane" id="finding">
+                                                    <p>
+                                                    <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
+                                                        <select class="form-control" id="selectdrug" onchange="javascript:ajaxloadfindingdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['diagnosticExaminations'] as $diagnosticExaminations)
+                                                                <option value="{{$diagnosticExaminations->diagnosis_date}}">{{$diagnosticExaminations->diagnosis_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-finding" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Finding </b></button></a>
+                                                    </div>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientfindingdiv"></div>
                                                     </p>
                                                 </div>
                                             </div>
@@ -758,6 +812,59 @@ $profile_menu="0";
             else
             {
                 $("#patientsymptomdiv").html("");
+            }
+
+        }
+
+
+
+        function ajaxloadcomplaintdetails(pid,date) {
+
+            $("#patientcomplaintdiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/complaintdetails';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientcomplaintdiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientcomplaintdiv").html("");
+            }
+
+        }
+
+
+        function ajaxloadfindingdetails(pid,date) {
+
+            $("#patientfindingdiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/' + pid + '/investigationdetails';
+
+            if(date!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"id": pid, "examinationDate": date, "status": status},
+                    success: function (data) {
+                        $("#patientfindingdiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientfindingdiv").html("");
             }
 
         }

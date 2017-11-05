@@ -561,6 +561,9 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-pregnancy', array('as' => 'hospital.patientmedicalpregnancy', 'uses' => 'DoctorController@AddPatientMedicalPregnancyByHospitalForDoctor'));
         Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-symptom', array('as' => 'hospital.patientmedicalsymptom', 'uses' => 'DoctorController@AddPatientMedicalSymptomByHospitalForDoctor'));
 
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-complaint', array('as' => 'hospital.patientmedicalcomplaint', 'uses' => 'DoctorController@AddPatientMedicalComplaintByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/add-medical-finding', array('as' => 'hospital.patientmedicalfinding', 'uses' => 'DoctorController@AddPatientMedicalFindingByHospitalForDoctor'));
+
         Route::post('personalhistory', array('as' => 'doctor.savepersonalhistory', 'uses' => 'DoctorController@savePersonalHistoryForDoctor'));
         Route::post('generalexamination', array('as' => 'doctor.savegeneralexamination', 'uses' => 'DoctorController@savePatientGeneralExaminationForDoctor'));
         Route::post('pastillness', array('as' => 'doctor.savepastillness', 'uses' => 'DoctorController@savePatientPastIllnessForDoctor'));
@@ -568,6 +571,9 @@ Route::group(['prefix' => 'doctor'], function()
         Route::post('pregnancydetails', array('as' => 'doctor.savepregnancydetails', 'uses' => 'DoctorController@savePatientPregnancyDetailsForDoctor'));
         Route::post('drughistory', array('as' => 'doctor.savedrughistory', 'uses' => 'DoctorController@savePatientDrugHistoryForDoctor'));
         Route::post('symptomdetails', array('as' => 'doctor.savesymptomdetails', 'uses' => 'DoctorController@savePatientSymptomsForDoctor'));
+
+        Route::post('complaints', array('as' => 'doctor.savecomplaints', 'uses' => 'DoctorController@savePatientComplaintsForDoctor'));
+        Route::post('investigations', array('as' => 'doctor.saveinvestigations', 'uses' => 'DoctorController@savePatientInvestigationAndDiagnosisForDoctor'));
 
 //Prescription
         Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/prescription-details', array('as' => 'hospital.patientdetails', 'uses' => 'DoctorController@PatientPrescriptionDetailsByHospitalForDoctor'));
