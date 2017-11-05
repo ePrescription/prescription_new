@@ -4174,6 +4174,7 @@ class DoctorController extends Controller
 
 
 
+
     /**
      * Get personal history for the patient
      * @param $patientId
@@ -4579,6 +4580,101 @@ class DoctorController extends Controller
 
     }
 
+
+    /**
+     * Get patient symptom details
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientComplaints($patientId, Request $patientSearchRequest)
+    {
+        $complaintDetails = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $complaintDate = date('Y-m-d', strtotime($examinationDate));
+            //$complaintDetails = $this->hospitalService->getPatientComplaints($patientId, $complaintDate);
+            $complaintDetails = $this->hospitalService->getComplaints(0);
+            //dd($familyIllness);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return view('portal.hospital-patient-medical-complaint-detail',compact('complaintDetails'));
+
+    }
+
+    /**
+     * Get patient symptom details
+     * @param $patientId, $patientSearchRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientInvestigations($patientId, Request $patientSearchRequest)
+    {
+        $investigationDetails = null;
+        $responseJson = null;
+
+        try
+        {
+            $examinationDate = $patientSearchRequest->get('examinationDate');
+            //dd($examinationDate);
+            //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
+            $investigationDate = date('Y-m-d', strtotime($examinationDate));
+            //$investigationDetails = $this->hospitalService->getPatientInvestigations($patientId, $investigationDate);
+            $investigationDetails = $this->hospitalService->getComplaints(0);
+            //dd($familyIllness);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_DETAILS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return view('portal.hospital-patient-medical-finding-detail',compact('investigationDetails'));
+
+    }
+
     /**
      * Get Ajax Sub Symptom details
      * @param $patientId, $patientSearchRequest
@@ -4625,7 +4721,71 @@ class DoctorController extends Controller
 
         return $OptionHTML;
     }
-        /**
+
+
+    /**
+     * Get all the complaints
+     * @param $complaintTypeId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+
+    public function ajaxGetComplaints(Request $complaintTypeRequest)
+    {
+        $complaints = null;
+        $responseJson = null;
+        //dd('Inside doctor api controller');
+
+        try
+        {
+            //dd($this->hospitalService);
+
+
+            $complaintTypeId = $complaintTypeRequest->get('categoryId');
+            $complaints = HospitalServiceFacade::getComplaints($complaintTypeId);
+
+            $OptionHTML = "";
+            $OptionHTML .= '<option value="0">Complaints</option>';
+            foreach($complaints as $complaintsValue)
+            {
+                $OptionHTML .= '<option value="'.$complaintsValue->id.'">'.$complaintsValue->complaint_name.'</option>';
+            }
+
+            return $OptionHTML;
+
+            /*
+            if(!is_null($complaints) && !empty($complaints))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::COMPLAINTS_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($complaints));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_COMPLAINTS_LIST_FOUND));
+            }
+
+            $responseJson->setObj($complaints);
+            $responseJson->sendSuccessResponse();
+            */
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::COMPLAINTS_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+    }
+
+    /**
      * Get patient drug history
      * @param $patientId
      * @throws $hospitalException
@@ -5292,6 +5452,106 @@ class DoctorController extends Controller
     }
 
 
+    /**
+     * Save patient complaint details
+     * @param $complaintRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientComplaints(Request $complaintRequest)
+    {
+        $patientComVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($personalHistoryRequest->all());
+            $patientComVM = PatientProfileMapper::setPatientComplaintDetails($complaintRequest);
+            //dd($patientHistoryVM);
+            $status = $this->hospitalService->savePatientComplaints($patientComVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$complaintRequest->patientId.'/medical-details#complaint')->with('success',trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_SUCCESS));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$complaintRequest->patientId.'/medical-details#complaint')->with('success',trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR));
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_COMPLAINT_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$complaintRequest->patientId.'/add-medical-complaint');
+    }
+
+    /**
+     * Save patient investigations and diagnosis
+     * @param $diagnosisRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function savePatientInvestigationAndDiagnosis(Request $diagnosisRequest)
+    {
+        //dd($diagnosisRequest);
+        $patientDiagnosisVM = null;
+        $status = true;
+        $responseJson = null;
+
+        try
+        {
+            //dd($personalHistoryRequest->all());
+            $patientDiagnosisVM = PatientProfileMapper::setPatientDiagnosisDetails($diagnosisRequest);
+            //dd($patientHistoryVM);
+            $status = $this->hospitalService->savePatientInvestigationAndDiagnosis($patientDiagnosisVM);
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_DIAGNOSIS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$diagnosisRequest->patientId.'/medical-details#finding')->with('success',trans('messages.'.ErrorEnum::PATIENT_DIAGNOSIS_SAVE_SUCCESS));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DIAGNOSIS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$diagnosisRequest->patientId.'/medical-details#finding')->with('success',trans('messages.'.ErrorEnum::PATIENT_DIAGNOSIS_SAVE_ERROR));
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DIAGNOSIS_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $responseJson;
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$symptomsRequest->patientId.'/add-medical-finding');
+    }
 
     /**
      * Save patient ultra sound details
@@ -6279,6 +6539,72 @@ class DoctorController extends Controller
 
     }
 
+
+    public function AddPatientMedicalComplaintByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+
+        try
+        {
+
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+
+            $ComplaintTypes = HospitalServiceFacade::getComplaintTypes();
+            $ComplaintTypes_id=0;
+            $Complaints = HospitalServiceFacade::getComplaints($ComplaintTypes_id);
+            $Complaints_id=0;
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-complaint',compact('patientDetails','ComplaintTypes','Complaints'));
+
+    }
+
+
+    public function AddPatientMedicalFindingByHospitalForFront($hid,$patientId)
+    {
+        $patientDetails = null;
+
+        try
+        {
+
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-medical-add-finding',compact('patientDetails'));
+
+    }
 
     //LAB
 

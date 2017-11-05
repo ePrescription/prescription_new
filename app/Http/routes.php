@@ -210,11 +210,14 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('rest/api/{patientId}/patienthistory', array('as' => 'doctor.patienthistory', 'uses' => 'DoctorController@getPersonalHistory'));
     Route::get('rest/api/{patientId}/drughistory', array('as' => 'doctor.drughistory', 'uses' => 'DoctorController@getPatientDrugHistory'));
     Route::get('rest/api/{patientId}/pregnancydetails', array('as' => 'doctor.pregnancydetails', 'uses' => 'DoctorController@getPregnancyDetails'));
-
     Route::get('rest/api/{patientId}/symptomdetails', array('as' => 'doctor.symptomdetails', 'uses' => 'DoctorController@getPatientSymptoms'));
+    Route::get('rest/api/{patientId}/complaintdetails', array('as' => 'doctor.complaintdetails', 'uses' => 'DoctorController@getPatientComplaints'));
+    Route::get('rest/api/{patientId}/investigationdetails', array('as' => 'doctor.investigationdetails', 'uses' => 'DoctorController@getPatientInvestigations'));
 
     Route::get('rest/api/getsubsymptom', array('as' => 'doctor.getsubsymptomdetails', 'uses' => 'DoctorController@ajaxGetSubSymptoms'));
     Route::get('rest/api/getsymptomname', array('as' => 'doctor.getsymptomnamedetails', 'uses' => 'DoctorController@ajaxGetSymptomsName'));
+
+    Route::get('rest/api/getcomplaint', array('as' => 'doctor.complaints', 'uses' => 'DoctorController@ajaxGetComplaints'));
 
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-general', array('as' => 'hospital.patientmedicalgeneral', 'uses' => 'DoctorController@AddPatientMedicalGeneralByHospitalForFront'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-family', array('as' => 'hospital.patientmedicalfamily', 'uses' => 'DoctorController@AddPatientMedicalFamilyByHospitalForFront'));
@@ -224,6 +227,8 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-drug', array('as' => 'hospital.patientmedicaldrug', 'uses' => 'DoctorController@AddPatientMedicalDrugByHospitalForFront'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-pregnancy', array('as' => 'hospital.patientmedicalpregnancy', 'uses' => 'DoctorController@AddPatientMedicalPregnancyByHospitalForFront'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-symptom', array('as' => 'hospital.patientmedicalsymptom', 'uses' => 'DoctorController@AddPatientMedicalSymptomByHospitalForFront'));
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-complaint', array('as' => 'hospital.patientmedicalcomplaint', 'uses' => 'DoctorController@AddPatientMedicalComplaintByHospitalForFront'));
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/add-medical-finding', array('as' => 'hospital.patientmedicalfinding', 'uses' => 'DoctorController@AddPatientMedicalFindingByHospitalForFront'));
 
     Route::post('rest/api/personalhistory', array('as' => 'doctor.savepersonalhistory', 'uses' => 'DoctorController@savePersonalHistory'));
     Route::post('rest/api/generalexamination', array('as' => 'doctor.savegeneralexamination', 'uses' => 'DoctorController@savePatientGeneralExamination'));
@@ -234,6 +239,8 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::post('rest/api/drughistory', array('as' => 'doctor.savedrughistory', 'uses' => 'DoctorController@savePatientDrugHistory'));
     Route::post('rest/api/symptomdetails', array('as' => 'doctor.savesymptomdetails', 'uses' => 'DoctorController@savePatientSymptoms'));
 
+    Route::post('rest/api/complaints', array('as' => 'doctor.savecomplaints', 'uses' => 'DoctorController@savePatientComplaints'));
+    Route::post('rest/api/investigations', array('as' => 'doctor.saveinvestigations', 'uses' => 'DoctorController@savePatientInvestigationAndDiagnosis'));
 
     //Lab
     Route::get('rest/api/{hospitalId}/patient/{patientId}/lab-details', array('as' => 'hospital.patientlabdetails', 'uses' => 'DoctorController@PatientLabDetailsByHospitalForFront'));
