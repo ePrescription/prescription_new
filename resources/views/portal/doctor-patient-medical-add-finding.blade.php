@@ -115,6 +115,7 @@ $profile_menu="0";
                                                     <div class="col-sm-4"></div>
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="diagnosisDate" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="examinationTime" value="{{date('h:i:s')}}" required="required" />
                                                         <input type="hidden" class="form-control" name="doctorId" value="{{$doctorId}}" required="required" />
                                                         <input type="hidden" class="form-control" name="hospitalId" value="{{$hospitalId}}" required="required" />
                                                         <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />

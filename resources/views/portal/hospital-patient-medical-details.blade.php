@@ -362,6 +362,12 @@ $profile_menu="0";
                                             </style>
                                             <ul class="nav nav-tabs navtab-bg">
                                                 <li class="active">
+                                                    <a href="#complaint" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                        <span class="hidden-xs">Complaint</span>
+                                                    </a>
+                                                </li>
+                                                <li class="">
                                                     <a href="#general" data-toggle="tab" aria-expanded="true">
                                                         <span class="visible-xs"><i class="fa fa-home"></i></span>
                                                         <span class="hidden-xs">General</span>
@@ -405,12 +411,6 @@ $profile_menu="0";
                                                     </a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#complaint" data-toggle="tab" aria-expanded="false">
-                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                        <span class="hidden-xs">Complaint</span>
-                                                    </a>
-                                                </li>
-                                                <li class="">
                                                     <a href="#finding" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Finding</span>
@@ -419,7 +419,26 @@ $profile_menu="0";
                                             </ul>
                                             <?php /* * / ?>{{print_r($patientExaminations)}}<?php / * */ ?>
                                             <div class="tab-content">
-                                                <div class="tab-pane active" id="general">
+
+                                                <div class="tab-pane active" id="complaint">
+                                                    <p>
+                                                    <div class="col-md-12">
+                                                        <label style="float: left;margin: 10px;">Choose Date</label>
+                                                        <select class="form-control" id="selectdrug" onchange="javascript:ajaxloadcomplaintdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
+                                                            <option value="0">NONE</option>
+                                                            @foreach($patientExaminations['complaintDates'] as $complaintDates)
+                                                                <option value="{{$complaintDates->complaint_date}}">{{$complaintDates->complaint_date}}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-complaint" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Complaints </b></button></a>
+                                                    </div>
+                                                    <br/>
+                                                    <div style="width:100%;" id="patientcomplaintdiv"></div>
+                                                    </p>
+                                                </div>
+
+                                                <div class="tab-pane" id="general">
                                                     <p>
                                                     <div class="col-md-12">
                                                         <label style="float: left;margin: 10px;">Choose Date</label>
@@ -543,36 +562,18 @@ $profile_menu="0";
                                                     </p>
                                                 </div>
 
-                                                <div class="tab-pane" id="complaint">
-                                                    <p>
-                                                    <div class="col-md-12">
-                                                        <label style="float: left;margin: 10px;">Choose Date</label>
-                                                        <select class="form-control" id="selectdrug" onchange="javascript:ajaxloadcomplaintdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
-                                                            <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['complaintDates'] as $complaintDates)
-                                                                <option value="{{$complaintDates->complaint_date}}">{{$complaintDates->complaint_date}}</option>
-                                                            @endforeach
-                                                        </select>
-
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-complaint" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Complaints </b></button></a>
-                                                    </div>
-                                                    <br/>
-                                                    <div style="width:100%;" id="patientcomplaintdiv"></div>
-                                                    </p>
-                                                </div>
-
                                                 <div class="tab-pane" id="finding">
                                                     <p>
                                                     <div class="col-md-12">
                                                         <label style="float: left;margin: 10px;">Choose Date</label>
                                                         <select class="form-control" id="selectdrug" onchange="javascript:ajaxloadfindingdetails({{$patientDetails[0]->patient_id}},this.value);" style="width:200px;float:left;">
                                                             <option value="0">NONE</option>
-                                                            @foreach($patientExaminations['diagnosticExaminations'] as $diagnosticExaminations)
+                                                            @foreach($patientExaminations['diagnosisDates'] as $diagnosticExaminations)
                                                                 <option value="{{$diagnosticExaminations->diagnosis_date}}">{{$diagnosticExaminations->diagnosis_date}}</option>
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-finding" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Finding </b></button></a>
+                                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-finding" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Finding </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientfindingdiv"></div>

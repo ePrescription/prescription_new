@@ -139,6 +139,8 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
                                                         <input type="hidden" class="form-control" name="complaintDate" value="{{date('Y-m-d')}}" required="required" />
+                                                        <input type="hidden" class="form-control" name="examinationTime" value="{{date('h:i:s')}}" required="required" />
+
                                                         <input type="submit" name="addcomplaint" value="Save" class="btn btn-success">
                                                     </div>
                                                 </div>

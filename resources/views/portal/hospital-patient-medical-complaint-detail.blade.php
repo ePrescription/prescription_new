@@ -9,39 +9,22 @@
 
     <form role="form" method="POST" class="form-horizontal ">
         <div class="form-group">
-            @foreach($complaintDetails as $complaintDetail)
+
+            @foreach($complaintDetails as $complaintDetailValues)
+
                 <div class="row">
-                    <div class="col-sm-12">{{$complaintDetail->complaint_name}}</div>
+                    <h4>{{$complaintDetailValues[0]->complaint_date}} - {{$complaintDetailValues[0]->examination_time}}</h4>
+                    @foreach($complaintDetailValues as $complaintDetail)
+                    <div class="col-sm-12"><i class="fa fa-square"></i> {{$complaintDetail->complaint_name}}</div>
+                    @endforeach
+                    <br/><br/><br/>
+                    <div class="col-sm-12"><p><strong> Notes: </strong>{{$complaintDetailValues[0]->complaint_text}}</p></div>
                 </div>
                 <hr/>
             @endforeach
+
         </div>
     </form>
-
-
-    <?php /* ?>
-<!-- form start -->
-    <form role="form" method="POST" class="form-horizontal ">
-    <div class="form-group">
-
-        <div class="row">
-            <div class="col-sm-4"><strong>Main Symptom</strong></div>
-            <div class="col-sm-4"><strong>Sub Symptom</strong></div>
-            <div class="col-sm-4"><strong>Symptom</strong></div>
-        </div>
-        <hr/>
-        @foreach($symptomDetails as $symptomDetail)
-        <div class="row">
-            <div class="col-sm-4">{{$symptomDetail->mainSymptomName}}</div>
-            <div class="col-sm-4">{{$symptomDetail->subSymptomName}}</div>
-            <div class="col-sm-4">{{$symptomDetail->symptomName}}</div>
-        </div>
-        <hr/>
-        @endforeach
-    </div>
-
-    </form>
-    <?php */ ?>
 
 
 
