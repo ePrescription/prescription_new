@@ -4648,7 +4648,7 @@ class DoctorController extends Controller
             //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
             $investigationDate = date('Y-m-d', strtotime($examinationDate));
             $investigationDetails = $this->hospitalService->getPatientInvestigations($patientId, $investigationDate);
-            dd($investigationDetails);
+            //dd($investigationDetails);
             //$investigationDetails = $this->hospitalService->getPatientInvestigations(0);
             //dd($familyIllness);
 

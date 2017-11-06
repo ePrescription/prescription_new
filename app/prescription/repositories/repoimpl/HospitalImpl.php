@@ -6170,6 +6170,7 @@ class HospitalImpl implements HospitalInterface{
         $motionTestDates = null;
         $drugTestDates = null;
         $dentalTestDates = null;
+        $diagnosisDates = null;
 
         $patientLabTests = null;
 
@@ -6562,6 +6563,10 @@ class HospitalImpl implements HospitalInterface{
             $complaintDatesQuery->select('pc.complaint_date')->orderBy('pc.complaint_date', 'DESC');
             $complaintDates = $complaintDatesQuery->distinct()->get();
 
+            $diagnosisDatesQuery = DB::table('patient_investigations_diagnosis as pid')->where('pid.patient_id', '=', $patientId);
+            $diagnosisDatesQuery->select('pid.diagnosis_date')->orderBy('pid.diagnosis_date', 'DESC');
+            $diagnosisDates = $diagnosisDatesQuery->distinct()->get();
+
             //$symptomDates = $symptomDatesQuery->distinct()->take(2147483647)->skip(1)->get();
 
             $ultraSoundDatesQuery = DB::table('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
@@ -6645,6 +6650,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationDates["scanDates"] = $scanDates;
             $examinationDates["symptomDates"] = $symptomDates;
             $examinationDates["complaintDates"] = $complaintDates;
+            $examinationDates["diagnosisDates"] = $diagnosisDates;
             $examinationDates["ultraSoundDates"] = $ultraSoundDates;
             $examinationDates["bloodTestDates"] = $bloodTestDates;
             $examinationDates["urineTestDates"] = $urineTestDates;
