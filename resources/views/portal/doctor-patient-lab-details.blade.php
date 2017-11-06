@@ -47,7 +47,10 @@ $profile_menu="0";
 
 
                                     <div style="float:right;">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
+                                        <!-- <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
+                                            <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
+                                        </a> -->
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
                                             <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
                                         </a>
                                     </div>
