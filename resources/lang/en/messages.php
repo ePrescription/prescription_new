@@ -314,4 +314,12 @@
         "885" => "Unable to transfer the doctor appointment",
         "886" => "Successfully transferred the doctor appointment",
 
+        "887" => "Unable to retrieve patient complaint details",
+        "888" => "Successfully retrieved patient complaint details",
+        "889" => "No complaint details available for the patient",
+
+        "890" => "Unable to retrieve patient investigation details",
+        "891" => "Successfully retrieved patient investigation details",
+        "892" => "No investigation details available for the patient",
+
     ];

@@ -4017,14 +4017,14 @@ class DoctorController extends Controller
             $errorMsg = $hospitalExc->getMessageForCode();
             $msg = AppendMessage::appendMessage($hospitalExc);
             Log::error($msg);
-            $prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::FAILURE));
+            //$prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::FAILURE));
         }
         catch(Exception $exc)
         {
             //dd("2".$exc);
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
-            $prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::FAILURE));
+            //$prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::FAILURE));
         }
 
     }
@@ -4582,34 +4582,34 @@ class DoctorController extends Controller
 
 
     /**
-     * Get patient symptom details
-     * @param $patientId, $patientSearchRequest
+     * Get patient complaint details
+     * @param $patientId, $complaintRequest
      * @throws $hospitalException
      * @return array | null
      * @author Baskar
      */
 
-    public function getPatientComplaints($patientId, Request $patientSearchRequest)
+    public function getPatientComplaints($patientId, Request $complaintRequest)
     {
         $complaintDetails = null;
         $responseJson = null;
 
         try
         {
-            $examinationDate = $patientSearchRequest->get('examinationDate');
+            $examinationDate = $complaintRequest->get('examinationDate');
             //dd($examinationDate);
             //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
             $complaintDate = date('Y-m-d', strtotime($examinationDate));
             //$complaintDetails = $this->hospitalService->getPatientComplaints($patientId, $complaintDate);
-            $complaintDetails = $this->hospitalService->getComplaints(0);
-            //dd($familyIllness);
+            $complaintDetails = $this->hospitalService->getPatientComplaints($patientId, $complaintDate);
+            //dd($complaintDetails);
 
         }
         catch(HospitalException $hospitalExc)
         {
-            //dd($hospitalExc);
-            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
-            $responseJson->sendErrorResponse($hospitalExc);
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
         }
             /*catch(HospitalException $hospitalExc)
             {
@@ -4619,8 +4619,8 @@ class DoctorController extends Controller
         catch(Exception $exc)
         {
             //dd($exc);
-            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_DETAILS_ERROR));
-            $responseJson->sendUnExpectedExpectionResponse($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
         }
 
         //return $responseJson;
@@ -4629,34 +4629,35 @@ class DoctorController extends Controller
     }
 
     /**
-     * Get patient symptom details
-     * @param $patientId, $patientSearchRequest
+     * Get patient investigation details
+     * @param $patientId, $investigationRequest
      * @throws $hospitalException
      * @return array | null
      * @author Baskar
      */
 
-    public function getPatientInvestigations($patientId, Request $patientSearchRequest)
+    public function getPatientInvestigations($patientId, Request $investigationRequest)
     {
         $investigationDetails = null;
         $responseJson = null;
 
         try
         {
-            $examinationDate = $patientSearchRequest->get('examinationDate');
+            $examinationDate = $investigationRequest->get('examinationDate');
             //dd($examinationDate);
             //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
             $investigationDate = date('Y-m-d', strtotime($examinationDate));
-            //$investigationDetails = $this->hospitalService->getPatientInvestigations($patientId, $investigationDate);
-            $investigationDetails = $this->hospitalService->getComplaints(0);
+            $investigationDetails = $this->hospitalService->getPatientInvestigations($patientId, $investigationDate);
+            dd($investigationDetails);
+            //$investigationDetails = $this->hospitalService->getPatientInvestigations(0);
             //dd($familyIllness);
 
         }
         catch(HospitalException $hospitalExc)
         {
-            //dd($hospitalExc);
-            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
-            $responseJson->sendErrorResponse($hospitalExc);
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
         }
             /*catch(HospitalException $hospitalExc)
             {
@@ -4665,9 +4666,8 @@ class DoctorController extends Controller
             }*/
         catch(Exception $exc)
         {
-            //dd($exc);
-            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_SYMPTOM_DETAILS_ERROR));
-            $responseJson->sendUnExpectedExpectionResponse($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
         }
 
         //return $responseJson;
@@ -5502,6 +5502,7 @@ class DoctorController extends Controller
         return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$complaintRequest->patientId.'/add-medical-complaint');
     }
 
+
     /**
      * Save patient investigations and diagnosis
      * @param $diagnosisRequest
@@ -5550,7 +5551,7 @@ class DoctorController extends Controller
         }
 
         //return $responseJson;
-        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$symptomsRequest->patientId.'/add-medical-finding');
+        return redirect('fronthospital/rest/api/'.Auth::user()->id.'/patient/'.$diagnosisRequest->patientId.'/add-medical-finding');
     }
 
     /**
@@ -8371,7 +8372,7 @@ class DoctorController extends Controller
         }
 
         //return $responseJson;
-        return redirect('doctor/'.$complaintRequest->doctorId.'/hospital/'.$complaintRequest->hospitalId.'/patient/'.$symptomsRequest->patientId.'/add-medical-finding');
+        return redirect('doctor/'.$diagnosisRequest->doctorId.'/hospital/'.$diagnosisRequest->hospitalId.'/patient/'.$diagnosisRequest->patientId.'/add-medical-finding');
     }
 
     //Lab profile for doctor

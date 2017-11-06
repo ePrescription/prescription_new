@@ -363,6 +363,7 @@ class PatientProfileMapper
         $patientComVM->setHospitalId(property_exists($comObj, 'hospitalId') ? $comObj->hospitalId : null);
         $patientComVM->setComplaintText(property_exists($comObj, 'complaintText') ? $comObj->complaintText : null);
         $patientComVM->setComplaintDate(property_exists($comObj, 'complaintDate') ? $comObj->complaintDate : null);
+        $patientComVM->setComplaintTime(property_exists($comObj, 'examinationTime') ? $comObj->examinationTime : null);
         /*$patientSymVM->setDoctorId($symObj->doctorId);
         $patientSymVM->setHospitalId($symObj->hospitalId);*/
         $complaintDetails = $comObj->complaints;
@@ -397,6 +398,7 @@ class PatientProfileMapper
         $patientDiagnosisVM->setProvisionalDiagnosis(property_exists($diagnosisObj, 'provisionalDiagnosis') ? $diagnosisObj->provisionalDiagnosis : null);
         $patientDiagnosisVM->setFinalDiagnosis(property_exists($diagnosisObj, 'finalDiagnosis') ? $diagnosisObj->finalDiagnosis : null);
         $patientDiagnosisVM->setDiagnosisDate(property_exists($diagnosisObj, 'diagnosisDate') ? $diagnosisObj->diagnosisDate : null);
+        $patientDiagnosisVM->setExaminationTime(property_exists($diagnosisObj, 'examinationTime') ? $diagnosisObj->examinationTime : null);
         $patientDiagnosisVM->setTreatmentType(property_exists($diagnosisObj, 'treatmentType') ? $diagnosisObj->treatmentType : null);
         /*$patientSymVM->setDoctorId($symObj->doctorId);
         $patientSymVM->setHospitalId($symObj->hospitalId);*/

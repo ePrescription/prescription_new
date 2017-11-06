@@ -3029,6 +3029,7 @@ class HospitalImpl implements HospitalInterface{
             $complaintText = $patientComVM->getComplaintText();
 
             $complaintDate = $patientComVM->getComplaintDate();
+            $complaintTime = $patientComVM->getComplaintTime();
 
             if(!is_null($complaintDate))
             {
@@ -3053,6 +3054,7 @@ class HospitalImpl implements HospitalInterface{
                 $patientComplaint->doctor_id = $doctorId;
                 $patientComplaint->complaint_text = $complaintText;
                 $patientComplaint->complaint_date = $patientComplaintDate;
+                $patientComplaint->examination_time = $complaintTime;
                 $patientComplaint->created_by = $patientComVM->getCreatedBy();
                 $patientComplaint->modified_by = $patientComVM->getUpdatedBy();
                 $patientComplaint->created_at = $patientComVM->getCreatedAt();
@@ -3107,6 +3109,90 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get patient complaint details
+     * @param $patientId, $complaintsDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientComplaints($patientId, $complaintsDate)
+    {
+        $complaintDetails = array();
+
+        try
+        {
+            $patientUser = User::find($patientId);
+            //dd('Inside impl');
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $timeQuery = DB::table('patient_complaints as pc');
+            $timeQuery->where('pc.patient_id', '=', $patientId);
+            $timeQuery->where('pc.complaint_date', '=', $complaintsDate);
+            $timeQuery->whereNotNull('pc.examination_time');
+            //$timeQuery->where('ps.is_value_set', '=', 1);
+            $timeQuery->select('pc.examination_time');
+            $timeQuery->groupBy('pc.examination_time');
+            $timeQuery->orderby('pc.examination_time', 'DESC');
+
+            $examinationTime = $timeQuery->get();
+            //dd($examinationTime);
+
+            foreach($examinationTime as $time)
+            {
+                //DB::connection()->enableQueryLog();
+
+                $query = DB::table('patient_complaint_details as pcd')->select('pc.id', 'pc.patient_id', 'pc.hospital_id',
+                    'pc.doctor_id', 'pc.complaint_text', 'pc.complaint_date', 'pc.examination_time',
+                    'pcd.is_value_set', 'c.id as complaint_id',
+                    'c.complaint_name', 'ct.id as complaint_type_id', 'ct.complaint_name');
+                $query->join('patient_complaints as pc', 'pc.id', '=', 'pcd.patient_complaint_id');
+                $query->join('complaints as c', function($join){
+                    $join->on('c.id', '=', 'pcd.complaint_id');
+                    $join->on('c.status', '=', DB::raw('?'));
+                })->setBindings(array_merge($query->getBindings(), array(1)));
+                $query->join('complaint_type as ct', function($join){
+                    $join->on('ct.id', '=', 'c.complaint_type_id');
+                    $join->on('ct.status', '=', DB::raw('?'));
+                })->setBindings(array_merge($query->getBindings(), array(1)));
+                $query->where('pc.patient_id', '=', $patientId);
+                $query->where('pc.complaint_date', '=', $complaintsDate);
+                $query->where('pc.examination_time', '=', $time->examination_time);
+                $query->orderBy('pc.examination_time', 'DESC');
+
+                $complaints = $query->get();
+                //$query = DB::getQueryLog();
+                //dd($query);
+
+                array_push($complaintDetails, $complaints);
+            }
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_COMPLAINT_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_COMPLAINT_DETAILS_ERROR, $exc);
+        }
+
+        //dd($complaintDetails);
+        return $complaintDetails;
+    }
+
+    /**
      * Save patient investigations and diagnosis
      * @param $patientDiagnosisVM
      * @throws $hospitalException
@@ -3130,6 +3216,7 @@ class HospitalImpl implements HospitalInterface{
             $treatmentType = $patientDiagnosisVM->getTreatmentType();
 
             $diagnosisDate = $patientDiagnosisVM->getDiagnosisDate();
+            $examinationTime = $patientDiagnosisVM->getExaminationTime();
 
             if(!is_null($diagnosisDate))
             {
@@ -3155,6 +3242,7 @@ class HospitalImpl implements HospitalInterface{
                 $patientDiagnosis->provisional_diagnosis = $provisionalDiagnosis;
                 $patientDiagnosis->final_diagnosis = $finalDiagnosis;
                 $patientDiagnosis->diagnosis_date = $patientDiagnosistDate;
+                $patientDiagnosis->examination_time = $examinationTime;
                 $patientDiagnosis->treatment_plan_id = $treatmentType;
                 $patientDiagnosis->created_by = $patientDiagnosisVM->getCreatedBy();
                 $patientDiagnosis->modified_by = $patientDiagnosisVM->getUpdatedBy();
@@ -3190,6 +3278,82 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $status;
+    }
+
+    /**
+     * Get patient investigation details
+     * @param $patientId, $investigationDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientInvestigations($patientId, $investigationDate)
+    {
+        $investigationDetails = array();
+
+        try
+        {
+            $patientUser = User::find($patientId);
+            //dd('Inside impl');
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $timeQuery = DB::table('patient_investigations_diagnosis as pid');
+            $timeQuery->where('pid.patient_id', '=', $patientId);
+            $timeQuery->where('pid.diagnosis_date', '=', $investigationDate);
+            $timeQuery->whereNotNull('pid.examination_time');
+            //$timeQuery->where('ps.is_value_set', '=', 1);
+            $timeQuery->select('pid.examination_time');
+            $timeQuery->groupBy('pid.examination_time');
+            $timeQuery->orderby('pid.examination_time', 'DESC');
+
+            $examinationTime = $timeQuery->get();
+            //dd($examinationTime);
+
+            foreach($examinationTime as $time)
+            {
+                //DB::connection()->enableQueryLog();
+
+                $query = DB::table('patient_investigations_diagnosis as pid')->select('pid.id', 'pid.patient_id', 'pid.hospital_id',
+                    'pid.doctor_id', 'pid.investigations', 'pid.examination_findings',
+                    'pid.provisional_diagnosis', 'pid.final_diagnosis', 'pid.diagnosis_date',
+                    'pid.examination_time', 'tt.id as treatmentPlanId', 'tt.treatment_type', 'tt.treatment_code');
+                $query->join('treatment_type as tt', 'tt.id', '=', 'pid.treatment_plan_id');
+                $query->where('pid.patient_id', '=', $patientId);
+                $query->where('pid.diagnosis_date', '=', $investigationDate);
+                $query->where('pid.examination_time', '=', $time->examination_time);
+                $query->orderBy('pid.examination_time', 'DESC');
+
+                $investigations = $query->get();
+                //$query = DB::getQueryLog();
+                //dd($query);
+
+                array_push($investigationDetails, $investigations);
+            }
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_INVESTIGATION_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_INVESTIGATION_DETAILS_ERROR, $exc);
+        }
+
+        //dd($complaintDetails);
+        return $investigationDetails;
     }
 
     /**
@@ -4774,6 +4938,8 @@ class HospitalImpl implements HospitalInterface{
             $timeQuery->select('pde.examination_time');
             $timeQuery->groupBy('pde.examination_time');
 
+            //dd($timeQuery->toSql());
+
             $examinationTime = $timeQuery->get();
 
             foreach($examinationTime as $time)
@@ -4793,14 +4959,18 @@ class HospitalImpl implements HospitalInterface{
                 $dentalTestQuery = DB::table('patient_dental_examination_item as pdei');
                 $dentalTestQuery->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
                 $dentalTestQuery->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
+                $dentalTestQuery->join('dental_category as dc', 'dc.id', '=', 'dei.dental_category_id');
                 $dentalTestQuery->where('pde.patient_id', '=', $patientId);
                 $dentalTestQuery->where('pde.examination_date', '=', $dentalDate);
                 $dentalTestQuery->where('pde.examination_time', '=', $time->examination_time);
                 $dentalTestQuery->orderBy('pde.examination_time', 'DESC');
                 //$dentalTestQuery->where('pme.is_value_set', '=', 1);
-                $dentalTestQuery->select('pde.patient_id', 'pde.hospital_id', 'dei.id as examinationId',
+                $dentalTestQuery->select('pde.patient_id', 'pde.hospital_id', 'dc.id as categoryId',
+                    'dei.id as examinationId', 'dc.category_name',
                     'dei.examination_name as examinationName', 'pde.examination_date as examinationDate',
                     'pdei.id as patientExaminationId', 'pde.examination_time');
+
+                //dd($dentalTestQuery->toSql());
 
                 $dentalTests = $dentalTestQuery->get();
 
@@ -4825,6 +4995,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_DENTAL_TESTS_DETAILS_ERROR, $exc);
         }
 
+        //dd($dentalTestDetails);
         return $dentalTestDetails;
     }
 

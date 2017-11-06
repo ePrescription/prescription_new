@@ -1501,6 +1501,34 @@ class HospitalService {
     }
 
     /**
+     * Get patient complaint details
+     * @param $patientId, $complaintsDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientComplaints($patientId, $complaintsDate)
+    {
+        $complaintDetails = null;
+
+        try
+        {
+            $complaintDetails = $this->hospitalRepo->getPatientComplaints($patientId, $complaintsDate);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_COMPLAINT_DETAILS_ERROR, $exc);
+        }
+
+        return $complaintDetails;
+    }
+
+    /**
      * Save patient investigations and diagnosis
      * @param $patientDiagnosisVM
      * @throws $hospitalException
@@ -1532,6 +1560,34 @@ class HospitalService {
         }
 
         return $status;
+    }
+
+    /**
+     * Get patient investigation details
+     * @param $patientId, $investigationDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientInvestigations($patientId, $investigationDate)
+    {
+        $investigationDetails = null;
+
+        try
+        {
+            $investigationDetails = $this->hospitalRepo->getPatientInvestigations($patientId, $investigationDate);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_INVESTIGATION_DETAILS_ERROR, $exc);
+        }
+
+        return $investigationDetails;
     }
 
     /**

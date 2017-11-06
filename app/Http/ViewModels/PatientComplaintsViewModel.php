@@ -15,6 +15,7 @@ class PatientComplaintsViewModel
     private $doctorId;
     private $hospitalId;
     private $complaintDate;
+    private $complaintTime;
     private $complaintText;
     private $patientComplaints;
 
@@ -90,6 +91,22 @@ class PatientComplaintsViewModel
     public function setComplaintDate($complaintDate)
     {
         $this->complaintDate = $complaintDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComplaintTime()
+    {
+        return $this->complaintTime;
+    }
+
+    /**
+     * @param mixed $complaintTime
+     */
+    public function setComplaintTime($complaintTime)
+    {
+        $this->complaintTime = $complaintTime;
     }
 
     /**

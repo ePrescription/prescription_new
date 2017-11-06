@@ -15,6 +15,7 @@ class PatientDiagnosisViewModel
     private $doctorId;
     private $hospitalId;
     private $diagnosisDate;
+    private $examinationTime;
     private $investigations;
     private $examinationFindings;
     private $provisionalDiagnosis;
@@ -88,6 +89,22 @@ class PatientDiagnosisViewModel
     public function setDiagnosisDate($diagnosisDate)
     {
         $this->diagnosisDate = $diagnosisDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExaminationTime()
+    {
+        return $this->examinationTime;
+    }
+
+    /**
+     * @param mixed $examinationTime
+     */
+    public function setExaminationTime($examinationTime)
+    {
+        $this->examinationTime = $examinationTime;
     }
 
     /**

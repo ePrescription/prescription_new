@@ -172,6 +172,8 @@ interface HospitalInterface {
     public function getComplaintTypes();
     public function getComplaints($complaintTypeId);
     public function savePatientComplaints(PatientComplaintsViewModel $patientComVM);
+    public function getPatientComplaints($patientId, $complaintsDate);
 
     public function savePatientInvestigationAndDiagnosis(PatientDiagnosisViewModel $patientDiagnosisVM);
+    public function getPatientInvestigations($patientId, $investigationDate);
 }
