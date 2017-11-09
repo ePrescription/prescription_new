@@ -100,15 +100,21 @@ $profile_menu="0";
                                                         <div class="col-sm-6">
                                                             <div class="radio radio-info radio-inline">
                                                                 <input type="radio" id="treatmentType1" value="1" name="treatmentType" />
-                                                                <label for="treatmentType1"> Yes </label>
+                                                                <label for="treatmentType1"> Inpatient </label>
                                                             </div>
                                                             <div class="radio radio-inline">
-                                                                <input type="radio" id="treatmentType2" value="0" name="treatmentType" checked="checked" />
-                                                                <label for="treatmentType2"> No </label>
+                                                                <input type="radio" id="treatmentType2" value="2" name="treatmentType" checked="checked" />
+                                                                <label for="treatmentType2"> Outpatient </label>
                                                             </div>
 
                                                         </div>
                                                     </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Treatment Notes</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" name="treatmentPlanNotes" value="" required="required" />
+                                                    </div>
+                                                </div>
 
 
                                                 <div class="form-group">
