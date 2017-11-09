@@ -557,6 +557,34 @@ class HospitalService {
     }
 
     /**
+     * Get patient appointment counts by doctor
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDashboardDetailsForDoctor($hospitalId, $doctorId)
+    {
+        $dashboardDetails = null;
+
+        try
+        {
+            $dashboardDetails = $this->hospitalRepo->getDashboardDetailsForDoctor($hospitalId, $doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $exc);
+        }
+
+        return $dashboardDetails;
+    }
+
+    /**
      * Get patients by appointment category
      * @param $hospitalId, $categoryType
      * @throws $hospitalException

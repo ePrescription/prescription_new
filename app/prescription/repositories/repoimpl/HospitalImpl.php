@@ -1540,11 +1540,12 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $currentDate = Carbon::now()->format('Y-m-d');
+            //dd($currentDate);
             //$currentDate = '2017-09-20';
 
             //dd($currentDate);
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
-            //$query->whereDate('da.appointment_date', '<=', $currentDate);
+            $query->whereDate('da.appointment_date', '=', $currentDate);
             $query->whereNotNull('da.appointment_date');
             $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
             $query->groupBy('da.appointment_category');
@@ -1660,6 +1661,199 @@ class HospitalImpl implements HospitalInterface{
             $xrayExamQuery = DB::table('patient_xray_examination_item as pxei');
             $xrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
             $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
+            $xrayExamQuery->whereDate('pxei.created_at', '=', $currentDate);
+            $xrayExamQuery->where(function($xrayExamQuery){
+                $xrayExamQuery->where(DB::raw('TIME(pxei.created_at)'), '>=', '07:00:00');
+                $xrayExamQuery->where(DB::raw('TIME(pxei.created_at)'), '<=', '19:00:00');
+            });
+
+            $xrayExamQuery->select(DB::raw("SUM(pxei.fees) as xrayTestAmount"));
+
+            $xRayFees = $xrayExamQuery->get();
+            $xRayTotalFees = $xRayFees[0]->xrayTestAmount;
+
+            //$query = DB::getQueryLog();
+            //dd($query);
+
+            /*SELECT * FROM doctor_appointment da
+            WHERE da.`hospital_id` = 1
+            AND DATE(da.`created_at`) = '2017-07-13'
+            AND TIME(da.`created_at`) >= '07:00:00'
+            AND TIME(da.`created_at`) <= '19:00:00'
+            */
+
+            $totalAmount = $appTotalFees + $bloodTotalFees + $motionTotalFees + $urineTotalFees + $scanTotalFees + $ultraSoundTotalFees + $dentalTotalFees + $xRayTotalFees;
+            $labAmount = $bloodTotalFees + $motionTotalFees + $urineTotalFees + $scanTotalFees + $ultraSoundTotalFees + $dentalTotalFees + $xRayTotalFees;
+            $appTotalFees = $appTotalFees + 0;
+
+
+            $dashboardDetails["appointmentCategory"] = $appointments;
+            $dashboardDetails["totalAmountCollected"] = $totalAmount;
+            $dashboardDetails["totalLabFees"] = $labAmount;
+            $dashboardDetails["consultingFees"] = $appTotalFees;
+
+            //dd($dashboardDetails);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $queryEx);
+        }
+        catch(Exception $ex)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $ex);
+        }
+
+        return $dashboardDetails;
+    }
+
+    /**
+     * Get patient appointment counts by doctor
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDashboardDetailsForDoctor($hospitalId, $doctorId)
+    {
+        $appointments = null;
+        $totalAmount = null;
+        $dashboardDetails = null;
+
+        try
+        {
+            $currentDate = Carbon::now()->format('Y-m-d');
+            //dd($currentDate);
+            //$currentDate = '2017-09-20';
+
+            //dd($currentDate);
+            $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $query->where('da.doctor_id', '=', $doctorId);
+            $query->whereDate('da.appointment_date', '=', $currentDate);
+            $query->whereNotNull('da.appointment_date');
+            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $query->groupBy('da.appointment_category');
+
+            //dd($query->toSql());
+
+            //DB::connection()->enableQueryLog();
+            //$appointments = $query->get();
+            //$query = DB::getQueryLog();
+            //$lastQuery = end($query);
+            //dd($query);
+
+            //dd($query->toSql());
+
+            $appointments = $query->get();
+
+            $dashBoardQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $dashBoardQuery->where('da.doctor_id', '=', $doctorId);
+            $dashBoardQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $dashBoardQuery->where(function($dashBoardQuery){
+                $dashBoardQuery->where('da.appointment_time', '>=', '07:00:00');
+                $dashBoardQuery->where('da.appointment_time', '<=', '19:00:00');
+            });
+
+            $dashBoardQuery->select(DB::raw("SUM(da.fee) as appAmount"));
+            //dd($dashBoardQuery->toSql());
+            $appFees = $dashBoardQuery->get();
+            $appTotalFees = $appFees[0]->appAmount;
+
+            //dd($totalFees);
+
+            /*$hospitalQuery->join('hospital as h', function($join) {
+                $join->on('h.hospital_id', '=', 'users.id');
+                $join->on('h.hospital_id', '=', DB::raw('?'));
+            })->setBindings(array_merge($doctorQuery->getBindings(), array($hospitalId)));*/
+
+            $bloodExamQuery = DB::table('patient_blood_examination as pbe')->where('pbe.hospital_id', '=', $hospitalId);
+            $bloodExamQuery->where('pbe.doctor_id', '=', $doctorId);
+            $bloodExamQuery->whereDate('pbe.created_at', '=', $currentDate);
+            $bloodExamQuery->where(function($bloodExamQuery){
+                $bloodExamQuery->where(DB::raw('TIME(pbe.created_at)'), '>=', '07:00:00');
+                $bloodExamQuery->where(DB::raw('TIME(pbe.created_at)'), '<=', '19:00:00');
+            });
+
+            $bloodExamQuery->select(DB::raw("SUM(pbe.fees) as bloodTestAmount"));
+            //dd($bloodExamQuery->toSql());
+
+            $bloodTestFees = $bloodExamQuery->get();
+            $bloodTotalFees = $bloodTestFees[0]->bloodTestAmount;
+            //dd($bloodTestFees);
+
+            $motionExamQuery = DB::table('patient_motion_examination as pme')->where('pme.hospital_id', '=', $hospitalId);
+            $motionExamQuery->where('pme.doctor_id', '=', $doctorId);
+            $motionExamQuery->whereDate('pme.created_at', '=', $currentDate);
+            $motionExamQuery->where(function($motionExamQuery){
+                $motionExamQuery->where(DB::raw('TIME(pme.created_at)'), '>=', '07:00:00');
+                $motionExamQuery->where(DB::raw('TIME(pme.created_at)'), '<=', '19:00:00');
+            });
+
+            $motionExamQuery->select(DB::raw("SUM(pme.fees) as motionTestAmount"));
+            //dd($bloodExamQuery->toSql());
+            $motionTestFees = $motionExamQuery->get();
+            $motionTotalFees = $motionTestFees[0]->motionTestAmount;
+
+
+            $urineExamQuery = DB::table('patient_urine_examination as pue')->where('pue.hospital_id', '=', $hospitalId);
+            $urineExamQuery->where('pue.doctor_id', '=', $doctorId);
+            $urineExamQuery->whereDate('pue.created_at', '=', $currentDate);
+            $urineExamQuery->where(function($urineExamQuery){
+                $urineExamQuery->where(DB::raw('TIME(pue.created_at)'), '>=', '07:00:00');
+                $urineExamQuery->where(DB::raw('TIME(pue.created_at)'), '<=', '19:00:00');
+            });
+
+            $urineExamQuery->select(DB::raw("SUM(pue.fees) as urineTestAmount"));
+            //dd($bloodExamQuery->toSql());
+            $urineTestFees = $urineExamQuery->get();
+            $urineTotalFees = $urineTestFees[0]->urineTestAmount;
+
+            $scanExamQuery = DB::table('patient_scan as ps')->where('ps.hospital_id', '=', $hospitalId);
+            $scanExamQuery->where('ps.doctor_id', '=', $doctorId);
+            $scanExamQuery->whereDate('ps.created_at', '=', $currentDate);
+            $scanExamQuery->where(function($scanExamQuery){
+                $scanExamQuery->where(DB::raw('TIME(ps.created_at)'), '>=', '07:00:00');
+                $scanExamQuery->where(DB::raw('TIME(ps.created_at)'), '<=', '19:00:00');
+            });
+
+            $scanExamQuery->select(DB::raw("SUM(ps.fees) as scanTestAmount"));
+
+            $scanTestFees = $scanExamQuery->get();
+            $scanTotalFees = $scanTestFees[0]->scanTestAmount;
+
+            $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus')->where('pus.hospital_id', '=', $hospitalId);
+            $ultraSoundExamQuery->where('pus.doctor_id', '=', $doctorId);
+            $ultraSoundExamQuery->whereDate('pus.created_at', '=', $currentDate);
+            $ultraSoundExamQuery->where(function($ultraSoundExamQuery){
+                $ultraSoundExamQuery->where(DB::raw('TIME(pus.created_at)'), '>=', '07:00:00');
+                $ultraSoundExamQuery->where(DB::raw('TIME(pus.created_at)'), '<=', '19:00:00');
+            });
+
+            $ultraSoundExamQuery->select(DB::raw("SUM(pus.fees) as ultraSoundTestAmount"));
+
+            $ultraSoundTestFees = $ultraSoundExamQuery->get();
+            $ultraSoundTotalFees = $ultraSoundTestFees[0]->ultraSoundTestAmount;
+
+            $dentalExamQuery = DB::table('patient_dental_examination_item as pdei');
+            $dentalExamQuery->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
+            $dentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            $dentalExamQuery->where('pde.doctor_id', '=', $doctorId);
+            $dentalExamQuery->whereDate('pdei.created_at', '=', $currentDate);
+            $dentalExamQuery->where(function($dentalExamQuery){
+                $dentalExamQuery->where(DB::raw('TIME(pdei.created_at)'), '>=', '07:00:00');
+                $dentalExamQuery->where(DB::raw('TIME(pdei.created_at)'), '<=', '19:00:00');
+            });
+
+            $dentalExamQuery->select(DB::raw("SUM(pdei.fees) as dentalTestAmount"));
+
+            $dentalTestFees = $dentalExamQuery->get();
+            $dentalTotalFees = $dentalTestFees[0]->dentalTestAmount;
+
+            $xrayExamQuery = DB::table('patient_xray_examination_item as pxei');
+            $xrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+            $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
+            $xrayExamQuery->where('pxe.doctor_id', '=', $doctorId);
             $xrayExamQuery->whereDate('pxei.created_at', '=', $currentDate);
             $xrayExamQuery->where(function($xrayExamQuery){
                 $xrayExamQuery->where(DB::raw('TIME(pxei.created_at)'), '>=', '07:00:00');
@@ -3189,6 +3383,7 @@ class HospitalImpl implements HospitalInterface{
         }
 
         //dd($complaintDetails);
+        //dd($complaintDetails);
         return $complaintDetails;
     }
 
@@ -3214,6 +3409,7 @@ class HospitalImpl implements HospitalInterface{
             $provisionalDiagnosis = $patientDiagnosisVM->getProvisionalDiagnosis();
             $finalDiagnosis = $patientDiagnosisVM->getFinalDiagnosis();
             $treatmentType = $patientDiagnosisVM->getTreatmentType();
+            $treatmentPlanNotes = $patientDiagnosisVM->getTreatmentPlanNotes();
 
             $diagnosisDate = $patientDiagnosisVM->getDiagnosisDate();
             $examinationTime = $patientDiagnosisVM->getExaminationTime();
@@ -3244,6 +3440,7 @@ class HospitalImpl implements HospitalInterface{
                 $patientDiagnosis->diagnosis_date = $patientDiagnosistDate;
                 $patientDiagnosis->examination_time = $examinationTime;
                 $patientDiagnosis->treatment_plan_id = $treatmentType;
+                $patientDiagnosis->treatment_plan_notes = $treatmentPlanNotes;
                 $patientDiagnosis->created_by = $patientDiagnosisVM->getCreatedBy();
                 $patientDiagnosis->modified_by = $patientDiagnosisVM->getUpdatedBy();
                 $patientDiagnosis->created_at = $patientDiagnosisVM->getCreatedAt();
@@ -3321,7 +3518,8 @@ class HospitalImpl implements HospitalInterface{
                 $query = DB::table('patient_investigations_diagnosis as pid')->select('pid.id', 'pid.patient_id', 'pid.hospital_id',
                     'pid.doctor_id', 'pid.investigations', 'pid.examination_findings',
                     'pid.provisional_diagnosis', 'pid.final_diagnosis', 'pid.diagnosis_date',
-                    'pid.examination_time', 'tt.id as treatmentPlanId', 'tt.treatment_type', 'tt.treatment_code');
+                    'pid.examination_time', 'tt.id as treatmentPlanId', 'pid.treatment_plan_notes',
+                    'tt.treatment_type', 'tt.treatment_code');
                 $query->join('treatment_type as tt', 'tt.id', '=', 'pid.treatment_plan_id');
                 $query->where('pid.patient_id', '=', $patientId);
                 $query->where('pid.diagnosis_date', '=', $investigationDate);

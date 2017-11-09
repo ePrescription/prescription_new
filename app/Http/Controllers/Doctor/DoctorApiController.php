@@ -211,6 +211,53 @@ class DoctorApiController extends Controller
     }
 
     /**
+     * Get patient appointment counts by doctor
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDashboardDetailsForDoctor($doctorId, $hospitalId)
+    {
+        $dashboardDetails = null;
+        //$selectedDate = $dashboardRequest->get('selectedDate');
+        //dd($hospitalId);
+
+        try
+        {
+            $dashboardDetails = $this->hospitalService->getDashboardDetailsForDoctor($hospitalId, $doctorId);
+
+            if(!is_null($dashboardDetails) && !empty($dashboardDetails))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_SUCCESS));
+                $responseJson->setCount(sizeof($dashboardDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_DASHBOARD_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($dashboardDetails);
+            $responseJson->sendSuccessResponse();
+            //dd($appointments);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+
+    /**
      * Get patients by appointment category
      * @param $hospitalId, $categoryType
      * @throws $hospitalException
@@ -2554,6 +2601,8 @@ class DoctorApiController extends Controller
      * @author Baskar
      */
 
+    //public function savePatientBloodTests(Request $examinationRequest)
+    //public function savePatientBloodTests(Requests\BloodTestRequest $examinationRequest)
     public function savePatientBloodTests(Request $examinationRequest)
     {
         $patientBloodVM = null;

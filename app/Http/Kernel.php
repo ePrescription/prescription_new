@@ -54,6 +54,7 @@ class Kernel extends HttpKernel
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
 
         'prescription.auth' => \App\Http\Middleware\PrescriptionJWTToken::class,
-        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class
+        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        //'prescription.tests' => \App\Http\Middleware\ExaminationMiddleware::class
     ];
 }

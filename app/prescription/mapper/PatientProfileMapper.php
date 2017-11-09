@@ -400,6 +400,7 @@ class PatientProfileMapper
         $patientDiagnosisVM->setDiagnosisDate(property_exists($diagnosisObj, 'diagnosisDate') ? $diagnosisObj->diagnosisDate : null);
         $patientDiagnosisVM->setExaminationTime(property_exists($diagnosisObj, 'examinationTime') ? $diagnosisObj->examinationTime : null);
         $patientDiagnosisVM->setTreatmentType(property_exists($diagnosisObj, 'treatmentType') ? $diagnosisObj->treatmentType : null);
+        $patientDiagnosisVM->setTreatmentPlanNotes(property_exists($diagnosisObj, 'treatmentPlanNotes') ? $diagnosisObj->treatmentPlanNotes : null);
         /*$patientSymVM->setDoctorId($symObj->doctorId);
         $patientSymVM->setHospitalId($symObj->hospitalId);*/
 

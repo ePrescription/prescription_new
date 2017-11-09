@@ -33,7 +33,7 @@ abstract class BasePrescriptionRequest extends Request
     public function validator($factory)
     {
         return $factory->make(
-            $this->sanitizeInput(), $this->container->call([$this, 'rules']), $this->messages()
+            $this->sanitizeInput(), $this->container->call([$this, 'rules']), $this->messages(), $this->attributes()
         );
     }
 

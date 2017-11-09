@@ -125,6 +125,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
 
     Route::get('{id}/dashboard', array('as' => 'patient.dashboard', 'uses' => 'DoctorController@getDashboardDetailsForFront'));
+    Route::get('{id}/doctor/{doctorId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'DoctorController@getDashboardDetailsForDoctor'));
 
 
     Route::get('rest/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForFront'));
@@ -256,6 +257,9 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::post('rest/api/ultrasoundtests', array('as' => 'doctor.saveultrasoundtests', 'uses' => 'DoctorController@savePatientUltraSoundTests'));
     Route::post('rest/api/urinetests', array('as' => 'doctor.saveurinetests', 'uses' => 'DoctorController@savePatientUrineTests'));
     Route::post('rest/api/motiontests', array('as' => 'doctor.savemotiontests', 'uses' => 'DoctorController@savePatientMotionTests'));
+
+
+
     Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorController@savePatientBloodTests'));
     Route::post('rest/api/scandetails', array('as' => 'doctor.savescandetails', 'uses' => 'DoctorController@savePatientScanDetails'));
     Route::post('rest/api/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@savePatientDentalTests'));
@@ -446,6 +450,7 @@ Route::group(['prefix' => 'doctor'], function()
     Route::group(['namespace' => 'Doctor'], function()
     {
 
+        Route::get('{doctorId}/hospital/{hospitalId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'DoctorApiController@getDashboardDetailsForDoctor'));
 
         Route::get('rest/api/mainsymptoms', array('as' => 'doctor.symptoms', 'uses' => 'DoctorApiController@getMainSymptoms'));
         Route::get('rest/api/{mainsymptomId}/subsymptoms', array('as' => 'doctor.subsymptoms', 'uses' => 'DoctorApiController@getSubSymptomsForMainSymptoms'));
@@ -488,7 +493,13 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/{patientId}/motiontests', array('as' => 'doctor.motiontests', 'uses' => 'DoctorApiController@getPatientMotionTests'));
         Route::post('rest/api/motiontests', array('as' => 'doctor.savemotiontests', 'uses' => 'DoctorApiController@savePatientMotionTests'));
         Route::get('rest/api/{patientId}/bloodtests', array('as' => 'doctor.bloodtests', 'uses' => 'DoctorApiController@getPatientBloodTests'));
-        Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorApiController@savePatientBloodTests'));
+        //Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorApiController@savePatientBloodTests'));
+
+        //Route::group(array('middleware' => ['prescription.tests']), function()
+        //{
+            Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorApiController@savePatientBloodTests'));
+
+        //});
 
         Route::get('rest/api/{patientId}/ultrasoundtests', array('as' => 'doctor.ultrasoundtests', 'uses' => 'DoctorApiController@getPatientUltraSoundTests'));
         Route::post('rest/api/ultrasoundtests', array('as' => 'doctor.saveultrasoundtests', 'uses' => 'DoctorApiController@savePatientUltraSoundTests'));

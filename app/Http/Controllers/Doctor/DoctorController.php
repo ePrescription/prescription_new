@@ -7329,6 +7329,39 @@ class DoctorController extends Controller
     }
 
     /**
+     * Get patient appointment counts by doctor
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getDashboardDetailsForDoctor($hospitalId, $doctorId)
+    {
+        $dashboardDetails = null;
+
+        try
+        {
+            $dashboardDetails = $this->hospitalService->getDashboardDetailsForDoctor($hospitalId, $doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        //dd($dashboardDetails);
+        return view('portal.hospital-dashboard',compact('dashboardDetails'));
+        //return $responseJson;
+    }
+
+    /**
      * Get patients by appointment category
      * @param $hospitalId, $categoryType
      * @throws $hospitalException

@@ -21,6 +21,7 @@ class PatientDiagnosisViewModel
     private $provisionalDiagnosis;
     private $finalDiagnosis;
     private $treatmentType;
+    private $treatmentPlanNotes;
 
     private $createdBy;
     private $updatedBy;
@@ -185,6 +186,22 @@ class PatientDiagnosisViewModel
     public function setTreatmentType($treatmentType)
     {
         $this->treatmentType = $treatmentType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTreatmentPlanNotes()
+    {
+        return $this->treatmentPlanNotes;
+    }
+
+    /**
+     * @param mixed $treatmentPlanNotes
+     */
+    public function setTreatmentPlanNotes($treatmentPlanNotes)
+    {
+        $this->treatmentPlanNotes = $treatmentPlanNotes;
     }
 
     /**

@@ -55,6 +55,7 @@ interface HospitalInterface {
     public function getPatientProfile($patientId);
     public function getPatientAppointments($patientId);
     public function getDashboardDetails($hospitalId, $selectedDate);
+    public function getDashboardDetailsForDoctor($hospitalId, $doctorId);
     public function getPatientsByAppointmentCategory($hospitalId, $categoryType);
     public function getPatientAppointmentDates($patientId, $hospitalId);
     //public function getPatientsByA
