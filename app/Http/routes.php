@@ -443,9 +443,13 @@ Route::group(['prefix' => 'doctor'], function()
 
     Route::post('/changehospital', array('as' => 'doctor.changehospital', 'uses' => 'Doctor\DoctorController@changeHospital'));
 
+
     Route::get('{id}/dashboard', function () {
         return view('portal.doctor-dashboard');
     });
+
+
+    Route::get('hospital/{id}/doctor/{doctorId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'Doctor\DoctorController@getDashboardDetailsForDoctor'));
 
     Route::group(['namespace' => 'Doctor'], function()
     {
