@@ -8,22 +8,24 @@
 
 
     <form role="form" method="POST" class="form-horizontal ">
+        @foreach($complaintDetails as $complaintDetailValues)<h4>{{$complaintDetailValues[0]->complaint_date}} - {{$complaintDetailValues[0]->examination_time}}</h4>
         <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6"><strong>Complaint Type</strong></div>
+                <div class="col-sm-6"><strong>Complaint Name</strong></div>
 
-            @foreach($complaintDetails as $complaintDetailValues)
-
+            </div>
+            <hr/>
+            @foreach($complaintDetailValues as $complaintDetail)
                 <div class="row">
-                    <h4>{{$complaintDetailValues[0]->complaint_date}} - {{$complaintDetailValues[0]->examination_time}}</h4>
-                    @foreach($complaintDetailValues as $complaintDetail)
-                    <div class="col-sm-12"><i class="fa fa-square"></i> {{$complaintDetail->complaint_name}}</div>
-                    @endforeach
-                    <br/><br/><br/>
-                    <div class="col-sm-12"><p><strong> Notes: </strong>{{$complaintDetailValues[0]->complaint_text}}</p></div>
+                    <div class="col-sm-6">{{$complaintDetail->complaint_type_name}}</div>
+                    <div class="col-sm-6">{{$complaintDetail->complaint_name}}</div>
                 </div>
                 <hr/>
             @endforeach
-
         </div>
+        @endforeach
+
     </form>
 
 

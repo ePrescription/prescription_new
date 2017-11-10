@@ -39,8 +39,8 @@ $profile_menu="0";
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
-                                        <h4 class="m-t-0 m-b-30">Add Pass Illness</h4>
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="button" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
+                                        <h4 class="m-t-0 m-b-30">Add Past Illness</h4>
 
 
                                         @if (session()->has('message'))
@@ -100,6 +100,8 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
 
                                                         <input type="submit" name="addpast" value="Save" class="btn btn-success"/>
+
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="margin:0px 16px;"><button type="button" class="btn btn-success">Cancel</button></a>
                                                     </div>
                                                 </div>
 

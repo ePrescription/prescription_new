@@ -7458,7 +7458,7 @@ class DoctorController extends Controller
         }
 
 
-        return view('portal.hospital-patients-appointment',compact('patients','doctors'));
+        return view('portal.doctor-patients-appointment',compact('patients','doctors'));
         //return $responseJson;
     }
 

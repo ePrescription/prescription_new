@@ -38,7 +38,7 @@ $profile_menu="0";
                             <div class="col-sm-12">
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="button" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
                                         <h4 class="m-t-0 m-b-30">Add Symptoms</h4>
 
 
@@ -71,10 +71,10 @@ $profile_menu="0";
                                                     <label class="col-sm-1 control-label"></label>
                                                     <div class="col-sm-10" id="complaint-form">
                                                         <div class="form-group">
-                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                            <div class="col-md-6 col-sm-6 col-xs-6">
                                                                Complaint Type
                                                             </div>
-                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                            <div class="col-md-6 col-sm-6 col-xs-6">
                                                                Complaint
                                                             </div>
                                                         </div>
@@ -142,6 +142,8 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="examinationTime" value="{{date('h:i:s')}}" required="required" />
 
                                                         <input type="submit" name="addcomplaint" value="Save" class="btn btn-success">
+
+                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="margin: 0px 16px;"><button type="button" class="btn btn-success"> Cancel </button></a>
                                                     </div>
                                                 </div>
 

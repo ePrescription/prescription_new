@@ -1,5 +1,5 @@
 <!-- ========== Left Sidebar Start ========== -->
-
+<?php $appointment_menu=""; ?>
 <div class="left side-menu">
     <div class="sidebar-inner slimscrollleft">
 
@@ -41,6 +41,13 @@
                             <i class="fa fa-users"></i> <span>Patients</span>
                         </a>
                     </li>
+
+                    <li class="@if($appointment_menu==1) active @endif treeview">
+                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments">
+                            <i class="fa fa-stethoscope"></i> <span>Appointments</span>
+                        </a>
+                    </li>
+
                     <li  class="@if($prescription_menu==1) active @endif treeview">
                         <a href="{{URL::to('/')}}/doctor/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/prescriptions">
                             <i class="fa fa-pencil-square-o"></i> <span>Prescriptions</span>

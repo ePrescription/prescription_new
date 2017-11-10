@@ -81,6 +81,8 @@ $profile_menu="0";
                                                     <div class="col-sm-6">
                                                         <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
                                                         <input type="submit" name="addpregnancy" value="Save" class="btn btn-success"/>
+
+                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="margin: 0px 16px;"><button type="button" class="btn btn-success"> Cancel </button></a>
                                                     </div>
                                                 </div>
 

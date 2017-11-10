@@ -450,6 +450,7 @@ Route::group(['prefix' => 'doctor'], function()
 
 
     Route::get('hospital/{id}/doctor/{doctorId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'Doctor\DoctorController@getDashboardDetailsForDoctor'));
+    //Route::get('{doctorId}/hospital/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForDoctor'));
 
     Route::group(['namespace' => 'Doctor'], function()
     {
