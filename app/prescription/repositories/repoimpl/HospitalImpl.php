@@ -3343,7 +3343,7 @@ class HospitalImpl implements HospitalInterface{
                 $query = DB::table('patient_complaint_details as pcd')->select('pc.id', 'pc.patient_id', 'pc.hospital_id',
                     'pc.doctor_id', 'pc.complaint_text', 'pc.complaint_date', 'pc.examination_time',
                     'pcd.is_value_set', 'c.id as complaint_id',
-                    'c.complaint_name', 'ct.id as complaint_type_id', 'ct.complaint_name');
+                    'c.complaint_name', 'ct.id as complaint_type_id', 'ct.complaint_name as complaint_type_name');
                 $query->join('patient_complaints as pc', 'pc.id', '=', 'pcd.patient_complaint_id');
                 $query->join('complaints as c', function($join){
                     $join->on('c.id', '=', 'pcd.complaint_id');
@@ -6557,11 +6557,22 @@ class HospitalImpl implements HospitalInterface{
                 $query->select(DB::raw('MAX(pc.complaint_date)'));
                 $query->from('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
             });
+            $latestComplaintsQuery->where('pc.examination_time', function($query) use($patientId){
+                $query->select(DB::raw('MAX(pc.examination_time)'));
+                $query->from('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
+                $query->where('pc.complaint_date', function($query1) use($patientId){
+                    $query1->select(DB::raw('MAX(pc.complaint_date)'));
+                    $query1->from('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
+                });
+            });
             $latestComplaintsQuery->where('pc.patient_id', '=', $patientId);
             $latestComplaintsQuery->where('pcd.is_value_set', '=', 1);
             $latestComplaintsQuery->select('pc.id', 'pc.patient_id', 'pc.complaint_text','pc.complaint_date',
                 'c.id as complaintId', 'c.complaint_name', 'ct.complaint_name as complaintType');
             $latestComplaints = $latestComplaintsQuery->get();
+            //dd($latestComplaintsQuery->toSql());
+
+            //dd($latestComplaints);
 
             $latestUltrasoundQuery = DB::table('patient_ultra_sound as pus');
             $latestUltrasoundQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
