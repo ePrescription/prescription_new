@@ -14,7 +14,6 @@
             @foreach($investigationDetails as $investigationDetailValues)
 
                 <div class="row">
-
                     <h4>{{$investigationDetailValues[0]->diagnosis_date}} - {{$investigationDetailValues[0]->examination_time}}</h4>
                     @foreach($investigationDetailValues as $investigationDetail)
                     <div class="col-sm-3">Investigations </div><div class="col-sm-9"> {{$investigationDetail->investigations}}</div>
@@ -22,6 +21,7 @@
                     <div class="col-sm-3">Provisional Diagnosis </div><div class="col-sm-9"> {{$investigationDetail->provisional_diagnosis}}</div>
                     <div class="col-sm-3">Final Diagnosis </div><div class="col-sm-9"> {{$investigationDetail->final_diagnosis}}</div>
                     <div class="col-sm-3">Treatment Type </div><div class="col-sm-9"> {{$investigationDetail->treatment_type}}</div>
+                    <div class="col-sm-3">Treatment Notes </div><div class="col-sm-9"> {{$investigationDetail->treatment_plan_notes}}</div>
                     @endforeach
                 </div>
                 <hr/>

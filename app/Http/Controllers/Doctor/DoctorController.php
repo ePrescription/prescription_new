@@ -3999,7 +3999,7 @@ class DoctorController extends Controller
                 //dd($hospitalInfo);
                 Session::put('LoginHospitalDetails', $hospitalInfo[0]->hospital_name.' '.$hospitalInfo[0]->address);
 
-                return redirect('doctor/'.Auth::user()->id.'/dashboard');
+                return redirect('doctor/hospital/'.$hospital_id.'/doctor/'.Auth::user()->id.'/dashboard');
 
             }
             else
@@ -7339,6 +7339,7 @@ class DoctorController extends Controller
     public function getDashboardDetailsForDoctor($hospitalId, $doctorId)
     {
         $dashboardDetails = null;
+        //dd($hospitalId.'--'.$doctorId);
 
         try
         {
@@ -7357,7 +7358,7 @@ class DoctorController extends Controller
         }
 
         //dd($dashboardDetails);
-        return view('portal.hospital-dashboard',compact('dashboardDetails'));
+        return view('portal.doctor-hospital-dashboard',compact('dashboardDetails'));
         //return $responseJson;
     }
 

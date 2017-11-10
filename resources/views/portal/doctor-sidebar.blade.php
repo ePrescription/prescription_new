@@ -32,7 +32,7 @@
             <div id="sidebar-menu">
                 <ul>
                     <li  class="@if($dashboard_menu==1) active @endif treeview">
-                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/dashboard">
+                        <a href="{{URL::to('/')}}/doctor/hospital/{{Session::get('LoginUserHospital')}}/doctor/{{Auth::user()->id}}/dashboard">
                             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                         </a>
                     </li>
