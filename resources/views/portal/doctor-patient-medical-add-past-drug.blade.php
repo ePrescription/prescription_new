@@ -164,6 +164,8 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
 
                                                         <input type="submit" name="addpersonal" value="Save" class="btn btn-success">
+
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="margin:0px 16px;"><button type="button" class="btn btn-success">Cancel</button></a>
                                                     </div>
                                                 </div>
 

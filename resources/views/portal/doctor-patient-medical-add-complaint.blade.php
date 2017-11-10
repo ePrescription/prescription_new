@@ -72,10 +72,10 @@ $profile_menu="0";
                                                     <label class="col-sm-1 control-label"></label>
                                                     <div class="col-sm-10" id="complaint-form">
                                                         <div class="form-group">
-                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                            <div class="col-md-6 col-sm-6 col-xs-6">
                                                                Complaint Type
                                                             </div>
-                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                            <div class="col-md-6 col-sm-6 col-xs-6">
                                                                Complaint
                                                             </div>
                                                         </div>
@@ -147,6 +147,8 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="examinationTime" value="{{date('h:i:s')}}" required="required" />
 
                                                         <input type="submit" name="addcomplaint" value="Save" class="btn btn-success">
+
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="margin:0px 16px;"><button type="button" class="btn btn-success">Cancel</button></a>
                                                     </div>
                                                 </div>
 
