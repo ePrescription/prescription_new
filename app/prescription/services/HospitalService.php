@@ -592,13 +592,13 @@ class HospitalService {
      * @author Baskar
      */
 
-    public function getPatientsByAppointmentCategory($hospitalId, $categoryType)
+    public function getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId = null)
     {
         $patients = null;
 
         try
         {
-            $patients = $this->hospitalRepo->getPatientsByAppointmentCategory($hospitalId, $categoryType);
+            $patients = $this->hospitalRepo->getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId);
         }
         catch(HospitalException $hospitalExc)
         {

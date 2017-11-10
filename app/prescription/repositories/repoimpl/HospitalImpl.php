@@ -1908,13 +1908,13 @@ class HospitalImpl implements HospitalInterface{
      * @author Baskar
      */
 
-    public function getPatientsByAppointmentCategory($hospitalId, $categoryType)
+    public function getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId = null)
     {
         $patients = null;
-        //dd($categoryType);
+        //dd($doctorId);
         try
         {
-            //DB::connection()->enableQueryLog();
+            DB::connection()->enableQueryLog();
 
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $query->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
@@ -1928,6 +1928,10 @@ class HospitalImpl implements HospitalInterface{
             {
                 $query->where('da.appointment_date', '=', date('Y-m-d'));
             }
+            if(!is_null($doctorId))
+            {
+                $query->where('da.doctor_id', '=', $doctorId);
+            }
             $query->whereIn('da.appointment_status_id', [AppointmentType::APPOINTMENT_FIXED, AppointmentType::APPOINTMENT_TRANSFERRED]);
             $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.patient_id', 'p.name as name', 'p.address','p.pid', 'p.telephone', 'p.email', 'p.relationship',
@@ -1937,7 +1941,7 @@ class HospitalImpl implements HospitalInterface{
 
             $patients = $query->get();
 
-            //$query1 = DB::getQueryLog();
+            $query1 = DB::getQueryLog();
             //dd($query1);
             //dd($patients);
         }
