@@ -1914,7 +1914,7 @@ class HospitalImpl implements HospitalInterface{
         //dd($doctorId);
         try
         {
-            DB::connection()->enableQueryLog();
+            //DB::connection()->enableQueryLog();
 
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $query->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
@@ -1941,7 +1941,7 @@ class HospitalImpl implements HospitalInterface{
 
             $patients = $query->get();
 
-            $query1 = DB::getQueryLog();
+            //$query1 = DB::getQueryLog();
             //dd($query1);
             //dd($patients);
         }
