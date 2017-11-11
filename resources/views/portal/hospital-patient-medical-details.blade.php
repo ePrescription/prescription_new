@@ -50,7 +50,7 @@ $profile_menu="0";
                                     </div>
                                     <h4 class="m-t-0 m-b-30">Patient Medical Details</h4>
 
-                                    <div id='DivIdToPrint' style="display:none;">
+                                    <div id='DivIdToPrint' style="display:block;">
 
 
                                         <div id="PatientInfoPrint" class="" style="height: 250px;">
@@ -189,7 +189,7 @@ $profile_menu="0";
                                                 @foreach($patientExaminations['recentPersonalHistory'] as $recentTest)
                                                     <div class="col-sm-6" style="width:50%;float:left;">
 
-                                                        {{$recentTest->personal_history_name}} - {{$recentTest->personal_history_item_name}}
+                                                        {{$recentTest->personal_history_name}} - {{$recentTest->personal_history_item_name}} @if(!empty($recentTest->personal_history_value)) - {{$recentTest->personal_history_value}} @endif
 
                                                     </div>
                                                 @endforeach
