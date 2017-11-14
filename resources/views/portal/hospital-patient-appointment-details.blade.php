@@ -204,8 +204,13 @@ $profile_menu="0";
                                                         </div>
                                                     </div>
 
+                                                    <div class="form-group col-md-6">
+
+                                                    </div>
+
                                                 @if($appointmentDetails['appointmentDetails'][0]->referral_type == "External")
-                                                        <h4 class="m-t-0 m-b-30">Referral Details</h4>
+                                                    <h4 class="m-t-0 m-b-30">Referral Details</h4>
+
                                                     <div class="form-group col-md-6">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Referral Type</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
@@ -224,7 +229,7 @@ $profile_menu="0";
                                                             {{$appointmentDetails['appointmentDetails'][0]->referral_hospital}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-12">
+                                                    <div class="form-group col-md-6">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Referral Hospital Location</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$appointmentDetails['appointmentDetails'][0]->referral_hospital_location}}
