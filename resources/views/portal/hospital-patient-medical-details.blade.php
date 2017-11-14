@@ -50,7 +50,7 @@ $profile_menu="0";
                                     </div>
                                     <h4 class="m-t-0 m-b-30">Patient Medical Details</h4>
 
-                                    <div id='DivIdToPrint' style="display:block;">
+                                    <div id='DivIdToPrint' style="display:none;">
 
 
                                         <div id="PatientInfoPrint" class="" style="height: 250px;">

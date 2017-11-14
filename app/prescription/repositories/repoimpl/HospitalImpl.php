@@ -1539,16 +1539,23 @@ class HospitalImpl implements HospitalInterface{
 
         try
         {
-            $currentDate = Carbon::now()->format('Y-m-d');
+            //$currentDate = Carbon::now()->format('Y-m-d');
             //dd($currentDate);
-            //$currentDate = '2017-09-20';
+            $currentDate = '2017-07-14';
 
             //dd($currentDate);
-            $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            /*$query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $query->whereDate('da.appointment_date', '=', $currentDate);
             $query->whereNotNull('da.appointment_date');
             $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
-            $query->groupBy('da.appointment_category');
+            $query->groupBy('da.appointment_category');*/
+
+            $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $query->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $query->whereDate('da.appointment_date', '=', $currentDate);
+            $query->whereNotNull('da.appointment_date');
+            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category', 'aps.id', 'aps.appointment_name');
+            $query->groupBy('da.appointment_category', 'aps.appointment_name');
 
             //dd($query->toSql());
 
@@ -1932,7 +1939,7 @@ class HospitalImpl implements HospitalInterface{
             {
                 $query->where('da.doctor_id', '=', $doctorId);
             }
-            $query->whereIn('da.appointment_status_id', [AppointmentType::APPOINTMENT_FIXED, AppointmentType::APPOINTMENT_TRANSFERRED]);
+            $query->whereIn('da.appointment_status_id', [AppointmentType::APPOINTMENT_OPEN, AppointmentType::APPOINTMENT_TRANSFERRED]);
             $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.patient_id', 'p.name as name', 'p.address','p.pid', 'p.telephone', 'p.email', 'p.relationship',
                 'da.id','da.id as appointment_id' ,'da.appointment_category', 'da.appointment_date', 'da.appointment_time');
@@ -2085,6 +2092,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_APPOINT_DETAILS_ERROR, $ex);
         }
 
+        //dd($appointmentDetails);
         return $appointmentDetails;
     }
 
@@ -2417,7 +2425,7 @@ class HospitalImpl implements HospitalInterface{
     {
         //$appointments = $patientProfileVM->getAppointment();
         //dd($doctorUser);
-        $appointmentStatus = AppointmentType::APPOINTMENT_FIXED;
+        $appointmentStatus = AppointmentType::APPOINTMENT_OPEN;
         $doctorAppointment = new DoctorAppointments();
 
         $doctorAppointment->patient_id = $patientUserId;

@@ -11,8 +11,9 @@ namespace App\prescription\utilities;
 
 class AppointmentType
 {
-    const APPOINTMENT_FIXED = 1;
-    const APPOINTMENT_COMPLETED = 2;
+    const APPOINTMENT_OPEN = 1;
+    const APPOINTMENT_VISITED = 2;
     const APPOINTMENT_TRANSFERRED = 3;
     const APPOINTMENT_CANCELLED = 4;
+    const APPOINTMENT_POSTPONED = 5;
 }
