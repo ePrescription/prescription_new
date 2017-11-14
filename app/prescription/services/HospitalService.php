@@ -585,6 +585,34 @@ class HospitalService {
     }
 
     /**
+     * Get future appointment count for the hospital and doctor
+     * @param $fromDate, $toDate, $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId = null)
+    {
+        $futureAppointments = null;
+
+        try
+        {
+            $dashboardDetails = $this->hospitalRepo->getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $exc);
+        }
+
+        return $futureAppointments;
+    }
+
+    /**
      * Get patients by appointment category
      * @param $hospitalId, $categoryType
      * @throws $hospitalException

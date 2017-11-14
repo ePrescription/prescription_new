@@ -256,6 +256,55 @@ class DoctorApiController extends Controller
         return $responseJson;
     }
 
+    /**
+     * Get future appointment count for the hospital and doctor
+     * @param $fromDate, $toDate, $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getFutureAppointmentsForDashboard($hospitalId, $doctorId, Request $appointmentRequest)
+    {
+        $futureAppointments = null;
+
+        try
+        {
+            $fromDate = $appointmentRequest->get('fromDate');
+            $toDate = $appointmentRequest->get('toDate');
+
+            $futureAppointments = $this->hospitalService->getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId);
+
+            if(!is_null($futureAppointments) && !empty($futureAppointments))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_SUCCESS));
+                $responseJson->setCount(sizeof($futureAppointments));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_DASHBOARD_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($futureAppointments);
+            $responseJson->sendSuccessResponse();
+            //dd($appointments);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return $responseJson;
+
+
+    }
+
 
     /**
      * Get patients by appointment category

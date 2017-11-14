@@ -7363,6 +7363,44 @@ class DoctorController extends Controller
     }
 
     /**
+     * Get future appointment count for the hospital and doctor
+     * @param $fromDate, $toDate, $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getFutureAppointmentsForDashboard($hospitalId, Request $appointmentRequest)
+    {
+        $futureAppointments = null;
+        //dd($hospitalId.'--'.$doctorId);
+        $fromDate = $appointmentRequest->get('fromDate');
+        $toDate = $appointmentRequest->get('toDate');
+
+        $doctorId = null;
+
+        try
+        {
+            $futureAppointments = $this->hospitalService->getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        //dd($dashboardDetails);
+        //return view('portal.doctor-hospital-dashboard',compact('dashboardDetails'));
+        //return $responseJson;
+    }
+
+    /**
      * Get patients by appointment category
      * @param $hospitalId, $categoryType
      * @throws $hospitalException

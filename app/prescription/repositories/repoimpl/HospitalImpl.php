@@ -1537,11 +1537,17 @@ class HospitalImpl implements HospitalInterface{
         $totalAmount = null;
         $dashboardDetails = null;
 
+        $openAppointments = null;
+        $visitedAppointments = null;
+        $transferredAppointments = null;
+        $cancelledAppointments = null;
+        $postponedAppointments = null;
+
         try
         {
-            //$currentDate = Carbon::now()->format('Y-m-d');
+            $currentDate = Carbon::now()->format('Y-m-d');
             //dd($currentDate);
-            $currentDate = '2017-07-14';
+            //$currentDate = '2017-07-14';
 
             //dd($currentDate);
             /*$query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
@@ -1553,9 +1559,59 @@ class HospitalImpl implements HospitalInterface{
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $query->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             $query->whereDate('da.appointment_date', '=', $currentDate);
+            $query->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_OPEN);
             $query->whereNotNull('da.appointment_date');
-            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category', 'aps.id', 'aps.appointment_name');
-            $query->groupBy('da.appointment_category', 'aps.appointment_name');
+            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $query->groupBy('da.appointment_category');
+
+            $openAppointments = $query->get();
+
+            $visitedQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $visitedQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $visitedQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $visitedQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_VISITED);
+            $visitedQuery->whereNotNull('da.appointment_date');
+            $visitedQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $visitedQuery->groupBy('da.appointment_category');
+
+            $visitedAppointments = $visitedQuery->get();
+
+            $transferredQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $transferredQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $transferredQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $transferredQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_TRANSFERRED);
+            $transferredQuery->whereNotNull('da.appointment_date');
+            $transferredQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $transferredQuery->groupBy('da.appointment_category');
+
+            $transferredAppointments = $transferredQuery->get();
+
+            //DB::connection()->enableQueryLog();
+
+            $cancelledQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $cancelledQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $cancelledQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $cancelledQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_CANCELLED);
+            $cancelledQuery->whereNotNull('da.appointment_date');
+            $cancelledQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $cancelledQuery->groupBy('da.appointment_category');
+
+            $cancelledAppointments = $cancelledQuery->get();
+
+            //$query1 = DB::getQueryLog();
+            //$lastQuery = end($query);
+            //dd($query1);
+            //dd($cancelledAppointments);
+
+            $postponedQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $postponedQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $postponedQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $postponedQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_POSTPONED);
+            $postponedQuery->whereNotNull('da.appointment_date');
+            $postponedQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $postponedQuery->groupBy('da.appointment_category');
+
+            $postponedAppointments = $postponedQuery->get();
 
             //dd($query->toSql());
 
@@ -1567,7 +1623,7 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($query->toSql());
 
-            $appointments = $query->get();
+            //$appointments = $query->get();
 
             $dashBoardQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $dashBoardQuery->whereDate('da.appointment_date', '=', $currentDate);
@@ -1694,7 +1750,11 @@ class HospitalImpl implements HospitalInterface{
             $appTotalFees = $appTotalFees + 0;
 
 
-            $dashboardDetails["appointmentCategory"] = $appointments;
+            $dashboardDetails["openAppointments"] = $openAppointments;
+            $dashboardDetails["visitedAppointments"] = $visitedAppointments;
+            $dashboardDetails["transferredAppointments"] = $transferredAppointments;
+            $dashboardDetails["cancelledAppointments"] = $cancelledAppointments;
+            $dashboardDetails["postponedAppointments"] = $postponedAppointments;
             $dashboardDetails["totalAmountCollected"] = $totalAmount;
             $dashboardDetails["totalLabFees"] = $labAmount;
             $dashboardDetails["consultingFees"] = $appTotalFees;
@@ -1728,6 +1788,12 @@ class HospitalImpl implements HospitalInterface{
         $totalAmount = null;
         $dashboardDetails = null;
 
+        $openAppointments = null;
+        $visitedAppointments = null;
+        $transferredAppointments = null;
+        $cancelledAppointments = null;
+        $postponedAppointments = null;
+
         try
         {
             $currentDate = Carbon::now()->format('Y-m-d');
@@ -1736,8 +1802,10 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($currentDate);
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $query->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             $query->where('da.doctor_id', '=', $doctorId);
             $query->whereDate('da.appointment_date', '=', $currentDate);
+            $query->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_OPEN);
             $query->whereNotNull('da.appointment_date');
             $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
             $query->groupBy('da.appointment_category');
@@ -1752,7 +1820,58 @@ class HospitalImpl implements HospitalInterface{
 
             //dd($query->toSql());
 
-            $appointments = $query->get();
+            $openAppointments = $query->get();
+
+            $visitedQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $visitedQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $visitedQuery->where('da.doctor_id', '=', $doctorId);
+            $visitedQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $visitedQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_VISITED);
+            $visitedQuery->whereNotNull('da.appointment_date');
+            $visitedQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $visitedQuery->groupBy('da.appointment_category');
+
+            $visitedAppointments = $visitedQuery->get();
+
+            $transferredQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $transferredQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $transferredQuery->where('da.doctor_id', '=', $doctorId);
+            $transferredQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $transferredQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_TRANSFERRED);
+            $transferredQuery->whereNotNull('da.appointment_date');
+            $transferredQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $transferredQuery->groupBy('da.appointment_category');
+
+            $transferredAppointments = $transferredQuery->get();
+
+            //DB::connection()->enableQueryLog();
+
+            $cancelledQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $cancelledQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $cancelledQuery->where('da.doctor_id', '=', $doctorId);
+            $cancelledQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $cancelledQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_CANCELLED);
+            $cancelledQuery->whereNotNull('da.appointment_date');
+            $cancelledQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $cancelledQuery->groupBy('da.appointment_category');
+
+            $cancelledAppointments = $cancelledQuery->get();
+
+            //$query1 = DB::getQueryLog();
+            //$lastQuery = end($query);
+            //dd($query1);
+            //dd($cancelledAppointments);
+
+            $postponedQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $postponedQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            $postponedQuery->where('da.doctor_id', '=', $doctorId);
+            $postponedQuery->whereDate('da.appointment_date', '=', $currentDate);
+            $postponedQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_POSTPONED);
+            $postponedQuery->whereNotNull('da.appointment_date');
+            $postponedQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $postponedQuery->groupBy('da.appointment_category');
+
+            $postponedAppointments = $postponedQuery->get();
 
             $dashBoardQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $dashBoardQuery->where('da.doctor_id', '=', $doctorId);
@@ -1887,7 +2006,16 @@ class HospitalImpl implements HospitalInterface{
             $appTotalFees = $appTotalFees + 0;
 
 
-            $dashboardDetails["appointmentCategory"] = $appointments;
+            /*$dashboardDetails["appointmentCategory"] = $appointments;
+            $dashboardDetails["totalAmountCollected"] = $totalAmount;
+            $dashboardDetails["totalLabFees"] = $labAmount;
+            $dashboardDetails["consultingFees"] = $appTotalFees;*/
+
+            $dashboardDetails["openAppointments"] = $openAppointments;
+            $dashboardDetails["visitedAppointments"] = $visitedAppointments;
+            $dashboardDetails["transferredAppointments"] = $transferredAppointments;
+            $dashboardDetails["cancelledAppointments"] = $cancelledAppointments;
+            $dashboardDetails["postponedAppointments"] = $postponedAppointments;
             $dashboardDetails["totalAmountCollected"] = $totalAmount;
             $dashboardDetails["totalLabFees"] = $labAmount;
             $dashboardDetails["consultingFees"] = $appTotalFees;
@@ -1905,6 +2033,109 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $dashboardDetails;
+    }
+
+    /**
+     * Get future appointment count for the hospital and doctor
+     * @param $fromDate, $toDate, $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId = null)
+    {
+        $appointments = null;
+        $totalAmount = null;
+        $futureAppointments = null;
+
+        $openAppointments = null;
+        //$visitedAppointments = null;
+        $transferredAppointments = null;
+        $cancelledAppointments = null;
+        //$postponedAppointments = null;
+
+        try
+        {
+            //$currentDate = Carbon::now()->format('Y-m-d');
+            //dd($currentDate);
+            //$currentDate = '2017-09-20';
+
+            //dd($currentDate);
+            $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $query->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            if(!is_null($doctorId))
+            {
+                $query->where('da.doctor_id', '=', $doctorId);
+            }
+            $query->whereDate('da.appointment_date', '>=', $fromDate);
+            $query->whereDate('da.appointment_date', '<=', $toDate);
+            $query->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_OPEN);
+            $query->whereNotNull('da.appointment_date');
+            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $query->groupBy('da.appointment_category');
+
+            //dd($query->toSql());
+
+            //DB::connection()->enableQueryLog();
+            //$appointments = $query->get();
+            //$query = DB::getQueryLog();
+            //$lastQuery = end($query);
+            //dd($query);
+
+            //dd($query->toSql());
+
+            $openAppointments = $query->get();
+
+            $transferredQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $transferredQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            if(!is_null($doctorId))
+            {
+                $transferredQuery->where('da.doctor_id', '=', $doctorId);
+            }
+            $transferredQuery->whereDate('da.appointment_date', '>=', $fromDate);
+            $transferredQuery->whereDate('da.appointment_date', '<=', $toDate);
+            $transferredQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_TRANSFERRED);
+            $transferredQuery->whereNotNull('da.appointment_date');
+            $transferredQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $transferredQuery->groupBy('da.appointment_category');
+
+            $transferredAppointments = $transferredQuery->get();
+
+            //DB::connection()->enableQueryLog();
+
+            $cancelledQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $cancelledQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
+            if(!is_null($doctorId))
+            {
+                $cancelledQuery->where('da.doctor_id', '=', $doctorId);
+            }
+            $cancelledQuery->whereDate('da.appointment_date', '>=', $fromDate);
+            $cancelledQuery->whereDate('da.appointment_date', '<=', $toDate);
+            $cancelledQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_CANCELLED);
+            $cancelledQuery->whereNotNull('da.appointment_date');
+            $cancelledQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $cancelledQuery->groupBy('da.appointment_category');
+
+            $cancelledAppointments = $cancelledQuery->get();
+
+            $futureAppointments["openAppointments"] = $openAppointments;
+            $futureAppointments["transferredAppointments"] = $transferredAppointments;
+            $futureAppointments["cancelledAppointments"] = $cancelledAppointments;
+
+            //dd($dashboardDetails);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $queryEx);
+        }
+        catch(Exception $ex)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $ex);
+        }
+
+        return $futureAppointments;
     }
 
     /**

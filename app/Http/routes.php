@@ -127,6 +127,8 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('{id}/dashboard', array('as' => 'patient.dashboard', 'uses' => 'DoctorController@getDashboardDetailsForFront'));
     Route::get('{id}/doctor/{doctorId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'DoctorController@getDashboardDetailsForDoctor'));
 
+    Route::get('{hospitalId}/futureappointments', array('as' => 'hospital.futureappointments', 'uses' => 'DoctorController@getFutureAppointmentsForDashboard'));
+
 
     Route::get('rest/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForFront'));
 
@@ -456,6 +458,8 @@ Route::group(['prefix' => 'doctor'], function()
     {
 
         Route::get('{doctorId}/hospital/{hospitalId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'DoctorApiController@getDashboardDetailsForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/futureappointments', array('as' => 'doctor.futureappointments', 'uses' => 'DoctorApiController@getFutureAppointmentsForDashboard'));
+
 
         Route::get('rest/api/mainsymptoms', array('as' => 'doctor.symptoms', 'uses' => 'DoctorApiController@getMainSymptoms'));
         Route::get('rest/api/{mainsymptomId}/subsymptoms', array('as' => 'doctor.subsymptoms', 'uses' => 'DoctorApiController@getSubSymptomsForMainSymptoms'));
