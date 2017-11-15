@@ -37,7 +37,7 @@ $profile_menu="0";
                 <div class="container">
 
                     <div class="row">
-
+                    <?php /* ?>
 
                         @foreach($dashboardDetails['appointmentCategory'] as $appointmentCategory)
                         <div class="col-sm-6 col-lg-3">
@@ -57,6 +57,7 @@ $profile_menu="0";
                         </div>
                         @endforeach
 
+                    <?php */ ?>
                     </div>
 
                     <div class="row">

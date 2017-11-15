@@ -269,6 +269,26 @@ $profile_menu="0";
                                         <h4 class="m-t-0 m-b-30">Medical Examination Details</h4>
 
 
+                                        @if(count($patientExaminations['recentComplaints'])>0)
+                                            <hr style="width: 100%;"/>
+                                            <div class="form-group" style="width: 100%;">
+                                                <label class="col-sm-12 control-label" style="width: 100%;">Complaints - {{$patientExaminations['recentComplaints'][0]->complaint_date}}</label>
+                                            </div>
+                                            <div class="form-group col-sm-12" style="width: 100%;">
+                                                @foreach($patientExaminations['recentComplaints'] as $recentTest)
+                                                    <div class="col-sm-6" style="width:50%;float:left;">
+
+                                                        {{$recentTest->complaintType}} :: {{$recentTest->complaint_name}}
+                                                        <br/>
+                                                        {{$recentTest->complaint_text}}
+
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+                                            <br/><br/>
+                                        @endif
+
                                         @if(count($patientExaminations['recentGeneralTests'])>0)
                                             <hr/>
                                             <div class="form-group" style="width: 100%;">
@@ -416,6 +436,31 @@ $profile_menu="0";
                                                 @endforeach
                                             </div>
                                             <hr/>
+                                            <br/><br/>
+                                        @endif
+
+
+                                        @if(count($patientExaminations['diagnosticExaminations'])>0)
+                                            <hr style="width: 100%;"/>
+                                            <div class="form-group" style="width: 100%;">
+                                                <label class="col-sm-12 control-label" style="width: 100%;">Diagnostic Examinations - {{$patientExaminations['diagnosticExaminations'][0]->diagnosis_date}}</label>
+                                            </div>
+                                            <div class="form-group col-sm-12" style="width: 100%;">
+                                                @foreach($patientExaminations['diagnosticExaminations'] as $recentTest)
+                                                    <div class="col-sm-6" style="width:50%;float:left;">
+
+                                                        Investigations - {{$recentTest->investigations}} <br/>
+                                                        Examination Findings - {{$recentTest->examination_findings}} <br/>
+                                                        Provisional Diagnosis - {{$recentTest->provisional_diagnosis}} <br/>
+                                                        Final Diagnosis - {{$recentTest->final_diagnosis}} <br/>
+                                                        Treatment Type - {{$recentTest->treatment_type}} <br/>
+                                                        Treatment Notes - {{$recentTest->treatment_code}} <br/>
+
+
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
                                             <br/><br/>
                                         @endif
 
