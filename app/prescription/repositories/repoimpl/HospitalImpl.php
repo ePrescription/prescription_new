@@ -1079,7 +1079,7 @@ class HospitalImpl implements HospitalInterface{
             if(!is_null($doctorAppointment))
             {
                 $doctorAppointment->appointment_status_id = AppointmentType::APPOINTMENT_CANCELLED;
-                $doctorAppointment->created_at = date("Y-m-d H:i:s");
+                //$doctorAppointment->created_at = date("Y-m-d H:i:s");
                 $doctorAppointment->updated_at = date("Y-m-d H:i:s");
                 $doctorAppointment->save();
             }
@@ -1143,7 +1143,7 @@ class HospitalImpl implements HospitalInterface{
             {
                 $doctorAppointment->doctor_id = $doctorId;
                 $doctorAppointment->appointment_status_id = AppointmentType::APPOINTMENT_TRANSFERRED;
-                $doctorAppointment->created_at = date("Y-m-d H:i:s");
+                //$doctorAppointment->created_at = date("Y-m-d H:i:s");
                 $doctorAppointment->updated_at = date("Y-m-d H:i:s");
                 $doctorAppointment->save();
             }
