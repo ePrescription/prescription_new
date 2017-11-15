@@ -1837,6 +1837,8 @@ class HospitalImpl implements HospitalInterface{
 
             $visitedAppointments = $visitedQuery->get();
 
+            //DB::connection()->enableQueryLog();
+
             $transferredQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $transferredQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             $transferredQuery->where('da.doctor_id', '=', $doctorId);
@@ -1847,6 +1849,10 @@ class HospitalImpl implements HospitalInterface{
             $transferredQuery->groupBy('da.appointment_category');
 
             $transferredAppointments = $transferredQuery->get();
+
+            //$query1 = DB::getQueryLog();
+            //$lastQuery = end($query);
+            //dd($query1);
 
             //DB::connection()->enableQueryLog();
 
@@ -1866,6 +1872,8 @@ class HospitalImpl implements HospitalInterface{
             //dd($query1);
             //dd($cancelledAppointments);
 
+
+
             $postponedQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $postponedQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             $postponedQuery->where('da.doctor_id', '=', $doctorId);
@@ -1876,6 +1884,9 @@ class HospitalImpl implements HospitalInterface{
             $postponedQuery->groupBy('da.appointment_category');
 
             $postponedAppointments = $postponedQuery->get();
+
+            //$query1 = DB::getQueryLog();
+            //dd($query1);
 
             $dashBoardQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $dashBoardQuery->where('da.doctor_id', '=', $doctorId);
@@ -2024,7 +2035,7 @@ class HospitalImpl implements HospitalInterface{
             $dashboardDetails["totalLabFees"] = $labAmount;
             $dashboardDetails["consultingFees"] = $appTotalFees;
 
-            dd($dashboardDetails);
+            //dd($dashboardDetails);
         }
         catch(QueryException $queryEx)
         {
