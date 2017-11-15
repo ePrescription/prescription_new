@@ -35,26 +35,632 @@ $profile_menu="0";
                 <div class="container">
 
                     <div class="row">
+                        <h4 class="page-title">Today's Appointments</h4>
 
-                    <?php /* ?>
-                        @foreach($dashboardDetails['appointmentCategory'] as $appointmentCategory)
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="panel">
-                                <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$appointmentCategory->appointment_category}}">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title text-purple m-t-10 font-light">{{$appointmentCategory->appointment_category}} Appointments</h4>
-                                </div>
-                                <div class="panel-body p-t-10">
-                                    <h2 class="m-t-0 m-b-15 text-warning font-light">
-                                        <i class="fa fa-stethoscope"></i>
-                                        {{$appointmentCategory->noAppointments}}
-                                    </h2>
-                                </div>
-                                </a>
-                            </div>
-                        </div>
-                        @endforeach
-                    <?php */ ?>
+                        <table id="datatable" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th> </th>
+                                <th>Normal</th>
+                                <th>Special</th>
+                                <th>Pregnancy</th>
+                                <th>Online</th>
+                            </tr>
+                            </thead>
+
+
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        Open
+                                    </td>
+                                    <td>
+
+                                    <?php
+                                        $openAppointments = $dashboardDetails['openAppointments'];
+                                        $selected_value = "Normal";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                            if($e->appointment_category == $selected_value)
+                                            { return true; }
+                                            else
+                                            { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                    ?>
+                                        {{$noAppointments}}
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['openAppointments'];
+                                        $selected_value = "Special";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['openAppointments'];
+                                        $selected_value = "Pregnancy";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['openAppointments'];
+                                        $selected_value = "Online";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Visited
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['visitedAppointments'];
+                                        $selected_value = "Normal";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['visitedAppointments'];
+                                        $selected_value = "Special";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['visitedAppointments'];
+                                        $selected_value = "Pregnancy";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['visitedAppointments'];
+                                        $selected_value = "Online";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Transferred
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['transferredAppointments'];
+                                        $selected_value = "Normal";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['transferredAppointments'];
+                                        $selected_value = "Special";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['transferredAppointments'];
+                                        $selected_value = "Pregnancy";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['transferredAppointments'];
+                                        $selected_value = "Online";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Cancelled
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['cancelledAppointments'];
+                                        $selected_value = "Normal";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['cancelledAppointments'];
+                                        $selected_value = "Special";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['cancelledAppointments'];
+                                        $selected_value = "Pregnancy";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['cancelledAppointments'];
+                                        $selected_value = "Online";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Postponed
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['postponedAppointments'];
+                                        $selected_value = "Normal";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['postponedAppointments'];
+                                        $selected_value = "Special";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['postponedAppointments'];
+                                        $selected_value = "Pregnancy";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                    <td>
+
+                                        <?php
+                                        $openAppointments = $dashboardDetails['postponedAppointments'];
+                                        $selected_value = "Online";
+
+                                        $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
+
+                                        if($e->appointment_category == $selected_value)
+                                        { return true; }
+                                        else
+                                        { return false; }
+
+                                        });
+
+                                        if(count($openAppointments_values))
+                                        {
+                                        $openAppointments_values_key = key($openAppointments_values);
+                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                        }
+                                        else
+                                        {
+                                        $noAppointments = "0";
+                                        }
+
+                                        ?>
+                                        {{$noAppointments}}
+
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+
                     </div>
 
                     <div class="row">
