@@ -691,7 +691,19 @@ $profile_menu="0";
                     </div>
                     <!-- end row -->
 
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="col-sm-3 control-label">Date Range</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" name="appointmentDate" id="appointmentDate" value="" required="required" />
+                            </div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                        </div>
 
+
+                        <div style="width:100%;min-height:350px;" id="patientappointmentdiv"></div>
+                    </div>
                 </div><!-- container -->
 
 
@@ -703,5 +715,53 @@ $profile_menu="0";
 
 </div><!-- ./wrapper -->
 
-</body>
-</html>
+@section('scripts')
+
+
+    <script>
+        function ajaxloadappointmentdetails(did,hid,fdate,tdate) {
+
+            $("#patientappointmentdiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'doctor/rest/api/' + did + '/hospital/' + hid + '/futureappointments';
+
+            if(hid!=0)
+            {
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"doctorId": did, "hospitalId": hid, "fromDate": fdate, "toDate": tdate, "status": status},
+                    success: function (data) {
+                        $("#patientappointmentdiv").html(data);
+                    }
+                });
+            }
+            else
+            {
+                $("#patientappointmentdiv").html("");
+            }
+
+        }
+    </script>
+
+    <!-- Include Required Prerequisites -->
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <script>
+        $( function() {
+
+            $( "#appointmentDate" ).daterangepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+            $('#appointmentDate').on('apply.daterangepicker', function(ev, picker) {
+                console.log(picker.startDate.format('YYYY-MM-DD'));
+                console.log(picker.endDate.format('YYYY-MM-DD'));
+                ajaxloadappointmentdetails('{{Auth::user()->id}}','{{Session::get('LoginUserHospital')}}',picker.startDate.format('YYYY-MM-DD'),picker.endDate.format('YYYY-MM-DD'));
+            });
+
+
+        } );
+    </script>
+@stop

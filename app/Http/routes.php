@@ -558,6 +558,8 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/{specialtyId}/referraldoctors', array('as' => 'hospital.referraldoctors', 'uses' => 'DoctorController@getDoctorsBySpecialty'));
 
 
+        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/futureappointments', array('as' => 'doctor.futureappointments', 'uses' => 'DoctorController@getFutureAppointmentsForDoctorDashboard'));
+
         //Medical
         Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/medical-details', array('as' => 'hospital.patientmedicaldetails', 'uses' => 'DoctorController@PatientMedicalDetailsByHospitalForDoctor'));
 

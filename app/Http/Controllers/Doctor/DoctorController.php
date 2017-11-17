@@ -7395,8 +7395,41 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
+        $dashboardDetails = $futureAppointments;
+        //return $futureAppointments;
         //dd($dashboardDetails);
-        //return view('portal.doctor-hospital-dashboard',compact('dashboardDetails'));
+        return view('portal.hospital-future-appointment-dashboard',compact('dashboardDetails'));
+        //return $responseJson;
+    }
+
+
+    public function getFutureAppointmentsForDoctorDashboard($doctorId,$hospitalId, Request $appointmentRequest)
+    {
+        $futureAppointments = null;
+        //dd($hospitalId.'--'.$doctorId);
+        $fromDate = $appointmentRequest->get('fromDate');
+        $toDate = $appointmentRequest->get('toDate');
+
+        try
+        {
+            $futureAppointments = $this->hospitalService->getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        $dashboardDetails = $futureAppointments;
+        //return $futureAppointments;
+        //dd($dashboardDetails);
+        return view('portal.hospital-future-appointment-dashboard',compact('dashboardDetails'));
         //return $responseJson;
     }
 

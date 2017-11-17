@@ -598,7 +598,7 @@ class HospitalService {
 
         try
         {
-            $dashboardDetails = $this->hospitalRepo->getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId);
+            $futureAppointments = $this->hospitalRepo->getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId);
         }
         catch(HospitalException $hospitalExc)
         {

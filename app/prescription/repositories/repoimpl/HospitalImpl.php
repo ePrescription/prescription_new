@@ -2095,7 +2095,7 @@ class HospitalImpl implements HospitalInterface{
             //DB::connection()->enableQueryLog();
             //$appointments = $query->get();
             //$query = DB::getQueryLog();
-            //$lastQuery = end($query);
+            $lastQuery = end($query);
             //dd($query);
 
             //dd($query->toSql());
@@ -2150,6 +2150,7 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $ex);
         }
 
+        //dd($futureAppointments);
         return $futureAppointments;
     }
 
