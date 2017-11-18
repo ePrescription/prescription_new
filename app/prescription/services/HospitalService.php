@@ -2760,6 +2760,11 @@ class HospitalService {
             $status = false;
             throw $hospitalExc;
         }
+        catch(UserNotFoundException $userExc)
+        {
+            $status = false;
+            throw $userExc;
+        }
         catch (Exception $ex) {
 
             $status = false;

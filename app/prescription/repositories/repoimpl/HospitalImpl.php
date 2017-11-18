@@ -58,6 +58,7 @@ use App\prescription\utilities\Exception\HospitalException;
 use App\Http\ViewModels\PatientPrescriptionViewModel;
 
 use App\prescription\utilities\Exception\UserNotFoundException;
+use App\prescription\utilities\Helper;
 use App\prescription\utilities\UserType;
 use App\User;
 use App\Role;
@@ -2178,14 +2179,15 @@ class HospitalImpl implements HospitalInterface{
             {
                 $query->where('da.appointment_category', '=', $categoryType);
             }
-            else
+            /*else
             {
                 $query->where('da.appointment_date', '=', date('Y-m-d'));
-            }
+            }*/
             if(!is_null($doctorId))
             {
                 $query->where('da.doctor_id', '=', $doctorId);
             }
+            $query->where('da.appointment_date', '=', date('Y-m-d'));
             $query->whereIn('da.appointment_status_id', [AppointmentType::APPOINTMENT_OPEN, AppointmentType::APPOINTMENT_TRANSFERRED]);
             $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.patient_id', 'p.name as name', 'p.address','p.pid', 'p.telephone', 'p.email', 'p.relationship',
@@ -3493,12 +3495,29 @@ class HospitalImpl implements HospitalInterface{
                 $patientComplaintDate = null;
             }
 
-            $patientUser = User::find($patientId);
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            //$patientUser = User::find($patientId);
 
             $patientComplaints = $patientComVM->getPatientComplaints();
 
-            if (!is_null($patientUser))
+            if (!is_null($patient))
             {
+                //$patientUser = User::find($patientId);
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
 
                 $patientComplaint = new PatientComplaints();
@@ -3682,11 +3701,28 @@ class HospitalImpl implements HospitalInterface{
                 $patientDiagnosistDate = null;
             }
 
-            $patientUser = User::find($patientId);
+            $doctor = Helper::checkDoctorExists($doctorId);
 
-            if (!is_null($patientUser))
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            //$patientUser = User::find($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
 
                 $patientDiagnosis = new PatientDiagnosis();
                 $patientDiagnosis->patient_id = $patientId;
@@ -6712,6 +6748,8 @@ class HospitalImpl implements HospitalInterface{
             $latestPastIllnessQuery->select('ppi.id', 'ppi.patient_id', 'pii.illness_name', 'ppi.past_illness_name', 'ppi.past_illness_date');
             $latestPastIllness = $latestPastIllnessQuery->get();
 
+            //dd($latestPastIllnessQuery->toSql());
+
             $latestFamilyIllnessQuery = DB::table('patient_family_illness as pfi');
             $latestFamilyIllnessQuery->join('family_illness as fi', 'fi.id', '=', 'pfi.family_illness_id');
             $latestFamilyIllnessQuery->where('pfi.family_illness_date', function($query) use($patientId){
@@ -7345,26 +7383,30 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientHistoryVM->getPatientId();
             $doctorId = $patientHistoryVM->getDoctorId();
             $hospitalId = $patientHistoryVM->getHospitalId();
-            $patientUser = User::find($patientId);
-
-            //dd($patientId);
 
             $patientPersonalHistory = $patientHistoryVM->getPatientPersonalHistory();
             //dd($patientPersonalHistory);
 
-            /*if(!is_null($patientPersonalHistory) && !empty($patientPersonalHistory))
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
             {
-                foreach($patientPersonalHistory as $patientHistory)
-                {
-                    $personalHistoryIds[] = $patientHistory->personalHistoryId;
-                }
-                //dd($personalHistoryIds);
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
 
-            }*/
+            $hospital = Helper::checkHospitalExists($hospitalId);
 
-            if (!is_null($patientUser))
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_personal_history')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
 
                 foreach($patientPersonalHistory as $patientHistory)
                 {
@@ -7477,14 +7519,33 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientExaminationVM->getPatientId();
             $doctorId = $patientExaminationVM->getDoctorId();
             $hospitalId = $patientExaminationVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
 
             $patientGeneralExamination = $patientExaminationVM->getPatientGeneralExamination();
+
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
             //dd($patientGeneralExamination);
 
-            if (!is_null($patientUser))
+            if (!is_null($patient))
             {
+
+                $patientUser = User::find($patientId);
 
                 //DB::table('patient_general_history')->where('patient_id', $patientId)->delete();
 
@@ -7573,7 +7634,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_GENERAL_EXAMINATION_SAVE_ERROR, $exc);
         }
@@ -7593,21 +7654,49 @@ class HospitalImpl implements HospitalInterface{
     public function savePatientPastIllness(PatientPastIllnessViewModel $patientPastIllnessVM)
     {
         $status = true;
+        $patientUser = null;
+        //dd()
 
         try
         {
             $patientId = $patientPastIllnessVM->getPatientId();
             $doctorId = $patientPastIllnessVM->getDoctorId();
             $hospitalId = $patientPastIllnessVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
+
+            //dd($patientId);
+
+            $patient = Helper::checkPatientExists($patientId);
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            //dd($patientUser);
+
+            /*$doctorQuery = User::join('role_user as ru', 'ru.user_id', '=', 'users.id');
+            $doctorQuery->where('ru.role_id', '=', UserType::USERTYPE_DOCTOR);
+            $doctorQuery->where('users.id', '=', $doctorId);
+            $doctorQuery->where('users.delete_status', '=', 1);*/
+            //$query =
 
             $patientPastIllness = $patientPastIllnessVM->getPatientPastIllness();
 
             //$pivotData = array();
 
-            if (!is_null($patientUser))
+            if (!is_null($patient))
             {
                 //DB::table('patient_past_illness')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
 
                 foreach($patientPastIllness as $illness)
                 {
@@ -7692,6 +7781,7 @@ class HospitalImpl implements HospitalInterface{
         {
             //dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+            //throw $userExc;
         }
         catch(Exception $exc)
         {
@@ -7720,13 +7810,29 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientFamilyIllnessVM->getPatientId();
             $doctorId = $patientFamilyIllnessVM->getDoctorId();
             $hospitalId = $patientFamilyIllnessVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientFamilyIllness = $patientFamilyIllnessVM->getPatientFamilyIllness();
 
-            if (!is_null($patientUser))
+            $patient = Helper::checkPatientExists($patientId);
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
 
                 foreach($patientFamilyIllness as $illness)
                 {
@@ -7841,14 +7947,31 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientPregnancyVM->getPatientId();
             $doctorId = $patientPregnancyVM->getDoctorId();
             $hospitalId = $patientPregnancyVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientPregnancy = $patientPregnancyVM->getPatientPregnancy();
 
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
             //dd($patientPregnancy);
 
-            if (!is_null($patientUser))
+            if (!is_null($patient))
             {
+                $patientUser = User::find($patientId);
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
 
                 foreach($patientPregnancy as $pregnancy)
@@ -7931,13 +8054,31 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientScanVM->getPatientId();
             $doctorId = $patientScanVM->getDoctorId();
             $hospitalId = $patientScanVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientScans = $patientScanVM->getPatientScans();
 
-            if (!is_null($patientUser))
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+
+                $patientUser = User::find($patientId);
 
                 foreach($patientScans as $scans)
                 {
@@ -8016,13 +8157,30 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientSymVM->getPatientId();
             $doctorId = $patientSymVM->getDoctorId();
             $hospitalId = $patientSymVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientSymptoms = $patientSymVM->getPatientSymptoms();
 
-            if (!is_null($patientUser))
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                //$patientUser = User::find($patientId);
 
                 foreach($patientSymptoms as $symptom)
                 {
@@ -8115,13 +8273,30 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientUrineVM->getPatientId();
             $doctorId = $patientUrineVM->getDoctorId();
             $hospitalId = $patientUrineVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientExaminations = $patientUrineVM->getExaminations();
 
-            if (!is_null($patientUser))
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
 
                 foreach($patientExaminations as $examination)
                 {
@@ -8200,13 +8375,30 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientMotionVM->getPatientId();
             $doctorId = $patientMotionVM->getDoctorId();
             $hospitalId = $patientMotionVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientExaminations = $patientMotionVM->getExaminations();
 
-            if (!is_null($patientUser))
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
 
                 foreach($patientExaminations as $examination)
                 {
@@ -8285,13 +8477,30 @@ class HospitalImpl implements HospitalInterface{
             $patientId = $patientBloodVM->getPatientId();
             $doctorId = $patientBloodVM->getDoctorId();
             $hospitalId = $patientBloodVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientExaminations = $patientBloodVM->getExaminations();
 
-            if (!is_null($patientUser))
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
 
                 foreach($patientExaminations as $examination)
                 {
@@ -8372,13 +8581,30 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientUltraSoundVM->getDoctorId();
             //dd($doctorId);
             $hospitalId = $patientUltraSoundVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientExaminations = $patientUltraSoundVM->getExaminations();
 
-            if (!is_null($patientUser))
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
 
                 foreach($patientExaminations as $examination)
                 {
@@ -8461,15 +8687,32 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientDentalVM->getDoctorId();
             //dd($doctorId);
             $hospitalId = $patientDentalVM->getHospitalId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $dentalExaminations = $patientDentalVM->getPatientDentalTests();
             $examinationDate = $patientDentalVM->getExaminationDate();
             $examinationTime = $patientDentalVM->getExaminationTime();
             //dd($examinationDate);
 
-            if (!is_null($patientUser))
+            $doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
             {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
+            {
+                //$patientUser = User::find($patientId);
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
                //dd($patientDentalVM->getExaminationDate());
                 $examinationDt = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
@@ -8576,9 +8819,24 @@ class HospitalImpl implements HospitalInterface{
             $examinationTime = $patientXRayVM->getExaminationTime();
             //dd($xrayExaminations);
 
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
+            $doctor = Helper::checkDoctorExists($doctorId);
 
-            if (!is_null($patientUser))
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
                 //dd($patientDentalVM->getExaminationDate());
@@ -8673,13 +8931,17 @@ class HospitalImpl implements HospitalInterface{
         try
         {
             $patientId = $drugHistoryVM->getPatientId();
-            $patientUser = User::find($patientId);
+            //$patientUser = User::find($patientId);
 
             $patientDrugHistory = $drugHistoryVM->getDrugHistory();
             $patientSurgeryHistory = $drugHistoryVM->getSurgeryHistory();
 
-            if (!is_null($patientUser))
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
             {
+
+                $patientUser = User::find($patientId);
 
                 foreach($patientDrugHistory as $history)
                 {
@@ -8724,12 +8986,21 @@ class HospitalImpl implements HospitalInterface{
                 $patientLabTests->modified_by = 'Admin';
                 $patientUser->labtests()->save($patientLabTests);*/
             }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
 
         }
         catch(QueryException $queryEx)
         {
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_DRUG_HISTORY_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         }
         catch(Exception $exc)
         {
