@@ -111,7 +111,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
 
                                 </td>
@@ -141,7 +143,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                                 <td>
@@ -170,7 +174,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                             </tr>
@@ -204,7 +210,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
                                 </td>
                                 <td>
 
@@ -232,7 +240,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
 
                                 </td>
@@ -262,7 +272,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                                 <td>
@@ -291,7 +303,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                             </tr>
@@ -325,7 +339,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
                                 </td>
                                 <td>
 
@@ -383,7 +399,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                                 <td>
@@ -412,7 +430,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                             </tr>
@@ -446,7 +466,10 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
+
                                 </td>
                                 <td>
 
@@ -474,7 +497,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
 
                                 </td>
@@ -504,7 +529,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                                 <td>
@@ -533,7 +560,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                             </tr>
@@ -567,7 +596,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
                                 </td>
                                 <td>
 
@@ -595,7 +626,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
 
                                 </td>
@@ -625,7 +658,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                                 <td>
@@ -654,7 +689,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                    {{$noAppointments}}
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            {{$noAppointments}}
+                                        </a>
 
                                 </td>
                             </tr>
