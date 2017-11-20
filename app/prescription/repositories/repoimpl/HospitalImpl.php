@@ -8058,7 +8058,7 @@ class HospitalImpl implements HospitalInterface{
 
             $patientScans = $patientScanVM->getPatientScans();
 
-            $doctor = Helper::checkDoctorExists($doctorId);
+            /*$doctor = Helper::checkDoctorExists($doctorId);
 
             if(is_null($doctor))
             {
@@ -8070,7 +8070,7 @@ class HospitalImpl implements HospitalInterface{
             if(is_null($hospital))
             {
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
-            }
+            }*/
 
             $patient = Helper::checkPatientExists($patientId);
 
@@ -8277,7 +8277,7 @@ class HospitalImpl implements HospitalInterface{
 
             $patientExaminations = $patientUrineVM->getExaminations();
 
-            $doctor = Helper::checkDoctorExists($doctorId);
+            /*$doctor = Helper::checkDoctorExists($doctorId);
 
             if(is_null($doctor))
             {
@@ -8289,7 +8289,7 @@ class HospitalImpl implements HospitalInterface{
             if(is_null($hospital))
             {
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
-            }
+            }*/
 
             $patient = Helper::checkPatientExists($patientId);
 
@@ -8379,7 +8379,7 @@ class HospitalImpl implements HospitalInterface{
 
             $patientExaminations = $patientMotionVM->getExaminations();
 
-            $doctor = Helper::checkDoctorExists($doctorId);
+            /*$doctor = Helper::checkDoctorExists($doctorId);
 
             if(is_null($doctor))
             {
@@ -8391,7 +8391,7 @@ class HospitalImpl implements HospitalInterface{
             if(is_null($hospital))
             {
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
-            }
+            }*/
 
             $patient = Helper::checkPatientExists($patientId);
 
@@ -8481,7 +8481,7 @@ class HospitalImpl implements HospitalInterface{
 
             $patientExaminations = $patientBloodVM->getExaminations();
 
-            $doctor = Helper::checkDoctorExists($doctorId);
+            /*$doctor = Helper::checkDoctorExists($doctorId);
 
             if(is_null($doctor))
             {
@@ -8493,7 +8493,7 @@ class HospitalImpl implements HospitalInterface{
             if(is_null($hospital))
             {
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
-            }
+            }*/
 
             $patient = Helper::checkPatientExists($patientId);
 
@@ -8585,7 +8585,7 @@ class HospitalImpl implements HospitalInterface{
 
             $patientExaminations = $patientUltraSoundVM->getExaminations();
 
-            $doctor = Helper::checkDoctorExists($doctorId);
+            /*$doctor = Helper::checkDoctorExists($doctorId);
 
             if(is_null($doctor))
             {
@@ -8597,7 +8597,7 @@ class HospitalImpl implements HospitalInterface{
             if(is_null($hospital))
             {
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
-            }
+            }*/
 
             $patient = Helper::checkPatientExists($patientId);
 
@@ -8694,7 +8694,7 @@ class HospitalImpl implements HospitalInterface{
             $examinationTime = $patientDentalVM->getExaminationTime();
             //dd($examinationDate);
 
-            $doctor = Helper::checkDoctorExists($doctorId);
+            /*$doctor = Helper::checkDoctorExists($doctorId);
 
             if(is_null($doctor))
             {
@@ -8706,7 +8706,7 @@ class HospitalImpl implements HospitalInterface{
             if(is_null($hospital))
             {
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
-            }
+            }*/
 
             $patient = Helper::checkPatientExists($patientId);
 
@@ -8820,7 +8820,7 @@ class HospitalImpl implements HospitalInterface{
             //dd($xrayExaminations);
 
             //$patientUser = User::find($patientId);
-            $doctor = Helper::checkDoctorExists($doctorId);
+            /*$doctor = Helper::checkDoctorExists($doctorId);
 
             if(is_null($doctor))
             {
@@ -8832,7 +8832,7 @@ class HospitalImpl implements HospitalInterface{
             if(is_null($hospital))
             {
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
-            }
+            }*/
 
             $patient = Helper::checkPatientExists($patientId);
 
