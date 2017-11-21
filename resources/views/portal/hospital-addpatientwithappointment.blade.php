@@ -251,7 +251,7 @@ $time_array=array(
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" id="gender1" name="gender" value="1" required="required" />&nbsp;&nbsp;Male
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" id="gender2" name="gender" value="2" required="required" />&nbsp;&nbsp;Female
+                                                        <input type="radio" class="form-controlx" id="gender2" name="gender" value="0" required="required" />&nbsp;&nbsp;Female
                                                         @if ($errors->has('gender'))<p class="error" style="">{!!$errors->first('gender')!!}</p>@endif
                                                     </div>
                                                 </div>

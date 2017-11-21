@@ -104,7 +104,7 @@ $profile_menu="0";
 
                                                     <input type="radio" class="form-controlx" name="gender" value="1" required="required" @if($patientDetails[0]->gender==1) checked @endif />Male
                                                     &nbsp;&nbsp;
-                                                    <input type="radio" class="form-controlx" name="gender" value="2" required="required" @if($patientDetails[0]->gender==2) checked @endif />Female
+                                                    <input type="radio" class="form-controlx" name="gender" value="2" required="required" @if($patientDetails[0]->gender==0) checked @endif />Female
                                                 </div>
                                             </div>
 
