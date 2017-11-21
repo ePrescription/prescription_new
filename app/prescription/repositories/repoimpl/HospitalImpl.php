@@ -2215,6 +2215,52 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /**
+     * Get patients by appointment date
+     * @param $hospitalId, $doctorId, $appointmentDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientsByAppointmentDate($hospitalId, $doctorId, $appointmentDate)
+    {
+        $patients = null;
+        //dd($doctorId);
+        try
+        {
+            //DB::connection()->enableQueryLog();
+
+            $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
+            $query->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
+            $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
+            $query->where('usr.delete_status', '=', 1);
+            $query->where('da.doctor_id', '=', $doctorId);
+            $query->where('da.appointment_date', '=', $appointmentDate);
+            $query->select('p.patient_id', 'p.name as name', 'p.address','p.pid', 'p.telephone', 'p.email', 'p.relationship',
+                'da.id','da.id as appointment_id' ,'da.appointment_category', 'da.appointment_date', 'da.appointment_time');
+
+            //dd($query->toSql());
+
+            $patients = $query->get();
+
+            //$query1 = DB::getQueryLog();
+            //dd($query1);
+            //dd($patients);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $ex)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_LIST_ERROR, $ex);
+        }
+
+        return $patients;
+    }
+
+    /**
      * Get patient appointment dates by hospital
      * @param $hospitalId, $patientId
      * @throws $hospitalException

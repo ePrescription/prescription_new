@@ -641,6 +641,34 @@ class HospitalService {
     }
 
     /**
+     * Get patients by appointment date
+     * @param $hospitalId, $doctorId, $appointmentDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientsByAppointmentDate($hospitalId, $doctorId, $appointmentDate)
+    {
+        $patients = null;
+
+        try
+        {
+            $patients = $this->hospitalRepo->getPatientsByAppointmentDate($hospitalId, $doctorId, $appointmentDate);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_LIST_ERROR, $exc);
+        }
+
+        return $patients;
+    }
+
+    /**
      * Get patient appointment dates by hospital
      * @param $hospitalId, $patientId
      * @throws $hospitalException

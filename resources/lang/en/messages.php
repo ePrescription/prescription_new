@@ -92,6 +92,9 @@
         "313" => "No dashboard details available",
         "314" => "Unable to get appointment details",
 
+        "315" => "Successfully retrieved patient appointments",
+        "316" => "No appointments found for the selected date",
+
         "1001" => "Prescription delivered successfully through SMS",
         "1002" => "Unable to deliver prescription through SMS",
         "1003" => "Lab test delivered successfully through SMS",

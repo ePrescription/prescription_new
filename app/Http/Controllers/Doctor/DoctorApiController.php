@@ -355,6 +355,55 @@ class DoctorApiController extends Controller
     }
 
     /**
+     * Get patients by appointment date
+     * @param $hospitalId, $doctorId, $appointmentDate
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientsByAppointmentDate($doctorId, $hospitalId, Request $appointmentRequest)
+    {
+        $patients = null;
+        $appointmentDate = $appointmentRequest->get('appointmentDate');
+        //dd('Inside appointment date function');
+
+        try
+        {
+            $patients = $this->hospitalService->getPatientsByAppointmentDate($hospitalId, $doctorId, $appointmentDate);
+            //dd($patients);
+
+            if(!is_null($patients) && !empty($patients))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($patients));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_APPOINTMENT_FOUND));
+            }
+
+            $responseJson->setObj($patients);
+            $responseJson->sendSuccessResponse();
+            //dd($appointments);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            /*$responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);*/
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
      * Get patient appointment dates by hospital
      * @param $hospitalId, $patientId
      * @throws $hospitalException

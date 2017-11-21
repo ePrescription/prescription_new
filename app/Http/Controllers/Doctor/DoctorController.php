@@ -7495,6 +7495,7 @@ class DoctorController extends Controller
     {
         $patients = null;
         $categoryType = $appointmentRequest->get('appointmentCategory');
+        //dd('Inside appointment category function');
         //dd($hospitalId);
         //dd($categoryType);
         try

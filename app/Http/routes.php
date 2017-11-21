@@ -551,6 +551,8 @@ Route::group(['prefix' => 'doctor'], function()
         Route::post('{doctorId}/hospital/{hospitalId}/savepatientwithappointment', array('as' => 'hospital.savepatientwithappointment', 'uses' => 'DoctorController@savePatientWithAppointmentByHospitalForDoctor'));
 
         Route::get('{doctorId}/hospital/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/appointments', array('as' => 'patient.appointmentdate', 'uses' => 'DoctorApiController@getPatientsByAppointmentDate'));
+
         Route::get('patients/appointments/{appointmentId}/details', array('as' => 'patient.appointmentdetails', 'uses' => 'DoctorController@getAppointmentDetailsForDoctor'));
 
         Route::get('{doctorId}/hospital/{hospitalId}/patientnames', array('as' => 'hospital.searchnames', 'uses' => 'DoctorController@getPatientNamesForHospital'));
