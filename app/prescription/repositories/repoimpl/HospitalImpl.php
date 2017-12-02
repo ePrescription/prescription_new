@@ -17,6 +17,7 @@ use App\Http\ViewModels\PatientDiagnosisViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
+use App\Http\ViewModels\PatientLabDocumentsViewModel;
 use App\Http\ViewModels\PatientLabReceiptViewModel;
 use App\Http\ViewModels\PatientLabTestViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
@@ -43,6 +44,8 @@ use App\prescription\model\entities\PatientComplaints;
 use App\prescription\model\entities\PatientDentalExamination;
 use App\prescription\model\entities\PatientDentalExaminationItems;
 use App\prescription\model\entities\PatientDiagnosis;
+use App\prescription\model\entities\PatientDocumentItems;
+use App\prescription\model\entities\PatientDocuments;
 use App\prescription\model\entities\PatientDrugHistory;
 use App\prescription\model\entities\PatientLabTests;
 use App\prescription\model\entities\PatientPrescription;
@@ -69,6 +72,10 @@ use Exception;
 use Numbers_Words;
 use Config as CA;
 use Carbon\Carbon;
+
+use File;
+use Storage;
+use Crypt;
 
 
 class HospitalImpl implements HospitalInterface{
@@ -8608,6 +8615,113 @@ class HospitalImpl implements HospitalInterface{
         return $status;
     }
 
+    public function savePatientBloodTessNew(PatientUrineExaminationViewModel $patientBloodVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $patientBloodVM->getPatientId();
+            $doctorId = $patientBloodVM->getDoctorId();
+            $hospitalId = $patientBloodVM->getHospitalId();
+            //$patientUser = User::find($patientId);
+
+            $patientExaminations = $patientBloodVM->getExaminations();
+
+            /*$doctor = Helper::checkDoctorExists($doctorId);
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }*/
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
+            {
+                //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
+                $patientUser = User::find($patientId);
+
+                foreach($patientExaminations as $examination)
+                {
+                    //dd($patientHistory);
+                    $examinationId = $examination->examinationId;
+                    $isValueSet = $examination->isValueSet;
+                    //$pregnancyDate = $pregnancy->pregnancyDate;
+
+                    $examinationDate = property_exists($examination, 'examinationDate') ? $examination->examinationDate : null;
+                    $examinationTime = (isset($examination->examinationTime)) ? $examination->examinationTime : null;
+
+                    if(!is_null($examinationDate))
+                    {
+                        $patientExaminationDate = date('Y-m-d', strtotime($examinationDate));
+                    }
+                    else
+                    {
+                        $patientExaminationDate = null;
+                    }
+
+                    $patientUser->patientbloodexaminations()->attach($examinationId,
+                        array('examination_date' => $patientExaminationDate,
+                            'examination_time' => $examinationTime,
+                            'is_value_set' => $isValueSet,
+                            'doctor_id' => $doctorId,
+                            'hospital_id' => $hospitalId,
+                            'created_by' => 'Admin',
+                            'modified_by' => 'Admin',
+                            'created_at' => date("Y-m-d H:i:s"),
+                            'updated_at' => date("Y-m-d H:i:s"),
+                        ));
+
+                }
+
+                if(!is_null($examinationDate))
+                {
+                    $patientExaminationDate = date('Y-m-d', strtotime($examinationDate));
+                }
+                else
+                {
+                    $patientExaminationDate = null;
+                }
+
+                //dd($patientExaminationDate);
+
+
+
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
     /**
      * Save patient ultra sound details
      * @param $patientUltraSoundVM
@@ -9365,6 +9479,102 @@ class HospitalImpl implements HospitalInterface{
     }
 
     /*Symptom section -- End */
+
+    /**
+     * Upload patient lab test documents
+     * @param $labDocumentsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM)
+    {
+        $labDocuments = null;
+        $status = true;
+
+        try
+        {
+            $patientId = $labDocumentsVM->getPatientId();
+            $labId = $labDocumentsVM->getLabId();
+            $labDocuments = $labDocumentsVM->getPatientLabDocuments();
+
+            if (!is_null($labDocuments))
+            {
+                $labDocument = new PatientDocuments();
+                $labDocument->patient_id = $patientId;
+                $labDocument->lab_id = $labId;
+                $labDocument->document_upload_date = $labDocumentsVM->getDocumentUploadDate();
+                $labDocument->created_by = $labDocumentsVM->getCreatedBy();
+                $labDocument->modified_by = $labDocumentsVM->getUpdatedBy();
+                $labDocument->created_at = $labDocumentsVM->getCreatedAt();
+                $labDocument->updated_at = $labDocumentsVM->getUpdatedAt();
+                $labDocument->save();
+
+                foreach ($labDocuments as $document)
+                {
+                    $uploadPath = $document['document_upload_path'];
+                    $documentContents = File::get($uploadPath);
+
+                    $filename = $uploadPath->getClientOriginalName();
+                    $extension = $uploadPath->getClientOriginalExtension();
+
+                    $randomName = $this->generateUniqueFileName();
+
+                    $documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . 'patient_document_' . $patientId . '_' . $randomName . '.' . $extension;
+                    Storage::disk('local')->put($documentPath, Crypt::encrypt(file_get_contents($documentContents)));
+
+                    $labDocumentItems = new PatientDocumentItems();
+
+                    $labDocumentItems->test_category_name = $labDocumentsVM->getTestCategoryName();
+                    $labDocumentItems->document_name = $labDocumentsVM->getDocumentName();
+                    $labDocumentItems->document_path = $documentPath;
+                    $labDocumentItems->document_upload_date = (date("Y-m-d H:i:s"));
+                    $labDocumentItems->document_filename = $filename;
+                    $labDocumentItems->document_extension = $extension;
+                    $labDocumentItems->document_upload_status = 1;
+                    $labDocumentItems->created_by = $labDocumentsVM->getCreatedBy();
+                    $labDocumentItems->modified_by = $labDocumentsVM->getUpdatedBy();
+                    $labDocumentItems->created_at = $labDocumentsVM->getCreatedAt();
+                    $labDocumentItems->updated_at = $labDocumentsVM->getUpdatedAt();
+
+                    $labDocument->patientdocumentitems()->save($labDocumentItems);
+
+                }
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            $status = false;
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    private function generateUniqueFileName()
+    {
+        $i = 0;
+        $randomString = mt_rand(1, 9);
+        do {
+            $randomString .= mt_rand(0, 9);
+        } while (++$i < 7);
+
+        return $randomString;
+    }
 
     private function generateRandomString($length = 9) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

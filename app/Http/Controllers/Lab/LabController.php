@@ -708,6 +708,46 @@ class LabController extends Controller
         return view('portal.hospital-labtest-details',compact('labTestDetails'));
     }
 
+    /**
+     * Upload patient lab test documents
+     * @param $uploadRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientLabDocuments(Request $uploadRequest)
+    {
+        $status = true;
+        $labDocumentsVM = null;
+
+        try
+        {
+            $labDocumentsVM = LabMapper::setLabDocumentDetails($uploadRequest);
+            $status = $this->labService->uploadPatientLabDocuments($labDocumentsVM);
+
+            if($status)
+            {
+                //return
+            }
+        }
+        catch(LabException $userExc)
+        {
+            //dd($userExc);
+            $errorMsg = $userExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($userExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',$errorMsg." ".trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',trans('messages.SupportTeam'));
+        }
+    }
+
 
     public function getLabTestUploadForLab($labTestId)
     {

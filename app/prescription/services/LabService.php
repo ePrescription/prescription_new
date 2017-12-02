@@ -223,4 +223,39 @@ class LabService
 
         return $labTests;
     }
+
+    /**
+     * Upload patient lab test documents
+     * @param $labDocumentsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientLabDocuments($labDocumentsVM)
+    {
+        $status = true;
+
+        try
+        {
+            //dd('Inside edit lab in service');
+            DB::transaction(function() use ($labDocumentsVM, &$status)
+            {
+                $status = $this->labRepo->uploadPatientLabDocuments($labDocumentsVM);
+            });
+
+        }
+        catch(LabException $profileExc)
+        {
+            $status = false;
+            throw $profileExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $ex);
+        }
+
+        return $status;
+    }
 }

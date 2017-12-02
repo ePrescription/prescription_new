@@ -9,16 +9,24 @@
 namespace App\prescription\repositories\repoimpl;
 
 use App\Http\ViewModels\LabViewModel;
+use App\Http\ViewModels\PatientLabDocumentsViewModel;
 use App\prescription\model\entities\Lab;
+use App\prescription\model\entities\PatientDocumentItems;
+use App\prescription\model\entities\PatientDocuments;
 use App\prescription\repositories\repointerface\LabInterface;
+use App\prescription\utilities\Exception\HospitalException;
 use App\prescription\utilities\Exception\LabException;
 
+use App\prescription\utilities\Exception\UserNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use App\User;
 
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
 use Exception;
+
+use Storage;
+use File;
 
 class LabImpl implements LabInterface
 {
@@ -299,5 +307,101 @@ class LabImpl implements LabInterface
         }
 
         return $labTests;
+    }
+
+    /**
+     * Upload patient lab test documents
+     * @param $labDocumentsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM)
+    {
+        $labDocuments = null;
+        $status = true;
+
+        try
+        {
+            $patientId = $labDocumentsVM->getPatientId();
+            $labId = $labDocumentsVM->getLabId();
+            $labDocuments = $labDocumentsVM->getPatientLabDocuments();
+
+            if (!is_null($labDocuments))
+            {
+                $labDocument = new PatientDocuments();
+                $labDocument->patient_id = $patientId;
+                $labDocument->lab_id = $labId;
+                $labDocument->document_upload_date = $labDocumentsVM->getDocumentUploadDate();
+                $labDocument->created_by = $labDocumentsVM->getCreatedBy();
+                $labDocument->modified_by = $labDocumentsVM->getUpdatedBy();
+                $labDocument->created_at = $labDocumentsVM->getCreatedAt();
+                $labDocument->updated_at = $labDocumentsVM->getUpdatedAt();
+                $labDocument->save();
+
+                foreach ($labDocuments as $document)
+                {
+                    $uploadPath = $document['document_upload_path'];
+                    $documentContents = File::get($uploadPath);
+
+                    $filename = $uploadPath->getClientOriginalName();
+                    $extension = $uploadPath->getClientOriginalExtension();
+
+                    $randomName = $this->generateUniqueFileName();
+
+                    $documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . 'patient_document_' . $patientId . '_' . $randomName . '.' . $extension;
+                    Storage::disk('local')->put($documentPath, Crypt::encrypt(file_get_contents($documentContents)));
+
+                    $labDocumentItems = new PatientDocumentItems();
+
+                    $labDocumentItems->test_category_name = $labDocumentsVM->getTestCategoryName();
+                    $labDocumentItems->document_name = $labDocumentsVM->getDocumentName();
+                    $labDocumentItems->document_path = $documentPath;
+                    $labDocumentItems->document_upload_date = (date("Y-m-d H:i:s"));
+                    $labDocumentItems->document_filename = $filename;
+                    $labDocumentItems->document_extension = $extension;
+                    $labDocumentItems->document_upload_status = 1;
+                    $labDocumentItems->created_by = $labDocumentsVM->getCreatedBy();
+                    $labDocumentItems->modified_by = $labDocumentsVM->getUpdatedBy();
+                    $labDocumentItems->created_at = $labDocumentsVM->getCreatedAt();
+                    $labDocumentItems->updated_at = $labDocumentsVM->getUpdatedAt();
+
+                    $labDocument->patientdocumentitems()->save($labDocumentItems);
+
+                }
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            $status = false;
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    private function generateUniqueFileName()
+    {
+        $i = 0;
+        $randomString = mt_rand(1, 9);
+        do {
+            $randomString .= mt_rand(0, 9);
+        } while (++$i < 7);
+
+        return $randomString;
     }
 }

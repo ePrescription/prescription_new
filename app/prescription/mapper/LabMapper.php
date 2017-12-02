@@ -10,6 +10,7 @@ namespace App\prescription\mapper;
 
 
 use App\Http\ViewModels\LabViewModel;
+use App\Http\ViewModels\PatientLabDocumentsViewModel;
 use Illuminate\Http\Request;
 
 //use Session;
@@ -39,5 +40,39 @@ class LabMapper
         $labVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $labVM;
+    }
+
+    public static function setLabDocumentDetails(Request $uploadRequest)
+    {
+        $labDocumentsVM = new PatientLabDocumentsViewModel();
+
+        $labDocuments = $uploadRequest['lab_documents'];
+        //$medicalDocuments = $hospitalRequest['medical_new_document'];
+
+        //dd($medicalDocuments);
+        //$loggedUserId = Session::get('LoginUserId');
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        foreach ($labDocuments as $key => $value)
+        {
+            if(!is_null($value['document_upload_path']))
+            {
+                $labDocumentsVM->setPatientLabDocuments($value);
+            }
+        }
+
+        $labDocumentsVM->setPatientId($uploadRequest['patient_id']);
+        $labDocumentsVM->setLabId($uploadRequest['lab_id']);
+        $labDocumentsVM->setDocumentUploadDate(date("Y-m-d"));
+        $labDocumentsVM->setTestCategoryName($uploadRequest['test_category_name']);
+        $labDocumentsVM->setDocumentName($uploadRequest['document_name']);
+
+        $labDocumentsVM->setCreatedBy($userName);
+        $labDocumentsVM->setUpdatedBy($userName);
+        $labDocumentsVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $labDocumentsVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $labDocumentsVM;
     }
 }

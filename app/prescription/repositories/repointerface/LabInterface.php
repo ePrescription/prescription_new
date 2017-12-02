@@ -10,6 +10,7 @@ namespace App\prescription\repositories\repointerface;
 
 
 use App\Http\ViewModels\LabViewModel;
+use App\Http\ViewModels\PatientLabDocumentsViewModel;
 
 interface LabInterface
 {
@@ -21,4 +22,6 @@ interface LabInterface
     public function getTestsForLabForPatient($patientId);
 
     public function getTestsForDoctor($doctorId, $hospitalId);
+
+    public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM);
 }

@@ -15,6 +15,7 @@ use App\Http\ViewModels\PatientDiagnosisViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
+use App\Http\ViewModels\PatientLabDocumentsViewModel;
 use App\Http\ViewModels\PatientLabReceiptViewModel;
 use App\Http\ViewModels\PatientLabTestViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
@@ -141,6 +142,7 @@ interface HospitalInterface {
 
     public function getPatientBloodTests($patientId, $bloodTestDate);
     public function savePatientBloodTests(PatientUrineExaminationViewModel $patientBloodVM);
+    public function savePatientBloodTessNew(PatientUrineExaminationViewModel $patientBloodVM);
 
     public function getPatientUltraSoundTests($patientId, $ultraSoundDate);
     public function savePatientUltraSoundTests(PatientUrineExaminationViewModel $patientUltraSoundVM);
@@ -181,4 +183,7 @@ interface HospitalInterface {
 
     public function savePatientInvestigationAndDiagnosis(PatientDiagnosisViewModel $patientDiagnosisVM);
     public function getPatientInvestigations($patientId, $investigationDate);
+
+    public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM);
+
 }
