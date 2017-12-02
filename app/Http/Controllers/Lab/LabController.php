@@ -11,6 +11,8 @@ use App\prescription\utilities\Exception\AppendMessage;
 use App\prescription\common\ResponseJson;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
 
+use App\prescription\facades\HospitalServiceFacade;
+
 use GuzzleHttp\Client;
 use App\prescription\model\entities\LabTestDetails;
 use App\prescription\common\ResponsePrescription;
@@ -756,5 +758,78 @@ class LabController extends Controller
         return redirect('lab/rest/api/lab/23')->with('message',$msg);
        // return view('portal.lab-labtest-upload',compact('labTestId'));
     }
+
+
+    public function PatientDetailsForLab($lid,$hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
+            //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
+            //$patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
+            //dd($patientDetails);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.lab-patient-details',compact('patientDetails','labTests'));
+
+    }
+
+
+    public function PatientLabDetailsForLab($lid,$hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+            //dd($patientExaminations);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.lab-patient-lab-details',compact('patientExaminations','patientDetails'));
+
+    }
+
 
 }

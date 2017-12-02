@@ -85,15 +85,19 @@ $profile_menu="0";
                                             @foreach($patients as $patient)
                                             <tr>
                                                 <td>{{$patient->id}}</td>
-                                                <td>{{$patient->pid}}</td>
+                                                <td>
+                                                    <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->pid}} </a>
+                                                </td>
                                                 <td>{{$patient->name}}</td>
                                                 <td>{{$patient->telephone}}</td>
                                                 <td>{{$patient->age}}</td>
                                                 <td>@if($patient->gender==1) Male @else Female @endif</td>
                                                 <td>
-            <!--
-                                                    <a href="#doctorview.html"><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View</button></a>
-            -->
+
+                                                    <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i> </a>
+                                                    &nbsp;&nbsp;
+                                                    <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i> </a>
+
                                                 </td>
                                             </tr>
                                             @endforeach

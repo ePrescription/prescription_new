@@ -37,11 +37,13 @@
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
                 </li>
+                <?php /* ?>
                 <li class="@if($lab_menu==1) active @endif treeview">
                     <a href="{{URL::to('/')}}/lab/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/labtests">
                         <i class="fa fa-pencil-square-o"></i> <span>Lab Test</span>
                     </a>
                 </li>
+                <?php */ ?>
                 <li class="@if($patient_menu==1) active @endif treeview">
                     <a href="{{URL::to('/')}}/lab/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
                         <i class="fa fa-users"></i> <span>Patients</span>

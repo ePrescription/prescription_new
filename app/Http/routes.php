@@ -714,6 +714,9 @@ Route::group(['prefix' => 'lab'], function()
         Route::get('rest/api/patient/{prescriptionId}/sms', array('as' => 'patient.send sms', 'uses' => 'LabController@forwardLabDetailsBySMS'));
 
 
+        //WEB NEW PAGES
+        Route::get('{labId}/hospital/{hid}/patient/{patientId}/details', array('as' => 'lab.patientdetails', 'uses' => 'LabController@PatientDetailsForLab'));
+        Route::get('{labId}/hospital/{hid}/patient/{patientId}/lab-details', array('as' => 'lab.patientlabdetails', 'uses' => 'LabController@PatientLabDetailsForLab'));
 
 
         Route::get('rest/api/lab/report/{labTestId}/upload', array('as' => 'patient.labtestupload', 'uses' => 'LabController@getLabTestUploadForLab'));
