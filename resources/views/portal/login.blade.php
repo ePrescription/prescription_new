@@ -14,7 +14,7 @@
 
             <div class="panel-body">
                 <h3 class="text-center m-t-0 m-b-15">
-                    <a href="{{URL::to('/')}}/" class="logo logo-admin"><img src="{{URL::to('/')}}/images/head-logo-new.png" height="56" alt="logo"></a>
+                    <a href="{{URL::to('/')}}/" class="logo logo-admin"><img src="{{URL::to('/')}}/images/head-logo.png" height="56" alt="logo"></a>
                 </h3>
                 <h4 class="text-muted text-center m-t-0"><b>Sign In</b></h4>
 
