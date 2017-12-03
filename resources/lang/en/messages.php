@@ -75,6 +75,8 @@
 
         "160" => "Successfully logged in",
 
+        "193" => "Unable to get patient lab tests",
+
         "221" => "Unable to get doctor details",
         "222" => "Successfully retrieved doctor details",
         "223" => "No doctor details available",

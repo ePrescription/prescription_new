@@ -24,4 +24,5 @@ interface LabInterface
     public function getTestsForDoctor($doctorId, $hospitalId);
 
     public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM);
+    public function getPatientDocuments($patientId);
 }

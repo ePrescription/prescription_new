@@ -258,4 +258,32 @@ class LabService
 
         return $status;
     }
+
+    /**
+     * Get patient documents
+     * @param $patientId
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function getPatientDocuments($patientId)
+    {
+        $labReports = null;
+
+        try
+        {
+            $labReports = $this->labRepo->getPatientDocuments($patientId);
+        }
+        catch(LabException $profileExc)
+        {
+            throw $profileExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new LabException(null, ErrorEnum::LAB_TESTS_LIST_ERROR, $exc);
+        }
+
+        return $labReports;
+    }
 }

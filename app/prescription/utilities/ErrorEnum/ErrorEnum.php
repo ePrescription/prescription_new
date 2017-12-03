@@ -371,6 +371,6 @@ class ErrorEnum extends Enum{
     const PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR = 893;
     const PATIENT_LAB_DOCUMENTS_UPLOAD_SUCCESS = 894;
 
-
+    //const PATIENT_LAB_
 
 }

@@ -312,7 +312,7 @@ class LabImpl implements LabInterface
     /**
      * Upload patient lab test documents
      * @param $labDocumentsVM
-     * @throws $hospitalException
+     * @throws $labException
      * @return true | false
      * @author Baskar
      */
@@ -321,6 +321,7 @@ class LabImpl implements LabInterface
     {
         $labDocuments = null;
         $status = true;
+        //dd('Inside lab impl');
 
         try
         {
@@ -376,19 +377,19 @@ class LabImpl implements LabInterface
         {
             //dd($queryEx);
             $status = false;
-            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
+            throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
         }
         catch(UserNotFoundException $userExc)
         {
             //dd($userExc);
             $status = false;
-            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+            throw new LabException(null, $userExc->getUserErrorCode(), $userExc);
         }
         catch(Exception $exc)
         {
             //dd($exc);
             $status = false;
-            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
+            throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
         }
 
         return $status;
@@ -403,5 +404,41 @@ class LabImpl implements LabInterface
         } while (++$i < 7);
 
         return $randomString;
+    }
+
+    /**
+     * Get patient documents
+     * @param $patientId
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function getPatientDocuments($patientId)
+    {
+        $labReports = null;
+
+        try
+        {
+
+            $query = DB::table('patient_document as pd')->join('patient_document_items as pdi', 'pdi.patient_document_id', '=', 'pd.id');
+            $query->join('hospital_doctor as hl', 'hl.hospital_id', '=', 'pl.hospital_id');
+            $query->where('pd.patient_id', '=', $patientId);
+            $query->select('pd.id', 'pd.patient_id', 'pd.document_upload_date',
+                'pdi.test_category_name', 'pdi.document_name', 'pdi.document_path');
+
+            $labReports = $query->get();
+            //dd($labTests);
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new LabException(null, ErrorEnum::LAB_TESTS_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new LabException(null, ErrorEnum::LAB_TESTS_LIST_ERROR, $exc);
+        }
+
+        return $labReports;
     }
 }

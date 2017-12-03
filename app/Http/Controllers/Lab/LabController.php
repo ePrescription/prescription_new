@@ -720,6 +720,7 @@ class LabController extends Controller
     {
         $status = true;
         $labDocumentsVM = null;
+        //dd('Inside lab controller');
 
         try
         {
@@ -730,6 +731,40 @@ class LabController extends Controller
             {
                 //return
             }
+        }
+        catch(LabException $userExc)
+        {
+            //dd($userExc);
+            $errorMsg = $userExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($userExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',$errorMsg." ".trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',trans('messages.SupportTeam'));
+        }
+    }
+
+    /**
+     * Get patient documents
+     * @param $patientId
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function getPatientDocuments($patientId)
+    {
+        $labReports = null;
+
+        try
+        {
+            $labReports = $this->labService->getPatientDocuments($patientId);
+            //dd($labReports);
         }
         catch(LabException $userExc)
         {
