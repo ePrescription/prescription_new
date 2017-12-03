@@ -3983,6 +3983,7 @@ class DoctorController extends Controller
     public function changeHospital(Request $loginRequest)
     {
         $loginInfo = $loginRequest->all();
+        //dd($loginInfo);
         //dd($loginInfo['hospital']);
         //$userSession = null;
 
