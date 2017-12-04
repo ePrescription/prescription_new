@@ -783,6 +783,58 @@ class LabController extends Controller
         }
     }
 
+    /**
+     * Download document item
+     * @param $documentItemId
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientDocument($documentItemId)
+    {
+        $documentItem = null;
+        $contents = null;
+        $path = null;
+
+        try
+        {
+            $documentItem = $this->labService->downloadPatientDocument($documentItemId);
+            if(!empty($documentItem))
+            {
+                $downloadFileName = $documentItem['document_path'];
+
+                //$path =  Config::get('constants.DOCTOR_EMPANEL_URL') .'/' .$downloadFileName;
+                $path = storage_path('app').'/' .$downloadFileName;
+
+                $file = Storage::disk('local')->get($downloadFileName);
+                $contents = Crypt::decrypt($file);
+            }
+
+        }
+        catch(LabException $userExc)
+        {
+            //dd($userExc);
+            $errorMsg = $userExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($userExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',$errorMsg." ".trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',trans('messages.SupportTeam'));
+        }
+
+        return response()->make($contents, 200, array(
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . pathinfo($path, PATHINFO_BASENAME) . '"'
+        ));
+
+    }
+
 
     public function getLabTestUploadForLab($labTestId)
     {

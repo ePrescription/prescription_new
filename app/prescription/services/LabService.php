@@ -286,4 +286,32 @@ class LabService
 
         return $labReports;
     }
+
+    /**
+     * Download document item
+     * @param $documentItemId
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientDocument($documentItemId)
+    {
+        $documentItem = null;
+
+        try
+        {
+            $documentItem = $this->labRepo->downloadPatientDocument($documentItemId);
+        }
+        catch(LabException $profileExc)
+        {
+            throw $profileExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENT_DOWNLOAD_ERROR, $exc);
+        }
+
+        return $documentItem;
+    }
 }

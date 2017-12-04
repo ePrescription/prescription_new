@@ -25,4 +25,5 @@ interface LabInterface
 
     public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM);
     public function getPatientDocuments($patientId);
+    public function downloadPatientDocument($documentItemId);
 }

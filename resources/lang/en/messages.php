@@ -328,6 +328,9 @@
         "892" => "No investigation details available for the patient",
 
         "893" => "Unable to upload patient lab test documents",
-        "894" => "Successfully uploaded patient lab test documents"
+        "894" => "Successfully uploaded patient lab test documents",
+
+        "895" => "Unable to download patient lab documents",
+        "896" => "Successfully downloaded patient lab documents",
 
     ];

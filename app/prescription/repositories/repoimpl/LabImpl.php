@@ -422,9 +422,9 @@ class LabImpl implements LabInterface
         {
 
             $query = DB::table('patient_document as pd')->join('patient_document_items as pdi', 'pdi.patient_document_id', '=', 'pd.id');
-            $query->join('hospital_doctor as hl', 'hl.hospital_id', '=', 'pl.hospital_id');
+            //$query->join('hospital_doctor as hl', 'hl.hospital_id', '=', 'pl.hospital_id');
             $query->where('pd.patient_id', '=', $patientId);
-            $query->select('pd.id', 'pd.patient_id', 'pd.document_upload_date',
+            $query->select('pd.id', 'pd.patient_id', 'pd.document_upload_date', 'pdi.id as document_item_id',
                 'pdi.test_category_name', 'pdi.document_name', 'pdi.document_path');
 
             $labReports = $query->get();
@@ -440,5 +440,38 @@ class LabImpl implements LabInterface
         }
 
         return $labReports;
+    }
+
+    /**
+     * Download document item
+     * @param $documentItemId
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientDocument($documentItemId)
+    {
+        $documentItem = null;
+
+        try
+        {
+            $query = DB::table('patient_document_items as pd1');
+            $query->where('pdi.id', '=', $documentItemId);
+            $query->select('pdi.id',
+                'pdi.test_category_name', 'pdi.document_name', 'pdi.document_path', 'pdi.document_filename', 'pdi.document_extension');
+
+            $documentItem = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENT_DOWNLOAD_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENT_DOWNLOAD_ERROR, $exc);
+        }
+
+        return $documentItem;
     }
 }
