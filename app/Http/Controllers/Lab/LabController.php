@@ -28,6 +28,8 @@ use Exception;
 use Log;
 
 use Mail;
+use Storage;
+use Crypt;
 
 class LabController extends Controller
 {
@@ -729,7 +731,11 @@ class LabController extends Controller
 
             if($status)
             {
-                return redirect('lab/'.$uploadRequest->lab_id.'/hospital/'.$uploadRequest->hospital_id.'/patient/'.$uploadRequest->patient_id.'/lab-report-upload')->with('message','Lab Report Upload Successfully');
+                return redirect('lab/'.$uploadRequest->lab_id.'/hospital/'.$uploadRequest->hospital_id.'/patient/'.$uploadRequest->patient_id.'/lab-report-upload')->with('success','Lab Report Upload Successfully');
+            }
+            else
+            {
+                return redirect('lab/'.$uploadRequest->lab_id.'/hospital/'.$uploadRequest->hospital_id.'/patient/'.$uploadRequest->patient_id.'/lab-report-upload')->with('message','Lab Report Upload Issues');
             }
         }
         catch(LabException $userExc)
@@ -797,6 +803,7 @@ class LabController extends Controller
 
     public function downloadPatientDocument($documentItemId)
     {
+        //dd($documentItemId);
         $documentItem = null;
         $contents = null;
         $path = null;
@@ -804,21 +811,27 @@ class LabController extends Controller
         try
         {
             $documentItem = $this->labService->downloadPatientDocument($documentItemId);
+            //dd($documentItem);
             if(!empty($documentItem))
             {
-                $downloadFileName = $documentItem['document_path'];
+                $downloadFileName = $documentItem[0]->document_path;
+
+                /*
+                echo $path = storage_path($downloadFileName);
+                return response()->download($path);
+                */
 
                 //$path =  Config::get('constants.DOCTOR_EMPANEL_URL') .'/' .$downloadFileName;
                 $path = storage_path('app').'/' .$downloadFileName;
-
                 $file = Storage::disk('local')->get($downloadFileName);
                 $contents = Crypt::decrypt($file);
+
             }
 
         }
         catch(LabException $userExc)
         {
-            //dd($userExc);
+            dd($userExc);
             $errorMsg = $userExc->getMessageForCode();
             $msg = AppendMessage::appendMessage($userExc);
             Log::error($msg);
@@ -826,11 +839,14 @@ class LabController extends Controller
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            dd($exc);
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
             //return redirect('exception')->with('message',trans('messages.SupportTeam'));
         }
+
+
+
 
         return response()->make($contents, 200, array(
             'Content-Type' => 'application/octet-stream',

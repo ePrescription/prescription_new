@@ -172,12 +172,12 @@ $profile_menu="0";
                                                     </div>
                                                     <div class="form-group col-sm-4">
                                                         <?php /* ?>{{$labReport->document_path}}<?php */ ?>
-                                                        <a href="{{URL::to('/')}}/lab/rest/labreports/{{$labReport->id}}/report"> <i class="fa fa-download"></i> Download </a>
+                                                        <a href="{{URL::to('/')}}/lab/rest/labreports/{{$labReport->document_item_id}}/report"> <i class="fa fa-download"></i> Download </a>
                                                     </div>
 
                                                 @endforeach
                                             @endif
-
+{{print_r($labReport)}}
                                         </div>
                                     </div>
 
