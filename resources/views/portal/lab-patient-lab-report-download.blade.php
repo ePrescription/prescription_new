@@ -177,7 +177,7 @@ $profile_menu="0";
 
                                                 @endforeach
                                             @endif
-{{print_r($labReport)}}
+
                                         </div>
                                     </div>
 
