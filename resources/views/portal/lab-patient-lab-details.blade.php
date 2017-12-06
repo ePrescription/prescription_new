@@ -45,9 +45,22 @@ $profile_menu="0";
                                 <div class="panel-body">
 
 
+
                                     <div style="float:right;">
                                         <a href="{{URL::to('/')}}/lab/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
                                             <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
+                                        </a>
+                                    </div>
+
+                                    <div style="float:right;margin: 0px 10px;">
+                                        <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-donwload">
+                                            <button class="btn btn-info waves-effect waves-light"><i class="fa fa-download"></i> Lab Report Download</button>
+                                        </a>
+                                    </div>
+
+                                    <div style="float:right;margin: 0px 10px;">
+                                        <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-upload">
+                                            <button class="btn btn-info waves-effect waves-light"><i class="fa fa-upload"></i> Lab Report Upload</button>
                                         </a>
                                     </div>
 

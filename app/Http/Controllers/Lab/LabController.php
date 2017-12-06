@@ -729,7 +729,7 @@ class LabController extends Controller
 
             if($status)
             {
-                //return
+                return redirect('lab/'.$uploadRequest->lab_id.'/hospital/'.$uploadRequest->hospital_id.'/patient/'.$uploadRequest->patient_id.'/lab-report-upload')->with('message','Lab Report Upload Successfully');
             }
         }
         catch(LabException $userExc)
@@ -747,6 +747,7 @@ class LabController extends Controller
             Log::error($msg);
             //return redirect('exception')->with('message',trans('messages.SupportTeam'));
         }
+
     }
 
     /**
@@ -757,14 +758,16 @@ class LabController extends Controller
      * @author Baskar
      */
 
-    public function getPatientDocuments($patientId)
+    public function getPatientDocuments($doctorId, $hospitalId, $patientId)
     {
         $labReports = null;
 
         try
         {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $labReports = $this->labService->getPatientDocuments($patientId);
             //dd($labReports);
+            //dd($patientDetails);
         }
         catch(LabException $userExc)
         {
@@ -781,6 +784,7 @@ class LabController extends Controller
             Log::error($msg);
             //return redirect('exception')->with('message',trans('messages.SupportTeam'));
         }
+        return view('portal.lab-patient-lab-report-download',compact('patientDetails','labReports'));
     }
 
     /**
@@ -955,6 +959,41 @@ class LabController extends Controller
         }
 
         return view('portal.lab-patient-lab-details',compact('patientExaminations','patientDetails'));
+
+    }
+
+
+    public function PatientLabReportUploadForLab($lid,$hid,$patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+            //dd($patientExaminations);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.lab-patient-lab-report-upload',compact('patientDetails'));
 
     }
 

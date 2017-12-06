@@ -56,17 +56,33 @@ class LabMapper
 
         foreach ($labDocuments as $key => $value)
         {
+
+            /*
+            if(!is_null($value['test_category_name']))
+            {
+                $labDocumentsVM->setTestCategoryName($value);
+            }
+
+            if(!is_null($value['document_name']))
+            {
+                $labDocumentsVM->setDocumentName($value);
+            }
+            */
+
             if(!is_null($value['document_upload_path']))
             {
                 $labDocumentsVM->setPatientLabDocuments($value);
             }
+
+
         }
 
+        $labDocumentsVM->setDocumentName($uploadRequest['document_name']);
+        $labDocumentsVM->setTestCategoryName($uploadRequest['test_category_name']);
         $labDocumentsVM->setPatientId($uploadRequest['patient_id']);
         $labDocumentsVM->setLabId($uploadRequest['lab_id']);
         $labDocumentsVM->setDocumentUploadDate(date("Y-m-d"));
-        $labDocumentsVM->setTestCategoryName($uploadRequest['test_category_name']);
-        $labDocumentsVM->setDocumentName($uploadRequest['document_name']);
+
 
         $labDocumentsVM->setCreatedBy($userName);
         $labDocumentsVM->setUpdatedBy($userName);

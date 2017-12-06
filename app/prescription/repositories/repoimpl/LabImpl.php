@@ -27,6 +27,7 @@ use Exception;
 
 use Storage;
 use File;
+use Crypt;
 
 class LabImpl implements LabInterface
 {
@@ -319,6 +320,7 @@ class LabImpl implements LabInterface
 
     public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM)
     {
+        //dd($labDocumentsVM);
         $labDocuments = null;
         $status = true;
         //dd('Inside lab impl');
@@ -343,6 +345,8 @@ class LabImpl implements LabInterface
 
                 foreach ($labDocuments as $document)
                 {
+                    $uploadCategory = $document['test_category_name'];
+                    $uploadName = $document['document_name'];
                     $uploadPath = $document['document_upload_path'];
                     $documentContents = File::get($uploadPath);
 
@@ -352,14 +356,15 @@ class LabImpl implements LabInterface
                     $randomName = $this->generateUniqueFileName();
 
                     $documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . 'patient_document_' . $patientId . '_' . $randomName . '.' . $extension;
-                    Storage::disk('local')->put($documentPath, Crypt::encrypt(file_get_contents($documentContents)));
+                    //Storage::disk('local')->put($documentPath, Crypt::encrypt(file_get_contents($documentContents)));
+                    Storage::disk('local')->put($documentPath, Crypt::encrypt(file_get_contents($uploadPath)));
 
                     $labDocumentItems = new PatientDocumentItems();
 
-                    $labDocumentItems->test_category_name = $labDocumentsVM->getTestCategoryName();
-                    $labDocumentItems->document_name = $labDocumentsVM->getDocumentName();
+                    $labDocumentItems->test_category_name = $uploadCategory;
+                    $labDocumentItems->document_name = $uploadName;
                     $labDocumentItems->document_path = $documentPath;
-                    $labDocumentItems->document_upload_date = (date("Y-m-d H:i:s"));
+                    //$labDocumentItems->document_upload_date = (date("Y-m-d H:i:s"));
                     $labDocumentItems->document_filename = $filename;
                     $labDocumentItems->document_extension = $extension;
                     $labDocumentItems->document_upload_status = 1;
@@ -375,19 +380,19 @@ class LabImpl implements LabInterface
         }
         catch(QueryException $queryEx)
         {
-            //dd($queryEx);
+            dd($queryEx);
             $status = false;
             throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
         }
         catch(UserNotFoundException $userExc)
         {
-            //dd($userExc);
+            dd($userExc);
             $status = false;
             throw new LabException(null, $userExc->getUserErrorCode(), $userExc);
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            dd($exc);
             $status = false;
             throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
         }

@@ -27,6 +27,8 @@ class PatientLabDocumentsViewModel
     public function __construct()
     {
         $this->patientLabDocuments = array();
+        //$this->testCategoryName = array();
+        //$this->documentName = array();
     }
 
     /**

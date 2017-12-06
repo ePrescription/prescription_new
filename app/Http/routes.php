@@ -717,14 +717,20 @@ Route::group(['prefix' => 'lab'], function()
         //WEB NEW PAGES
         Route::get('{labId}/hospital/{hid}/patient/{patientId}/details', array('as' => 'lab.patientdetails', 'uses' => 'LabController@PatientDetailsForLab'));
         Route::get('{labId}/hospital/{hid}/patient/{patientId}/lab-details', array('as' => 'lab.patientlabdetails', 'uses' => 'LabController@PatientLabDetailsForLab'));
+        Route::get('{labId}/hospital/{hid}/patient/{patientId}/lab-report-upload', array('as' => 'lab.patientlabreportupload', 'uses' => 'LabController@PatientLabReportUploadForLab'));
+        Route::post('{labId}/hospital/{hid}/patient/{patientId}/labreports', array('as' => 'patient.labtestreports', 'uses' => 'LabController@uploadPatientLabDocuments'));
+        Route::get('{labId}/hospital/{hid}/patient/{patientId}/lab-report-download', array('as' => 'lab.getlabtestreports', 'uses' => 'LabController@getPatientDocuments'));
+        Route::get('rest/labreports/{itemId}/report', array('as' => 'patient.downloadreport', 'uses' => 'LabController@downloadPatientDocument'));
 
 
         Route::get('rest/api/lab/report/{labTestId}/upload', array('as' => 'patient.labtestupload', 'uses' => 'LabController@getLabTestUploadForLab'));
         Route::post('rest/api/lab/report/{labTestId}/saveupload', array('as' => 'patient.labtestsaveupload', 'uses' => 'LabController@getLabTestUploadSaveForLab'));
 
+
+
         Route::post('rest/labreports', array('as' => 'patient.labtestreports', 'uses' => 'LabController@uploadPatientLabDocuments'));
         Route::get('rest/patient/{patientId}/labreports', array('as' => 'patient.getlabtestreports', 'uses' => 'LabController@getPatientDocuments'));
-        Route::get('rest/labreports/{itemId}/report', array('as' => 'patient.downloadreport', 'uses' => 'LabController@downloadPatientDocument'));
+        //Route::get('rest/labreports/{itemId}/report', array('as' => 'patient.downloadreport', 'uses' => 'LabController@downloadPatientDocument'));
 
         //Route::get('rest/api/{labId}/changepassword', array('as' => 'lab.changepassword', 'uses' => 'LabController@editChangePassword'));
         //Route::post('rest/api/lab', array('as' => 'lab.editlab', 'uses' => 'LabController@editLab'));
