@@ -47,11 +47,15 @@ $profile_menu="0";
 
 
                                     <div style="float:right;">
-                                        <!-- <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
-                                            <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
-                                        </a> -->
                                         <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
                                             <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
+                                        </a>
+                                    </div>
+
+
+                                    <div style="float:right; ">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-download">
+                                            <button  style="margin: 0px 10px;" class="btn btn-info waves-effect waves-light"><i class="fa fa-download"></i> Lab Report Download</button>
                                         </a>
                                     </div>
 

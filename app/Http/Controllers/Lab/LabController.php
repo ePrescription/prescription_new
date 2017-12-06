@@ -793,6 +793,65 @@ class LabController extends Controller
         return view('portal.lab-patient-lab-report-download',compact('patientDetails','labReports'));
     }
 
+
+    public function getPatientDocumentsForDoctor($doctorId, $hospitalId, $patientId)
+    {
+        $labReports = null;
+
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $labReports = $this->labService->getPatientDocuments($patientId);
+            //dd($labReports);
+            //dd($patientDetails);
+        }
+        catch(LabException $userExc)
+        {
+            //dd($userExc);
+            $errorMsg = $userExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($userExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',$errorMsg." ".trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',trans('messages.SupportTeam'));
+        }
+        return view('portal.doctor-patient-lab-report-download',compact('patientDetails','labReports'));
+    }
+
+    public function getPatientDocumentsForHospital($hospitalId, $patientId)
+    {
+        $labReports = null;
+
+        try
+        {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $labReports = $this->labService->getPatientDocuments($patientId);
+            //dd($labReports);
+            //dd($patientDetails);
+        }
+        catch(LabException $userExc)
+        {
+            //dd($userExc);
+            $errorMsg = $userExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($userExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',$errorMsg." ".trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',trans('messages.SupportTeam'));
+        }
+        return view('portal.hospital-patient-lab-report-download',compact('patientDetails','labReports'));
+    }
+
     /**
      * Download document item
      * @param $documentItemId

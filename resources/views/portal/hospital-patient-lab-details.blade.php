@@ -50,6 +50,12 @@ $profile_menu="0";
                                         </a>
                                     </div>
 
+                                    <div style="float:right; ">
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-download">
+                                            <button  style="margin: 0px 10px;" class="btn btn-info waves-effect waves-light"><i class="fa fa-download"></i> Lab Report Download</button>
+                                        </a>
+                                    </div>
+
                                     <div style="float:right;">
                                     <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>

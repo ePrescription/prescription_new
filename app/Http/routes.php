@@ -76,6 +76,7 @@ Route::group(array('prefix' => 'patient'), function()
         Route::get('rest/api/{patientId}/labtests', array('as' => 'patient.labtests', 'uses' => 'LabController@getTestsForLabForPatient'));
         Route::get('rest/api/labtests', array('as' => 'patient.lid', 'uses' => 'LabController@getLabTestsByLidForPatient'));
         Route::get('rest/api/lab/{labId}', array('as' => 'patient.labdetails', 'uses' => 'LabController@getLabTestDetailsForPatient'));
+
     });
 
     Route::group(['namespace' => 'Pharmacy'], function()
@@ -103,7 +104,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Lab'), function(
     //Route::get('rest/api/labtests', array('as' => 'patient.lid', 'uses' => 'LabController@getLabTestsByLidForPatient'));
     Route::get('rest/api/lab/{labId}', array('as' => 'patient.labdetails', 'uses' => 'LabController@getLabTestDetailsForHospital'));
 
-
+    Route::get('rest/api/{hid}/patient/{patientId}/lab-report-download', array('as' => 'lab.getlabtestreports', 'uses' => 'LabController@getPatientDocumentsForHospital'));
 });
 
 Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Pharmacy'), function()
@@ -675,6 +676,7 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/lab/{labTestId}', array('as' => 'doctor.labdetails', 'uses' => 'LabController@getLabTestDetailsForDoctor'));
         Route::get('rest/api/labtests', array('as' => 'doctor.lid', 'uses' => 'LabController@getLabTestsByLid'));
 
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/lab-report-download', array('as' => 'lab.getlabtestreports', 'uses' => 'LabController@getPatientDocumentsForDoctor'));
         //Route::get('rest/api/patient/{prescriptionId}/mail', array('as' => 'patient.sendemail', 'uses' => 'LabController@forwardLabDetailsByMail'));
         //Route::get('rest/api/patient/{prescriptionId}/sms', array('as' => 'patient.send sms', 'uses' => 'LabController@forwardLabDetailsBySMS'));
 
