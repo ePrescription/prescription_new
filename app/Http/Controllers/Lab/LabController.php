@@ -905,12 +905,18 @@ class LabController extends Controller
         }
 
 
+        $documentName = $documentItem[0]->test_category_name.'-'.$documentItem[0]->document_name.'.'.pathinfo($path, PATHINFO_EXTENSION);
+        return response()->make($contents, 200, array(
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . $documentName . '"'
+        ));
 
-
+        /*
         return response()->make($contents, 200, array(
             'Content-Type' => 'application/octet-stream',
             'Content-Disposition' => 'attachment; filename="' . pathinfo($path, PATHINFO_BASENAME) . '"'
         ));
+        */
 
     }
 
