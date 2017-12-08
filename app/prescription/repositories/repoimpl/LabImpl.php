@@ -461,10 +461,16 @@ class LabImpl implements LabInterface
 
         try
         {
-            $query = DB::table('patient_document_items as pdi');
+            /*$query = DB::table('patient_document_items as pdi');
             $query->where('pdi.id', '=', $documentItemId);
             $query->select('pdi.id',
-                'pdi.test_category_name', 'pdi.document_name', 'pdi.document_path', 'pdi.document_filename', 'pdi.document_extension');
+                'pdi.test_category_name', 'pdi.document_name', 'pdi.document_path', 'pdi.document_filename', 'pdi.document_extension');*/
+
+            $query = DB::table('patient_document_items as pdi');
+            $query->join('patient_document as pd', 'pd.id', '=', 'pdi.patient_document_id');
+            $query->where('pdi.id', '=', $documentItemId);
+            $query->select('pdi.id',
+                'pdi.test_category_name', 'pdi.document_name', 'pdi.document_path', 'pdi.document_filename', 'pdi.document_extension', 'pd.document_upload_date');
 
             $documentItem = $query->get();
         }

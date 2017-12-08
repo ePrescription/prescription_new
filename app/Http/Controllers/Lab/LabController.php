@@ -866,6 +866,7 @@ class LabController extends Controller
         $documentItem = null;
         $contents = null;
         $path = null;
+        $documentName = null;
 
         try
         {
@@ -885,12 +886,14 @@ class LabController extends Controller
                 $file = Storage::disk('local')->get($downloadFileName);
                 $contents = Crypt::decrypt($file);
 
+                //$documentName = $documentItem[0]->test_category_name.'-'.$documentItem[0]->document_name.'.'.pathinfo($path, PATHINFO_EXTENSION);
+                $documentName = $documentItem[0]->document_name.' '.$documentItem[0]->document_upload_date.'.'.pathinfo($path, PATHINFO_EXTENSION);
             }
 
         }
         catch(LabException $userExc)
         {
-            dd($userExc);
+            //dd($userExc);
             $errorMsg = $userExc->getMessageForCode();
             $msg = AppendMessage::appendMessage($userExc);
             Log::error($msg);
@@ -898,18 +901,23 @@ class LabController extends Controller
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
             //return redirect('exception')->with('message',trans('messages.SupportTeam'));
         }
 
-
-        $documentName = $documentItem[0]->test_category_name.'-'.$documentItem[0]->document_name.'.'.pathinfo($path, PATHINFO_EXTENSION);
         return response()->make($contents, 200, array(
             'Content-Type' => 'application/octet-stream',
             'Content-Disposition' => 'attachment; filename="' . $documentName . '"'
         ));
+
+        /*$documentName = $documentItem[0]->test_category_name.'-'.$documentItem[0]->document_name.'.'.pathinfo($path, PATHINFO_EXTENSION);
+        return response()->make($contents, 200, array(
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . $documentName . '"'
+        ));*/
+
 
         /*
         return response()->make($contents, 200, array(
