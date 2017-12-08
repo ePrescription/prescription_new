@@ -53,7 +53,7 @@ $profile_menu="0";
                                     </div>
 
                                     <div style="float:right;margin: 0px 10px;">
-                                        <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-donwload">
+                                        <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-download">
                                             <button class="btn btn-info waves-effect waves-light"><i class="fa fa-download"></i> Lab Report Download</button>
                                         </a>
                                     </div>
