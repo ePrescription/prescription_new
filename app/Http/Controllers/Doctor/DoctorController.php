@@ -3889,6 +3889,7 @@ class DoctorController extends Controller
         ];
         */
         //dd($parameters);
+        //
         try
         {
             //$order = Indipay::prepare($parameters);

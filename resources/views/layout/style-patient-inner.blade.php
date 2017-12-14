@@ -4,6 +4,9 @@
 {!!  Html::style(asset('theme/assets/css/icons.css')) !!}
 {!!  Html::style(asset('theme/assets/css/style.css')) !!}
 <style>
-    a.logo img, a.logo-sm img {height: 58px !important;}
+    a.logo img, a.logo-sm img {
+        height: 68px !important;
+        padding-top: 1px !important;
+    }
 </style>
 @yield('styles')
