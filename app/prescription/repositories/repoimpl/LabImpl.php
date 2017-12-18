@@ -10,12 +10,15 @@ namespace App\prescription\repositories\repoimpl;
 
 use App\Http\ViewModels\LabViewModel;
 use App\Http\ViewModels\PatientLabDocumentsViewModel;
+use App\Http\ViewModels\TestResultsViewModel;
 use App\prescription\model\entities\Lab;
+use App\prescription\model\entities\PatientBloodExamination;
 use App\prescription\model\entities\PatientDocumentItems;
 use App\prescription\model\entities\PatientDocuments;
 use App\prescription\repositories\repointerface\LabInterface;
 use App\prescription\utilities\Exception\HospitalException;
 use App\prescription\utilities\Exception\LabException;
+use App\prescription\utilities\Helper;
 
 use App\prescription\utilities\Exception\UserNotFoundException;
 use Illuminate\Database\QueryException;
@@ -380,19 +383,19 @@ class LabImpl implements LabInterface
         }
         catch(QueryException $queryEx)
         {
-            dd($queryEx);
+            //dd($queryEx);
             $status = false;
             throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
         }
         catch(UserNotFoundException $userExc)
         {
-            dd($userExc);
+            //dd($userExc);
             $status = false;
             throw new LabException(null, $userExc->getUserErrorCode(), $userExc);
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $status = false;
             throw new LabException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
         }
@@ -484,5 +487,66 @@ class LabImpl implements LabInterface
         }
 
         return $documentItem;
+    }
+
+    /**
+     * Save blood test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveBloodTestResults(TestResultsViewModel $testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $testResultsVM->getPatientId();
+            //dd($patientId);
+            //$patientUser = User::find($patientId);
+
+            $bloodResults = $testResultsVM->getTestResults();
+            //dd($bloodResults);
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
+            {
+                //dd('Inside patient');
+                foreach($bloodResults as $bloodResult)
+                {
+                    $examinationId = $bloodResult->examinationId;
+                    $examinationValue = $bloodResult->examinationValue;
+                    //dd($examinationId);
+
+                    $patientBloodExamination = PatientBloodExamination::find($examinationId);
+                    //dd($patientBloodExamination);
+                    $patientBloodExamination->test_readings = $examinationValue;
+                    $patientBloodExamination->test_reading_status = 1;
+                    $patientBloodExamination->modified_by = $testResultsVM->getUpdatedBy();
+                    $patientBloodExamination->updated_at = $testResultsVM->getUpdatedAt();
+
+                    $patientBloodExamination->save();
+                }
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_BLOOD_TEST_RESULTS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_BLOOD_TEST_RESULTS_ERROR, $exc);
+        }
+
+        return $status;
     }
 }

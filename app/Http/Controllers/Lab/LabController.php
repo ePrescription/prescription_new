@@ -7,6 +7,8 @@ use App\prescription\services\HelperService;
 use App\prescription\services\HospitalService;
 use App\prescription\services\LabService;
 use App\prescription\utilities\Exception\LabException;
+use App\prescription\utilities\Exception\HospitalException;
+
 use App\prescription\utilities\Exception\AppendMessage;
 use App\prescription\common\ResponseJson;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
@@ -1086,5 +1088,43 @@ class LabController extends Controller
 
     }
 
+    /**
+     * Save blood test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
 
+    public function saveBloodTestResults(Request $bloodTestRequest)
+    {
+        $patientBloodVM = null;
+        $status = true;
+
+        try
+        {
+            //dd($bloodTestRequest);
+            $patientBloodVM = LabMapper::setBloodTestMapper($bloodTestRequest);
+            //dd($patientBloodVM);
+            $status = $this->labService->saveBloodTestResults($patientBloodVM);
+
+            //dd($status);
+
+            if($status)
+            {
+
+            }
+        }
+        catch(LabException $labExc)
+        {
+            $errorMsg = $labExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($labExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+    }
 }

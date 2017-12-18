@@ -333,4 +333,7 @@
         "895" => "Unable to download patient lab documents",
         "896" => "Successfully downloaded patient lab documents",
 
+        "897" => "Unable to save blood test results",
+        "898" => "Successfully saved blood test results",
+
     ];

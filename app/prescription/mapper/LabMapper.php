@@ -11,6 +11,7 @@ namespace App\prescription\mapper;
 
 use App\Http\ViewModels\LabViewModel;
 use App\Http\ViewModels\PatientLabDocumentsViewModel;
+use App\Http\ViewModels\TestResultsViewModel;
 use Illuminate\Http\Request;
 
 //use Session;
@@ -90,5 +91,32 @@ class LabMapper
         $labDocumentsVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $labDocumentsVM;
+    }
+
+    public static function setBloodTestMapper(Request $bloodTestRequest)
+    {
+        $testResultsVM = new TestResultsViewModel();
+
+        $resultsObj = (object) $bloodTestRequest->all();
+        $testResultsVM->setPatientId($resultsObj->patientId);
+        /*$patientBloodVM->setDoctorId($examinationObj->doctorId);
+        $patientBloodVM->setHospitalId($examinationObj->hospitalId);*/
+        $testResults = $resultsObj->testResults;
+        //dd($candidateEmployments);
+
+        foreach($testResults as $testResult)
+        {
+            $testResultsVM->setTestResults($testResult);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $testResultsVM->setCreatedBy($userName);
+        $testResultsVM->setUpdatedBy($userName);
+        $testResultsVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $testResultsVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $testResultsVM;
     }
 }

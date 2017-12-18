@@ -314,4 +314,39 @@ class LabService
 
         return $documentItem;
     }
+
+    /**
+     * Save blood test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveBloodTestResults($testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            //dd('Inside edit lab in service');
+            DB::transaction(function() use ($testResultsVM, &$status)
+            {
+                $status = $this->labRepo->saveBloodTestResults($testResultsVM);
+            });
+
+        }
+        catch(LabException $profileExc)
+        {
+            $status = false;
+            throw $profileExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_BLOOD_TEST_RESULTS_ERROR, $ex);
+        }
+
+        return $status;
+    }
 }

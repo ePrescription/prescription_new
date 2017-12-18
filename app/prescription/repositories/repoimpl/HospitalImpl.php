@@ -39,6 +39,8 @@ use App\prescription\model\entities\Hospital;
 use App\prescription\model\entities\LabFeeReceipt;
 use App\prescription\model\entities\LabTestDetails;
 use App\prescription\model\entities\Patient;
+use App\prescription\model\entities\PatientBloodExamination;
+use App\prescription\model\entities\PatientBloodExaminationItems;
 use App\prescription\model\entities\PatientComplaintDetails;
 use App\prescription\model\entities\PatientComplaints;
 use App\prescription\model\entities\PatientDentalExamination;
@@ -8624,10 +8626,14 @@ class HospitalImpl implements HospitalInterface{
         {
             $patientId = $patientBloodVM->getPatientId();
             $doctorId = $patientBloodVM->getDoctorId();
+            //dd($doctorId);
             $hospitalId = $patientBloodVM->getHospitalId();
             //$patientUser = User::find($patientId);
 
-            $patientExaminations = $patientBloodVM->getExaminations();
+            $bloodExaminations = $patientBloodVM->getExaminations();
+            $examinationDate = $patientBloodVM->getExaminationDate();
+            $examinationTime = $patientBloodVM->getExaminationTime();
+            //dd($examinationDate);
 
             /*$doctor = Helper::checkDoctorExists($doctorId);
 
@@ -8647,41 +8653,11 @@ class HospitalImpl implements HospitalInterface{
 
             if (!is_null($patient))
             {
+                //$patientUser = User::find($patientId);
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
-                $patientUser = User::find($patientId);
-
-                foreach($patientExaminations as $examination)
-                {
-                    //dd($patientHistory);
-                    $examinationId = $examination->examinationId;
-                    $isValueSet = $examination->isValueSet;
-                    //$pregnancyDate = $pregnancy->pregnancyDate;
-
-                    $examinationDate = property_exists($examination, 'examinationDate') ? $examination->examinationDate : null;
-                    $examinationTime = (isset($examination->examinationTime)) ? $examination->examinationTime : null;
-
-                    if(!is_null($examinationDate))
-                    {
-                        $patientExaminationDate = date('Y-m-d', strtotime($examinationDate));
-                    }
-                    else
-                    {
-                        $patientExaminationDate = null;
-                    }
-
-                    $patientUser->patientbloodexaminations()->attach($examinationId,
-                        array('examination_date' => $patientExaminationDate,
-                            'examination_time' => $examinationTime,
-                            'is_value_set' => $isValueSet,
-                            'doctor_id' => $doctorId,
-                            'hospital_id' => $hospitalId,
-                            'created_by' => 'Admin',
-                            'modified_by' => 'Admin',
-                            'created_at' => date("Y-m-d H:i:s"),
-                            'updated_at' => date("Y-m-d H:i:s"),
-                        ));
-
-                }
+                //dd($patientDentalVM->getExaminationDate());
+                $examinationDt = property_exists($patientBloodVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
+                //dd($examinationDt);
 
                 if(!is_null($examinationDate))
                 {
@@ -8694,7 +8670,42 @@ class HospitalImpl implements HospitalInterface{
 
                 //dd($patientExaminationDate);
 
+                $bloodExamination = new PatientBloodExamination();
+                $bloodExamination->patient_id = $patientId;
+                $bloodExamination->hospital_id = $hospitalId;
+                $bloodExamination->doctor_id = $doctorId;
+                $bloodExamination->examination_date = $patientExaminationDate;
+                $bloodExamination->examination_time = $examinationTime;
+                $bloodExamination->created_by = $patientBloodVM->getCreatedBy();
+                $bloodExamination->modified_by = $patientBloodVM->getUpdatedBy();
+                $bloodExamination->created_at = $patientBloodVM->getCreatedAt();
+                $bloodExamination->updated_at = $patientBloodVM->getUpdatedAt();
+                $patientBloodExamination = $bloodExamination->save();
 
+                /*foreach($bloodExaminations as $examination)
+                {
+                    //dd($examination);
+                    //$examinationId = $examination->examinationId;
+                    //$examinationName = $examination->examinationName;
+                    //$pregnancyDate = $pregnancy->pregnancyDate;
+                    $bloodExaminationItems = new PatientBloodExaminationItems();
+                    $bloodExaminationItems->dental_examination_item_id = $examination->dentalExaminationId;
+                    //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
+
+                    //$dentalExaminationItems->dental_examination_name = property_exists($examination->dentalExaminationName, 'dentalExaminationName') ? $examination->dentalExaminationName : null;
+                    $dentalExaminationItems->dental_examination_name = (isset($examination->dentalExaminationName)) ? $examination->dentalExaminationName : null;
+
+                    //$dentalExaminationItems->dental_examination_name = $examination->dentalExaminationName;
+                    $dentalExaminationItems->created_by = $patientDentalVM->getCreatedBy();
+                    $dentalExaminationItems->modified_by = $patientDentalVM->getUpdatedBy();
+                    $dentalExaminationItems->created_at = $patientDentalVM->getCreatedAt();
+                    $dentalExaminationItems->updated_at = $patientDentalVM->getUpdatedAt();
+                    if(!is_null($dentalExaminationItems->dental_examination_name))
+                    {
+                        $dentalExamination->dentalexaminationitems()->save($dentalExaminationItems);
+                    }
+
+                }*/
 
             }
             else

@@ -14,6 +14,10 @@ class PatientUrineExaminationViewModel
     private $patientId;
     private $doctorId;
     private $hospitalId;
+
+    private $examinationDate;
+    private $examinationTime;
+
     private $examinations;
 
     private $createdBy;
@@ -72,6 +76,38 @@ class PatientUrineExaminationViewModel
     public function setHospitalId($hospitalId)
     {
         $this->hospitalId = $hospitalId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExaminationDate()
+    {
+        return $this->examinationDate;
+    }
+
+    /**
+     * @param mixed $examinationDate
+     */
+    public function setExaminationDate($examinationDate)
+    {
+        $this->examinationDate = $examinationDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExaminationTime()
+    {
+        return $this->examinationTime;
+    }
+
+    /**
+     * @param mixed $examinationTime
+     */
+    public function setExaminationTime($examinationTime)
+    {
+        $this->examinationTime = $examinationTime;
     }
 
     /**

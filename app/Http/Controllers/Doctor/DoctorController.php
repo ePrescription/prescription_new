@@ -620,6 +620,7 @@ class DoctorController extends Controller
     {
         //dd('Test');
         $loginInfo = $loginRequest->all();
+        dd('Inside doctor login');
         //dd($loginInfo);
         //dd($loginInfo);
         //$userSession = null;
@@ -1951,7 +1952,7 @@ class DoctorController extends Controller
     public function userlogin(Request $loginRequest)
     {
         $loginInfo = $loginRequest->all();
-        //dd($loginInfo);
+        dd($loginInfo);
         //$userSession = null;
 
         try
@@ -2073,7 +2074,7 @@ class DoctorController extends Controller
             }
             else
             {
-                //dd(Auth::user());
+                dd(Auth::user());
                 //$prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::DOCTOR_LOGIN_FAILURE));
                 $msg = "Login Details Incorrect! Try Again.";
                 return redirect('/login')->with('message',$msg);
