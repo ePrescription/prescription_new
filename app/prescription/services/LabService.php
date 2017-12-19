@@ -344,7 +344,147 @@ class LabService
         catch (Exception $ex) {
 
             $status = false;
-            throw new LabException(null, ErrorEnum::PATIENT_BLOOD_TEST_RESULTS_ERROR, $ex);
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save motion test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveMotionTestResults($testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            //dd('Inside edit lab in service');
+            DB::transaction(function() use ($testResultsVM, &$status)
+            {
+                $status = $this->labRepo->saveMotionTestResults($testResultsVM);
+            });
+
+        }
+        catch(LabException $profileExc)
+        {
+            $status = false;
+            throw $profileExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save urine test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveUrineTestResults($testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            //dd('Inside edit lab in service');
+            DB::transaction(function() use ($testResultsVM, &$status)
+            {
+                $status = $this->labRepo->saveUrineTestResults($testResultsVM);
+            });
+
+        }
+        catch(LabException $profileExc)
+        {
+            $status = false;
+            throw $profileExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save ultrasound test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveUltrasoundTestResults($testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            //dd('Inside edit lab in service');
+            DB::transaction(function() use ($testResultsVM, &$status)
+            {
+                $status = $this->labRepo->saveUltrasoundTestResults($testResultsVM);
+            });
+
+        }
+        catch(LabException $profileExc)
+        {
+            $status = false;
+            throw $profileExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $ex);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save scan test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveScanTestResults($testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            //dd('Inside edit lab in service');
+            DB::transaction(function() use ($testResultsVM, &$status)
+            {
+                $status = $this->labRepo->saveScanTestResults($testResultsVM);
+            });
+
+        }
+        catch(LabException $profileExc)
+        {
+            $status = false;
+            throw $profileExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $ex);
         }
 
         return $status;

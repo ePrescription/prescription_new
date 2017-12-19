@@ -93,7 +93,7 @@ class LabMapper
         return $labDocumentsVM;
     }
 
-    public static function setBloodTestMapper(Request $bloodTestRequest)
+    public static function setLabTestMapper(Request $bloodTestRequest)
     {
         $testResultsVM = new TestResultsViewModel();
 

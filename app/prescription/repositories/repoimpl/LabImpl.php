@@ -15,6 +15,10 @@ use App\prescription\model\entities\Lab;
 use App\prescription\model\entities\PatientBloodExamination;
 use App\prescription\model\entities\PatientDocumentItems;
 use App\prescription\model\entities\PatientDocuments;
+use App\prescription\model\entities\PatientMotionExamination;
+use App\prescription\model\entities\PatientScanExamination;
+use App\prescription\model\entities\PatientUltrasoundExamination;
+use App\prescription\model\entities\PatientUrineExamination;
 use App\prescription\repositories\repointerface\LabInterface;
 use App\prescription\utilities\Exception\HospitalException;
 use App\prescription\utilities\Exception\LabException;
@@ -545,6 +549,250 @@ class LabImpl implements LabInterface
         {
             $status = false;
             throw new LabException(null, ErrorEnum::PATIENT_BLOOD_TEST_RESULTS_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save motion test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveMotionTestResults(TestResultsViewModel $testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $testResultsVM->getPatientId();
+            //dd($patientId);
+            //$patientUser = User::find($patientId);
+
+            $motionResults = $testResultsVM->getTestResults();
+            //dd($bloodResults);
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
+            {
+                //dd('Inside patient');
+                foreach($motionResults as $motionResult)
+                {
+                    $examinationId = $motionResult->examinationId;
+                    $examinationValue = $motionResult->examinationValue;
+                    //dd($examinationId);
+
+                    $patientMotionExamination = PatientMotionExamination::find($examinationId);
+                    //dd($patientBloodExamination);
+                    $patientMotionExamination->test_readings = $examinationValue;
+                    $patientMotionExamination->test_reading_status = 1;
+                    $patientMotionExamination->modified_by = $testResultsVM->getUpdatedBy();
+                    $patientMotionExamination->updated_at = $testResultsVM->getUpdatedAt();
+
+                    $patientMotionExamination->save();
+                }
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save urine test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveUrineTestResults(TestResultsViewModel $testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $testResultsVM->getPatientId();
+            //dd($patientId);
+            //$patientUser = User::find($patientId);
+
+            $urineResults = $testResultsVM->getTestResults();
+            //dd($bloodResults);
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
+            {
+                //dd('Inside patient');
+                foreach($urineResults as $urineResult)
+                {
+                    $examinationId = $urineResult->examinationId;
+                    $examinationValue = $urineResult->examinationValue;
+                    //dd($examinationId);
+
+                    $patientUrineExamination = PatientUrineExamination::find($examinationId);
+                    //dd($patientBloodExamination);
+                    $patientUrineExamination->test_readings = $examinationValue;
+                    $patientUrineExamination->test_reading_status = 1;
+                    $patientUrineExamination->modified_by = $testResultsVM->getUpdatedBy();
+                    $patientUrineExamination->updated_at = $testResultsVM->getUpdatedAt();
+
+                    $patientUrineExamination->save();
+                }
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save ultrasound test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveUltrasoundTestResults(TestResultsViewModel $testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $testResultsVM->getPatientId();
+            //dd($patientId);
+            //$patientUser = User::find($patientId);
+
+            $ultrasoundResults = $testResultsVM->getTestResults();
+            //dd($bloodResults);
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
+            {
+                //dd('Inside patient');
+                foreach($ultrasoundResults as $ultrasoundResult)
+                {
+                    $examinationId = $ultrasoundResult->examinationId;
+                    $examinationValue = $ultrasoundResult->examinationValue;
+                    //dd($examinationId);
+
+                    $patientUltrasoundExamination = PatientUltrasoundExamination::find($examinationId);
+                    //dd($patientBloodExamination);
+                    $patientUltrasoundExamination->test_readings = $examinationValue;
+                    $patientUltrasoundExamination->test_reading_status = 1;
+                    $patientUltrasoundExamination->modified_by = $testResultsVM->getUpdatedBy();
+                    $patientUltrasoundExamination->updated_at = $testResultsVM->getUpdatedAt();
+
+                    $patientUltrasoundExamination->save();
+                }
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+    /**
+     * Save scan test results
+     * @param $testResultsVM
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveScanTestResults(TestResultsViewModel $testResultsVM)
+    {
+        $status = true;
+
+        try
+        {
+            $patientId = $testResultsVM->getPatientId();
+            //dd($patientId);
+            //$patientUser = User::find($patientId);
+
+            $scanResults = $testResultsVM->getTestResults();
+            //dd($bloodResults);
+
+            $patient = Helper::checkPatientExists($patientId);
+
+            if (!is_null($patient))
+            {
+                //dd('Inside patient');
+                foreach($scanResults as $scanResult)
+                {
+                    $examinationId = $scanResult->examinationId;
+                    $examinationValue = $scanResult->examinationValue;
+                    //dd($examinationId);
+
+                    $patientScanExamination = PatientScanExamination::find($examinationId);
+                    //dd($patientBloodExamination);
+                    $patientScanExamination->test_readings = $examinationValue;
+                    $patientScanExamination->test_reading_status = 1;
+                    $patientScanExamination->modified_by = $testResultsVM->getUpdatedBy();
+                    $patientScanExamination->updated_at = $testResultsVM->getUpdatedAt();
+
+                    $patientScanExamination->save();
+                }
+            }
+            else
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            $status = false;
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $exc);
         }
 
         return $status;

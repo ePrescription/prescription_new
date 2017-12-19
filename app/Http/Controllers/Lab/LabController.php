@@ -1090,13 +1090,13 @@ class LabController extends Controller
 
     /**
      * Save blood test results
-     * @param $testResultsVM
+     * @param $testRequest
      * @throws $labException
      * @return true | false
      * @author Baskar
      */
 
-    public function saveBloodTestResults(Request $bloodTestRequest)
+    public function saveBloodTestResults(Request $testRequest)
     {
         $patientBloodVM = null;
         $status = true;
@@ -1104,9 +1104,169 @@ class LabController extends Controller
         try
         {
             //dd($bloodTestRequest);
-            $patientBloodVM = LabMapper::setBloodTestMapper($bloodTestRequest);
+            $patientBloodVM = LabMapper::setLabTestMapper($testRequest);
             //dd($patientBloodVM);
             $status = $this->labService->saveBloodTestResults($patientBloodVM);
+
+            //dd($status);
+
+            if($status)
+            {
+
+            }
+        }
+        catch(LabException $labExc)
+        {
+            $errorMsg = $labExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($labExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+    }
+
+    /**
+     * Save motion test results
+     * @param $testRequest
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveMotionTestResults(Request $testRequest)
+    {
+        $patientMotionVM = null;
+        $status = true;
+
+        try
+        {
+            //dd($bloodTestRequest);
+            $patientMotionVM = LabMapper::setLabTestMapper($testRequest);
+            //dd($patientBloodVM);
+            $status = $this->labService->saveMotionTestResults($patientMotionVM);
+
+            //dd($status);
+
+            if($status)
+            {
+
+            }
+        }
+        catch(LabException $labExc)
+        {
+            $errorMsg = $labExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($labExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+    }
+
+    /**
+     * Save urine test results
+     * @param $testRequest
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveUrineTestResults(Request $testRequest)
+    {
+        $patientUrineVM = null;
+        $status = true;
+
+        try
+        {
+            //dd($bloodTestRequest);
+            $patientUrineVM = LabMapper::setLabTestMapper($testRequest);
+            //dd($patientBloodVM);
+            $status = $this->labService->saveUrineTestResults($patientUrineVM);
+
+            //dd($status);
+
+            if($status)
+            {
+
+            }
+        }
+        catch(LabException $labExc)
+        {
+            $errorMsg = $labExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($labExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+    }
+
+    /**
+     * Save ultrasound test results
+     * @param $testRequest
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveUltrasoundTestResults(Request $testRequest)
+    {
+        $patientUltrasoundVM = null;
+        $status = true;
+
+        try
+        {
+            //dd($bloodTestRequest);
+            $patientUltrasoundVM = LabMapper::setLabTestMapper($testRequest);
+            //dd($patientBloodVM);
+            $status = $this->labService->saveUltrasoundTestResults($patientUltrasoundVM);
+
+            //dd($status);
+
+            if($status)
+            {
+
+            }
+        }
+        catch(LabException $labExc)
+        {
+            $errorMsg = $labExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($labExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+    }
+
+    /**
+     * Save scan test results
+     * @param $testRequest
+     * @throws $labException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function saveScanTestResults(Request $testRequest)
+    {
+        $patientScanVM = null;
+        $status = true;
+
+        try
+        {
+            //dd($bloodTestRequest);
+            $patientScanVM = LabMapper::setLabTestMapper($testRequest);
+            //dd($patientBloodVM);
+            $status = $this->labService->saveUltrasoundTestResults($patientScanVM);
 
             //dd($status);
 

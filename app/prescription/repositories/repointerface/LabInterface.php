@@ -29,4 +29,8 @@ interface LabInterface
     public function downloadPatientDocument($documentItemId);
 
     public function saveBloodTestResults(TestResultsViewModel $testResultsVM);
+    public function saveMotionTestResults(TestResultsViewModel $testResultsVM);
+    public function saveUrineTestResults(TestResultsViewModel $testResultsVM);
+    public function saveUltrasoundTestResults(TestResultsViewModel $testResultsVM);
+    public function saveScanTestResults(TestResultsViewModel $testResultsVM);
 }

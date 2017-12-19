@@ -734,6 +734,10 @@ Route::group(['prefix' => 'lab'], function()
         Route::get('rest/patient/{patientId}/labreports', array('as' => 'patient.getlabtestreports', 'uses' => 'LabController@getPatientDocuments'));
 
         Route::post('rest/patient/bloodtestresults', array('as' => 'patient.bloodtestresults', 'uses' => 'LabController@saveBloodTestResults'));
+        Route::post('rest/patient/motiontestresults', array('as' => 'patient.motiontestresults', 'uses' => 'LabController@saveMotionTestResults'));
+        Route::post('rest/patient/urinetestresults', array('as' => 'patient.urinetestresults', 'uses' => 'LabController@saveUrineTestResults'));
+        Route::post('rest/patient/ultrasoundtestresults', array('as' => 'patient.ultrasoundtestresults', 'uses' => 'LabController@saveUltrasoundTestResults'));
+        Route::post('rest/patient/scantestresults', array('as' => 'patient.scantestresults', 'uses' => 'LabController@saveScanTestResults'));
         //Route::get('rest/labreports/{itemId}/report', array('as' => 'patient.downloadreport', 'uses' => 'LabController@downloadPatientDocument'));
 
         //Route::get('rest/api/{labId}/changepassword', array('as' => 'lab.changepassword', 'uses' => 'LabController@editChangePassword'));
