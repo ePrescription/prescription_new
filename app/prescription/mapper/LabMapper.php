@@ -119,4 +119,31 @@ class LabMapper
 
         return $testResultsVM;
     }
+
+    /*public static function setLabTestMapperArr($bloodResults)
+    {
+        $testResultsVM = new TestResultsViewModel();
+
+        $resultsObj = (object) $bloodResults;
+        //dd($resultsObj);
+        $testResultsVM->setPatientId($resultsObj->patientId);
+
+        $testResults = $resultsObj->testResults;
+        //dd($candidateEmployments);
+
+        foreach($testResults as $testResult)
+        {
+            $testResultsVM->setTestResults($testResult);
+        }
+
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        $testResultsVM->setCreatedBy($userName);
+        $testResultsVM->setUpdatedBy($userName);
+        $testResultsVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $testResultsVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $testResultsVM;
+    }*/
 }

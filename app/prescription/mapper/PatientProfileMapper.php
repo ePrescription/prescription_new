@@ -305,6 +305,8 @@ class PatientProfileMapper
         $patientScanVM->setHospitalId($scanObj->hospitalId);*/
         $patientScanVM->setDoctorId(property_exists($scanObj, 'doctorId') ? $scanObj->doctorId : null);
         $patientScanVM->setHospitalId(property_exists($scanObj, 'hospitalId') ? $scanObj->hospitalId : null);
+        $patientScanVM->setExaminationDate(property_exists($scanObj, 'scanDate') ? $scanObj->scanDate : null);
+        $patientScanVM->setExaminationTime(property_exists($scanObj, 'examinationTime') ? $scanObj->examinationTime : null);
         $scanDetails = $scanObj->scanDetails;
         //dd($candidateEmployments);
 
@@ -459,6 +461,8 @@ class PatientProfileMapper
         $patientUrineVM->setHospitalId($examinationObj->hospitalId);*/
         $patientUrineVM->setDoctorId(property_exists($examinationObj, 'doctorId') ? $examinationObj->doctorId : null);
         $patientUrineVM->setHospitalId(property_exists($examinationObj, 'hospitalId') ? $examinationObj->hospitalId : null);
+        $patientUrineVM->setExaminationDate(property_exists($examinationObj, 'examinationDate') ? $examinationObj->examinationDate : null);
+        $patientUrineVM->setExaminationTime(property_exists($examinationObj, 'examinationTime') ? $examinationObj->examinationTime : null);
         $examinationDetails = $examinationObj->urineExaminations;
         //dd($candidateEmployments);
 
@@ -488,6 +492,8 @@ class PatientProfileMapper
         $patientMotionVM->setHospitalId($examinationObj->hospitalId);*/
         $patientMotionVM->setDoctorId(property_exists($examinationObj, 'doctorId') ? $examinationObj->doctorId : null);
         $patientMotionVM->setHospitalId(property_exists($examinationObj, 'hospitalId') ? $examinationObj->hospitalId : null);
+        $patientMotionVM->setExaminationDate(property_exists($examinationObj, 'examinationDate') ? $examinationObj->examinationDate : null);
+        $patientMotionVM->setExaminationTime(property_exists($examinationObj, 'examinationTime') ? $examinationObj->examinationTime : null);
         $examinationDetails = $examinationObj->motionExaminations;
         //dd($candidateEmployments);
 
@@ -517,6 +523,8 @@ class PatientProfileMapper
         $patientBloodVM->setHospitalId($examinationObj->hospitalId);*/
         $patientBloodVM->setDoctorId(property_exists($examinationObj, 'doctorId') ? $examinationObj->doctorId : null);
         $patientBloodVM->setHospitalId(property_exists($examinationObj, 'hospitalId') ? $examinationObj->hospitalId : null);
+        $patientBloodVM->setExaminationDate(property_exists($examinationObj, 'examinationDate') ? $examinationObj->examinationDate : null);
+        $patientBloodVM->setExaminationTime(property_exists($examinationObj, 'examinationTime') ? $examinationObj->examinationTime : null);
         $examinationDetails = $examinationObj->bloodExaminations;
         //dd($candidateEmployments);
 
@@ -545,6 +553,8 @@ class PatientProfileMapper
         //$patientUltraSoundVM->setDoctorId($examinationObj->doctorId);
         $patientUltraSoundVM->setDoctorId(property_exists($examinationObj, 'doctorId') ? $examinationObj->doctorId : null);
         $patientUltraSoundVM->setHospitalId(property_exists($examinationObj, 'hospitalId') ? $examinationObj->hospitalId : null);
+        $patientUltraSoundVM->setExaminationDate(property_exists($examinationObj, 'examinationDate') ? $examinationObj->examinationDate : null);
+        $patientUltraSoundVM->setExaminationTime(property_exists($examinationObj, 'examinationTime') ? $examinationObj->examinationTime : null);
         //$patientUltraSoundVM->setHospitalId($examinationObj->hospitalId);
         $examinationDetails = $examinationObj->ultraSoundExaminations;
         //dd($candidateEmployments);

@@ -33,4 +33,5 @@ interface LabInterface
     public function saveUrineTestResults(TestResultsViewModel $testResultsVM);
     public function saveUltrasoundTestResults(TestResultsViewModel $testResultsVM);
     public function saveScanTestResults(TestResultsViewModel $testResultsVM);
+    //public function saveDentalTestResults(TestResultsViewModel $testResultsVM);
 }

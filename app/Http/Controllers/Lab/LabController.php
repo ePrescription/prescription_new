@@ -1096,6 +1096,7 @@ class LabController extends Controller
      * @author Baskar
      */
 
+    //public function saveBloodTestResults()
     public function saveBloodTestResults(Request $testRequest)
     {
         $patientBloodVM = null;
@@ -1103,9 +1104,23 @@ class LabController extends Controller
 
         try
         {
+
+            /*$bloodResults = array(
+                "patientId"=> 57,
+                "testResults" => array(
+                    0=>array(
+                        "examinationId" => 98,
+                        "examinationValue" => "120"
+                    ),
+                    1=>array(
+                        "examinationId" => 100,
+                        "examinationValue" => "Sugar"
+                    )
+                )
+            );*/
             //dd($bloodTestRequest);
             $patientBloodVM = LabMapper::setLabTestMapper($testRequest);
-            //dd($patientBloodVM);
+            //dd($patientBloodVM->getPatientId());
             $status = $this->labService->saveBloodTestResults($patientBloodVM);
 
             //dd($status);

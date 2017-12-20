@@ -2886,7 +2886,8 @@ class HospitalService {
         {
             DB::transaction(function() use ($patientScanVM, &$status)
             {
-                $status = $this->hospitalRepo->savePatientScanDetails($patientScanVM);
+                //$status = $this->hospitalRepo->savePatientScanDetails($patientScanVM);
+                $status = $this->hospitalRepo->savePatientScanDetailsNew($patientScanVM);
             });
 
         }
@@ -2954,7 +2955,8 @@ class HospitalService {
         {
             DB::transaction(function() use ($patientUrineVM, &$status)
             {
-                $status = $this->hospitalRepo->savePatientUrineTests($patientUrineVM);
+                //$status = $this->hospitalRepo->savePatientUrineTests($patientUrineVM);
+                $status = $this->hospitalRepo->savePatientUrineTestsNew($patientUrineVM);
             });
 
         }
@@ -2988,7 +2990,8 @@ class HospitalService {
         {
             DB::transaction(function() use ($patientMotionVM, &$status)
             {
-                $status = $this->hospitalRepo->savePatientMotionTests($patientMotionVM);
+                //$status = $this->hospitalRepo->savePatientMotionTests($patientMotionVM);
+                $status = $this->hospitalRepo->savePatientMotionTestsNew($patientMotionVM);
             });
 
         }
@@ -3022,7 +3025,8 @@ class HospitalService {
         {
             DB::transaction(function() use ($patientBloodVM, &$status)
             {
-                $status = $this->hospitalRepo->savePatientBloodTests($patientBloodVM);
+                //$status = $this->hospitalRepo->savePatientBloodTests($patientBloodVM);
+                $status = $this->hospitalRepo->savePatientBloodTestsNew($patientBloodVM);
             });
 
         }
@@ -3056,7 +3060,8 @@ class HospitalService {
         {
             DB::transaction(function() use ($patientUltraSoundVM, &$status)
             {
-                $status = $this->hospitalRepo->savePatientUltraSoundTests($patientUltraSoundVM);
+                //$status = $this->hospitalRepo->savePatientUltraSoundTests($patientUltraSoundVM);
+                $status = $this->hospitalRepo->savePatientUltraSoundTestsNew($patientUltraSoundVM);
             });
 
         }

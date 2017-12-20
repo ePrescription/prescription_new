@@ -2736,7 +2736,7 @@ class DoctorApiController extends Controller
         {
             //dd($personalHistoryRequest->all());
             $patientBloodVM = PatientProfileMapper::setPatientBloodExamination($examinationRequest);
-            //dd($patientMotionVM);
+            //dd($patientBloodVM);
             $status = $this->hospitalService->savePatientBloodTests($patientBloodVM);
 
             if($status)

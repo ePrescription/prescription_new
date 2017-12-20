@@ -507,7 +507,7 @@ Route::group(['prefix' => 'doctor'], function()
 
         //Route::group(array('middleware' => ['prescription.tests']), function()
         //{
-            Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorApiController@savePatientBloodTests'));
+        Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorApiController@savePatientBloodTests'));
 
         //});
 
@@ -734,6 +734,7 @@ Route::group(['prefix' => 'lab'], function()
         Route::get('rest/patient/{patientId}/labreports', array('as' => 'patient.getlabtestreports', 'uses' => 'LabController@getPatientDocuments'));
 
         Route::post('rest/patient/bloodtestresults', array('as' => 'patient.bloodtestresults', 'uses' => 'LabController@saveBloodTestResults'));
+        //Route::get('rest/patient/bloodtestresults', array('as' => 'patient.bloodtestresults', 'uses' => 'LabController@saveBloodTestResults'));
         Route::post('rest/patient/motiontestresults', array('as' => 'patient.motiontestresults', 'uses' => 'LabController@saveMotionTestResults'));
         Route::post('rest/patient/urinetestresults', array('as' => 'patient.urinetestresults', 'uses' => 'LabController@saveUrineTestResults'));
         Route::post('rest/patient/ultrasoundtestresults', array('as' => 'patient.ultrasoundtestresults', 'uses' => 'LabController@saveUltrasoundTestResults'));

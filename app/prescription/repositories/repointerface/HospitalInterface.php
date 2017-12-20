@@ -126,8 +126,11 @@ interface HospitalInterface {
 
     public function getPregnancyDetails($patientId, $pregnancyDate = null);
     public function savePatientPregnancyDetails(PatientPregnancyViewModel $patientPregnancyVM);
+
     public function getPatientScanDetails($patientId, $scanDate);
     public function savePatientScanDetails(PatientScanViewModel $patientScanVM);
+    public function savePatientScanDetailsNew(PatientScanViewModel $patientScanVM);
+
     public function getPatientSymptoms($patientId, $symptomDate);
     public function savePatientSymptoms(PatientSymptomsViewModel $patientSymVM);
 
@@ -136,16 +139,19 @@ interface HospitalInterface {
 
     public function getPatientUrineTests($patientId, $urineTestDate);
     public function savePatientUrineTests(PatientUrineExaminationViewModel $patientUrineVM);
+    public function savePatientUrineTestsNew(PatientUrineExaminationViewModel $patientUrineVM);
 
     public function getPatientMotionTests($patientId, $motionTestDate);
     public function savePatientMotionTests(PatientUrineExaminationViewModel $patientMotionVM);
+    public function savePatientMotionTestsNew(PatientUrineExaminationViewModel $patientMotionVM);
 
     public function getPatientBloodTests($patientId, $bloodTestDate);
     public function savePatientBloodTests(PatientUrineExaminationViewModel $patientBloodVM);
-    public function savePatientBloodTessNew(PatientUrineExaminationViewModel $patientBloodVM);
+    public function savePatientBloodTestsNew(PatientUrineExaminationViewModel $patientBloodVM);
 
     public function getPatientUltraSoundTests($patientId, $ultraSoundDate);
     public function savePatientUltraSoundTests(PatientUrineExaminationViewModel $patientUltraSoundVM);
+    public function savePatientUltraSoundTestsNew(PatientUrineExaminationViewModel $patientUltraSoundVM);
 
     public function getPatientDentalTests($patientId, $dentalDate);
     public function savePatientDentalTests(PatientDentalViewModel $patientDentalVM);
