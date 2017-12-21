@@ -14,9 +14,9 @@
         form.display label.control-label{ text-align:left; }
     </style>
     @if(Session::get('LoginUserType')=="lab")
-        {{print_r($bloodTests)}}
 
-        <form action="{{URL::to('/')}}/lab/rest/patient/bloodtestresults" role="form" method="POST" class="form-horizontal ">
+
+        <form action="{{URL::to('/')}}/lab/rest/patient/bloodtestresults" role="form" method="POST" class="display form-horizontal">
 
             @if(count($bloodTests)>0)
                 <h4 class="m-t-0 m-b-30">Blood Test Details</h4>
@@ -31,30 +31,42 @@
                         @endforeach
                     </div>
                     <div class="form-group col-sm-12">
+
+
                         <?php $i=0; ?>
+                        <table id="datatable" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Reading</th>
+                                <th>Default</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                         @foreach($recentTest as $recentTestValue)
-                            <div class="row">
+                            <tr>
                             @if($recentTestValue->isValueSet==1)
-                                <div class="col-sm-4" >
+                                <td class="col-sm-4" >
                                     {{$recentTestValue->examinationName}}
-                                </div>
-                                <div class="col-sm-4" >
+                                </td>
+                                <td class="col-sm-4" >
 
 
 
-                                    <input type="hidden" name="testResults[{{$i}}]['examinationId']" value="{{$recentTestValue->patientExaminationItemId}}">
-                                    <input type="text" name="testResults[{{$i}}]['examinationValue']" value="{{$recentTestValue->Reading}}">
+                                    <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
+                                    <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->Reading}}">
 
-                                </div>
-                                <div class="col-sm-4" >
+                                </td>
+                                <td class="col-sm-4" >
                                     {{$recentTestValue->examinationDefaultValue}}
                                     <?php /* ?> {{$recentTestValue->ReadingStatus}} <?php */ ?>
-                                </div>
+                                </td>
                             @endif
-                            </div>
+                            </tr>
                             <?php $i++; ?>
                         @endforeach
-
+                            </tbody>
+                        </table>
                     </div>
                 @endforeach
 
@@ -74,6 +86,7 @@
     @else
     <form role="form" method="POST" class="display form-horizontal">
 
+
         @if(count($bloodTests)>0)
             <h4 class="m-t-0 m-b-30">Blood Test Details</h4>
             @foreach($bloodTests as $recentTest)
@@ -87,28 +100,49 @@
                     @endforeach
                 </div>
                 <div class="form-group col-sm-12">
-                    @foreach($recentTest as $recentTestValue)
-                        @if($recentTestValue->isValueSet==1)
-                            <div class="col-sm-6" style="width:50%;float:left;">
-                                {{$recentTestValue->examinationName}}
-                            </div>
-                        @endif
-                    @endforeach
+
+
+                    <?php $i=0; ?>
+                    <table id="datatable" class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Reading</th>
+                            <th>Default</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($recentTest as $recentTestValue)
+                            <tr>
+                                @if($recentTestValue->isValueSet==1)
+                                    <td class="col-sm-4" >
+                                        {{$recentTestValue->examinationName}}
+                                    </td>
+                                    <td class="col-sm-4" >
+                                        {{$recentTestValue->Reading}}
+                                    </td>
+                                    <td class="col-sm-4" >
+                                        {{$recentTestValue->examinationDefaultValue}}
+                                        <?php /* ?> {{$recentTestValue->ReadingStatus}} <?php */ ?>
+                                    </td>
+                                @endif
+                            </tr>
+                            <?php $i++; ?>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
             @endforeach
+
+            <div class="col-sm-12 form-group">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-6">
+                    <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
+                    <input type="submit" name="addblood" value="Save Report" class="btn btn-success"/>
+                </div>
+            </div>
         @endif
 
-        <?php /* ?>
-        <?php $i=0; ?>
-        @foreach($bloodTests as $bloodTestsValue)
-            @if($bloodTestsValue->isValueSet==1)
-            <div class="form-group col-sm-6">
-                <label class="col-sm-12 control-label">{{$bloodTestsValue->examinationName}}</label>
-            </div>
-            <?php $i++; ?>
-            @endif
-        @endforeach
-        <?php */ ?>
 
     </form>
     @endif

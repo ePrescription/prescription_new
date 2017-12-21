@@ -29,6 +29,9 @@ use App\Http\Requests\LabReportRequest;
 use Exception;
 use Log;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
 use Mail;
 use Storage;
 use Crypt;

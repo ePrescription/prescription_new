@@ -13,6 +13,7 @@ use App\Http\ViewModels\PatientLabDocumentsViewModel;
 use App\Http\ViewModels\TestResultsViewModel;
 use App\prescription\model\entities\Lab;
 use App\prescription\model\entities\PatientBloodExamination;
+use App\prescription\model\entities\PatientBloodExaminationItems;
 use App\prescription\model\entities\PatientDocumentItems;
 use App\prescription\model\entities\PatientDocuments;
 use App\prescription\model\entities\PatientMotionExamination;
@@ -521,18 +522,19 @@ class LabImpl implements LabInterface
                 //dd('Inside patient');
                 foreach($bloodResults as $bloodResult)
                 {
+                    //dd($bloodResult);
                     $examinationId = $bloodResult->examinationId;
                     $examinationValue = $bloodResult->examinationValue;
                     //dd($examinationId);
 
-                    $patientBloodExamination = PatientBloodExamination::find($examinationId);
+                    $patientBloodExaminationItem = PatientBloodExaminationItems::find($examinationId);
                     //dd($patientBloodExamination);
-                    $patientBloodExamination->test_readings = $examinationValue;
-                    $patientBloodExamination->test_reading_status = 1;
-                    $patientBloodExamination->modified_by = $testResultsVM->getUpdatedBy();
-                    $patientBloodExamination->updated_at = $testResultsVM->getUpdatedAt();
+                    $patientBloodExaminationItem->test_readings = $examinationValue;
+                    $patientBloodExaminationItem->test_reading_status = 1;
+                    $patientBloodExaminationItem->modified_by = $testResultsVM->getUpdatedBy();
+                    $patientBloodExaminationItem->updated_at = $testResultsVM->getUpdatedAt();
 
-                    $patientBloodExamination->save();
+                    $patientBloodExaminationItem->save();
                 }
             }
             else
@@ -543,12 +545,12 @@ class LabImpl implements LabInterface
         catch(QueryException $queryEx)
         {
             $status = false;
-            throw new LabException(null, ErrorEnum::PATIENT_BLOOD_TEST_RESULTS_ERROR, $queryEx);
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $queryEx);
         }
         catch(Exception $exc)
         {
             $status = false;
-            throw new LabException(null, ErrorEnum::PATIENT_BLOOD_TEST_RESULTS_ERROR, $exc);
+            throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $exc);
         }
 
         return $status;
