@@ -1952,7 +1952,7 @@ class DoctorController extends Controller
     public function userlogin(Request $loginRequest)
     {
         $loginInfo = $loginRequest->all();
-        dd($loginInfo);
+        //dd($loginInfo);
         //$userSession = null;
 
         try

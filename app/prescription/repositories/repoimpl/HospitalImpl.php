@@ -1668,13 +1668,14 @@ class HospitalImpl implements HospitalInterface{
             })->setBindings(array_merge($doctorQuery->getBindings(), array($hospitalId)));*/
 
             $bloodExamQuery = DB::table('patient_blood_examination as pbe')->where('pbe.hospital_id', '=', $hospitalId);
+            $bloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id','=','pbe.id');
             $bloodExamQuery->whereDate('pbe.created_at', '=', $currentDate);
             $bloodExamQuery->where(function($bloodExamQuery){
                 $bloodExamQuery->where(DB::raw('TIME(pbe.created_at)'), '>=', '07:00:00');
                 $bloodExamQuery->where(DB::raw('TIME(pbe.created_at)'), '<=', '19:00:00');
             });
 
-            $bloodExamQuery->select(DB::raw("SUM(pbe.fees) as bloodTestAmount"));
+            $bloodExamQuery->select(DB::raw("SUM(pbei.fees) as bloodTestAmount"));
             //dd($bloodExamQuery->toSql());
 
             $bloodTestFees = $bloodExamQuery->get();
@@ -1682,50 +1683,54 @@ class HospitalImpl implements HospitalInterface{
             //dd($bloodTestFees);
 
             $motionExamQuery = DB::table('patient_motion_examination as pme')->where('pme.hospital_id', '=', $hospitalId);
+            $motionExamQuery->join('patient_motion_examination_item as pmei','pmei.patient_motion_examination_id','=','pme.id');
             $motionExamQuery->whereDate('pme.created_at', '=', $currentDate);
             $motionExamQuery->where(function($motionExamQuery){
                 $motionExamQuery->where(DB::raw('TIME(pme.created_at)'), '>=', '07:00:00');
                 $motionExamQuery->where(DB::raw('TIME(pme.created_at)'), '<=', '19:00:00');
             });
 
-            $motionExamQuery->select(DB::raw("SUM(pme.fees) as motionTestAmount"));
+            $motionExamQuery->select(DB::raw("SUM(pmei.fees) as motionTestAmount"));
             //dd($bloodExamQuery->toSql());
             $motionTestFees = $motionExamQuery->get();
             $motionTotalFees = $motionTestFees[0]->motionTestAmount;
 
 
             $urineExamQuery = DB::table('patient_urine_examination as pue')->where('pue.hospital_id', '=', $hospitalId);
+            $urineExamQuery->join('patient_urine_examination_item as puei','puei.patient_urine_examination_id','=','pue.id');
             $urineExamQuery->whereDate('pue.created_at', '=', $currentDate);
             $urineExamQuery->where(function($urineExamQuery){
                 $urineExamQuery->where(DB::raw('TIME(pue.created_at)'), '>=', '07:00:00');
                 $urineExamQuery->where(DB::raw('TIME(pue.created_at)'), '<=', '19:00:00');
             });
 
-            $urineExamQuery->select(DB::raw("SUM(pue.fees) as urineTestAmount"));
+            $urineExamQuery->select(DB::raw("SUM(puei.fees) as urineTestAmount"));
             //dd($bloodExamQuery->toSql());
             $urineTestFees = $urineExamQuery->get();
             $urineTotalFees = $urineTestFees[0]->urineTestAmount;
 
             $scanExamQuery = DB::table('patient_scan as ps')->where('ps.hospital_id', '=', $hospitalId);
+            $scanExamQuery->join('patient_scan_item as psi','psi.patient_scan_id','=','ps.id');
             $scanExamQuery->whereDate('ps.created_at', '=', $currentDate);
             $scanExamQuery->where(function($scanExamQuery){
                 $scanExamQuery->where(DB::raw('TIME(ps.created_at)'), '>=', '07:00:00');
                 $scanExamQuery->where(DB::raw('TIME(ps.created_at)'), '<=', '19:00:00');
             });
 
-            $scanExamQuery->select(DB::raw("SUM(ps.fees) as scanTestAmount"));
+            $scanExamQuery->select(DB::raw("SUM(psi.fees) as scanTestAmount"));
 
             $scanTestFees = $scanExamQuery->get();
             $scanTotalFees = $scanTestFees[0]->scanTestAmount;
 
             $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus')->where('pus.hospital_id', '=', $hospitalId);
+            $ultraSoundExamQuery->join('patient_ultra_sound_item as pusi','pusi.patient_ultra_sound_id','=','pus.id');
             $ultraSoundExamQuery->whereDate('pus.created_at', '=', $currentDate);
             $ultraSoundExamQuery->where(function($ultraSoundExamQuery){
                 $ultraSoundExamQuery->where(DB::raw('TIME(pus.created_at)'), '>=', '07:00:00');
                 $ultraSoundExamQuery->where(DB::raw('TIME(pus.created_at)'), '<=', '19:00:00');
             });
 
-            $ultraSoundExamQuery->select(DB::raw("SUM(pus.fees) as ultraSoundTestAmount"));
+            $ultraSoundExamQuery->select(DB::raw("SUM(pusi.fees) as ultraSoundTestAmount"));
 
             $ultraSoundTestFees = $ultraSoundExamQuery->get();
             $ultraSoundTotalFees = $ultraSoundTestFees[0]->ultraSoundTestAmount;
@@ -4985,8 +4990,8 @@ class HospitalImpl implements HospitalInterface{
                 $urineTestQuery->orderBY('pue.examination_time', 'DESC');
                 $urineTestQuery->select('pue.id as patientExaminationId', 'pue.patient_id', 'pue.hospital_id',
                     'ue.id as examinationId',
-                    'ue.examination_name as examinationName', 'pue.examination_date as examinationDate',
-                    'puei.id as patientExaminationItemId',
+                    'ue.examination_name as examinationName','ue.normal_default_values as examinationDefaultValue', 'pue.examination_date as examinationDate',
+                    'puei.id as patientExaminationItemId','puei.test_readings as Reading','puei.test_reading_status as ReadingStatus',
                     'puei.is_value_set as isValueSet', 'pue.examination_time');
 
                 $urineTests = $urineTestQuery->get();
@@ -5097,8 +5102,8 @@ class HospitalImpl implements HospitalInterface{
                 $motionTestQuery->where('pmei.is_value_set', '=', 1);
                 $motionTestQuery->orderBy('pme.examination_time', 'DESC');
                 $motionTestQuery->select('pme.id as patientExaminationId', 'pme.patient_id', 'pme.hospital_id', 'me.id as examinationId',
-                    'me.examination_name as examinationName', 'pme.examination_date as examinationDate',
-                    'pmei.id as patientExaminationItemId', 'pmei.is_value_set as isValueSet',
+                    'me.examination_name as examinationName', 'me.normal_default_values as examinationDefaultValue', 'pme.examination_date as examinationDate',
+                    'pmei.id as patientExaminationItemId', 'pmei.is_value_set as isValueSet','pmei.test_readings as Reading','pmei.test_reading_status as ReadingStatus',
                     'pme.examination_time');
 
                 $motionTests = $motionTestQuery->get();
@@ -5279,8 +5284,8 @@ class HospitalImpl implements HospitalInterface{
                 $latestBloodExamQuery->orderBy('pbe.examination_time', 'DESC');
                 //$latestBloodExamQuery->groupBy('pbe.id');
                 $latestBloodExamQuery->select('pbe.id as patientExaminationId', 'pbe.patient_id', 'pbe.hospital_id',
-                    'be.id as examinationId','be.examination_name as examinationName', 'pbe.examination_date as examinationDate',
-                    'pbe.examination_time', 'pbei.id as patientExaminationItemId',
+                    'be.id as examinationId','be.examination_name as examinationName','be.default_normal_values as examinationDefaultValue', 'pbe.examination_date as examinationDate',
+                    'pbe.examination_time', 'pbei.id as patientExaminationItemId','pbei.test_readings as Reading','pbei.test_reading_status as ReadingStatus',
                     'pbei.is_value_set as isValueSet');
 
                 $bloodTests = $latestBloodExamQuery->get();
@@ -6922,7 +6927,7 @@ class HospitalImpl implements HospitalInterface{
                 });
             });
             $latestScanQuery->where('ps.patient_id', '=', $patientId);
-            $latestScanQuery->where('ps.is_value_set', '=', 1);
+            $latestScanQuery->where('psi.is_value_set', '=', 1);
             $latestScanQuery->select('ps.id as examinationId', 'psi.id as examinationItemId',
                 'ps.patient_id', 's.scan_name', 'ps.scan_date');
             //dd($latestScanQuery->toSql());
@@ -6983,7 +6988,7 @@ class HospitalImpl implements HospitalInterface{
                 });
             });
             $latestUltrasoundQuery->where('pus.patient_id', '=', $patientId);
-            $latestUltrasoundQuery->where('pus.is_value_set', '=', 1);
+            $latestUltrasoundQuery->where('pusi.is_value_set', '=', 1);
             $latestUltrasoundQuery->select('pus.id as examinationId', 'pusi.id as examinationItemId',
                 'pus.patient_id', 'us.examination_name', 'pus.examination_date');
             $latestUltrasound = $latestUltrasoundQuery->get();
@@ -7004,7 +7009,7 @@ class HospitalImpl implements HospitalInterface{
                 });
             });
             $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
-            $latestUrineExamQuery->where('pue.is_value_set', '=', 1);
+            $latestUrineExamQuery->where('puei.is_value_set', '=', 1);
             $latestUrineExamQuery->select('pue.id as examinationId', 'puei.id as examinationItemId',
                 'pue.patient_id', 'ue.examination_name', 'pue.examination_date');
             $latestUrineExaminations = $latestUrineExamQuery->get();
@@ -7025,8 +7030,8 @@ class HospitalImpl implements HospitalInterface{
                 });
             });
             $latestMotionExamQuery->where('pme.patient_id', '=', $patientId);
-            $latestMotionExamQuery->where('pme.is_value_set', '=', 1);
-            $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.examinationItemId',
+            $latestMotionExamQuery->where('pmei.is_value_set', '=', 1);
+            $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.id as examinationItemId',
                 'pme.patient_id', 'me.examination_name', 'pme.examination_date');
             $latestMotionExaminations = $latestMotionExamQuery->get();
 
