@@ -160,6 +160,7 @@ $profile_menu="0";
                                                                                         <td>{{$patientBloodTestValue->examination_date}} </td>
                                                                                         <td>
                                                                                             <input type="hidden" class="form-control" name="labTests[bloodTests][{{$i}}][id]" value="{{$patientBloodTestValue->id}}" required="required" />
+                                                                                            <input type="hidden" class="form-control" name="labTests[bloodTests][{{$i}}][item_id]" value="{{$patientBloodTestValue->examination_item_id}}" required="required" />
                                                                                             <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[bloodTests][{{$i}}][fees]" value="0" required="required" />
                                                                                         </td>
                                                                                     </tr>
@@ -192,6 +193,7 @@ $profile_menu="0";
                                                                                             <td>{{$patientUrineTestValue->examination_date}} </td>
                                                                                             <td>
                                                                                                 <input type="hidden" class="form-control" name="labTests[urineTests][{{$i}}][id]" value="{{$patientUrineTestValue->id}}" required="required" />
+                                                                                                <input type="hidden" class="form-control" name="labTests[urineTests][{{$i}}][item_id]" value="{{$patientUrineTestValue->examination_item_id}}" required="required" />
                                                                                                 <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[urineTests][{{$i}}][fees]" value="0" required="required" />
                                                                                             </td>
                                                                                         </tr>
@@ -225,6 +227,7 @@ $profile_menu="0";
                                                                                             <td>{{$patientMotionTestValue->examination_date}} </td>
                                                                                             <td>
                                                                                                 <input type="hidden" class="form-control" name="labTests[motionTests][{{$i}}][id]" value="{{$patientMotionTestValue->id}}" required="required" />
+                                                                                                <input type="hidden" class="form-control" name="labTests[motionTests][{{$i}}][item_id]" value="{{$patientMotionTestValue->examination_item_id}}" required="required" />
                                                                                                 <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[motionTests][{{$i}}][fees]" value="0" required="required" />
                                                                                             </td>
                                                                                         </tr>
@@ -258,6 +261,7 @@ $profile_menu="0";
                                                                                             <td>{{$patientScanTestValue->scan_date}} </td>
                                                                                             <td>
                                                                                                 <input type="hidden" class="form-control" name="labTests[scanTests][{{$i}}][id]" value="{{$patientScanTestValue->id}}" required="required" />
+                                                                                                <input type="hidden" class="form-control" name="labTests[scanTests][{{$i}}][item_id]" value="{{$patientScanTestValue->examination_item_id}}" required="required" />
                                                                                                 <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[scanTests][{{$i}}][fees]" value="0" required="required" />
                                                                                             </td>
                                                                                         </tr>
@@ -289,6 +293,7 @@ $profile_menu="0";
                                                                                             <td>{{$patientUltraTestValue->examination_date}} </td>
                                                                                             <td>
                                                                                                 <input type="hidden" class="form-control" name="labTests[ultraSoundTests][{{$i}}][id]" value="{{$patientUltraTestValue->id}}" required="required" />
+                                                                                                <input type="hidden" class="form-control" name="labTests[ultraSoundTests][{{$i}}][item_id]" value="{{$patientUltraTestValue->examination_item_id}}" required="required" />
                                                                                                 <input id="fee" type="number" min="0" class="form-control testprice" name="labTests[ultraSoundTests][{{$i}}][fees]" value="0" required="required" />
                                                                                             </td>
                                                                                         </tr>

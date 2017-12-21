@@ -305,7 +305,7 @@ class PatientProfileMapper
         $patientScanVM->setHospitalId($scanObj->hospitalId);*/
         $patientScanVM->setDoctorId(property_exists($scanObj, 'doctorId') ? $scanObj->doctorId : null);
         $patientScanVM->setHospitalId(property_exists($scanObj, 'hospitalId') ? $scanObj->hospitalId : null);
-        $patientScanVM->setExaminationDate(property_exists($scanObj, 'scanDate') ? $scanObj->scanDate : null);
+        $patientScanVM->setExaminationDate(property_exists($scanObj, 'examinationDate') ? $scanObj->examinationDate : null);
         $patientScanVM->setExaminationTime(property_exists($scanObj, 'examinationTime') ? $scanObj->examinationTime : null);
         $scanDetails = $scanObj->scanDetails;
         //dd($candidateEmployments);

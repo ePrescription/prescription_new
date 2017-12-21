@@ -4741,7 +4741,7 @@ class HospitalImpl implements HospitalInterface{
 
                 $scanTestQuery = DB::table('patient_scan as ps');
                 $scanTestQuery->join('patient_scan_item as psi', 'psi.patient_scan_id', '=', 'ps.id');
-                $scanTestQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
+                $scanTestQuery->join('scans as s', 's.id', '=', 'psi.scan_id');
                 $scanTestQuery->where('ps.patient_id', '=', $patientId);
                 $scanTestQuery->where('ps.scan_date', '=', $scanDate);
                 $scanTestQuery->where('ps.examination_time', '=', $time->examination_time);
@@ -8263,6 +8263,7 @@ class HospitalImpl implements HospitalInterface{
 
         try
         {
+            //dd($patientScanVM);
             $patientId = $patientScanVM->getPatientId();
             $doctorId = $patientScanVM->getDoctorId();
             //dd($doctorId);
@@ -8331,7 +8332,7 @@ class HospitalImpl implements HospitalInterface{
                     //$examinationName = $examination->examinationName;
                     //$pregnancyDate = $pregnancy->pregnancyDate;
                     $scanExaminationItems = new PatientScanExaminationItems();
-                    $scanExaminationItems->scan_id = $examination->examinationId;
+                    $scanExaminationItems->scan_id = $examination->scanId;
                     //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
 
                     //$dentalExaminationItems->dental_examination_name = property_exists($examination->dentalExaminationName, 'dentalExaminationName') ? $examination->dentalExaminationName : null;
