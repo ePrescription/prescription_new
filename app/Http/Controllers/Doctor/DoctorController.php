@@ -6863,7 +6863,7 @@ class DoctorController extends Controller
         }
 
         //return $responseJson;
-        return view('portal.hospital-patient-lab-urine-tests-detail',compact('urineTests'));
+        return view('portal.hospital-patient-lab-urine-tests-detail',compact('urineTests','patientId'));
     }
 
     /**
@@ -6920,7 +6920,7 @@ class DoctorController extends Controller
         }
 
         //return $responseJson;
-        return view('portal.hospital-patient-lab-motion-tests-detail',compact('motionTests'));
+        return view('portal.hospital-patient-lab-motion-tests-detail',compact('motionTests','patientId'));
     }
 
     /**

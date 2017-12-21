@@ -17,9 +17,11 @@ use App\prescription\model\entities\PatientBloodExaminationItems;
 use App\prescription\model\entities\PatientDocumentItems;
 use App\prescription\model\entities\PatientDocuments;
 use App\prescription\model\entities\PatientMotionExamination;
+use App\prescription\model\entities\PatientMotionExaminationItems;
 use App\prescription\model\entities\PatientScanExamination;
 use App\prescription\model\entities\PatientUltrasoundExamination;
 use App\prescription\model\entities\PatientUrineExamination;
+use App\prescription\model\entities\PatientUrineExaminationItems;
 use App\prescription\repositories\repointerface\LabInterface;
 use App\prescription\utilities\Exception\HospitalException;
 use App\prescription\utilities\Exception\LabException;
@@ -588,14 +590,14 @@ class LabImpl implements LabInterface
                     $examinationValue = $motionResult->examinationValue;
                     //dd($examinationId);
 
-                    $patientMotionExamination = PatientMotionExamination::find($examinationId);
+                    $patientMotionExaminationItems = PatientMotionExaminationItems::find($examinationId);
                     //dd($patientBloodExamination);
-                    $patientMotionExamination->test_readings = $examinationValue;
-                    $patientMotionExamination->test_reading_status = 1;
-                    $patientMotionExamination->modified_by = $testResultsVM->getUpdatedBy();
-                    $patientMotionExamination->updated_at = $testResultsVM->getUpdatedAt();
+                    $patientMotionExaminationItems->test_readings = $examinationValue;
+                    $patientMotionExaminationItems->test_reading_status = 1;
+                    $patientMotionExaminationItems->modified_by = $testResultsVM->getUpdatedBy();
+                    $patientMotionExaminationItems->updated_at = $testResultsVM->getUpdatedAt();
 
-                    $patientMotionExamination->save();
+                    $patientMotionExaminationItems->save();
                 }
             }
             else
@@ -649,14 +651,14 @@ class LabImpl implements LabInterface
                     $examinationValue = $urineResult->examinationValue;
                     //dd($examinationId);
 
-                    $patientUrineExamination = PatientUrineExamination::find($examinationId);
+                    $patientUrineExaminationItems = PatientUrineExaminationItems::find($examinationId);
                     //dd($patientBloodExamination);
-                    $patientUrineExamination->test_readings = $examinationValue;
-                    $patientUrineExamination->test_reading_status = 1;
-                    $patientUrineExamination->modified_by = $testResultsVM->getUpdatedBy();
-                    $patientUrineExamination->updated_at = $testResultsVM->getUpdatedAt();
+                    $patientUrineExaminationItems->test_readings = $examinationValue;
+                    $patientUrineExaminationItems->test_reading_status = 1;
+                    $patientUrineExaminationItems->modified_by = $testResultsVM->getUpdatedBy();
+                    $patientUrineExaminationItems->updated_at = $testResultsVM->getUpdatedAt();
 
-                    $patientUrineExamination->save();
+                    $patientUrineExaminationItems->save();
                 }
             }
             else

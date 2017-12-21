@@ -14,44 +14,142 @@
     <style>
         form.display label.control-label{ text-align:left; }
     </style>
-    <form role="form" method="POST" class="display form-horizontal">
+    @if(Session::get('LoginUserType')=="lab")
 
-        @if(count($motionTests)>0)
-            <h4 class="m-t-0 m-b-30">Motion Test Details</h4>
-            @foreach($motionTests as $recentTest)
-                <?php $displaySet=0; ?>
-                <div class="form-group">
-                    @foreach($recentTest as $recentTestDate)
-                        @if($displaySet==0)
-                            <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
-                            <?php $displaySet=1; ?>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="form-group col-sm-12">
-                    @foreach($recentTest as $recentTestValue)
-                        @if($recentTestValue->isValueSet==1)
-                        <div class="col-sm-6" style="width:50%;float:left;">
-                            {{$recentTestValue->examinationName}}
+        <form action="{{URL::to('/')}}/lab/rest/patient/motiontestresults" role="form" method="POST" class="display form-horizontal">
+
+            @if(count($motionTests)>0)
+                <h4 class="m-t-0 m-b-30">Motion Test Details</h4>
+                @foreach($motionTests as $recentTest)
+                    <?php $displaySet=0; ?>
+                    <div class="form-group">
+                        @foreach($recentTest as $recentTestDate)
+                            @if($displaySet==0)
+                                <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
+                                <?php $displaySet=1; ?>
+                            @endif
+                        @endforeach
+                    </div>
+                    <div class="form-group col-sm-12">
+
+
+                        <?php $i=0; ?>
+                        <table id="datatable" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Reading</th>
+                                <th>Default</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($recentTest as $recentTestValue)
+                                <tr>
+                                    @if($recentTestValue->isValueSet==1)
+                                        <td class="col-sm-4" >
+                                            {{$recentTestValue->examinationName}}
+                                        </td>
+                                        <td class="col-sm-4" >
+
+
+                                            @if($recentTestValue->ReadingStatus==1)
+                                                {{$recentTestValue->Reading}}
+                                            @else
+                                                <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
+                                                <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->Reading}}">
+                                            @endif
+                                        </td>
+                                        <td class="col-sm-4" >
+                                            {{$recentTestValue->examinationDefaultValue}}
+                                            <?php /* ?> {{$recentTestValue->ReadingStatus}} <?php */ ?>
+                                        </td>
+                                    @endif
+                                </tr>
+                                <?php $i++; ?>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endforeach
+                @if($recentTestValue->ReadingStatus==1)
+
+                @else
+
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-6">
+                            <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
+                            <input type="submit" name="addmotion" value="Save Report" class="btn btn-success"/>
                         </div>
-                        @endif
-                    @endforeach
-                </div>
-            @endforeach
-        @endif
+                    </div>
 
-        <?php /* ?>
-        <?php $i=0; ?>
-        @foreach($motionTests as $motionTestsValue)
-            @if($motionTestsValue->isValueSet==1)
-            <div class="form-group col-sm-6">
-                <label class="col-sm-12 control-label">{{$motionTestsValue->examinationName}}</label>
-            </div>
-            <?php $i++; ?>
+                @endif
+
             @endif
-        @endforeach
-        <?php */ ?>
-    </form>
+
+
+        </form>
+
+
+    @else
+
+        <form role="form" method="POST" class="display form-horizontal">
+
+
+            @if(count($motionTests)>0)
+                <h4 class="m-t-0 m-b-30">Motion Test Details</h4>
+                @foreach($motionTests as $recentTest)
+                    <?php $displaySet=0; ?>
+                    <div class="form-group">
+                        @foreach($recentTest as $recentTestDate)
+                            @if($displaySet==0)
+                                <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
+                                <?php $displaySet=1; ?>
+                            @endif
+                        @endforeach
+                    </div>
+                    <div class="form-group col-sm-12">
+
+
+                        <?php $i=0; ?>
+                        <table id="datatable" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Reading</th>
+                                <th>Default</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($recentTest as $recentTestValue)
+                                <tr>
+                                    @if($recentTestValue->isValueSet==1)
+                                        <td class="col-sm-4" >
+                                            {{$recentTestValue->examinationName}}
+                                        </td>
+                                        <td class="col-sm-4" >
+                                            {{$recentTestValue->Reading}}
+                                        </td>
+                                        <td class="col-sm-4" >
+                                            {{$recentTestValue->examinationDefaultValue}}
+                                            <?php /* ?> {{$recentTestValue->ReadingStatus}} <?php */ ?>
+                                        </td>
+                                    @endif
+                                </tr>
+                                <?php $i++; ?>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endforeach
+
+            @endif
+
+
+        </form>
+
+
+    @endif
 
 </div> <!-- panel-body -->
 </div> <!-- panel -->

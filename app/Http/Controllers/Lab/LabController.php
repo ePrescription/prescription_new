@@ -1131,11 +1131,11 @@ class LabController extends Controller
             //lab/4/hospital/1/patient/317/lab-details
             if($status)
             {
-                return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$testRequest->patientId.'/lab-details#blood')->with('success',trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_SUCCESS));
+                return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$testRequest->patientId.'/lab-details#blood')->with('success',trans('messages.'.ErrorEnum::PATIENT_TEST_RESULTS_SUCCESS));
             }
             else
             {
-                return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$testRequest->patientId.'/lab-details#blood')->with('success',trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR));
+                return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$testRequest->patientId.'/lab-details#blood')->with('success',trans('messages.'.ErrorEnum::PATIENT_TEST_RESULTS_ERROR));
             }
         }
         catch(LabException $labExc)
@@ -1175,7 +1175,11 @@ class LabController extends Controller
 
             if($status)
             {
-
+                return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$testRequest->patientId.'/lab-details#motion')->with('success',trans('messages.'.ErrorEnum::PATIENT_TEST_RESULTS_SUCCESS));
+            }
+            else
+            {
+                return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$testRequest->patientId.'/lab-details#motion')->with('success',trans('messages.'.ErrorEnum::PATIENT_TEST_RESULTS_ERROR));
             }
         }
         catch(LabException $labExc)
@@ -1215,7 +1219,11 @@ class LabController extends Controller
 
             if($status)
             {
-
+                return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$testRequest->patientId.'/lab-details#urine')->with('success',trans('messages.'.ErrorEnum::PATIENT_TEST_RESULTS_SUCCESS));
+            }
+            else
+            {
+                return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$testRequest->patientId.'/lab-details#urine')->with('success',trans('messages.'.ErrorEnum::PATIENT_TEST_RESULTS_ERROR));
             }
         }
         catch(LabException $labExc)
