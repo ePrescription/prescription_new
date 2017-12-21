@@ -52,10 +52,12 @@
                                 <td class="col-sm-4" >
 
 
-
+                                    @if($recentTestValue->ReadingStatus==1)
+                                        {{$recentTestValue->Reading}}
+                                    @else
                                     <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
                                     <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->Reading}}">
-
+                                    @endif
                                 </td>
                                 <td class="col-sm-4" >
                                     {{$recentTestValue->examinationDefaultValue}}
@@ -69,6 +71,9 @@
                         </table>
                     </div>
                 @endforeach
+                @if($recentTestValue->ReadingStatus==1)
+
+                @else
 
                 <div class="col-sm-12 form-group">
                     <div class="col-sm-4"></div>
@@ -77,6 +82,9 @@
                         <input type="submit" name="addblood" value="Save Report" class="btn btn-success"/>
                     </div>
                 </div>
+
+                @endif
+
             @endif
 
 
@@ -134,13 +142,6 @@
                 </div>
             @endforeach
 
-            <div class="col-sm-12 form-group">
-                <div class="col-sm-4"></div>
-                <div class="col-sm-6">
-                    <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
-                    <input type="submit" name="addblood" value="Save Report" class="btn btn-success"/>
-                </div>
-            </div>
         @endif
 
 
