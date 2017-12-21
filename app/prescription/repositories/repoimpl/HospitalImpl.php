@@ -6383,7 +6383,7 @@ class HospitalImpl implements HospitalInterface{
 
             $bloodExamQuery = DB::table('patient_blood_examination as pbe');
             $bloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
-            $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
             $bloodExamQuery->where('pbei.is_value_set', '=', 1);
@@ -6396,7 +6396,7 @@ class HospitalImpl implements HospitalInterface{
             {
                 $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
             }
-            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'pdei.id as examination_item_id',
+            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'pbei.id as examination_item_id',
                 'be.examination_name', 'pbe.examination_date');
 
             //dd($bloodExamQuery->toSql());
@@ -6407,7 +6407,7 @@ class HospitalImpl implements HospitalInterface{
 
             $urineExamQuery = DB::table('patient_urine_examination as pue');
             $urineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
-            $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'pue.urine_examination_id');
+            $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
             $urineExamQuery->where('pue.patient_id', '=', $patientId);
             $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
             $urineExamQuery->where('puei.is_value_set', '=', 1);
@@ -6428,7 +6428,7 @@ class HospitalImpl implements HospitalInterface{
 
             $motionExamQuery = DB::table('patient_motion_examination as pme');
             $motionExamQuery->join('patient_motion_examination_item as pmei', 'pmei.patient_motion_examination_id', '=', 'pme.id');
-            $motionExamQuery->join('motion_examination as me', 'me.id', '=', 'pme.motion_examination_id');
+            $motionExamQuery->join('motion_examination as me', 'me.id', '=', 'pmei.motion_examination_id');
             $motionExamQuery->where('pme.patient_id', '=', $patientId);
             $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
             $motionExamQuery->where('pmei.is_value_set', '=', 1);
@@ -6451,7 +6451,7 @@ class HospitalImpl implements HospitalInterface{
 
             $scanExamQuery = DB::table('patient_scan as ps');
             $scanExamQuery->join('patient_scan_item as psi', 'psi.patient_scan_id', '=', 'ps.id');
-            $scanExamQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
+            $scanExamQuery->join('scans as s', 's.id', '=', 'psi.scan_id');
             $scanExamQuery->where('ps.patient_id', '=', $patientId);
             $scanExamQuery->where('ps.hospital_id', '=', $hospitalId);
             $scanExamQuery->where('psi.is_value_set', '=', 1);
@@ -6475,8 +6475,8 @@ class HospitalImpl implements HospitalInterface{
             //dd($scanExaminations);
 
             $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus');
-            $ultraSoundExamQuery->join('patient_ultra_sound_item as pusi', 'pmei.patient_ultra_sound_id', '=', 'pus.id');
-            $ultraSoundExamQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
+            $ultraSoundExamQuery->join('patient_ultra_sound_item as pusi', 'pusi.patient_ultra_sound_id', '=', 'pus.id');
+            $ultraSoundExamQuery->join('ultra_sound as us', 'us.id', '=', 'pusi.ultra_sound_id');
             $ultraSoundExamQuery->where('pus.patient_id', '=', $patientId);
             $ultraSoundExamQuery->where('pus.hospital_id', '=', $hospitalId);
             $ultraSoundExamQuery->where('pusi.is_value_set', '=', 1);
