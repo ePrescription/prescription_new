@@ -9735,6 +9735,11 @@ class HospitalImpl implements HospitalInterface{
         $labFeeReceipt = null;
         $isXrayTest = false;
         $isDentalTest = false;
+        $isBloodTest = false;
+        $isUrineTest = false;
+        $isMotionTest = false;
+        $isScanTest = false;
+        $isUltrasoundTest = false;
 
         try
         {
@@ -9765,7 +9770,7 @@ class HospitalImpl implements HospitalInterface{
 
             if(!is_null($labFeeReceipt))
             {
-                if(!is_null($bloodTests) && !empty($bloodTests))
+                /*if(!is_null($bloodTests) && !empty($bloodTests))
                 {
                     foreach($bloodTests as $bloodTest)
                     {
@@ -9780,9 +9785,54 @@ class HospitalImpl implements HospitalInterface{
                         }
 
                     }
+                }*/
+
+                if(!is_null($bloodTests) && !empty($bloodTests))
+                {
+                    //dd($dentalTests);
+                    $examinationId = $bloodTests[0]['id'];
+
+                    foreach($bloodTests as $bloodTest)
+                    {
+                        if($bloodTest['fees'] > 0)
+                        {
+                            $isBloodTest = true;
+                            break;
+                        }
+                    }
+
+                    if($isBloodTest)
+                    {
+                        $bloodExamination = PatientBloodExamination::where('id', '=', $examinationId)->first();
+                        //dd($dentalExamination);
+
+                        if(!is_null($bloodExamination))
+                        {
+                            $bloodExamination->fee_receipt_id = $labFeeReceipt->id;
+                            $bloodExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                            //dd($dentalExamination);
+                            $bloodExamination->save();
+                        }
+                        //dd($dentalExamination);
+
+                        foreach($bloodTests as $bloodTest)
+                        {
+                            if($bloodTest['fees'] > 0)
+                            {
+                                $updateValues = array('pbei.fees' => $bloodTest['fees'], 'pbei.is_fees_paid' => 1,
+                                    'pbei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_blood_examination_item as pbei')->where('pbei.id', '=', $bloodTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                                $query->update($updateValues);
+                            }
+
+                        }
+                    }
+
                 }
 
-                if(!is_null($urineTests) && !empty($urineTests))
+                /*if(!is_null($urineTests) && !empty($urineTests))
                 {
                     foreach($urineTests as $urineTest)
                     {
@@ -9797,9 +9847,54 @@ class HospitalImpl implements HospitalInterface{
                         }
 
                     }
+                }*/
+
+                if(!is_null($urineTests) && !empty($urineTests))
+                {
+                    //dd($dentalTests);
+                    $examinationId = $urineTests[0]['id'];
+
+                    foreach($urineTests as $urineTest)
+                    {
+                        if($urineTest['fees'] > 0)
+                        {
+                            $isUrineTest = true;
+                            break;
+                        }
+                    }
+
+                    if($isUrineTest)
+                    {
+                        $urineExamination = PatientUrineExamination::where('id', '=', $examinationId)->first();
+                        //dd($dentalExamination);
+
+                        if(!is_null($urineExamination))
+                        {
+                            $urineExamination->fee_receipt_id = $labFeeReceipt->id;
+                            $urineExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                            //dd($dentalExamination);
+                            $urineExamination->save();
+                        }
+                        //dd($dentalExamination);
+
+                        foreach($urineTests as $urineTest)
+                        {
+                            if($urineTest['fees'] > 0)
+                            {
+                                $updateValues = array('puei.fees' => $urineTest['fees'], 'puei.is_fees_paid' => 1,
+                                    'puei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_urine_examination_item as puei')->where('puei.id', '=', $urineTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                                $query->update($updateValues);
+                            }
+
+                        }
+                    }
+
                 }
 
-                if(!is_null($motionTests) && !empty($motionTests))
+                /*if(!is_null($motionTests) && !empty($motionTests))
                 {
                     foreach($motionTests as $motionTest)
                     {
@@ -9814,9 +9909,54 @@ class HospitalImpl implements HospitalInterface{
                         }
 
                     }
+                }*/
+
+                if(!is_null($motionTests) && !empty($motionTests))
+                {
+                    //dd($dentalTests);
+                    $examinationId = $motionTests[0]['id'];
+
+                    foreach($motionTests as $motionTest)
+                    {
+                        if($motionTest['fees'] > 0)
+                        {
+                            $isMotionTest = true;
+                            break;
+                        }
+                    }
+
+                    if($isMotionTest)
+                    {
+                        $motionExamination = PatientMotionExamination::where('id', '=', $examinationId)->first();
+                        //dd($dentalExamination);
+
+                        if(!is_null($motionExamination))
+                        {
+                            $motionExamination->fee_receipt_id = $labFeeReceipt->id;
+                            $motionExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                            //dd($dentalExamination);
+                            $motionExamination->save();
+                        }
+                        //dd($dentalExamination);
+
+                        foreach($motionTests as $motionTest)
+                        {
+                            if($motionTest['fees'] > 0)
+                            {
+                                $updateValues = array('pmei.fees' => $motionTest['fees'], 'pmei.is_fees_paid' => 1,
+                                    'pmei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_motion_examination_item as pmei')->where('pmei.id', '=', $motionTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                                $query->update($updateValues);
+                            }
+
+                        }
+                    }
+
                 }
 
-                if(!is_null($scanTests) && !empty($scanTests))
+                /*if(!is_null($scanTests) && !empty($scanTests))
                 {
                     foreach($scanTests as $scanTest)
                     {
@@ -9831,9 +9971,54 @@ class HospitalImpl implements HospitalInterface{
                         }
 
                     }
+                }*/
+
+                if(!is_null($scanTests) && !empty($scanTests))
+                {
+                    //dd($dentalTests);
+                    $examinationId = $scanTests[0]['id'];
+
+                    foreach($scanTests as $scanTest)
+                    {
+                        if($scanTest['fees'] > 0)
+                        {
+                            $isScanTest = true;
+                            break;
+                        }
+                    }
+
+                    if($isScanTest)
+                    {
+                        $scanExamination = PatientScanExamination::where('id', '=', $examinationId)->first();
+                        //dd($dentalExamination);
+
+                        if(!is_null($scanExamination))
+                        {
+                            $scanExamination->fee_receipt_id = $labFeeReceipt->id;
+                            $scanExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                            //dd($dentalExamination);
+                            $scanExamination->save();
+                        }
+                        //dd($dentalExamination);
+
+                        foreach($scanTests as $scanTest)
+                        {
+                            if($scanTest['fees'] > 0)
+                            {
+                                $updateValues = array('psi.fees' => $scanTest['fees'], 'psi.is_fees_paid' => 1,
+                                    'psi.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_scan_item as psi')->where('psi.id', '=', $scanTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                                $query->update($updateValues);
+                            }
+
+                        }
+                    }
+
                 }
 
-                if(!is_null($ultraSoundTests) && !empty($ultraSoundTests))
+                /*if(!is_null($ultraSoundTests) && !empty($ultraSoundTests))
                 {
                     foreach($ultraSoundTests as $ultraSoundTest)
                     {
@@ -9848,6 +10033,51 @@ class HospitalImpl implements HospitalInterface{
                         }
 
                     }
+                }*/
+
+                if(!is_null($ultraSoundTests) && !empty($ultraSoundTests))
+                {
+                    //dd($dentalTests);
+                    $examinationId = $ultraSoundTests[0]['id'];
+
+                    foreach($ultraSoundTests as $ultraSoundTest)
+                    {
+                        if($ultraSoundTest['fees'] > 0)
+                        {
+                            $isUltrasoundTest = true;
+                            break;
+                        }
+                    }
+
+                    if($isUltrasoundTest)
+                    {
+                        $ultraSoundExamination = PatientUltrasoundExamination::where('id', '=', $examinationId)->first();
+                        //dd($dentalExamination);
+
+                        if(!is_null($ultraSoundExamination))
+                        {
+                            $ultraSoundExamination->fee_receipt_id = $labFeeReceipt->id;
+                            $ultraSoundExamination->updated_at = $labReceiptsVM->getUpdatedAt();
+
+                            //dd($dentalExamination);
+                            $ultraSoundExamination->save();
+                        }
+                        //dd($dentalExamination);
+
+                        foreach($ultraSoundTests as $ultraSoundTest)
+                        {
+                            if($ultraSoundTest['fees'] > 0)
+                            {
+                                $updateValues = array('pusi.fees' => $ultraSoundTest['fees'], 'pusi.is_fees_paid' => 1,
+                                    'pusi.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_ultra_sound_item as pusi')->where('pusi.id', '=', $ultraSoundTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+                                $query->update($updateValues);
+                            }
+
+                        }
+                    }
+
                 }
 
                 if(!is_null($dentalTests) && !empty($dentalTests))
@@ -9884,7 +10114,7 @@ class HospitalImpl implements HospitalInterface{
                             if($dentalTest['fees'] > 0)
                             {
                                 $updateValues = array('pdei.fees' => $dentalTest['fees'], 'pdei.is_fees_paid' => 1,
-                                    'pdei.created_at' => $labReceiptsVM->getCreatedAt(), 'pdei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                    'pdei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_dental_examination_item as pdei')->where('pdei.id', '=', $dentalTest['item_id']);
                                 //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
                                 $query->update($updateValues);
@@ -9929,7 +10159,7 @@ class HospitalImpl implements HospitalInterface{
                             if($xrayTest['fees'] > 0)
                             {
                                 $updateValues = array('pxei.fees' => $xrayTest['fees'], 'pxei.is_fees_paid' => 1,
-                                    'pxei.created_at' => $labReceiptsVM->getCreatedAt(), 'pxei.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                    'pxei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_xray_examination_item as pxei')->where('pxei.id', '=', $xrayTest['item_id']);
                                 //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
                                 $query->update($updateValues);
