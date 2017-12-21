@@ -6382,20 +6382,22 @@ class HospitalImpl implements HospitalInterface{
             //DB::connection()->enableQueryLog();
 
             $bloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $bloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
             $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
-            $bloodExamQuery->where('pbe.is_value_set', '=', 1);
+            $bloodExamQuery->where('pbei.is_value_set', '=', 1);
             $bloodExamQuery->where(function($query){
-                $query->where('pbe.is_fees_paid', '=', 0);
-                $query->orWhereNull('pbe.is_fees_paid');
+                $query->where('pbei.is_fees_paid', '=', 0);
+                $query->orWhereNull('pbei.is_fees_paid');
             });
             //$bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
             }
-            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date');
+            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'pdei.id as examination_item_id',
+                'be.examination_name', 'pbe.examination_date');
 
             //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
@@ -6404,39 +6406,43 @@ class HospitalImpl implements HospitalInterface{
             //dd($bloodExaminations);
 
             $urineExamQuery = DB::table('patient_urine_examination as pue');
+            $urineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
             $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'pue.urine_examination_id');
             $urineExamQuery->where('pue.patient_id', '=', $patientId);
             $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
-            $urineExamQuery->where('pue.is_value_set', '=', 1);
+            $urineExamQuery->where('puei.is_value_set', '=', 1);
             $urineExamQuery->where(function($query){
-                $query->where('pue.is_fees_paid', '=', 0);
-                $query->orWhereNull('pue.is_fees_paid');
+                $query->where('puei.is_fees_paid', '=', 0);
+                $query->orWhereNull('puei.is_fees_paid');
             });
             //$urineExamQuery->where('pue.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $urineExamQuery->whereDate('pue.created_at', '=', $receiptDate);
             }
-            $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date');
+            $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'puei.id as examination_item_id',
+                'ue.examination_name', 'pue.examination_date');
 
             //dd($urineExamQuery->toSql());
             $urineExaminations = $urineExamQuery->get();
 
             $motionExamQuery = DB::table('patient_motion_examination as pme');
+            $motionExamQuery->join('patient_motion_examination_item as pmei', 'pmei.patient_motion_examination_id', '=', 'pme.id');
             $motionExamQuery->join('motion_examination as me', 'me.id', '=', 'pme.motion_examination_id');
             $motionExamQuery->where('pme.patient_id', '=', $patientId);
             $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
-            $motionExamQuery->where('pme.is_value_set', '=', 1);
+            $motionExamQuery->where('pmei.is_value_set', '=', 1);
             //$motionExamQuery->where('pme.is_fees_paid', '=', 0);
             $motionExamQuery->where(function($query){
-                $query->where('pme.is_fees_paid', '=', 0);
-                $query->orWhereNull('pme.is_fees_paid');
+                $query->where('pmei.is_fees_paid', '=', 0);
+                $query->orWhereNull('pmei.is_fees_paid');
             });
             if(!is_null($receiptDate))
             {
                 $motionExamQuery->whereDate('pme.created_at', '=', $receiptDate);
             }
-            $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'me.examination_name', 'pme.examination_date');
+            $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'pmei.id as examination_item_id',
+                'me.examination_name', 'pme.examination_date');
 
             //dd($motionExamQuery->toSql());
             $motionExaminations = $motionExamQuery->get();
@@ -6444,20 +6450,22 @@ class HospitalImpl implements HospitalInterface{
             //DB::connection()->enableQueryLog();
 
             $scanExamQuery = DB::table('patient_scan as ps');
+            $scanExamQuery->join('patient_scan_item as psi', 'psi.patient_scan_id', '=', 'ps.id');
             $scanExamQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
             $scanExamQuery->where('ps.patient_id', '=', $patientId);
             $scanExamQuery->where('ps.hospital_id', '=', $hospitalId);
-            $scanExamQuery->where('ps.is_value_set', '=', 1);
+            $scanExamQuery->where('psi.is_value_set', '=', 1);
             $scanExamQuery->where(function($query){
-                $query->where('ps.is_fees_paid', '=', 0);
-                $query->orWhereNull('ps.is_fees_paid');
+                $query->where('psi.is_fees_paid', '=', 0);
+                $query->orWhereNull('psi.is_fees_paid');
             });
             //$scanExamQuery->where('ps.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $scanExamQuery->whereDate('ps.created_at', '=', $receiptDate);
             }
-            $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 's.scan_name', 'ps.scan_date');
+            $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 'psi.id as examination_item_id',
+                's.scan_name', 'ps.scan_date');
 
             //dd($scanExamQuery->toSql());
             $scanExaminations = $scanExamQuery->get();
@@ -6467,20 +6475,22 @@ class HospitalImpl implements HospitalInterface{
             //dd($scanExaminations);
 
             $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus');
+            $ultraSoundExamQuery->join('patient_ultra_sound_item as pusi', 'pmei.patient_ultra_sound_id', '=', 'pus.id');
             $ultraSoundExamQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
             $ultraSoundExamQuery->where('pus.patient_id', '=', $patientId);
             $ultraSoundExamQuery->where('pus.hospital_id', '=', $hospitalId);
-            $ultraSoundExamQuery->where('pus.is_value_set', '=', 1);
+            $ultraSoundExamQuery->where('pusi.is_value_set', '=', 1);
             $ultraSoundExamQuery->where(function($query){
-                $query->where('pus.is_fees_paid', '=', 0);
-                $query->orWhereNull('pus.is_fees_paid');
+                $query->where('pusi.is_fees_paid', '=', 0);
+                $query->orWhereNull('pusi.is_fees_paid');
             });
             //$ultraSoundExamQuery->where('pus.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $ultraSoundExamQuery->whereDate('pus.created_at', '=', $receiptDate);
             }
-            $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date');
+            $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'pusi.id as examination_item_id',
+                'us.examination_name', 'pus.examination_date');
 
             //dd($ultraSoundExamQuery->toSql());
             $ultraSoundExaminations = $ultraSoundExamQuery->get();
