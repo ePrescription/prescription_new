@@ -4,7 +4,6 @@
     }
 </style>
 
-
 <div class="container">
 
 <div class="row">
@@ -14,6 +13,65 @@
     <style>
         form.display label.control-label{ text-align:left; }
     </style>
+    @if(Session::get('LoginUserType')=="lab")
+        {{print_r($bloodTests)}}
+
+        <form action="{{URL::to('/')}}/lab/rest/patient/bloodtestresults" role="form" method="POST" class="form-horizontal ">
+
+            @if(count($bloodTests)>0)
+                <h4 class="m-t-0 m-b-30">Blood Test Details</h4>
+                @foreach($bloodTests as $recentTest)
+                    <?php $displaySet=0; ?>
+                    <div class="form-group">
+                        @foreach($recentTest as $recentTestDate)
+                            @if($displaySet==0)
+                                <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
+                                <?php $displaySet=1; ?>
+                            @endif
+                        @endforeach
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <?php $i=0; ?>
+                        @foreach($recentTest as $recentTestValue)
+                            <div class="row">
+                            @if($recentTestValue->isValueSet==1)
+                                <div class="col-sm-4" >
+                                    {{$recentTestValue->examinationName}}
+                                </div>
+                                <div class="col-sm-4" >
+
+
+
+                                    <input type="hidden" name="testResults[{{$i}}]['examinationId']" value="{{$recentTestValue->patientExaminationItemId}}">
+                                    <input type="text" name="testResults[{{$i}}]['examinationValue']" value="{{$recentTestValue->Reading}}">
+
+                                </div>
+                                <div class="col-sm-4" >
+                                    {{$recentTestValue->examinationDefaultValue}}
+                                    <?php /* ?> {{$recentTestValue->ReadingStatus}} <?php */ ?>
+                                </div>
+                            @endif
+                            </div>
+                            <?php $i++; ?>
+                        @endforeach
+
+                    </div>
+                @endforeach
+
+                <div class="col-sm-12 form-group">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-6">
+                        <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
+                        <input type="submit" name="addblood" value="Save Report" class="btn btn-success"/>
+                    </div>
+                </div>
+            @endif
+
+
+        </form>
+
+
+    @else
     <form role="form" method="POST" class="display form-horizontal">
 
         @if(count($bloodTests)>0)
@@ -53,6 +111,7 @@
         <?php */ ?>
 
     </form>
+    @endif
 
 </div> <!-- panel-body -->
 </div> <!-- panel -->

@@ -6978,7 +6978,7 @@ class DoctorController extends Controller
 
         //return $responseJson;
 
-        return view('portal.hospital-patient-lab-blood-tests-detail',compact('bloodTests'));
+        return view('portal.hospital-patient-lab-blood-tests-detail',compact('bloodTests','patientId'));
     }
 
     /**

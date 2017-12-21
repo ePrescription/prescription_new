@@ -342,7 +342,7 @@ class LabService
             throw $profileExc;
         }
         catch (Exception $ex) {
-
+            dd($ex);
             $status = false;
             throw new LabException(null, ErrorEnum::PATIENT_TEST_RESULTS_ERROR, $ex);
         }
