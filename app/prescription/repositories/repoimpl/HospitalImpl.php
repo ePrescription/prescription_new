@@ -1978,7 +1978,7 @@ class HospitalImpl implements HospitalInterface{
             $urineTotalFees = $urineTestFees[0]->urineTestAmount;
 
             $scanExamQuery = DB::table('patient_scan as ps')->where('ps.hospital_id', '=', $hospitalId);
-            $urineExamQuery->join('patient_scan_item as psi', 'psi.patient_scan_id', '=', 'ps.id');
+            $scanExamQuery->join('patient_scan_item as psi', 'psi.patient_scan_id', '=', 'ps.id');
             $scanExamQuery->where('ps.doctor_id', '=', $doctorId);
             $scanExamQuery->whereDate('ps.created_at', '=', $currentDate);
             $scanExamQuery->where(function($scanExamQuery){
