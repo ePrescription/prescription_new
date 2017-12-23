@@ -2074,7 +2074,7 @@ class DoctorController extends Controller
             }
             else
             {
-                dd(Auth::user());
+                //dd(Auth::user());
                 //$prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::DOCTOR_LOGIN_FAILURE));
                 $msg = "Login Details Incorrect! Try Again.";
                 return redirect('/login')->with('message',$msg);

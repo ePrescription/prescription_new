@@ -14,6 +14,8 @@ class PatientXRayViewModel
     private $patientId;
     private $doctorId;
     private $hospitalId;
+    private $labId;
+
     private $examinationDate;
     private $examinationTime;
     private $patientXRayTests;
@@ -74,6 +76,22 @@ class PatientXRayViewModel
     public function setHospitalId($hospitalId)
     {
         $this->hospitalId = $hospitalId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLabId()
+    {
+        return $this->labId;
+    }
+
+    /**
+     * @param mixed $labId
+     */
+    public function setLabId($labId)
+    {
+        $this->labId = $labId;
     }
 
     /**

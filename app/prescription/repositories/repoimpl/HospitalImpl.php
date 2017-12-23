@@ -8265,6 +8265,7 @@ class HospitalImpl implements HospitalInterface{
     public function savePatientScanDetailsNew(PatientScanViewModel $patientScanVM)
     {
         $status = true;
+        //$hospitalLabId = null;
 
         try
         {
@@ -8273,6 +8274,7 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientScanVM->getDoctorId();
             //dd($doctorId);
             $hospitalId = $patientScanVM->getHospitalId();
+            //$labId = $patientScanVM->getLabId();
             //$patientUser = User::find($patientId);
 
             $patientScans = $patientScanVM->getPatientScans();
@@ -8315,12 +8317,18 @@ class HospitalImpl implements HospitalInterface{
                     $patientExaminationDate = null;
                 }
 
+                /*if(is_null($labId))
+                {
+                    $hospitalLabId = $this->getLabIdForHospital($hospitalId);
+                }*/
+
                 //dd($patientExaminationDate);
 
                 $scanExamination = new PatientScanExamination();
                 $scanExamination->patient_id = $patientId;
                 $scanExamination->hospital_id = $hospitalId;
                 $scanExamination->doctor_id = $doctorId;
+                //$scanExamination->lab_id = $hospitalLabId;
                 $scanExamination->scan_date = $patientExaminationDate;
                 $scanExamination->examination_time = $examinationTime;
                 $scanExamination->created_by = $patientScanVM->getCreatedBy();
@@ -8354,6 +8362,23 @@ class HospitalImpl implements HospitalInterface{
 
                 }
 
+                $query1 = PatientLabTests::where('patient_id', '=', $patientId)->where('hospital_id', '=', $hospitalId);
+                dd($query1->toSql());
+
+                /*if($count == 0) {
+                    $patientLabTest = new PatientLabTests();
+                    $patientLabTest->patient_id = $patientId;
+                    $patientLabTest->hospital_id = $hospitalId;
+                    $patientLabTest->created_by = 'Admin';
+                    $patientLabTest->modified_by = 'Admin';
+                    $patientLabTest->created_at = date("Y-m-d H:i:s");
+                    $patientLabTest->updated_at = date("Y-m-d H:i:s");
+
+                    $patientLabTest->save();
+                }*/
+
+                //$this->setPatientLabTests($patientId, $hospitalId);
+
             }
             else
             {
@@ -8379,6 +8404,39 @@ class HospitalImpl implements HospitalInterface{
         }
 
         return $status;
+    }
+
+    private function getLabIdForHospital($hospitalId)
+    {
+        $labId = null;
+
+        $query = DB::table('hospital_lab as hl')->where('hl.hospital_id', '=', $hospitalId);
+        $labId = $query->select('hl.lab_id')->get();
+
+        return $labId;
+    }
+
+    private function setPatientLabTests($patientId, $hospitalId)
+    {
+        //$isExists = false;
+        $count = PatientLabTests::where('patient_id', '=', $patientId)->where('hospital_id', '=', $hospitalId)->count();
+        //dd($count);
+
+        if($count == 0)
+        {
+            $patientLabTest = new PatientLabTests();
+            $patientLabTest->patient_id = $patientId;
+            $patientLabTest->hospital_id = $hospitalId;
+            $patientLabTest->created_by = 'Admin';
+            $patientLabTest->modified_by = 'Admin';
+            $patientLabTest->created_at = date("Y-m-d H:i:s");
+            $patientLabTest->updated_at = date("Y-m-d H:i:s");
+
+            $patientLabTest->save();
+            //$isExists = true;
+        }
+
+        //return $isExists;
     }
 
 
@@ -8603,11 +8661,13 @@ class HospitalImpl implements HospitalInterface{
     public function savePatientUrineTestsNew(PatientUrineExaminationViewModel $patientUrineVM)
     {
         $status = true;
+        //$hospitalLabId = null;
 
         try
         {
             $patientId = $patientUrineVM->getPatientId();
             $doctorId = $patientUrineVM->getDoctorId();
+            //$labId = $patientUrineVM->getLabId();
             //dd($doctorId);
             $hospitalId = $patientUrineVM->getHospitalId();
             //$patientUser = User::find($patientId);
@@ -8652,12 +8712,18 @@ class HospitalImpl implements HospitalInterface{
                     $patientExaminationDate = null;
                 }
 
+                /*if(is_null($labId))
+                {
+                    $hospitalLabId = $this->getLabIdForHospital($hospitalId);
+                }*/
+
                 //dd($patientExaminationDate);
 
                 $urineExamination = new PatientUrineExamination();
                 $urineExamination->patient_id = $patientId;
                 $urineExamination->hospital_id = $hospitalId;
                 $urineExamination->doctor_id = $doctorId;
+                //$urineExamination->lab_id = $hospitalLabId;
                 $urineExamination->examination_date = $patientExaminationDate;
                 $urineExamination->examination_time = $examinationTime;
                 $urineExamination->created_by = $patientUrineVM->getCreatedBy();
@@ -8690,6 +8756,8 @@ class HospitalImpl implements HospitalInterface{
                     $urineExamination->urineexaminationitems()->save($urineExaminationItems);
 
                 }
+
+                $this->setPatientLabTests($patientId, $hospitalId);
 
             }
             else
@@ -8823,6 +8891,7 @@ class HospitalImpl implements HospitalInterface{
     public function savePatientMotionTestsNew(PatientUrineExaminationViewModel $patientMotionVM)
     {
         $status = true;
+        //$hospitalLabId = null;
 
         try
         {
@@ -8830,6 +8899,7 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientMotionVM->getDoctorId();
             //dd($doctorId);
             $hospitalId = $patientMotionVM->getHospitalId();
+            //$labId = $patientMotionVM->getLabId();
             //$patientUser = User::find($patientId);
 
             $motionExaminations = $patientMotionVM->getExaminations();
@@ -8872,12 +8942,18 @@ class HospitalImpl implements HospitalInterface{
                     $patientExaminationDate = null;
                 }
 
+                /*if(is_null($labId))
+                {
+                    $hospitalLabId = $this->getLabIdForHospital($hospitalId);
+                }*/
+
                 //dd($patientExaminationDate);
 
                 $motionExamination = new PatientMotionExamination();
                 $motionExamination->patient_id = $patientId;
                 $motionExamination->hospital_id = $hospitalId;
                 $motionExamination->doctor_id = $doctorId;
+                //$motionExamination->lab_id = $hospitalLabId;
                 $motionExamination->examination_date = $patientExaminationDate;
                 $motionExamination->examination_time = $examinationTime;
                 $motionExamination->created_by = $patientMotionVM->getCreatedBy();
@@ -8910,6 +8986,8 @@ class HospitalImpl implements HospitalInterface{
                     $motionExamination->motionexaminationitems()->save($motionExaminationItems);
 
                 }
+
+                $this->setPatientLabTests($patientId, $hospitalId);
 
             }
             else
@@ -8949,12 +9027,14 @@ class HospitalImpl implements HospitalInterface{
     public function savePatientBloodTests(PatientUrineExaminationViewModel $patientBloodVM)
     {
         $status = true;
+        $hospitalLabId = null;
 
         try
         {
             $patientId = $patientBloodVM->getPatientId();
             $doctorId = $patientBloodVM->getDoctorId();
             $hospitalId = $patientBloodVM->getHospitalId();
+            $labId = $patientBloodVM->getLabId();
             //$patientUser = User::find($patientId);
 
             $patientExaminations = $patientBloodVM->getExaminations();
@@ -9043,6 +9123,7 @@ class HospitalImpl implements HospitalInterface{
     public function savePatientBloodTestsNew(PatientUrineExaminationViewModel $patientBloodVM)
     {
         $status = true;
+        //$hospitalLabId = null;
 
         try
         {
@@ -9050,6 +9131,7 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientBloodVM->getDoctorId();
             //dd($doctorId);
             $hospitalId = $patientBloodVM->getHospitalId();
+            //$labId = $patientBloodVM->getLabId();
             //$patientUser = User::find($patientId);
 
             $bloodExaminations = $patientBloodVM->getExaminations();
@@ -9092,12 +9174,18 @@ class HospitalImpl implements HospitalInterface{
                     $patientExaminationDate = null;
                 }
 
+                /*if(is_null($labId))
+                {
+                    $hospitalLabId = $this->getLabIdForHospital($hospitalId);
+                }*/
+
                 //dd($patientExaminationDate);
 
                 $bloodExamination = new PatientBloodExamination();
                 $bloodExamination->patient_id = $patientId;
                 $bloodExamination->hospital_id = $hospitalId;
                 $bloodExamination->doctor_id = $doctorId;
+                //$bloodExamination->lab_id = $hospitalLabId;
                 $bloodExamination->examination_date = $patientExaminationDate;
                 $bloodExamination->examination_time = $examinationTime;
                 $bloodExamination->created_by = $patientBloodVM->getCreatedBy();
@@ -9130,6 +9218,8 @@ class HospitalImpl implements HospitalInterface{
                     $bloodExamination->bloodexaminationitems()->save($bloodExaminationItems);
 
                 }
+
+                $this->setPatientLabTests($patientId, $hospitalId);
 
             }
             else
@@ -9265,6 +9355,7 @@ class HospitalImpl implements HospitalInterface{
     public function savePatientUltraSoundTestsNew(PatientUrineExaminationViewModel $patientUltraSoundVM)
     {
         $status = true;
+        //$hospitalLabId = null;
 
         try
         {
@@ -9272,6 +9363,7 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientUltraSoundVM->getDoctorId();
             //dd($doctorId);
             $hospitalId = $patientUltraSoundVM->getHospitalId();
+            //$labId = $patientUltraSoundVM->getLabId();
             //$patientUser = User::find($patientId);
 
             $ultrasoundExaminations = $patientUltraSoundVM->getExaminations();
@@ -9314,12 +9406,18 @@ class HospitalImpl implements HospitalInterface{
                     $patientExaminationDate = null;
                 }
 
+                /*if(is_null($labId))
+                {
+                    $hospitalLabId = $this->getLabIdForHospital($hospitalId);
+                }*/
+
                 //dd($patientExaminationDate);
 
                 $ultrasoundExamination = new PatientUltrasoundExamination();
                 $ultrasoundExamination->patient_id = $patientId;
                 $ultrasoundExamination->hospital_id = $hospitalId;
                 $ultrasoundExamination->doctor_id = $doctorId;
+                //$ultrasoundExamination->lab_id = $hospitalLabId;
                 $ultrasoundExamination->examination_date = $patientExaminationDate;
                 $ultrasoundExamination->examination_time = $examinationTime;
                 $ultrasoundExamination->created_by = $patientUltraSoundVM->getCreatedBy();
@@ -9352,6 +9450,8 @@ class HospitalImpl implements HospitalInterface{
                     $ultrasoundExamination->ultrasoundexaminationitems()->save($ultrasoundExaminationItems);
 
                 }
+
+                $this->setPatientLabTests($patientId, $hospitalId);
 
             }
             else
@@ -9393,6 +9493,7 @@ class HospitalImpl implements HospitalInterface{
         $status = true;
         $patientExaminationDate = null;
         $patientDentalExamination = null;
+        //$hospitalLabId = null;
 
         try
         {
@@ -9401,6 +9502,7 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientDentalVM->getDoctorId();
             //dd($doctorId);
             $hospitalId = $patientDentalVM->getHospitalId();
+            //$labId = $patientDentalVM->getLabId();
             //$patientUser = User::find($patientId);
 
             $dentalExaminations = $patientDentalVM->getPatientDentalTests();
@@ -9441,12 +9543,18 @@ class HospitalImpl implements HospitalInterface{
                     $patientExaminationDate = null;
                 }
 
+               /*if(is_null($labId))
+                {
+                    $hospitalLabId = $this->getLabIdForHospital($hospitalId);
+                }*/
+
                 //dd($patientExaminationDate);
 
                 $dentalExamination = new PatientDentalExamination();
                 $dentalExamination->patient_id = $patientId;
                 $dentalExamination->hospital_id = $hospitalId;
                 $dentalExamination->doctor_id = $patientDentalVM->getDoctorId();
+                //$dentalExamination->lab_id = $hospitalLabId;
                 $dentalExamination->examination_date = $patientExaminationDate;
                 $dentalExamination->examination_time = $examinationTime;
                 $dentalExamination->created_by = $patientDentalVM->getCreatedBy();
@@ -9479,6 +9587,8 @@ class HospitalImpl implements HospitalInterface{
                     }
 
                 }
+
+                $this->setPatientLabTests($patientId, $hospitalId);
 
             }
             else
@@ -9519,6 +9629,7 @@ class HospitalImpl implements HospitalInterface{
     {
         $status = true;
         $patientExaminationDate = null;
+        //$hospitalLabId = null;
         //$patientXRayExamination = null;
 
         try
@@ -9528,6 +9639,8 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientXRayVM->getDoctorId();
             //dd($doctorId);
             $hospitalId = $patientXRayVM->getHospitalId();
+            //$labId = $patientXRayVM->getLabId();
+
             $xrayExaminations = $patientXRayVM->getPatientXRayTests();
             $examinationDate = $patientXRayVM->getExaminationDate();
             $examinationTime = $patientXRayVM->getExaminationTime();
@@ -9566,12 +9679,18 @@ class HospitalImpl implements HospitalInterface{
                     $patientExaminationDate = null;
                 }
 
+                /*if(is_null($labId))
+                {
+                    $hospitalLabId = $this->getLabIdForHospital($hospitalId);
+                }*/
+
                 //dd($patientExaminationDate);
 
                 $xrayExamination = new PatientXRayExamination();
                 $xrayExamination->patient_id = $patientId;
                 $xrayExamination->hospital_id = $hospitalId;
                 $xrayExamination->doctor_id = $patientXRayVM->getDoctorId();
+                //$xrayExamination->lab_id = $hospitalLabId;
                 $xrayExamination->examination_date = $patientExaminationDate;
                 $xrayExamination->examination_time = $examinationTime;
                 $xrayExamination->created_by = $patientXRayVM->getCreatedBy();
@@ -9601,6 +9720,8 @@ class HospitalImpl implements HospitalInterface{
                     }
 
                 }
+
+                $this->setPatientLabTests($patientId, $hospitalId);
 
             }
             else

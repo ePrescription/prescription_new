@@ -97,17 +97,32 @@ class LabImpl implements LabInterface
             $query->where('hp.pharmacy_id', '=', $pharmacyId);
             $query->distinct()->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.telephone','p.age', 'p.gender');*/
 
-            $query = DB::table('patient as p')->join('patient_labtest as pl', 'pl.patient_id', '=', 'p.patient_id');
+            /*$query = DB::table('patient as p')->join('patient_labtest as pl', 'pl.patient_id', '=', 'p.patient_id');
             $query->join('hospital_lab as hl', 'hl.hospital_id', '=', 'pl.hospital_id');
             $query->where('hl.hospital_id', '=', $hospitalId);
             $query->where('hl.lab_id', '=', $labId);
-            /*$query->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.telephone','p.age', 'p.gender',
-                'pl.unique_id as labTestCode','pl.labtest_date');*/
-            $query->distinct()->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.telephone','p.age', 'p.gender');
-            //$query->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.telephone','p.age', 'p.gender');
+
+            $query->distinct()->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.telephone','p.age', 'p.gender');*/
+
+            $query = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.pid', 'p.name', 'p.age',
+                'p.gender', 'p.telephone', 'p.married', 'p.email', 'p.address', 'p.careof');
+            $query->join('hospital_patient as hp', 'hp.patient_id', '=', 'p.patient_id');
+            //$query->join('patient_labtest as pl', 'hp.patient_id', '=', 'p.patient_id');
+            $query->join('patient_labtest as pl', function($query)
+            {
+                $query->on('pl.patient_id', '=', 'p.patient_id');
+                $query->on('pl.patient_id', '=', 'hp.patient_id');
+                $query->on('pl.hospital_id', '=', 'hp.hospital_id');
+            });
+            $query->where('hp.hospital_id', '=', $hospitalId);
+
+            //$query->orderBy('hp.created_at', 'DESC');
+            //$query->where('p.name', 'LIKE', '%'.$keyword.'%');
 
             //dd($query->toSql());
             $patients = $query->get();
+
+            //$patients = $query->get();
             //dd($patients);
         }
         catch(QueryException $queryExc)
