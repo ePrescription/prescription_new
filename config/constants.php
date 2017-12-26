@@ -20,4 +20,7 @@ return [
     'S' => 'patient_scan',
     'US' => 'patient_ultra_sound',
     'U' => 'patient_urine_examination',
+
+    'BLOOD_EXAMINATION_CATEGORY' => array(1, 12, 15, 17, 24, 35, 36, 37, 40, 41, 84),
+    'URINE_EXAMINATION_CATEGORY' => array(8, 10, 22)
 ];

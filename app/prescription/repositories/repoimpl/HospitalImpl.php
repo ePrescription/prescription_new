@@ -31,6 +31,7 @@ use App\Http\ViewModels\PatientUltraSoundExaminationViewModel;
 use App\Http\ViewModels\PatientUrineExaminationViewModel;
 
 use App\Http\ViewModels\PatientXRayViewModel;
+use App\prescription\model\entities\BloodExamination;
 use App\prescription\model\entities\Doctor;
 use App\prescription\model\entities\DoctorAppointments;
 use App\prescription\model\entities\DoctorReferral;
@@ -4985,7 +4986,7 @@ class HospitalImpl implements HospitalInterface{
                     }
                 });*/
 
-                $urineTestQuery = DB::table('patient_urine_examination as pue');
+                /*$urineTestQuery = DB::table('patient_urine_examination as pue');
                 $urineTestQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
                 $urineTestQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
                 $urineTestQuery->where('pue.patient_id', '=', $patientId);
@@ -4999,6 +5000,27 @@ class HospitalImpl implements HospitalInterface{
                     'puei.id as patientExaminationItemId','puei.test_readings as Reading','puei.test_reading_status as ReadingStatus',
                     'puei.is_value_set as isValueSet', 'pue.examination_time');
 
+                $urineTests = $urineTestQuery->get();*/
+
+                $urineTestQuery = DB::table('patient_urine_examination_item as puei');
+                $urineTestQuery->join('patient_urine_examination as pue', 'pue.id', '=', 'puei.patient_urine_examination_id');
+                $urineTestQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
+                $urineTestQuery->join('urine_examination as ue1', 'ue1.id', '=', 'ue.parent_id');
+                $urineTestQuery->where('pue.patient_id', '=', $patientId);
+                $urineTestQuery->where('pue.examination_date', '=', $urineTestDate);
+                $urineTestQuery->where('pue.examination_time', '=', $time->examination_time);
+                $urineTestQuery->where('puei.is_value_set', '=', 1);
+                $urineTestQuery->orderBy('pue.examination_time', 'DESC');
+                //$latestBloodExamQuery->groupBy('pbe.id');
+                $urineTestQuery->select('pue.id as patientExaminationId', 'pue.patient_id', 'pue.hospital_id',
+                    'ue.id as examinationId', 'ue.examination_name as examinationName', 'ue1.parent_id',
+                    'ue1.examination_name AS parent_examination_name', 'ue.is_parent',
+                    'ue.normal_default_values as examinationDefaultValue',
+                    'pue.examination_date as examinationDate', 'pue.examination_time',
+                    'puei.id as patientExaminationItemId', 'puei.test_readings as readings',
+                    'puei.test_reading_status as readingStatus',
+                    'puei.is_value_set as isValueSet');
+
                 $urineTests = $urineTestQuery->get();
 
                 //array_push($urineTestDetails, $urineTestRecord);
@@ -5006,7 +5028,7 @@ class HospitalImpl implements HospitalInterface{
 
             }
 
-            //dd($pregnancyDetails);
+            dd($urineTestDetails);
         }
         catch(QueryException $queryEx)
         {
@@ -5279,7 +5301,7 @@ class HospitalImpl implements HospitalInterface{
                     }
                 });*/
 
-                $latestBloodExamQuery = DB::table('patient_blood_examination as pbe');
+                /*$latestBloodExamQuery = DB::table('patient_blood_examination as pbe');
                 $latestBloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
                 $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
                 $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
@@ -5291,21 +5313,79 @@ class HospitalImpl implements HospitalInterface{
                 $latestBloodExamQuery->select('pbe.id as patientExaminationId', 'pbe.patient_id', 'pbe.hospital_id',
                     'be.id as examinationId','be.examination_name as examinationName','be.default_normal_values as examinationDefaultValue', 'pbe.examination_date as examinationDate',
                     'pbe.examination_time', 'pbei.id as patientExaminationItemId','pbei.test_readings as Reading','pbei.test_reading_status as ReadingStatus',
+                    'pbei.is_value_set as isValueSet');*/
+
+                //$subQuery = BloodExamination::where('status', '=', 1);
+
+                //$latestBloodExamQuery =
+
+                /*$latestBloodExamQuery = DB::select("(SELECT pbe.id as patientExaminationId, pbe.patient_id, pbe.hospital_id,
+                                        be.id AS examinationId, be.examination_name as examinationName,
+                                        be.default_normal_values as examinationDefaultValue, pbe.examination_date as examinationDate,
+                                        pbe.examination_time, be.parent_id,
+                                        be1.examination_name AS parent_examination_name,
+                                        pbei.id as examinationItemId, pbei.is_value_set FROM
+                                        (SELECT be1.id, be1.parent_id, be1.examination_name FROM blood_examination be1
+                                            WHERE be1.status = 1) AS be1,
+                                        patient_blood_examination_item pbei
+                                        INNER JOIN blood_examination be ON be.id = pbei.blood_examination_id
+                                        INNER JOIN patient_blood_examination pbe ON pbe.id = pbei.patient_blood_examination_id
+                                        WHERE be1.id = be.parent_id
+                                        AND pbe.patient_id = ".$patientId."
+                                        AND pbe.examination_date = '".$bloodTestDate."'
+                                        AND pbe.examination_time = '".$time->examination_time."'
+                                        AND pbei.is_value_set = 1
+                                        ORDER BY pbe.examination_time DESC )");*/
+
+                /*$latestBloodExamQuery = DB::select("(SELECT pbe.id as patientExaminationId, pbe.patient_id, pbe.hospital_id,
+                                        be.id AS examinationId, be.examination_name as examinationName,
+                                        be.default_normal_values as examinationDefaultValue, pbe.examination_date as examinationDate,
+                                        pbe.examination_time, be.parent_id,
+                                        be1.examination_name AS parent_examination_name,
+                                        pbei.id as examinationItemId, pbei.is_value_set FROM
+                                        (SELECT be1.id, be1.parent_id, be1.examination_name FROM blood_examination be1
+                                            WHERE be1.status = 1) AS be1,
+                                        patient_blood_examination_item pbei
+                                        INNER JOIN blood_examination be ON be.id = pbei.blood_examination_id
+                                        INNER JOIN patient_blood_examination pbe ON pbe.id = pbei.patient_blood_examination_id
+                                        WHERE be1.id = be.parent_id
+                                        AND pbe.patient_id = :patientId
+                                        AND pbe.examination_date = :bloodTestDate
+                                        AND pbe.examination_time = :examinationTime
+                                        AND pbei.is_value_set = 1
+                                        ORDER BY pbe.examination_time DESC )", array('patientId' => $patientId,
+                                                'bloodTestDate' => $bloodTestDate, 'examinationTime' => $time->examination_time));*/
+
+                $latestBloodExamQuery = DB::table('patient_blood_examination_item as pbei');
+                $latestBloodExamQuery->join('patient_blood_examination as pbe', 'pbe.id', '=', 'pbei.patient_blood_examination_id');
+                $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
+                $latestBloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
+                $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
+                $latestBloodExamQuery->where('pbe.examination_date', '=', $bloodTestDate);
+                $latestBloodExamQuery->where('pbe.examination_time', '=', $time->examination_time);
+                $latestBloodExamQuery->where('pbei.is_value_set', '=', 1);
+                $latestBloodExamQuery->orderBy('pbe.examination_time', 'DESC');
+                //$latestBloodExamQuery->groupBy('pbe.id');
+                $latestBloodExamQuery->select('pbe.id as patientExaminationId', 'pbe.patient_id', 'pbe.hospital_id',
+                    'be.id as examinationId', 'be.examination_name as examinationName', 'be1.parent_id',
+                    'be1.examination_name AS parent_examination_name', 'be.is_parent',
+                    'be.default_normal_values as examinationDefaultValue',
+                    'pbe.examination_date as examinationDate', 'pbe.examination_time',
+                    'pbei.id as patientExaminationItemId','pbei.test_readings as readings','pbei.test_reading_status as readingStatus',
                     'pbei.is_value_set as isValueSet');
+                //dd($latestBloodExamQuery->toSql());
+                //$latestBloodExamQuery->groupBy('pbe.id');
+
 
                 $bloodTests = $latestBloodExamQuery->get();
+                //dd($latestBloodExamQuery);
 
                 //$patientBloodTests = $bloodTestRecord;
                 //dd($bloodTestRecord);
 
-                //array_push($patientBloodTests, $bloodTestRecord);
+                //array_push($patientBloodTests, $latestBloodExamQuery);
                 array_push($patientBloodTests, $bloodTests);
 
-                //$patientBloodTests[] = $bloodTestRecord;
-
-                //dd($bloodTestRecord);
-                //$patientBloodTests[$time->examination_time] = $accommodations;
-                //reset($accommodations);
             }
 
             //dd($patientBloodTests);
@@ -5647,16 +5727,20 @@ class HospitalImpl implements HospitalInterface{
                     }
                 });*/
 
+                //$dentalTestQuery->where('pme.is_value_set', '=', 1);
+
                 $xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
                 $xrayTestQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
-                $xrayTestQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+                $xrayTestQuery->join('xray_examination_items as xei', 'xei.id', '=', 'pxei.xray_examination_item_id');
+                $xrayTestQuery->join('xray_category as xc', 'xc.id', '=', 'xei.xray_category_id');
                 $xrayTestQuery->where('pxe.patient_id', '=', $patientId);
                 $xrayTestQuery->where('pxe.examination_date', '=', $xrayDate);
                 $xrayTestQuery->where('pxe.examination_time', '=', $time->examination_time);
                 $xrayTestQuery->orderBy('pxe.examination_time', 'DESC');
                 //$dentalTestQuery->where('pme.is_value_set', '=', 1);
-                $xrayTestQuery->select('pxe.patient_id', 'pxe.hospital_id', 'xe.id as examinationId',
-                    'xe.examination_name as examinationName', 'pxe.examination_date as examinationDate',
+                $xrayTestQuery->select('pxe.patient_id', 'pxe.hospital_id', 'xc.id as categoryId',
+                    'xei.id as examinationId', 'xc.category_name',
+                    'xei.examination_name as examinationName', 'pxe.examination_date as examinationDate',
                     'pxei.id as patientExaminationId', 'pxe.examination_time');
 
                 $patientXrayTests = $xrayTestQuery->get();
@@ -5684,6 +5768,75 @@ class HospitalImpl implements HospitalInterface{
 
         return $xrayTestDetails;
     }
+
+    /**
+     * Get all blood tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllBloodTests()
+    {
+        $bloodTests = null;
+
+        try
+        {
+            $query = DB::table('blood_examination as be')->where('be.status', '=', 1);
+            $query->where('be.is_parent', '=', 1);
+            $query->select('be.id', 'be.examination_name');
+
+            $bloodTests = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::BLOODTEST_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::BLOODTEST_LIST_ERROR, $exc);
+        }
+
+        return $bloodTests;
+    }
+
+    /**
+     * Get all urine tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllUrineTests()
+    {
+        $urineTests = null;
+
+        try
+        {
+            $query = DB::table('urine_examination as ue')->where('ue.status', '=', 1);
+            $query->where('ue.is_parent', '=', 1);
+            $query->select('ue.id', 'ue.examination_name');
+
+            $urineTests = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::URINETEST_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::URINETEST_LIST_ERROR, $exc);
+        }
+
+        return $urineTests;
+    }
+
 
     /**
      * Get all family illness
@@ -5901,6 +6054,7 @@ class HospitalImpl implements HospitalInterface{
             $query->join('dental_category as dc', 'dc.id', '=', 'dei.dental_category_id');
             $query->select('dei.id', 'dei.examination_name', 'dc.id as category_id', 'dc.category_name');
 
+            //dd($query->toSql());
             $dentalExaminations = $query->get();
         }
         catch(QueryException $queryEx)
@@ -5931,8 +6085,12 @@ class HospitalImpl implements HospitalInterface{
 
         try
         {
-            $query = DB::table('xray_examination as xe')->where('xe.status', '=', 1);
-            $query->select('xe.id', 'xe.examination_name', 'xe.category');
+            /*$query = DB::table('xray_examination as xe')->where('xe.status', '=', 1);
+            $query->select('xe.id', 'xe.examination_name', 'xe.category');*/
+
+            $query = DB::table('xray_examination_items as xei')->where('xei.examination_status', '=', 1);
+            $query->join('xray_category as xc', 'xc.id', '=', 'xei.xray_category_id');
+            $query->select('xei.id', 'xei.examination_name', 'xc.id as category_id', 'xc.category_name');
 
             $xrayExaminations = $query->get();
         }
@@ -8675,6 +8833,8 @@ class HospitalImpl implements HospitalInterface{
             $urineExaminations = $patientUrineVM->getExaminations();
             $examinationDate = $patientUrineVM->getExaminationDate();
             $examinationTime = $patientUrineVM->getExaminationTime();
+
+            $urineExamCategory = CA::get('constants.URINE_EXAMINATION_CATEGORY');
             //dd($examinationDate);
 
             /*$doctor = Helper::checkDoctorExists($doctorId);
@@ -8733,20 +8893,14 @@ class HospitalImpl implements HospitalInterface{
                 //$patientBloodExamination = $bloodExamination->save();
                 $urineExamination->save();
 
-                foreach($urineExaminations as $examination)
+                /*foreach($urineExaminations as $examination)
                 {
                     //dd($bloodExaminations);
                     //$examinationId = $examination->examinationId;
-                    //$examinationName = $examination->examinationName;
-                    //$pregnancyDate = $pregnancy->pregnancyDate;
+
                     $urineExaminationItems = new PatientUrineExaminationItems();
                     $urineExaminationItems->urine_examination_id = $examination->examinationId;
-                    //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
 
-                    //$dentalExaminationItems->dental_examination_name = property_exists($examination->dentalExaminationName, 'dentalExaminationName') ? $examination->dentalExaminationName : null;
-                    //$dentalExaminationItems->dental_examination_name = (isset($examination->dentalExaminationName)) ? $examination->dentalExaminationName : null;
-
-                    //$dentalExaminationItems->dental_examination_name = $examination->dentalExaminationName;
                     $urineExaminationItems->is_value_set = $examination->isValueSet;
                     $urineExaminationItems->created_by = $patientUrineVM->getCreatedBy();
                     $urineExaminationItems->modified_by = $patientUrineVM->getUpdatedBy();
@@ -8754,6 +8908,64 @@ class HospitalImpl implements HospitalInterface{
                     $urineExaminationItems->updated_at = $patientUrineVM->getUpdatedAt();
 
                     $urineExamination->urineexaminationitems()->save($urineExaminationItems);
+
+                }*/
+
+                foreach($urineExaminations as $examination)
+                {
+
+                    //dd($bloodExaminations);
+                    $examinationId = $examination->examinationId;
+                    $isValueSet = $examination->isValueSet;
+
+                    if(in_array($examinationId, $urineExamCategory))
+                    {
+
+                        //dd($examinationId);
+                        $categoryQuery = DB::table('urine_examination as ue')->where('ue.parent_id', '=', $examinationId);
+                        $categoryQuery->where('ue.has_child', '!=', 1);
+                        $categoryQuery->where('ue.status', '=', 1);
+                        $categoryQuery->select('id');
+
+                        //dd($categoryQuery->toSql());
+
+                        $categoryItems = $categoryQuery->get();
+                        //dd($categoryItems);
+
+                        foreach($categoryItems as $item)
+                        {
+                            //dd($item);
+                            $urineExaminationItems = new PatientUrineExaminationItems();
+
+                            $urineExaminationItems->urine_examination_id = $item->id;
+                            $urineExaminationItems->is_value_set = $examination->isValueSet;
+                            $urineExaminationItems->created_by = $patientUrineVM->getCreatedBy();
+                            $urineExaminationItems->modified_by = $patientUrineVM->getUpdatedBy();
+                            $urineExaminationItems->created_at = $patientUrineVM->getCreatedAt();
+                            $urineExaminationItems->updated_at = $patientUrineVM->getUpdatedAt();
+
+                            $urineExamination->urineexaminationitems()->save($urineExaminationItems);
+                        }
+                        /*if($isValueSet == 1)
+                        {
+
+                        }*/
+
+
+                    }
+                    else
+                    {
+                        $urineExaminationItems = new PatientUrineExaminationItems();
+
+                        $urineExaminationItems->urine_examination_id = $examination->examinationId;
+                        $urineExaminationItems->is_value_set = $examination->isValueSet;
+                        $urineExaminationItems->created_by = $patientUrineVM->getCreatedBy();
+                        $urineExaminationItems->modified_by = $patientUrineVM->getUpdatedBy();
+                        $urineExaminationItems->created_at = $patientUrineVM->getCreatedAt();
+                        $urineExaminationItems->updated_at = $patientUrineVM->getUpdatedAt();
+
+                        $urineExamination->urineexaminationitems()->save($urineExaminationItems);
+                    }
 
                 }
 
@@ -9035,6 +9247,7 @@ class HospitalImpl implements HospitalInterface{
             $doctorId = $patientBloodVM->getDoctorId();
             $hospitalId = $patientBloodVM->getHospitalId();
             $labId = $patientBloodVM->getLabId();
+
             //$patientUser = User::find($patientId);
 
             $patientExaminations = $patientBloodVM->getExaminations();
@@ -9124,6 +9337,7 @@ class HospitalImpl implements HospitalInterface{
     {
         $status = true;
         //$hospitalLabId = null;
+        //dd($patientBloodVM);
 
         try
         {
@@ -9137,6 +9351,10 @@ class HospitalImpl implements HospitalInterface{
             $bloodExaminations = $patientBloodVM->getExaminations();
             $examinationDate = $patientBloodVM->getExaminationDate();
             $examinationTime = $patientBloodVM->getExaminationTime();
+
+            $bloodExamCategory = CA::get('constants.BLOOD_EXAMINATION_CATEGORY');
+
+
             //dd($examinationDate);
 
             /*$doctor = Helper::checkDoctorExists($doctorId);
@@ -9197,25 +9415,59 @@ class HospitalImpl implements HospitalInterface{
 
                 foreach($bloodExaminations as $examination)
                 {
+
                     //dd($bloodExaminations);
-                    //$examinationId = $examination->examinationId;
-                    //$examinationName = $examination->examinationName;
-                    //$pregnancyDate = $pregnancy->pregnancyDate;
-                    $bloodExaminationItems = new PatientBloodExaminationItems();
-                    $bloodExaminationItems->blood_examination_id = $examination->examinationId;
-                    //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
+                    $examinationId = $examination->examinationId;
+                    $isValueSet = $examination->isValueSet;
 
-                    //$dentalExaminationItems->dental_examination_name = property_exists($examination->dentalExaminationName, 'dentalExaminationName') ? $examination->dentalExaminationName : null;
-                    //$dentalExaminationItems->dental_examination_name = (isset($examination->dentalExaminationName)) ? $examination->dentalExaminationName : null;
+                    if(in_array($examinationId, $bloodExamCategory))
+                    {
 
-                    //$dentalExaminationItems->dental_examination_name = $examination->dentalExaminationName;
-                    $bloodExaminationItems->is_value_set = $examination->isValueSet;
-                    $bloodExaminationItems->created_by = $patientBloodVM->getCreatedBy();
-                    $bloodExaminationItems->modified_by = $patientBloodVM->getUpdatedBy();
-                    $bloodExaminationItems->created_at = $patientBloodVM->getCreatedAt();
-                    $bloodExaminationItems->updated_at = $patientBloodVM->getUpdatedAt();
+                        //dd($examinationId);
+                        $categoryQuery = DB::table('blood_examination as be')->where('be.parent_id', '=', $examinationId);
+                        $categoryQuery->where('be.has_child', '!=', 1);
+                        $categoryQuery->where('be.status', '=', 1);
+                        $categoryQuery->select('id');
 
-                    $bloodExamination->bloodexaminationitems()->save($bloodExaminationItems);
+                        //dd($categoryQuery->toSql());
+
+                        $categoryItems = $categoryQuery->get();
+                        //dd($categoryItems);
+
+                        foreach($categoryItems as $item)
+                        {
+                            //dd($item);
+                            $bloodExaminationItems = new PatientBloodExaminationItems();
+
+                            $bloodExaminationItems->blood_examination_id = $item->id;
+                            $bloodExaminationItems->is_value_set = $examination->isValueSet;
+                            $bloodExaminationItems->created_by = $patientBloodVM->getCreatedBy();
+                            $bloodExaminationItems->modified_by = $patientBloodVM->getUpdatedBy();
+                            $bloodExaminationItems->created_at = $patientBloodVM->getCreatedAt();
+                            $bloodExaminationItems->updated_at = $patientBloodVM->getUpdatedAt();
+
+                            $bloodExamination->bloodexaminationitems()->save($bloodExaminationItems);
+                        }
+                        /*if($isValueSet == 1)
+                        {
+
+                        }*/
+
+
+                    }
+                    else
+                    {
+                        $bloodExaminationItems = new PatientBloodExaminationItems();
+
+                        $bloodExaminationItems->blood_examination_id = $examination->examinationId;
+                        $bloodExaminationItems->is_value_set = $examination->isValueSet;
+                        $bloodExaminationItems->created_by = $patientBloodVM->getCreatedBy();
+                        $bloodExaminationItems->modified_by = $patientBloodVM->getUpdatedBy();
+                        $bloodExaminationItems->created_at = $patientBloodVM->getCreatedAt();
+                        $bloodExaminationItems->updated_at = $patientBloodVM->getUpdatedAt();
+
+                        $bloodExamination->bloodexaminationitems()->save($bloodExaminationItems);
+                    }
 
                 }
 
@@ -9229,7 +9481,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(QueryException $queryEx)
         {
-            //dd($queryEx);
+            dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR, $queryEx);
         }
@@ -9240,7 +9492,7 @@ class HospitalImpl implements HospitalInterface{
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR, $exc);
         }
@@ -9561,7 +9813,7 @@ class HospitalImpl implements HospitalInterface{
                 $dentalExamination->modified_by = $patientDentalVM->getUpdatedBy();
                 $dentalExamination->created_at = $patientDentalVM->getCreatedAt();
                 $dentalExamination->updated_at = $patientDentalVM->getUpdatedAt();
-                $patientDentalExamination = $dentalExamination->save();
+                $dentalExamination->save();
 
                 foreach($dentalExaminations as $examination)
                 {
@@ -9703,7 +9955,7 @@ class HospitalImpl implements HospitalInterface{
                 {
                     //dd($examination);
                     $xrayExaminationItems = new PatientXRayExaminationItems();
-                    $xrayExaminationItems->xray_examination_id = $examination->xrayExaminationId;
+                    $xrayExaminationItems->xray_examination_item_id = $examination->xrayExaminationId;
                     //$examinationDate = property_exists($patientDentalVM->getExaminationDate(), 'examinationDate') ? $examinationDate : null;
 
                     //$xrayExaminationItems->xray_examination_name = property_exists($examination->xrayExaminationName, 'xrayExaminationName') ? $examination->xrayExaminationName : null;

@@ -5726,6 +5726,11 @@ class DoctorController extends Controller
         {
             //dd($personalHistoryRequest->all());
             $patientBloodVM = PatientProfileMapper::setPatientBloodExamination($examinationRequest);
+
+            //$examinations = $patientBloodVM->getExaminations();
+
+            //dd($patientBloodVM);
+
             //dd($patientMotionVM);
             $status = $this->hospitalService->savePatientBloodTests($patientBloodVM);
 
@@ -5744,12 +5749,13 @@ class DoctorController extends Controller
         }
         catch(HospitalException $hospitalExc)
         {
+            dd($hospitalExc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR));
             $responseJson->sendErrorResponse($hospitalExc);
         }
         catch(Exception $exc)
         {
-            //dd($exc);
+            dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
@@ -6656,7 +6662,10 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientBloodTests = DB::select('select * from blood_examination where status = ?', [1]);
+            $patientBloodTests = $this->hospitalService->getAllBloodTests();
+            //dd($patientBloodTests);
+
+            //$patientBloodTests = DB::select('select * from blood_examination where status = ?', [1]);
             //dd($blood_examination);
 
         }
@@ -6720,8 +6729,9 @@ class DoctorController extends Controller
         try
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientUrineTests = $this->hospitalService->getAllUrineTests();
 
-            $patientUrineTests = DB::select('select * from urine_examination where status = ?', [1]);
+            //$patientUrineTests = DB::select('select * from urine_examination where status = ?', [1]);
 
         }
         catch(HospitalException $hospitalExc)
@@ -8578,7 +8588,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientBloodTests = DB::select('select * from blood_examination where status = ?', [1]);
+            //$patientBloodTests = DB::select('select * from blood_examination where status = ?', [1]);
+            $patientBloodTests = $this->hospitalService->getAllBloodTests();
             //dd($blood_examination);
 
         }
@@ -8643,7 +8654,9 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientUrineTests = DB::select('select * from urine_examination where status = ?', [1]);
+            $patientUrineTests = $this->hospitalService->getAllUrineTests();
+
+            //$patientUrineTests = DB::select('select * from urine_examination where status = ?', [1]);
 
         }
         catch(HospitalException $hospitalExc)

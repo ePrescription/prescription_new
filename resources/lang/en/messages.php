@@ -269,6 +269,14 @@
         "808" => "Unable to save patient xray examination details",
         "809" => "Successfully saved patient xray examination details",
 
+        "810" => "Unable to retrieve blood tests",
+        "811" => "Successfully retrieved blood tests",
+        "812" => "No blood tests available",
+
+        "813" => "Unable to retrieve urine tests",
+        "814" => "Successfully retrieved urine tests",
+        "815" => "No urine tests available",
+
         "851" => "Unable to retrieve specialties list",
         "852" => "Successfully retrieved specialties list",
         "853" => "No specialties list available",

@@ -2123,6 +2123,62 @@ class HospitalService {
     }
 
     /**
+     * Get all blood tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllBloodTests()
+    {
+        $bloodTests = null;
+
+        try
+        {
+            $bloodTests = $this->hospitalRepo->getAllBloodTests();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::BLOODTEST_LIST_ERROR, $exc);
+        }
+
+        return $bloodTests;
+    }
+
+    /**
+     * Get all urine tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllUrineTests()
+    {
+        $urineTests = null;
+
+        try
+        {
+            $urineTests = $this->hospitalRepo->getAllUrineTests();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::URINETEST_LIST_ERROR, $exc);
+        }
+
+        return $urineTests;
+    }
+
+    /**
      * Get all family illness
      * @param none
      * @throws $hospitalException
