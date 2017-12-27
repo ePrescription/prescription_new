@@ -14,6 +14,7 @@ class PatientProfileViewModel
     private $patientId;
     private $name;
     private $address;
+    private $occupation;
     private $careOf;
     private $city;
     private $country;
@@ -100,6 +101,22 @@ class PatientProfileViewModel
     public function setAddress($address)
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOccupation()
+    {
+        return $this->occupation;
+    }
+
+    /**
+     * @param mixed $careOf
+     */
+    public function setOccupation($occupation)
+    {
+        $this->occupation = $occupation;
     }
 
     /**

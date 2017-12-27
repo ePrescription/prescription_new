@@ -181,7 +181,7 @@ $time_array=array(
                                         </div>
 
                                             <!-- form start -->
-                                        <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/savepatientwithappointment" id="appointment" role="form" method="POST">
+                                        <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/savepatientwithappointment" id="appointment" role="form" method="POST" enctype="multipart/form-data">
                                             <input type="hidden" name="hospitalId" value="{{Auth::user()->id}}" required="required" />
                                             <input type="hidden" name="patientId" id="patientId" value="0" required="required" />
                                             <div class="col-md-12">
@@ -193,6 +193,8 @@ $time_array=array(
                                                         <input type="radio" class="form-controlx" name="visiting" value="1" required="required" checked onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;First time
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <input type="radio" class="form-controlx" name="visiting" value="2" required="required" onclick="javascript:visitPatient(2);" />&nbsp;&nbsp;Followup
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <input type="radio" class="form-controlx" name="visiting" value="1" required="required" onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;Visitor
                                                     </div>
                                                 </div>
 
@@ -256,7 +258,49 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Martial Status <span class="red">*</span></label>
+                                                    <div class="col-sm-9">
+                                                        <input type="radio" class="form-controlx" id="married1" name="maritalStatus" value="1" required="required" />&nbsp;&nbsp;Married
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <input type="radio" class="form-controlx" id="married2" name="maritalStatus" value="0" required="required" />&nbsp;&nbsp;Unmarried
+                                                        @if ($errors->has('maritalStatus'))<p class="error" style="">{!!$errors->first('maritalStatus')!!}</p>@endif
+                                                    </div>
+                                                </div>
 
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Occupation</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="occupation" id="occupation">
+                                                            <option value="" selected></option>
+                                                            <option value="Baby">Baby</option>
+                                                            <option value="Student">Student</option>
+                                                            <option value="Employee">Employee</option>
+                                                            <option value="Profession">Profession</option>
+                                                            <option value="Self-Employee">Self-Employee</option>
+                                                            <option value="Un-Employee">Un-Employee</option>
+                                                            <option value="Senior">Senior</option>
+                                                        </select>
+                                                        @if ($errors->has('occupation'))<p class="error" style="">{!!$errors->first('occupation')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">C/o</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="careof" id="careof" value="" />
+                                                        @if ($errors->has('careof'))<p class="error" style="">{!!$errors->first('careof')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">DOB</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="date" class="form-control" name="dob" id="dob" value="" />
+                                                        @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
+                                                    </div>
+                                                </div>
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Relationship</label>
@@ -291,6 +335,13 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Photo</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="file" class="form-control" name="patient_photo" id="patient_photo" value="" />
+                                                        @if ($errors->has('patient_photo'))<p class="error" style="">{!!$errors->first('patient_photo')!!}</p>@endif
+                                                    </div>
+                                                </div>
 
                                                 <h4 class="m-t-0 m-b-30">Appointment Info</h4>
 
@@ -519,6 +570,11 @@ $time_array=array(
                 $('input#age').attr('readonly', false);
                 $('input#gender1').attr('disabled', false);
                 $('input#gender2').attr('disabled', false);
+                $('input#married1').attr('disabled', false);
+                $('input#married2').attr('disabled', false);
+                $('select#occupation').attr('disabled', false);
+                $('input#careof').attr('readonly', false);
+                $('input#dob').attr('readonly', false);
                 $('select#relationship').attr('disabled', false);
                 $('input#spouseName').attr('disabled', false);
                 $('textarea#address').attr('disabled', false);
@@ -534,6 +590,11 @@ $time_array=array(
                 $('input#age').attr('readonly', true);
                 $('input#gender1').attr('disabled', true);
                 $('input#gender2').attr('disabled', true);
+                $('input#married1').attr('disabled', true);
+                $('input#married2').attr('disabled', true);
+                $('select#occupation').attr('disabled', true);
+                $('input#careof').attr('readonly', true);
+                $('input#dob').attr('readonly', true);
                 $('select#relationship').attr('disabled', true);
                 $('input#spouseName').attr('disabled', true);
                 $('textarea#address').attr('disabled', true);
@@ -570,6 +631,18 @@ $time_array=array(
                         $("input#gender2").attr('checked', 'checked');
                     }
 
+                    if(data.result[0].married==1)
+                    {
+                        $("input#married1").attr('checked', 'checked');
+                    }
+                    if(data.result[0].married==2)
+                    {
+                        $("input#married2").attr('checked', 'checked');
+                    }
+
+                    $("select#occupation").val(data.result[0].occupation);
+                    $("input#careof").val(data.result[0].careof);
+                    $("input#dob").val(data.result[0].dob);
                     $("select#relationship").val(data.result[0].relationship);
                     $("input#spouseName").val(data.result[0].spouseName);
                     $("textarea#address").val(data.result[0].address);

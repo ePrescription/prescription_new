@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Session;
 
 use Illuminate\Support\Facades\DB;
 
+
 use Mail;
 use GuzzleHttp\Client;
 
@@ -46,6 +47,7 @@ use App\Http\ViewModels\PatientPrescriptionViewModel;
 
 use Softon\Indipay\Facades\Indipay;
 
+//use Illuminate\Support\Facades\Input;
 
 class DoctorController extends Controller
 {
@@ -2435,6 +2437,23 @@ class DoctorController extends Controller
 
         try
         {
+
+            //$patient_photo = \Input::file('patient_photo');
+            if(Input::hasFile('patient_photo'))
+            {
+                $destinationPath = 'uploads/patient_photo'; // upload path
+                $extension = Input::file('patient_photo')->getClientOriginalExtension(); // getting file extension
+                $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
+                $upload_success = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
+
+                $patientProfileRequest->patientPhoto = $fileName;
+            }
+            else
+            {
+                $patientProfileRequest->patientPhoto = "";
+            }
+
+
             $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
             $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 

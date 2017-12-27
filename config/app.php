@@ -166,6 +166,7 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Softon\Indipay\IndipayServiceProvider::class
 
+
     ],
 
     /*
@@ -212,6 +213,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'Input' => Illuminate\Support\Facades\Input::class,
+
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
 
@@ -220,6 +223,8 @@ return [
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         'Indipay' => Softon\Indipay\Facades\Indipay::class
+
+
 
     ],
 
