@@ -273,13 +273,14 @@ $time_array=array(
                                                     <div class="col-sm-9">
                                                         <select class="form-control" name="occupation" id="occupation">
                                                             <option value="" selected></option>
-                                                            <option value="Baby">Baby</option>
+                                                            <option value="Daily Labour">Daily Labour</option>
+                                                            <option value="Farmer">Farmer</option>
+                                                            <option value="Gov.Employee">Gov.Employee</option>
+                                                            <option value="House Wife">House Wife</option>
+                                                            <option value="Private Employee">Private Employee</option>
+                                                            <option value="Self Employee">Self Employee</option>
                                                             <option value="Student">Student</option>
-                                                            <option value="Employee">Employee</option>
-                                                            <option value="Profession">Profession</option>
-                                                            <option value="Self-Employee">Self-Employee</option>
-                                                            <option value="Un-Employee">Un-Employee</option>
-                                                            <option value="Senior">Senior</option>
+
                                                         </select>
                                                         @if ($errors->has('occupation'))<p class="error" style="">{!!$errors->first('occupation')!!}</p>@endif
                                                     </div>
@@ -475,6 +476,16 @@ $time_array=array(
                                                         <input type="number" min="0" class="form-control" id="fee" name="fee" value="" required="required" />
                                                     </div>
                                                 </div>
+
+                                                    <div class="form-group col-md-12">
+                                                        <label class="col-sm-3 control-label">Payment Status <span class="red">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="radio" class="form-controlx" id="paymentstatus1" name="paymentStatus" value="1" required="required" />&nbsp;&nbsp;Paid
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <input type="radio" class="form-controlx" id="paymentstatus2" name="paymentStatus" value="0" required="required" />&nbsp;&nbsp;Unpaid
+                                                            @if ($errors->has('paymentStatus'))<p class="error" style="">{!!$errors->first('paymentStatus')!!}</p>@endif
+                                                        </div>
+                                                    </div>
                                                 </div>
 
 
