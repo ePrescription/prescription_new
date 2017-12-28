@@ -5029,7 +5029,7 @@ class HospitalImpl implements HospitalInterface{
 
             }
 
-            dd($urineTestDetails);
+            //dd($urineTestDetails);
         }
         catch(QueryException $queryEx)
         {
@@ -7248,7 +7248,7 @@ class HospitalImpl implements HospitalInterface{
 
             $latestXrayExamQuery = DB::table('patient_xray_examination_item as pxei');
             $latestXrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
-            $latestXrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+            $latestXrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_item_id');
             $latestXrayExamQuery->where('pxe.examination_date', function($query) use($patientId){
                 $query->select(DB::raw('MAX(pxe.examination_date)'));
                 $query->from('patient_xray_examination as pxe')->where('pxe.patient_id', '=', $patientId);
@@ -8328,6 +8328,7 @@ class HospitalImpl implements HospitalInterface{
 
     public function savePatientScanDetails(PatientScanViewModel $patientScanVM)
     {
+        //dd($patientScanVM);
         $status = true;
 
         try
@@ -8357,6 +8358,7 @@ class HospitalImpl implements HospitalInterface{
 
             if (!is_null($patient))
             {
+                //dd('in');
                 //DB::table('patient_family_illness')->where('patient_id', $patientId)->delete();
 
                 $patientUser = User::find($patientId);
@@ -8397,6 +8399,7 @@ class HospitalImpl implements HospitalInterface{
             }
             else
             {
+                //dd('out');
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
         }
@@ -8522,7 +8525,7 @@ class HospitalImpl implements HospitalInterface{
                 }
 
                 $query1 = PatientLabTests::where('patient_id', '=', $patientId)->where('hospital_id', '=', $hospitalId);
-                dd($query1->toSql());
+                //dd($query1->toSql());
 
                 /*if($count == 0) {
                     $patientLabTest = new PatientLabTests();

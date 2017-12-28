@@ -5370,7 +5370,7 @@ class DoctorController extends Controller
         {
             //dd($personalHistoryRequest->all());
             $patientScanVM = PatientProfileMapper::setPatientScanDetails($scanRequest);
-            //dd($patientHistoryVM);
+            //dd($patientScanVM);
             $status = $this->hospitalService->savePatientScanDetails($patientScanVM);
 
 

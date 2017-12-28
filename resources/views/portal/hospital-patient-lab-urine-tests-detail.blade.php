@@ -47,16 +47,19 @@
                                                 <tr>
                                                     @if($recentTestValue->isValueSet==1)
                                                         <td class="col-sm-4" >
+                                                            @if($recentTestValue->is_parent==0)
+                                                                {{$recentTestValue->parent_examination_name}} -
+                                                            @endif
                                                             {{$recentTestValue->examinationName}}
                                                         </td>
                                                         <td class="col-sm-4" >
 
 
                                                             @if($recentTestValue->ReadingStatus==1)
-                                                                {{$recentTestValue->Reading}}
+                                                                {{$recentTestValue->readings}}
                                                             @else
                                                                 <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
-                                                                <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->Reading}}">
+                                                                <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->readings}}">
                                                             @endif
                                                         </td>
                                                         <td class="col-sm-4" >
@@ -125,10 +128,13 @@
                                                 <tr>
                                                     @if($recentTestValue->isValueSet==1)
                                                         <td class="col-sm-4" >
+                                                            @if($recentTestValue->is_parent==0)
+                                                                {{$recentTestValue->parent_examination_name}} -
+                                                            @endif
                                                             {{$recentTestValue->examinationName}}
                                                         </td>
                                                         <td class="col-sm-4" >
-                                                            {{$recentTestValue->Reading}}
+                                                            {{$recentTestValue->readings}}
                                                         </td>
                                                         <td class="col-sm-4" >
                                                             {{$recentTestValue->examinationDefaultValue}}

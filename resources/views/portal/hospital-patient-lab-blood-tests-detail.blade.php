@@ -13,6 +13,7 @@
     <style>
         form.display label.control-label{ text-align:left; }
     </style>
+
     @if(Session::get('LoginUserType')=="lab")
 
 
@@ -47,16 +48,19 @@
                             <tr>
                             @if($recentTestValue->isValueSet==1)
                                 <td class="col-sm-4" >
+                                    @if($recentTestValue->is_parent==0)
+                                        {{$recentTestValue->parent_examination_name}} -
+                                    @endif
                                     {{$recentTestValue->examinationName}}
                                 </td>
                                 <td class="col-sm-4" >
 
 
                                     @if($recentTestValue->ReadingStatus==1)
-                                        {{$recentTestValue->Reading}}
+                                        {{$recentTestValue->readings}}
                                     @else
                                     <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
-                                    <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->Reading}}">
+                                    <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->readings}}">
                                     @endif
                                 </td>
                                 <td class="col-sm-4" >
@@ -94,7 +98,6 @@
     @else
     <form role="form" method="POST" class="display form-horizontal">
 
-
         @if(count($bloodTests)>0)
             <h4 class="m-t-0 m-b-30">Blood Test Details</h4>
             @foreach($bloodTests as $recentTest)
@@ -124,10 +127,13 @@
                             <tr>
                                 @if($recentTestValue->isValueSet==1)
                                     <td class="col-sm-4" >
-                                        {{$recentTestValue->examinationName}}
+                                        @if($recentTestValue->is_parent==0)
+                                            {{$recentTestValue->parent_examination_name}} -
+                                        @endif
+                                            {{$recentTestValue->examinationName}}
                                     </td>
                                     <td class="col-sm-4" >
-                                        {{$recentTestValue->Reading}}
+                                        {{$recentTestValue->readings}}
                                     </td>
                                     <td class="col-sm-4" >
                                         {{$recentTestValue->examinationDefaultValue}}
