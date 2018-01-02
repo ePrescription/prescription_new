@@ -4928,6 +4928,7 @@ class HospitalImpl implements HospitalInterface{
     {
         $urineTests = null;
         $urineTestDetails = array();
+        $testArray = null;
 
         try
         {
@@ -5003,7 +5004,7 @@ class HospitalImpl implements HospitalInterface{
 
                 $urineTests = $urineTestQuery->get();*/
 
-                $urineTestQuery = DB::table('patient_urine_examination_item as puei');
+                /*$urineTestQuery = DB::table('patient_urine_examination_item as puei');
                 $urineTestQuery->join('patient_urine_examination as pue', 'pue.id', '=', 'puei.patient_urine_examination_id');
                 $urineTestQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
                 $urineTestQuery->join('urine_examination as ue1', 'ue1.id', '=', 'ue.parent_id');
@@ -5020,12 +5021,48 @@ class HospitalImpl implements HospitalInterface{
                     'pue.examination_date as examinationDate', 'pue.examination_time',
                     'puei.id as patientExaminationItemId', 'puei.test_readings as readings',
                     'puei.test_reading_status as readingStatus',
-                    'puei.is_value_set as isValueSet');
+                    'puei.is_value_set as isValueSet');*/
 
+                $urineTestQuery = DB::table('patient_urine_examination_item as puei');
+                $urineTestQuery->join('patient_urine_examination as pue', 'pue.id', '=', 'puei.patient_urine_examination_id');
+                $urineTestQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
+                $urineTestQuery->join('urine_examination as ue1', 'ue1.id',  '=', 'ue.parent_id');
+                $urineTestQuery->where('pue.patient_id', '=', $patientId);
+                $urineTestQuery->where('pue.examination_date', '=', $urineTestDate);
+                $urineTestQuery->where('pue.examination_time', '=', $time->examination_time);
+                $urineTestQuery->where('puei.is_value_set', '=', 1);
+                $urineTestQuery->groupBy('ue.parent_id');
+                $urineTestQuery->select('ue.parent_id', 'ue1.examination_name AS parent_examination_name');
                 $urineTests = $urineTestQuery->get();
 
+                //$urineTests = $urineTestQuery->get();
+
+                foreach($urineTests as $urineTest)
+                {
+                    $finalUrineTestQuery = DB::table('patient_urine_examination_item as puei');
+                    $finalUrineTestQuery->join('patient_urine_examination as pue', 'pue.id', '=', 'puei.patient_urine_examination_id');
+                    $finalUrineTestQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
+                    $finalUrineTestQuery->where('pue.patient_id', '=', $patientId);
+                    $finalUrineTestQuery->where('pue.examination_date', '=', $urineTestDate);
+                    $finalUrineTestQuery->where('pue.examination_time', '=', $time->examination_time);
+                    $finalUrineTestQuery->where('puei.is_value_set', '=', 1);
+                    $finalUrineTestQuery->where('ue.parent_id', '=', $urineTest->parent_id);
+                    $finalUrineTestQuery->select('pue.id as patientExaminationId', 'pue.patient_id', 'pue.hospital_id',
+                        'ue.id as examinationId', 'ue.examination_name as examinationName',
+                        'ue.is_parent',
+                        'ue.default_normal_values as examinationDefaultValue',
+                        'pue.examination_date as examinationDate', 'pue.examination_time',
+                        'puei.id as patientExaminationItemId','puei.test_readings as readings','puei.test_reading_status as readingStatus',
+                        'puei.is_value_set as isValueSet');
+
+                    $testArray[$urineTest->parent_examination_name] = $finalUrineTestQuery->get();
+
+
+                }
+
                 //array_push($urineTestDetails, $urineTestRecord);
-                array_push($urineTestDetails, $urineTests);
+                //array_push($urineTestDetails, $urineTests);
+                array_push($urineTestDetails, $testArray);
 
             }
 
@@ -5172,6 +5209,7 @@ class HospitalImpl implements HospitalInterface{
     public function getPatientBloodTests($patientId, $bloodTestDate)
     {
         $bloodTests = null;
+        $finalBloodTests = null;
 
         //$bloodTestRecord = null;
 
@@ -5357,7 +5395,7 @@ class HospitalImpl implements HospitalInterface{
                                         ORDER BY pbe.examination_time DESC )", array('patientId' => $patientId,
                                                 'bloodTestDate' => $bloodTestDate, 'examinationTime' => $time->examination_time));*/
 
-                $latestBloodExamQuery = DB::table('patient_blood_examination_item as pbei');
+                /*$latestBloodExamQuery = DB::table('patient_blood_examination_item as pbei');
                 $latestBloodExamQuery->join('patient_blood_examination as pbe', 'pbe.id', '=', 'pbei.patient_blood_examination_id');
                 $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
                 $latestBloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
@@ -5373,19 +5411,88 @@ class HospitalImpl implements HospitalInterface{
                     'be.default_normal_values as examinationDefaultValue',
                     'pbe.examination_date as examinationDate', 'pbe.examination_time',
                     'pbei.id as patientExaminationItemId','pbei.test_readings as readings','pbei.test_reading_status as readingStatus',
-                    'pbei.is_value_set as isValueSet');
+                    'pbei.is_value_set as isValueSet');*/
                 //dd($latestBloodExamQuery->toSql());
                 //$latestBloodExamQuery->groupBy('pbe.id');
 
+                $bloodTestQuery = DB::table('patient_blood_examination_item as pbei');
+                $bloodTestQuery->join('patient_blood_examination as pbe', 'pbe.id', '=', 'pbei.patient_blood_examination_id');
+                $bloodTestQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
+                $bloodTestQuery->join('blood_examination as be1', 'be1.id',  '=', 'be.parent_id');
+                $bloodTestQuery->where('pbe.patient_id', '=', $patientId);
+                $bloodTestQuery->where('pbe.examination_date', '=', $bloodTestDate);
+                $bloodTestQuery->where('pbe.examination_time', '=', $time->examination_time);
+                $bloodTestQuery->where('pbei.is_value_set', '=', 1);
+                $bloodTestQuery->groupBy('be.parent_id');
+                $bloodTestQuery->select('be.parent_id', 'be1.examination_name AS parent_examination_name');
+                $bloodTests = $bloodTestQuery->get();
 
-                $bloodTests = $latestBloodExamQuery->get();
-                //dd($latestBloodExamQuery);
+                foreach($bloodTests as $bloodTest)
+                {
+                    $finalBloodTestQuery = DB::table('patient_blood_examination_item as pbei');
+                    $finalBloodTestQuery->join('patient_blood_examination as pbe', 'pbe.id', '=', 'pbei.patient_blood_examination_id');
+                    $finalBloodTestQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
+                    $finalBloodTestQuery->where('pbe.patient_id', '=', $patientId);
+                    $finalBloodTestQuery->where('pbe.examination_date', '=', $bloodTestDate);
+                    $finalBloodTestQuery->where('pbe.examination_time', '=', $time->examination_time);
+                    $finalBloodTestQuery->where('pbei.is_value_set', '=', 1);
+                    $finalBloodTestQuery->where('be.parent_id', '=', $bloodTest->parent_id);
+                    //$finalBloodTestQuery->select('be.parent_id');
+                    $finalBloodTestQuery->select('pbe.id as patientExaminationId', 'pbe.patient_id', 'pbe.hospital_id',
+                        'be.id as examinationId', 'be.examination_name as examinationName',
+                        'be.is_parent',
+                        'be.default_normal_values as examinationDefaultValue',
+                        'pbe.examination_date as examinationDate', 'pbe.examination_time',
+                        'pbei.id as patientExaminationItemId','pbei.test_readings as readings','pbei.test_reading_status as readingStatus',
+                        'pbei.is_value_set as isValueSet');
+
+                    $finalBloodTests[$bloodTest->parent_examination_name] = $finalBloodTestQuery->get();
+
+
+                }
+
+
+                //$bloodTests = $latestBloodExamQuery->get();
+
+                //dd($bloodTests);
+
+                /*$bloodTestRecord = array_filter($bloodTests, function($e) use ($bloodTests, $bloodArray){
+                    if($e->examinationId != $e->parent_id)
+                    {
+                        if(!in_array($e->parent_id, $bloodArray))
+                        {
+                            //dd($e->parent_id);
+                            //array_push($bloodArray, $e->parent_id);
+                            //dd($bloodArray);
+                            return true;
+                        }
+                        else
+                        {
+                            //dd('Inside else');
+                            return false;
+                        }
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });*/
+
+                //dd($bloodTestRecord);
+
+                //array_push($bloodArray, $bloodTestRecord[0]['parent_id']);
+
+
+                //dd($bloodArray);
 
                 //$patientBloodTests = $bloodTestRecord;
                 //dd($bloodTestRecord);
 
                 //array_push($patientBloodTests, $latestBloodExamQuery);
-                array_push($patientBloodTests, $bloodTests);
+                //array_push($patientBloodTests, $bloodTests);
+
+                array_push($patientBloodTests, $finalBloodTests);
 
             }
 
