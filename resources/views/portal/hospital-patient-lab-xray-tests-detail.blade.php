@@ -15,7 +15,7 @@
         form.display label.control-label{ text-align:left; }
     </style>
     <form action="#" role="form" method="POST" class="form-horizontal display">
-
+{{dd($patientXrayTests)}}
         @if(count($patientXrayTests)>0)
             <h4 class="m-t-0 m-b-30">X-Ray Test Details</h4>
             @foreach($patientXrayTests as $recentTest)

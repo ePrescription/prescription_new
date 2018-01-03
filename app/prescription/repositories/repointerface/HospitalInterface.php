@@ -156,7 +156,7 @@ interface HospitalInterface {
     public function getPatientDentalTests($patientId, $dentalDate);
     public function savePatientDentalTests(PatientDentalViewModel $patientDentalVM);
 
-    public function getPatientXrayTests($patientId, $dentalDate);
+    public function getPatientXrayTests($patientId, $xrayDate);
     public function savePatientXRayTests(PatientXRayViewModel $patientXRayVM);
 
     public function getAllBloodTests();

@@ -37,7 +37,6 @@
 @if ($errors->has('examinationTime'))<p class="error" style="">{!!$errors->first('examinationTime')!!}</p>@endif
 </div>
 </div>
-
 <?php $i=0; ?>
 @foreach($dentalExaminationCategory as $key => $dentalExaminationCategoryValue)
 @if($key!=4)

@@ -22,7 +22,6 @@
 </div>
 @endif
 <!-- form start -->
-
 @if(count($xrayExaminations)>0)
 
 <form action="{{URL::to('/')}}/fronthospital/rest/api/xraytests" role="form" method="POST" class="form-horizontal ">
@@ -38,6 +37,7 @@
 </div>
 </div>
 
+
 <?php $i=0; ?>
 @foreach($xrayExaminationCategory as $key => $xrayExaminationCategoryValue)
 @if($key!="Other")
@@ -46,7 +46,7 @@
 </div>
 
 @foreach($xrayExaminations as $xrayExaminationsValue)
-@if($xrayExaminationsValue->category == $key)
+@if($xrayExaminationsValue->category_id == $key)
 
 <div class="form-group col-sm-6">
 <label class="col-sm-8 control-label">{{$xrayExaminationsValue->examination_name}}</label>

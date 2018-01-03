@@ -2,6 +2,9 @@
     div.control-label {
         text-align: left !important;
     }
+    table tr th {
+        background: #7578f9;  color: #fff;
+    }
 </style>
 
 <div class="container">
@@ -17,16 +20,17 @@
     @if(Session::get('LoginUserType')=="lab")
 
 
-        <form action="{{URL::to('/')}}/lab/rest/patient/bloodtestresults" role="form" method="POST" class="display form-horizontal">
 
             @if(count($bloodTests)>0)
                 <h4 class="m-t-0 m-b-30">Blood Test Details</h4>
                 @foreach($bloodTests as $recentTest)
-                    <?php $displaySet=0; ?>
+                <form action="{{URL::to('/')}}/lab/rest/patient/bloodtestresults" role="form" method="POST" class="display form-horizontal">
+
+                <?php $displaySet=0; ?>
                     <div class="form-group">
                         @foreach($recentTest as $recentTestDate)
                             @if($displaySet==0)
-                                <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
+                                <label class="col-sm-12 control-label">{{$recentTestDate[0]->examinationDate}} - {{$recentTestDate[0]->examination_time}} </label>
                                 <?php $displaySet=1; ?>
                             @endif
                         @endforeach
@@ -35,7 +39,7 @@
 
 
                         <?php $i=0; ?>
-                        <table id="datatable" class="table table-striped table-bordered">
+                            <table id="datatable" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -44,19 +48,31 @@
                             </tr>
                             </thead>
                             <tbody>
-                        @foreach($recentTest as $recentTestValue)
+                            <?php $recentTestKeyValueName=""; ?>
+                        @foreach($recentTest as $recentTestValueGroup)
+
+                            @foreach($recentTestValueGroup as $recentTestValue)
+                            <?php
+                            $recentTestKeyValue=array_keys($recentTest,$recentTestValueGroup);
+                            if($recentTestKeyValueName!=$recentTestKeyValue[0]) {
+                            $recentTestKeyValueName = $recentTestKeyValue[0];
+                            ?>
+                            <tr>
+                                <td colspan="3">
+                                   <strong> {{$recentTestKeyValueName}} </strong>
+                                </td>
+                            </tr>
+                            <?php } ?>
                             <tr>
                             @if($recentTestValue->isValueSet==1)
-                                <td class="col-sm-4" >
-                                    @if($recentTestValue->is_parent==0)
-                                        {{$recentTestValue->parent_examination_name}} -
-                                    @endif
+                                <td class="col-sm-4" style="text-align: right;">
+
                                     {{$recentTestValue->examinationName}}
                                 </td>
                                 <td class="col-sm-4" >
 
 
-                                    @if($recentTestValue->ReadingStatus==1)
+                                    @if($recentTestValue->readingStatus==1)
                                         {{$recentTestValue->readings}}
                                     @else
                                     <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
@@ -65,17 +81,18 @@
                                 </td>
                                 <td class="col-sm-4" >
                                     {{$recentTestValue->examinationDefaultValue}}
-                                    <?php /* ?> {{$recentTestValue->ReadingStatus}} <?php */ ?>
+                                    <?php /* ?> {{$recentTestValue->readingStatus}} <?php */ ?>
                                 </td>
                             @endif
                             </tr>
                             <?php $i++; ?>
+                            @endforeach
                         @endforeach
                             </tbody>
                         </table>
                     </div>
-                @endforeach
-                @if($recentTestValue->ReadingStatus==1)
+
+                @if($recentTestValue->readingStatus==1)
 
                 @else
 
@@ -88,11 +105,13 @@
                 </div>
 
                 @endif
+                </form>
+            @endforeach
 
             @endif
 
 
-        </form>
+
 
 
     @else
@@ -105,7 +124,7 @@
                 <div class="form-group">
                     @foreach($recentTest as $recentTestDate)
                         @if($displaySet==0)
-                            <label class="col-sm-12 control-label">{{$recentTestDate->examinationDate}} - {{$recentTestDate->examination_time}} </label>
+                            <label class="col-sm-12 control-label">{{$recentTestDate[0]->examinationDate}} - {{$recentTestDate[0]->examination_time}} </label>
                             <?php $displaySet=1; ?>
                         @endif
                     @endforeach
@@ -123,13 +142,24 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($recentTest as $recentTestValue)
+                        <?php $recentTestKeyValueName=""; ?>
+                        @foreach($recentTest as $recentTestValueGroup)
+                            @foreach($recentTestValueGroup as $recentTestValue)
+                            <?php
+                            $recentTestKeyValue=array_keys($recentTest,$recentTestValueGroup);
+                            if($recentTestKeyValueName!=$recentTestKeyValue[0]) {
+                            $recentTestKeyValueName = $recentTestKeyValue[0];
+                            ?>
+                            <tr>
+                                <td colspan="3">
+                                    <strong>{{$recentTestKeyValueName}}</strong>
+                                </td>
+                            </tr>
+                            <?php } ?>
                             <tr>
                                 @if($recentTestValue->isValueSet==1)
-                                    <td class="col-sm-4" >
-                                        @if($recentTestValue->is_parent==0)
-                                            {{$recentTestValue->parent_examination_name}} -
-                                        @endif
+                                    <td class="col-sm-4" style="text-align: right;">
+
                                             {{$recentTestValue->examinationName}}
                                     </td>
                                     <td class="col-sm-4" >
@@ -137,11 +167,12 @@
                                     </td>
                                     <td class="col-sm-4" >
                                         {{$recentTestValue->examinationDefaultValue}}
-                                        <?php /* ?> {{$recentTestValue->ReadingStatus}} <?php */ ?>
+                                        <?php /* ?> {{$recentTestValue->readingStatus}} <?php */ ?>
                                     </td>
                                 @endif
                             </tr>
                             <?php $i++; ?>
+                        @endforeach
                         @endforeach
                         </tbody>
                     </table>

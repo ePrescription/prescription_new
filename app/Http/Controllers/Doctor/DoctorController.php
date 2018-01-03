@@ -2901,7 +2901,7 @@ class DoctorController extends Controller
             //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
-            $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
+            //$labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
             //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
             $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
             //dd($patientAppointment);
@@ -6448,7 +6448,7 @@ class DoctorController extends Controller
 
             foreach($xrayExaminations as $xrayExamination)
             {
-                $xrayExaminationCategory[$xrayExamination->category] = $xrayExamination->category;
+                $xrayExaminationCategory[$xrayExamination->category_id] = $xrayExamination->category_name;
             }
 
         }
@@ -8812,9 +8812,10 @@ class DoctorController extends Controller
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $xrayExaminations = $this->hospitalService->getAllXRayItems();
 
+
             foreach($xrayExaminations as $xrayExamination)
             {
-                $xrayExaminationCategory[$xrayExamination->category] = $xrayExamination->category;
+                $xrayExaminationCategory[$xrayExamination->category_id] = $xrayExamination->category_name;
             }
 
         }

@@ -2,6 +2,9 @@
     div.control-label {
         text-align: left !important;
     }
+    table tr th {
+        background: #7578f9;  color: #fff;
+    }
 </style>
 
 
@@ -16,12 +19,13 @@
     </style>
     @if(Session::get('LoginUserType')=="lab")
 
-        <form action="{{URL::to('/')}}/lab/rest/patient/motiontestresults" role="form" method="POST" class="display form-horizontal">
+
 
             @if(count($motionTests)>0)
                 <h4 class="m-t-0 m-b-30">Motion Test Details</h4>
                 @foreach($motionTests as $recentTest)
                     <?php $displaySet=0; ?>
+                    <form action="{{URL::to('/')}}/lab/rest/patient/motiontestresults" role="form" method="POST" class="display form-horizontal">
                     <div class="form-group">
                         @foreach($recentTest as $recentTestDate)
                             @if($displaySet==0)
@@ -70,25 +74,28 @@
                             </tbody>
                         </table>
                     </div>
+
+                        @if($recentTestValue->ReadingStatus==1)
+
+                        @else
+
+                            <div class="col-sm-12 form-group">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-6">
+                                    <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
+                                    <input type="submit" name="addmotion" value="Save Report" class="btn btn-success"/>
+                                </div>
+                            </div>
+
+                        @endif
+                    </form>
                 @endforeach
-                @if($recentTestValue->ReadingStatus==1)
 
-                @else
-
-                    <div class="col-sm-12 form-group">
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-6">
-                            <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
-                            <input type="submit" name="addmotion" value="Save Report" class="btn btn-success"/>
-                        </div>
-                    </div>
-
-                @endif
 
             @endif
 
 
-        </form>
+
 
 
     @else

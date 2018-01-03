@@ -1107,6 +1107,7 @@ class LabController extends Controller
 
         try
         {
+            //dd($testRequest);
 
             /*$bloodResults = array(
                 "patientId"=> 57,

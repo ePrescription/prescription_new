@@ -5050,7 +5050,7 @@ class HospitalImpl implements HospitalInterface{
                     $finalUrineTestQuery->select('pue.id as patientExaminationId', 'pue.patient_id', 'pue.hospital_id',
                         'ue.id as examinationId', 'ue.examination_name as examinationName',
                         'ue.is_parent',
-                        'ue.default_normal_values as examinationDefaultValue',
+                        'ue.normal_default_values as examinationDefaultValue',
                         'pue.examination_date as examinationDate', 'pue.examination_time',
                         'puei.id as patientExaminationItemId','puei.test_readings as readings','puei.test_reading_status as readingStatus',
                         'puei.is_value_set as isValueSet');
@@ -5775,6 +5775,8 @@ class HospitalImpl implements HospitalInterface{
         $patientXrayTests = null;
         $xrayTestDetails = array();
 
+        $finalXrayTests = null;
+
         try
         {
             $patientUser = User::find($patientId);
@@ -5837,7 +5839,7 @@ class HospitalImpl implements HospitalInterface{
 
                 //$dentalTestQuery->where('pme.is_value_set', '=', 1);
 
-                $xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
+                /*$xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
                 $xrayTestQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
                 $xrayTestQuery->join('xray_examination_items as xei', 'xei.id', '=', 'pxei.xray_examination_item_id');
                 $xrayTestQuery->join('xray_category as xc', 'xc.id', '=', 'xei.xray_category_id');
@@ -5849,12 +5851,45 @@ class HospitalImpl implements HospitalInterface{
                 $xrayTestQuery->select('pxe.patient_id', 'pxe.hospital_id', 'xc.id as categoryId',
                     'xei.id as examinationId', 'xc.category_name',
                     'xei.examination_name as examinationName', 'pxe.examination_date as examinationDate',
-                    'pxei.id as patientExaminationId', 'pxe.examination_time');
+                    'pxei.id as patientExaminationId', 'pxe.examination_time');*/
 
-                $patientXrayTests = $xrayTestQuery->get();
+                $xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
+                $xrayTestQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+                $xrayTestQuery->join('xray_examination_items as xei', 'xei.id', '=', 'pxei.xray_examination_item_id');
+                $xrayTestQuery->join('xray_category as xc', 'xc.id', '=', 'xei.xray_category_id');
+                $xrayTestQuery->where('pxe.patient_id', '=', $patientId);
+                $xrayTestQuery->where('pxe.examination_date', '=', $xrayDate);
+                $xrayTestQuery->where('pxe.examination_time', '=', $time->examination_time);
+                $xrayTestQuery->groupBy('xc.id');
+                $xrayTestQuery->select('xc.id', 'xc.category_name');
+                $xrayTests = $xrayTestQuery->get();
+
+                foreach($xrayTests as $xrayTest)
+                {
+                    $finalXrayTestQuery = DB::table('patient_xray_examination_item as pxei');
+                    $finalXrayTestQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+                    $finalXrayTestQuery->join('xray_examination_items as xei', 'xei.id', '=', 'pxei.xray_examination_item_id');
+                    $finalXrayTestQuery->join('xray_category as xc', 'xc.id', '=', 'xei.xray_category_id');
+                    $finalXrayTestQuery->where('pxe.patient_id', '=', $patientId);
+                    $finalXrayTestQuery->where('pxe.examination_date', '=', $xrayDate);
+                    $finalXrayTestQuery->where('pxe.examination_time', '=', $time->examination_time);
+                    $finalXrayTestQuery->where('xc.id', '=', $xrayTest->id);
+                    //$finalBloodTestQuery->select('be.parent_id');
+                    $finalXrayTestQuery->select('pxe.id as patientExaminationId', 'pxe.patient_id', 'pxe.hospital_id',
+                        'xei.id as examinationId', 'xei.examination_name as examinationName',
+                        'pxe.examination_date as examinationDate', 'pxe.examination_time',
+                        'pxei.id as patientExaminationItemId', 'xc.id as category_id', 'xc.category_name');
+
+                    $finalXrayTests[$xrayTest->category_name] = $finalXrayTestQuery->get();
+                }
+
+                //$patientXrayTests = $xrayTestQuery->get();
 
                 //array_push($xrayTestDetails, $xrayTestRecord);
-                array_push($xrayTestDetails, $patientXrayTests);
+                array_push($xrayTestDetails, $finalXrayTests);
+
+                //dd($xrayTestDetails);
+
 
             }
         }
