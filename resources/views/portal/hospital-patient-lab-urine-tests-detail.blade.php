@@ -117,7 +117,7 @@
 
 
 
-                    @else
+                    @elseif(Session::get('LoginUserType')=="doctor")
 
                         <form role="form" method="POST" class="display form-horizontal">
 
@@ -189,7 +189,53 @@
 
                         </form>
 
+                    @else
 
+                        <form role="form" method="POST" class="display form-horizontal">
+
+
+                            @if(count($urineTests)>0)
+                                <h4 class="m-t-0 m-b-30">Urine Test Details</h4>
+                                @foreach($urineTests as $recentTest)
+                                    <?php $displaySet=0; ?>
+                                    <div class="form-group">
+                                        @foreach($recentTest as $recentTestDate)
+                                            @if($displaySet==0)
+                                                <label class="col-sm-12 control-label">{{$recentTestDate[0]->examinationDate}} - {{$recentTestDate[0]->examination_time}} </label>
+                                                <?php $displaySet=1; ?>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                    <div class="form-group col-sm-12">
+
+
+                                        <?php $i=0; ?>
+
+                                            <?php $recentTestKeyValueName=""; ?>
+                                            @foreach($recentTest as $recentTestValueGroup)
+                                                @foreach($recentTestValueGroup as $recentTestValue)
+                                                    <?php
+                                                    $recentTestKeyValue=array_keys($recentTest,$recentTestValueGroup);
+                                                    if($recentTestKeyValueName!=$recentTestKeyValue[0]) {
+                                                    $recentTestKeyValueName = $recentTestKeyValue[0];
+                                                    ?>
+                                                        <div class="col-sm-6">
+                                                            {{$recentTestKeyValueName}}
+                                                        </div>
+                                                    <?php } ?>
+
+
+                                                    <?php $i++; ?>
+                                                @endforeach
+                                            @endforeach
+
+                                    </div>
+                                @endforeach
+
+                            @endif
+
+
+                        </form>
                     @endif
 
                 </div> <!-- panel-body -->

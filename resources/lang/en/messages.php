@@ -97,6 +97,9 @@
         "315" => "Successfully retrieved patient appointments",
         "316" => "No appointments found for the selected date",
 
+        "403" => "Unable to upload patient photo",
+        "404" => "Successfully uploaded patient photo",
+
         "1001" => "Prescription delivered successfully through SMS",
         "1002" => "Unable to deliver prescription through SMS",
         "1003" => "Lab test delivered successfully through SMS",

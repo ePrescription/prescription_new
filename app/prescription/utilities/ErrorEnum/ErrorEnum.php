@@ -135,6 +135,9 @@ class ErrorEnum extends Enum{
     const NO_PRESCRIPTION_LIST_FOUND = 401;
     const NO_PRESCRIPTION_DETAILS_FOUND = 402;
 
+    const PATIENT_PHOTO_UPLOAD_FAILURE = 403;
+    const PATIENT_PHOTO_UPLOAD_SUCCESS = 404;
+
     //Fee receipt codes 500 - 550
     const FEE_RECEIPT_LIST_ERROR = 500;
     const FEE_RECEIPT_LIST_SUCCESS = 501;

@@ -15,6 +15,8 @@ use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
+use Input;
+
 class DoctorApiController extends Controller
 {
     protected $hospitalService;
@@ -2961,4 +2963,55 @@ class DoctorApiController extends Controller
     }
 
     /*Symptom section -- End */
+
+    public function savePatientPhoto(Request $patientProfileRequest)
+    {
+        //dd('HI');
+        //return "HI";
+        $patientProfileVM = null;
+        $status = true;
+        //$jsonResponse = null;
+        $fileName = null;
+        $msg = null;
+        //return $patientProfileRequest->all();
+
+        try
+        {
+
+            //$patient_photo = \Input::file('patient_photo');
+            //if(Input::hasFile('patient_photo'))
+            if ($patientProfileRequest->hasFile('photo'))
+            {
+                $destinationPath = 'uploads/patient_photo'; // upload path
+                //$extension = Input::file('patient_photo')->getClientOriginalExtension(); // getting file extension
+                $extension = $patientProfileRequest->file('photo')->getClientOriginalExtension(); // getting file extension
+                $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
+                //$status = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
+                //$status = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
+                $status = $patientProfileRequest->file('photo')->move($destinationPath, $fileName);
+
+            }
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PHOTO_UPLOAD_SUCCESS));
+                $responseJson->setObj($fileName);
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PHOTO_UPLOAD_FAILURE));
+                $responseJson->setObj($fileName);
+                $responseJson->sendSuccessResponse();
+            }
+
+
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PHOTO_UPLOAD_FAILURE));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+    }
 }
