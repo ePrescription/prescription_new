@@ -2972,7 +2972,9 @@ class DoctorApiController extends Controller
         $status = true;
         //$jsonResponse = null;
         $fileName = null;
+        $fileLocation = null;
         $msg = null;
+
         //return $patientProfileRequest->all();
 
         try
@@ -2982,26 +2984,31 @@ class DoctorApiController extends Controller
             //if(Input::hasFile('patient_photo'))
             if ($patientProfileRequest->hasFile('photo'))
             {
+                //dd($patientProfileRequest->file('photo')->getClientOriginalExtension());
                 $destinationPath = 'uploads/patient_photo'; // upload path
+                //dd($destinationPath);
                 //$extension = Input::file('patient_photo')->getClientOriginalExtension(); // getting file extension
                 $extension = $patientProfileRequest->file('photo')->getClientOriginalExtension(); // getting file extension
                 $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
                 //$status = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
                 //$status = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
+                //dd($fileName);
                 $status = $patientProfileRequest->file('photo')->move($destinationPath, $fileName);
+                $fileLocation = $destinationPath.'/'.$fileName;
+                //dd($fileLocation);
 
             }
 
             if($status)
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PHOTO_UPLOAD_SUCCESS));
-                $responseJson->setObj($fileName);
+                $responseJson->setObj($fileLocation);
                 $responseJson->sendSuccessResponse();
             }
             else
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PHOTO_UPLOAD_FAILURE));
-                $responseJson->setObj($fileName);
+                $responseJson->setObj($fileLocation);
                 $responseJson->sendSuccessResponse();
             }
 
@@ -3012,6 +3019,8 @@ class DoctorApiController extends Controller
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PHOTO_UPLOAD_FAILURE));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
+
+        return $responseJson;
 
     }
 }
