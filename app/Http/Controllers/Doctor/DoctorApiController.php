@@ -2992,7 +2992,9 @@ class DoctorApiController extends Controller
                 $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
                 //$status = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
                 //$status = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
-                //dd($fileName);
+                $file = $patientProfileRequest->file('photo');
+                //dd($file->getRealPath());
+                //dd($patientProfileRequest->file->getRealPath());
                 $status = $patientProfileRequest->file('photo')->move($destinationPath, $fileName);
                 $fileLocation = $destinationPath.'/'.$fileName;
                 //dd($fileLocation);
