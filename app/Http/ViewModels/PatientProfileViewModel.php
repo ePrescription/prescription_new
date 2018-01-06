@@ -44,6 +44,7 @@ class PatientProfileViewModel
     private $amount;
     private $referralType;
     private $paymentType;
+    private $paymentStatus;
 
     private $createdBy;
     private $updatedBy;
@@ -568,6 +569,21 @@ class PatientProfileViewModel
         $this->appointmentTime = $appointmentTime;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPaymentStatus()
+    {
+        return $this->paymentStatus;
+    }
+
+    /**
+     * @param mixed $paymentStatus
+     */
+    public function setPaymentStatus($paymentStatus)
+    {
+        $this->paymentStatus = $paymentStatus;
+    }
 
     /**
      * @return mixed

@@ -56,7 +56,7 @@ class PatientProfileMapper
         $profileVM->setRelationship(property_exists($profile, 'relationship') ? $profile->relationship : null);
         $profileVM->setSpouseName(property_exists($profile, 'spouseName') ? $profile->spouseName : null);
         //$profileVM->setPatientPhoto(property_exists($profile, 'patientPhoto') ? $profile->patientPhoto : null);
-        $profileVM->setPatientPhoto(property_exists($patientProfileRequest, 'patientPhoto') ? $patientProfileRequest->patientPhoto : null);
+        $profileVM->setPatientPhoto(property_exists($profile, 'patientPhoto') ? $profile->patientPhoto : null);
         $profileVM->setDob(property_exists($profile, 'dob') ? $profile->dob : null);
         $profileVM->setAge(property_exists($profile, 'age') ? $profile->age : null);
         $profileVM->setPlaceOfBirth(property_exists($profile, 'placeOfBirth') ? $profile->placeOfBirth : null);
@@ -64,6 +64,7 @@ class PatientProfileMapper
         $profileVM->setGender(property_exists($profile, 'gender') ? $profile->gender : null);
         //$profileVM->setGender($profile->gender);
         $profileVM->setMaritalStatus(property_exists($profile, 'maritalStatus') ? $profile->maritalStatus : null);
+
         $profileVM->setHospitalId(property_exists($profile, 'hospitalId') ? $profile->hospitalId : null);
         $profileVM->setDoctorId(property_exists($profile, 'doctorId') ? $profile->doctorId : null);
 
@@ -84,6 +85,7 @@ class PatientProfileMapper
         $profileVM->setHospitalLocation(property_exists($profile, 'hospitalLocation') ? $profile->hospitalLocation : null);
         $profileVM->setAmount(property_exists($profile, 'fee') ? $profile->fee : null);
         $profileVM->setPaymentType(property_exists($profile, 'paymentType') ? $profile->paymentType : null);
+        $profileVM->setPaymentStatus(property_exists($profile, 'paymentStatus') ? $profile->paymentStatus : null);
 
         /*$appointments = $profile->appointment;
 
