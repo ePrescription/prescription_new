@@ -2452,6 +2452,7 @@ class DoctorController extends Controller
             {
                 $patientProfileRequest->patientPhoto = "";
             }
+
             $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
             $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 

@@ -35,6 +35,8 @@ class PatientProfileMapper
 {
     public static function setPatientProfile(Request $patientProfileRequest)
     {
+
+        //dd($patientProfileRequest);
         $profileVM = new PatientProfileViewModel();
         $profile = (object) $patientProfileRequest->all();
 
@@ -53,7 +55,8 @@ class PatientProfileMapper
         $profileVM->setEmail(property_exists($profile, 'email') ? $profile->email : null);
         $profileVM->setRelationship(property_exists($profile, 'relationship') ? $profile->relationship : null);
         $profileVM->setSpouseName(property_exists($profile, 'spouseName') ? $profile->spouseName : null);
-        $profileVM->setPatientPhoto(property_exists($profile, 'patientPhoto') ? $profile->patientPhoto : null);
+        //$profileVM->setPatientPhoto(property_exists($profile, 'patientPhoto') ? $profile->patientPhoto : null);
+        $profileVM->setPatientPhoto(property_exists($patientProfileRequest, 'patientPhoto') ? $patientProfileRequest->patientPhoto : null);
         $profileVM->setDob(property_exists($profile, 'dob') ? $profile->dob : null);
         $profileVM->setAge(property_exists($profile, 'age') ? $profile->age : null);
         $profileVM->setPlaceOfBirth(property_exists($profile, 'placeOfBirth') ? $profile->placeOfBirth : null);

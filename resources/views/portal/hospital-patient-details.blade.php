@@ -53,11 +53,11 @@ $profile_menu="0";
                                         <div class="col-lg-2">
                                             @if($patientDetails[0]->patient_photo=="")
 
-                                                <img src="{{URL::to('/')}}/uploads/patient_photo/noimage.png" />
+                                                <img src="{{URL::to('/')}}/uploads/patient_photo/noimage.png"  />
 
                                             @else
 
-                                                <img src="{{URL::to('/')}}/uploads/patient_photo/{{$patientDetails[0]->patient_photo}}" />
+                                                <img src="{{URL::to('/')}}/uploads/patient_photo/{{$patientDetails[0]->patient_photo}}"  style="width:100px;" />
 
                                             @endif
                                         </div>
