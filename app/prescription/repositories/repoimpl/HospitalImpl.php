@@ -526,7 +526,7 @@ class HospitalImpl implements HospitalInterface{
         {
             $query = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.pid', 'p.age',
                 'p.gender', 'p.email', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.careof',
-                'p.telephone', 'p.address');
+                'p.telephone', 'p.address','p.patient_photo');
             $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
             $query->where('p.patient_id', $patientId);
             $query->where('usr.delete_status', '=', 1);
