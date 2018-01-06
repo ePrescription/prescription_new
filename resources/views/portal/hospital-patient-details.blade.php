@@ -50,8 +50,8 @@ $profile_menu="0";
                                     <h4 class="m-t-0 m-b-30">Patient Details</h4>
 
                                     <div class="row">
-                                        <div class="col-lg-10">
-                                            @if($patientDetails[0]->patient_photo==1)
+                                        <div class="col-lg-2">
+                                            @if($patientDetails[0]->patient_photo=="")
 
                                                 <img src="{{URL::to('/')}}/uploads/patient_photo/noimage.png" />
 
