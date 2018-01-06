@@ -5839,7 +5839,7 @@ class HospitalImpl implements HospitalInterface{
 
                 //$dentalTestQuery->where('pme.is_value_set', '=', 1);
 
-                /*$xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
+                $xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
                 $xrayTestQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
                 $xrayTestQuery->join('xray_examination_items as xei', 'xei.id', '=', 'pxei.xray_examination_item_id');
                 $xrayTestQuery->join('xray_category as xc', 'xc.id', '=', 'xei.xray_category_id');
@@ -5851,9 +5851,11 @@ class HospitalImpl implements HospitalInterface{
                 $xrayTestQuery->select('pxe.patient_id', 'pxe.hospital_id', 'xc.id as categoryId',
                     'xei.id as examinationId', 'xc.category_name',
                     'xei.examination_name as examinationName', 'pxe.examination_date as examinationDate',
-                    'pxei.id as patientExaminationId', 'pxe.examination_time');*/
+                    'pxei.id as patientExaminationId', 'pxe.examination_time');
 
-                $xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
+                $xrayTests = $xrayTestQuery->get();
+
+                /*$xrayTestQuery = DB::table('patient_xray_examination_item as pxei');
                 $xrayTestQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
                 $xrayTestQuery->join('xray_examination_items as xei', 'xei.id', '=', 'pxei.xray_examination_item_id');
                 $xrayTestQuery->join('xray_category as xc', 'xc.id', '=', 'xei.xray_category_id');
@@ -5881,12 +5883,12 @@ class HospitalImpl implements HospitalInterface{
                         'pxei.id as patientExaminationItemId', 'xc.id as category_id', 'xc.category_name');
 
                     $finalXrayTests[$xrayTest->category_name] = $finalXrayTestQuery->get();
-                }
+                }*/
 
                 //$patientXrayTests = $xrayTestQuery->get();
 
-                //array_push($xrayTestDetails, $xrayTestRecord);
-                array_push($xrayTestDetails, $finalXrayTests);
+                array_push($xrayTestDetails, $xrayTests);
+                //array_push($xrayTestDetails, $finalXrayTests);
 
                 //dd($xrayTestDetails);
 
