@@ -114,9 +114,6 @@
                             @endif
 
 
-
-
-
                     @elseif(Session::get('LoginUserType')=="doctor")
 
                         <form role="form" method="POST" class="display form-horizontal">
@@ -193,6 +190,76 @@
 
                         <form role="form" method="POST" class="display form-horizontal">
 
+                            @if(count($urineTests)>0)
+                                <h4 class="m-t-0 m-b-30">Urine Test Details</h4>
+                                @foreach($urineTests as $recentTest)
+                                    <?php $displaySet=0; ?>
+                                    <div class="form-group">
+                                        @foreach($recentTest as $recentTestDate)
+                                            @if($displaySet==0)
+                                                <label class="col-sm-12 control-label">{{$recentTestDate[0]->examinationDate}} - {{$recentTestDate[0]->examination_time}} </label>
+                                                <?php $displaySet=1; ?>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                    <div class="form-group col-sm-12">
+
+
+                                        <?php $i=0; ?>
+                                        <table id="datatable" class="table table-striped table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Reading</th>
+                                                <th>Default</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php $recentTestKeyValueName=""; ?>
+                                            @foreach($recentTest as $recentTestValueGroup)
+                                                @foreach($recentTestValueGroup as $recentTestValue)
+                                                    <?php
+                                                    $recentTestKeyValue=array_keys($recentTest,$recentTestValueGroup);
+                                                    if($recentTestKeyValueName!=$recentTestKeyValue[0]) {
+                                                    $recentTestKeyValueName = $recentTestKeyValue[0];
+                                                    ?>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <strong>{{$recentTestKeyValueName}}</strong>
+                                                        </td>
+                                                    </tr>
+                                                    <?php } ?>
+                                                    <tr>
+                                                        @if($recentTestValue->isValueSet==1)
+                                                            <td class="col-sm-4" style="text-align: right;">
+
+                                                                {{$recentTestValue->examinationName}}
+                                                            </td>
+                                                            <td class="col-sm-4" >
+                                                                {{$recentTestValue->readings}}
+                                                            </td>
+                                                            <td class="col-sm-4" >
+                                                                {{$recentTestValue->examinationDefaultValue}}
+                                                                <?php /* ?> {{$recentTestValue->readingStatus}} <?php */ ?>
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                    <?php $i++; ?>
+                                                @endforeach
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endforeach
+
+                            @endif
+
+
+                        </form>
+
+                        <?php /* ?>
+                        <form role="form" method="POST" class="display form-horizontal">
+
 
                             @if(count($urineTests)>0)
                                 <h4 class="m-t-0 m-b-30">Urine Test Details</h4>
@@ -236,6 +303,8 @@
 
 
                         </form>
+
+                        <?php */ ?>
                     @endif
 
                 </div> <!-- panel-body -->

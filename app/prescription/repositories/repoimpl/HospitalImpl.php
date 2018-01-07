@@ -6827,7 +6827,8 @@ class HospitalImpl implements HospitalInterface{
 
             $xrayExamQuery = DB::table('patient_xray_examination_item as pxei');
             $xrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
-            $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+            $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.patient_xray_examination_id');
+            //$xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
             $xrayExamQuery->where('pxe.patient_id', '=', $patientId);
             $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
             //$dentalExamQuery->where('pus.is_value_set', '=', 1);
