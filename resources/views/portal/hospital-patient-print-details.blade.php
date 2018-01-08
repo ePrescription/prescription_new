@@ -288,7 +288,7 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentGeneralTests'])>0)
                                             <hr style="width: 100%;"/>
                                             <div class="form-group" style="width: 100%;">
-                                                <label class="col-sm-12 control-label" style="width: 100%;">General Test - {{$patientExaminations['recentGeneralTests'][0]->general_examination_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;">General Examinations - {{$patientExaminations['recentGeneralTests'][0]->general_examination_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12" style="width: 100%;">
                                                 @foreach($patientExaminations['recentGeneralTests'] as $recentTest)
@@ -307,7 +307,7 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentPastIllness'])>0)
                                             <hr style="width: 100%;"/>
                                             <div class="form-group" style="width: 100%;">
-                                                <label class="col-sm-12 control-label" style="width: 100%;">Past Illeness - {{$patientExaminations['recentPastIllness'][0]->past_illness_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;">Past Illness - {{$patientExaminations['recentPastIllness'][0]->past_illness_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12" style="width: 100%;">
                                                 @foreach($patientExaminations['recentPastIllness'] as $recentTest)
@@ -326,7 +326,7 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentFamilyIllness'])>0)
                                             <hr style="width: 100%;"/>
                                             <div class="form-group" style="width: 100%;">
-                                                <label class="col-sm-12 control-label" style="width: 100%;">Family Illeness - {{$patientExaminations['recentFamilyIllness'][0]->family_illness_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;">Family Illness - {{$patientExaminations['recentFamilyIllness'][0]->family_illness_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12" style="width: 100%;">
                                                 @foreach($patientExaminations['recentFamilyIllness'] as $recentTest)
@@ -345,7 +345,7 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentPersonalHistory'])>0)
                                             <hr style="width: 100%;"/>
                                             <div class="form-group" style="width: 100%;">
-                                                <label class="col-sm-12 control-label" style="width: 100%;">Personal Illeness - {{$patientExaminations['recentPersonalHistory'][0]->personal_history_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;">Personal Illness - {{$patientExaminations['recentPersonalHistory'][0]->personal_history_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12" style="width: 100%;">
                                                 @foreach($patientExaminations['recentPersonalHistory'] as $recentTest)
