@@ -753,7 +753,7 @@ $profile_menu="0";
     </div><!-- /.content-page -->
 
 </div><!-- ./wrapper -->
-
+@endsection
 @section('scripts')
 
 
