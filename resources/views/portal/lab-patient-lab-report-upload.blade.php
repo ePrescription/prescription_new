@@ -215,8 +215,10 @@ $profile_menu="0";
                                                         <input type="hidden" class="form-control" name="lab_id" value="{{Auth::user()->id}}" required="required" />
                                                         <input type="hidden" class="form-control" name="hospital_id" value="{{Session::get('LoginUserHospital')}}" required="required" />
                                                         <input type="submit" name="addsymptom" value="Save" class="btn btn-success">
-
-                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="margin: 0px 16px;"><button type="button" class="btn btn-success"> Cancel </button></a>
+                                                        <a href="{{URL::to('/')}}/lab/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
+                                                            <button type="button" class="btn btn-info waves-effect waves-light">Cancel</button>
+                                                        </a>
+                                                        <!-- <a href="{{URL::to('/')}}/lab/rest/api/{{Auth::user()->id}}/patients" style="margin: 0px 16px;"><button type="button" class="btn btn-success"> Cancel </button></a> -->
                                                     </div>
                                                 </div>
 

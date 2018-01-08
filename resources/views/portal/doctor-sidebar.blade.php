@@ -48,12 +48,12 @@
                         </a>
                     </li>
 
-                    <li  class="@if($prescription_menu==1) active @endif treeview">
+                    <li  class="@if($prescription_menu==1) active @endif treeview hidden">
                         <a href="{{URL::to('/')}}/doctor/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/prescriptions">
                             <i class="fa fa-pencil-square-o"></i> <span>Prescriptions</span>
                         </a>
                     </li>
-                    <li  class="@if($lab_menu==1) active @endif treeview">
+                    <li  class="@if($lab_menu==1) active @endif treeview hidden">
                         <a href="{{URL::to('/')}}/doctor/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/labtests">
                             <i class="fa fa-flask"></i> <span>Lab Tests</span>
                         </a>

@@ -6515,25 +6515,27 @@ class HospitalImpl implements HospitalInterface{
             //DB::connection()->enableQueryLog();
 
             $bloodExamQuery = DB::table('patient_blood_examination as pbe');
-            $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            $bloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
+            $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
             $bloodExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pbe.fee_receipt_id');
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
             $bloodExamQuery->where('pbe.fee_receipt_id', '=', $feeReceiptId);
             $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date',
-                    'pbe.fees');
+                    'pbei.fees');
 
             //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
 
             $motionExamQuery = DB::table('patient_motion_examination as pme');
-            $motionExamQuery->join('motion_examination as me', 'me.id', '=', 'pme.motion_examination_id');
+            $motionExamQuery->join('patient_motion_examination_item as pmei', 'pmei.patient_motion_examination_id', '=', 'pme.id');
+            $motionExamQuery->join('motion_examination as me', 'me.id', '=', 'pmei.motion_examination_id');
             $motionExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pme.fee_receipt_id');
             $motionExamQuery->where('pme.patient_id', '=', $patientId);
             $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
             $motionExamQuery->where('pme.fee_receipt_id', '=', $feeReceiptId);
             $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'me.examination_name', 'pme.examination_date',
-                'pme.fees');
+                'pmei.fees');
 
             //dd($bloodExamQuery->toSql());
             $motionExaminations = $motionExamQuery->get();
@@ -6542,37 +6544,40 @@ class HospitalImpl implements HospitalInterface{
             //dd($bloodExaminations);
 
             $urineExamQuery = DB::table('patient_urine_examination as pue');
-            $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'pue.urine_examination_id');
+            $urineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
+            $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
             $urineExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pue.fee_receipt_id');
             $urineExamQuery->where('pue.patient_id', '=', $patientId);
             $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
             $urineExamQuery->where('pue.fee_receipt_id', '=', $feeReceiptId);
             $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date',
-                'pue.fees');
+                'puei.fees');
 
             //dd($bloodExamQuery->toSql());
             $urineExaminations = $urineExamQuery->get();
 
             $ultraSoundExamQuery = DB::table('patient_ultra_sound as pus');
-            $ultraSoundExamQuery->join('ultra_sound as us', 'us.id', '=', 'pus.ultra_sound_id');
+            $ultraSoundExamQuery->join('patient_ultra_sound_item as pusi', 'pusi.patient_ultra_sound_id', '=', 'pus.id');
+            $ultraSoundExamQuery->join('ultra_sound as us', 'us.id', '=', 'pusi.ultra_sound_id');
             $ultraSoundExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pus.fee_receipt_id');
             $ultraSoundExamQuery->where('pus.patient_id', '=', $patientId);
             $ultraSoundExamQuery->where('pus.hospital_id', '=', $hospitalId);
             $ultraSoundExamQuery->where('pus.fee_receipt_id', '=', $feeReceiptId);
             $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date',
-                'pus.fees');
+                'pusi.fees');
 
             //dd($bloodExamQuery->toSql());
             $ultraSoundExaminations = $ultraSoundExamQuery->get();
 
             $scanExamQuery = DB::table('patient_scan as ps');
-            $scanExamQuery->join('scans as s', 's.id', '=', 'ps.scan_id');
+            $scanExamQuery->join('patient_scan_item as psi', 'psi.patient_scan_id', '=', 'ps.id');
+            $scanExamQuery->join('scans as s', 's.id', '=', 'psi.scan_id');
             $scanExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'ps.fee_receipt_id');
             $scanExamQuery->where('ps.patient_id', '=', $patientId);
             $scanExamQuery->where('ps.hospital_id', '=', $hospitalId);
             $scanExamQuery->where('ps.fee_receipt_id', '=', $feeReceiptId);
             $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 's.scan_name', 'ps.scan_date',
-                'ps.fees');
+                'psi.fees');
 
             //dd($bloodExamQuery->toSql());
             $scanExaminations = $scanExamQuery->get();
@@ -6593,7 +6598,7 @@ class HospitalImpl implements HospitalInterface{
             $xrayExamQuery = DB::table('patient_xray_examination as pxe');
             $xrayExamQuery->join('patient_xray_examination_item as pxei', 'pxei.patient_xray_examination_id', '=', 'pxe.id');
             $xrayExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pxe.fee_receipt_id');
-            $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+            $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_item_id');
             $xrayExamQuery->where('pxe.patient_id', '=', $patientId);
             $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
             $xrayExamQuery->where('pxe.fee_receipt_id', '=', $feeReceiptId);
