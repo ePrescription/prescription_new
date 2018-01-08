@@ -7192,7 +7192,7 @@ class DoctorController extends Controller
             //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
-            $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
+            //$labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
             //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
             $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
             //dd($patientAppointment);
