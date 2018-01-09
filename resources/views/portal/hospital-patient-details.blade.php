@@ -57,7 +57,7 @@ $profile_menu="0";
 
                                             @else
 
-                                                <img src="{{URL::to('/')}}/uploads/patient_photo/{{$patientDetails[0]->patient_photo}}"  style="width:100px;" />
+                                                <img src="{{URL::to('/')}}/{{$patientDetails[0]->patient_photo}}"  style="width:100px;" />
 
                                             @endif
                                         </div>
