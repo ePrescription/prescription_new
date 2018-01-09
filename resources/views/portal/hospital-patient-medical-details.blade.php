@@ -140,7 +140,7 @@ $profile_menu="0";
 
                                                         {{$recentTest->complaintType}} :: {{$recentTest->complaint_name}}
                                                         <br/>
-                                                        {{$recentTest->complaint_text}}
+                                                        <strong>Notes:</strong>{{$recentTest->complaint_text}}
 
                                                     </div>
                                                 @endforeach
@@ -283,8 +283,7 @@ $profile_menu="0";
                                             <div class="form-group col-sm-12" style="width: 100%;">
                                                 @foreach($patientExaminations['recentSurgeryHistory'] as $recentTest)
                                                     <div class="col-sm-6" style="width:50%;float:left;">
-
-                                                        {{$recentTest->patient_surgeries}} - {{$recentTest->surgery_input_date}}
+                                                        {{$recentTest->patient_surgeries}} - {{$recentTest->operation_date}}
 
                                                     </div>
                                                 @endforeach

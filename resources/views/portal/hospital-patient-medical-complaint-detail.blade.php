@@ -24,6 +24,10 @@
                 <hr/>
             @endforeach
         </div>
+        <div class="row">
+            <div class="col-sm-12"><strong>Complaint Notes:</strong> {{$complaintDetailValues[0]->complaint_text}}</div>
+        </div>
+
         @endforeach
 
     </form>

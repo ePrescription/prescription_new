@@ -420,13 +420,13 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentSurgeryHistory'])>0)
                                             <hr style="width: 100%;"/>
                                             <div class="form-group" style="width: 100%;">
-                                                <label class="col-sm-12 control-label" style="width: 100%;">Surgery History - {{$patientExaminations['recentSurgeryHistory'][0]->surgery_input_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;">Surgery History - {{$patientExaminations['recentSurgeryHistory'][0]->operation_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12" style="width: 100%;">
                                                 @foreach($patientExaminations['recentSurgeryHistory'] as $recentTest)
                                                     <div class="col-sm-6" style="width:50%;float:left;">
 
-                                                        {{$recentTest->patient_surgeries}} - {{$recentTest->surgery_input_date}}
+                                                        {{$recentTest->patient_surgeries}} - {{$recentTest->operation_date}}
 
                                                     </div>
                                                 @endforeach

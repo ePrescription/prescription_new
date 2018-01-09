@@ -7377,7 +7377,7 @@ class HospitalImpl implements HospitalInterface{
             });
             $latestSurgeryHistoryQuery->where('ps.patient_id', '=', $patientId);
             $latestSurgeryHistoryQuery->select('ps.id', 'ps.patient_id',
-                'ps.patient_surgeries', 'ps.surgery_input_date');
+                'ps.patient_surgeries', 'ps.surgery_input_date', 'ps.operation_date');
             $latestSurgeryHistory = $latestSurgeryHistoryQuery->get();
 
             $latestDentalExamQuery = DB::table('patient_dental_examination_item as pdei');
