@@ -6832,7 +6832,7 @@ class HospitalImpl implements HospitalInterface{
 
             $xrayExamQuery = DB::table('patient_xray_examination_item as pxei');
             $xrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
-            $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.patient_xray_examination_id');
+            $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_item_id');
             //$xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
             $xrayExamQuery->where('pxe.patient_id', '=', $patientId);
             $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
@@ -6849,7 +6849,7 @@ class HospitalImpl implements HospitalInterface{
             $xrayExamQuery->select('pxe.id as examination_id', 'pxe.patient_id', 'pxe.hospital_id', 'xe.examination_name',
                 'pxei.id as examination_item_id','pxei.id as id', 'pxe.examination_date');
 
-            //dd($ultraSoundExamQuery->toSql());
+            //dd($xrayExamQuery->toSql());
             $xrayExaminations = $xrayExamQuery->get();
 
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
