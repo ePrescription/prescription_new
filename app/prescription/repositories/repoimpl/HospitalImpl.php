@@ -1158,6 +1158,7 @@ class HospitalImpl implements HospitalInterface{
             }
 
             $doctorAppointment = DoctorAppointments::find($appointmentId);
+            //dd($doctorAppointment);
 
             if(!is_null($doctorAppointment))
             {
@@ -6521,6 +6522,7 @@ class HospitalImpl implements HospitalInterface{
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
             $bloodExamQuery->where('pbe.fee_receipt_id', '=', $feeReceiptId);
+            $bloodExamQuery->whereNotNull('pbei.fees');
             $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date',
                     'pbei.fees');
 
@@ -6534,10 +6536,11 @@ class HospitalImpl implements HospitalInterface{
             $motionExamQuery->where('pme.patient_id', '=', $patientId);
             $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
             $motionExamQuery->where('pme.fee_receipt_id', '=', $feeReceiptId);
+            $motionExamQuery->whereNotNull('pmei.fees');
             $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'me.examination_name', 'pme.examination_date',
                 'pmei.fees');
 
-            //dd($bloodExamQuery->toSql());
+            //dd($motionExamQuery->toSql());
             $motionExaminations = $motionExamQuery->get();
             //$query = DB::getQueryLog();
             //dd($query);
@@ -6563,6 +6566,7 @@ class HospitalImpl implements HospitalInterface{
             $ultraSoundExamQuery->where('pus.patient_id', '=', $patientId);
             $ultraSoundExamQuery->where('pus.hospital_id', '=', $hospitalId);
             $ultraSoundExamQuery->where('pus.fee_receipt_id', '=', $feeReceiptId);
+            $ultraSoundExamQuery->whereNotNull('pusi.fees');
             $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date',
                 'pusi.fees');
 
@@ -6576,6 +6580,7 @@ class HospitalImpl implements HospitalInterface{
             $scanExamQuery->where('ps.patient_id', '=', $patientId);
             $scanExamQuery->where('ps.hospital_id', '=', $hospitalId);
             $scanExamQuery->where('ps.fee_receipt_id', '=', $feeReceiptId);
+            $scanExamQuery->whereNotNull('psi.fees');
             $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 's.scan_name', 'ps.scan_date',
                 'psi.fees');
 
@@ -6589,6 +6594,7 @@ class HospitalImpl implements HospitalInterface{
             $dentalExamQuery->where('pde.patient_id', '=', $patientId);
             $dentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
             $dentalExamQuery->where('pde.fee_receipt_id', '=', $feeReceiptId);
+            $dentalExamQuery->whereNotNull('pdei.fees');
             $dentalExamQuery->select('pde.id', 'pde.patient_id', 'pde.hospital_id', 'dei.examination_name', 'pde.examination_date',
                 'pdei.fees');
 
@@ -6602,6 +6608,7 @@ class HospitalImpl implements HospitalInterface{
             $xrayExamQuery->where('pxe.patient_id', '=', $patientId);
             $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
             $xrayExamQuery->where('pxe.fee_receipt_id', '=', $feeReceiptId);
+            $xrayExamQuery->whereNotNull('pxei.fees');
             $xrayExamQuery->select('pxe.id', 'pxe.patient_id', 'pxe.hospital_id', 'xe.examination_name', 'pxe.examination_date',
                 'pxei.fees');
 
