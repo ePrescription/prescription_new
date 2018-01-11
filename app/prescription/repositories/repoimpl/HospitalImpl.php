@@ -65,6 +65,7 @@ use App\prescription\model\entities\PatientUrineExaminationItems;
 use App\prescription\model\entities\PatientXRayExamination;
 use App\prescription\model\entities\PatientXRayExaminationItems;
 use App\prescription\model\entities\PrescriptionDetails;
+use App\prescription\model\entities\PatientPaymentHistory;//by ramana
 use App\prescription\repositories\repointerface\HospitalInterface;
 use App\prescription\utilities\AppointmentType;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
@@ -74,6 +75,7 @@ use App\Http\ViewModels\PatientPrescriptionViewModel;
 use App\prescription\utilities\Exception\UserNotFoundException;
 use App\prescription\utilities\Helper;
 use App\prescription\utilities\UserType;
+
 use App\User;
 use App\Role;
 use Illuminate\Database\Query\JoinClause;
@@ -87,6 +89,7 @@ use Carbon\Carbon;
 use File;
 use Storage;
 use Crypt;
+
 
 
 class HospitalImpl implements HospitalInterface{
@@ -6515,43 +6518,63 @@ class HospitalImpl implements HospitalInterface{
             //DB::connection()->enableQueryLog();
 
             $bloodExamQuery = DB::table('patient_blood_examination as pbe');
+
+            //$bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            // $bloodExamQuery->join('pbei.patient_motion_examination_id', '=', 'be.id')
             $bloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
             $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
+            $bloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
+
+            //  $bloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
+            // $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
+
             $bloodExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pbe.fee_receipt_id');
+
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
             $bloodExamQuery->where('pbe.fee_receipt_id', '=', $feeReceiptId);
-            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date',
-                    'pbei.fees');
 
-            //dd($bloodExamQuery->toSql());
+            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name','be1.examination_name as parent_examination_name', 'pbe.examination_date','pbei.fees');
+
+            // $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.fees');
+
+            // dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
-
+            // dd($bloodExaminations);
             $motionExamQuery = DB::table('patient_motion_examination as pme');
             $motionExamQuery->join('patient_motion_examination_item as pmei', 'pmei.patient_motion_examination_id', '=', 'pme.id');
+
             $motionExamQuery->join('motion_examination as me', 'me.id', '=', 'pmei.motion_examination_id');
             $motionExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pme.fee_receipt_id');
             $motionExamQuery->where('pme.patient_id', '=', $patientId);
             $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
             $motionExamQuery->where('pme.fee_receipt_id', '=', $feeReceiptId);
+            $motionExamQuery->where('pmei.is_value_set', '=', 1);
             $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'me.examination_name', 'pme.examination_date',
                 'pmei.fees');
 
-            //dd($bloodExamQuery->toSql());
+            //dd($motionExamQuery->toSql());
             $motionExaminations = $motionExamQuery->get();
             //$query = DB::getQueryLog();
             //dd($query);
-            //dd($bloodExaminations);
+            //dd($motionExaminations);
 
             $urineExamQuery = DB::table('patient_urine_examination as pue');
             $urineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
             $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
+
+            $urineExamQuery->join('urine_examination as ue1', 'ue1.id', '=', 'ue.parent_id');
+
             $urineExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pue.fee_receipt_id');
             $urineExamQuery->where('pue.patient_id', '=', $patientId);
             $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
             $urineExamQuery->where('pue.fee_receipt_id', '=', $feeReceiptId);
-            $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date',
-                'puei.fees');
+
+            $urineExamQuery->where('puei.is_value_set', '=', 1);
+            $urineExamQuery->select('pue.id', 'ue1.examination_name as parent_examination_name','pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date', 'puei.fees');
+
+            //  $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date',
+            // 'puei.fees');
 
             //dd($bloodExamQuery->toSql());
             $urineExaminations = $urineExamQuery->get();
@@ -6563,8 +6586,8 @@ class HospitalImpl implements HospitalInterface{
             $ultraSoundExamQuery->where('pus.patient_id', '=', $patientId);
             $ultraSoundExamQuery->where('pus.hospital_id', '=', $hospitalId);
             $ultraSoundExamQuery->where('pus.fee_receipt_id', '=', $feeReceiptId);
-            $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date',
-                'pusi.fees');
+            $ultraSoundExamQuery->where('pusi.is_value_set', '=', 1);
+            $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date','pusi.fees');
 
             //dd($bloodExamQuery->toSql());
             $ultraSoundExaminations = $ultraSoundExamQuery->get();
@@ -6576,16 +6599,17 @@ class HospitalImpl implements HospitalInterface{
             $scanExamQuery->where('ps.patient_id', '=', $patientId);
             $scanExamQuery->where('ps.hospital_id', '=', $hospitalId);
             $scanExamQuery->where('ps.fee_receipt_id', '=', $feeReceiptId);
-            $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 's.scan_name', 'ps.scan_date',
-                'psi.fees');
+            $scanExamQuery->where('psi.is_value_set', '=', 1);
+            $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 's.scan_name', 'ps.scan_date','psi.fees');
 
             //dd($bloodExamQuery->toSql());
             $scanExaminations = $scanExamQuery->get();
 
             $dentalExamQuery = DB::table('patient_dental_examination as pde');
             $dentalExamQuery->join('patient_dental_examination_item as pdei', 'pdei.patient_dental_examination_id', '=', 'pde.id');
-            $dentalExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pde.fee_receipt_id');
             $dentalExamQuery->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
+
+            $dentalExamQuery->join('lab_fee_receipt as lfr', 'lfr.id', '=', 'pde.fee_receipt_id');
             $dentalExamQuery->where('pde.patient_id', '=', $patientId);
             $dentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
             $dentalExamQuery->where('pde.fee_receipt_id', '=', $feeReceiptId);
@@ -6611,7 +6635,7 @@ class HospitalImpl implements HospitalInterface{
             $labReceiptQuery = DB::table('lab_fee_receipt as lfr')->where('lfr.patient_id', '=', $patientId);
             $labReceiptQuery->where('lfr.hospital_id', '=', $hospitalId);
             $labReceiptQuery->where('lfr.id', '=', $feeReceiptId);
-            $labReceiptQuery->select('lfr.id', 'lfr.patient_id', 'lfr.hospital_id', 'lfr.lab_receipt_date', 'lfr.total_fees');
+            $labReceiptQuery->select('lfr.id', 'lfr.patient_id', 'lfr.hospital_id', 'lfr.lab_receipt_date', 'lfr.total_fees','lfr.paid_amount','lfr.payment_type');
 
             $labTotalFees = $labReceiptQuery->get();
 
@@ -6698,6 +6722,7 @@ class HospitalImpl implements HospitalInterface{
             $bloodExamQuery = DB::table('patient_blood_examination as pbe');
             $bloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
             $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
+            $bloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
             $bloodExamQuery->where('pbei.is_value_set', '=', 1);
@@ -6711,7 +6736,7 @@ class HospitalImpl implements HospitalInterface{
                 $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
             }
             $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'pbei.id as examination_item_id',
-                'be.examination_name', 'pbe.examination_date');
+                'be.examination_name', 'pbe.examination_date','pbei.fees','be1.examination_name as parent_examination_name');
 
             //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
@@ -6722,6 +6747,7 @@ class HospitalImpl implements HospitalInterface{
             $urineExamQuery = DB::table('patient_urine_examination as pue');
             $urineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
             $urineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
+            $urineExamQuery->join('urine_examination as ue1', 'ue1.id', '=', 'ue.parent_id');
             $urineExamQuery->where('pue.patient_id', '=', $patientId);
             $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
             $urineExamQuery->where('puei.is_value_set', '=', 1);
@@ -6735,7 +6761,7 @@ class HospitalImpl implements HospitalInterface{
                 $urineExamQuery->whereDate('pue.created_at', '=', $receiptDate);
             }
             $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'puei.id as examination_item_id',
-                'ue.examination_name', 'pue.examination_date');
+                'ue.examination_name','ue1.examination_name as parent_examination_name', 'pue.examination_date','puei.fees');
 
             //dd($urineExamQuery->toSql());
             $urineExaminations = $urineExamQuery->get();
@@ -6756,7 +6782,7 @@ class HospitalImpl implements HospitalInterface{
                 $motionExamQuery->whereDate('pme.created_at', '=', $receiptDate);
             }
             $motionExamQuery->select('pme.id', 'pme.patient_id', 'pme.hospital_id', 'pmei.id as examination_item_id',
-                'me.examination_name', 'pme.examination_date');
+                'me.examination_name', 'pme.examination_date','pmei.fees');
 
             //dd($motionExamQuery->toSql());
             $motionExaminations = $motionExamQuery->get();
@@ -6779,7 +6805,7 @@ class HospitalImpl implements HospitalInterface{
                 $scanExamQuery->whereDate('ps.created_at', '=', $receiptDate);
             }
             $scanExamQuery->select('ps.id', 'ps.patient_id', 'ps.hospital_id', 'psi.id as examination_item_id',
-                's.scan_name', 'ps.scan_date');
+                's.scan_name', 'ps.scan_date','psi.fees');
 
             //dd($scanExamQuery->toSql());
             $scanExaminations = $scanExamQuery->get();
@@ -6804,7 +6830,7 @@ class HospitalImpl implements HospitalInterface{
                 $ultraSoundExamQuery->whereDate('pus.created_at', '=', $receiptDate);
             }
             $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'pusi.id as examination_item_id',
-                'us.examination_name', 'pus.examination_date');
+                'us.examination_name', 'pus.examination_date','pusi.fees');
 
             //dd($ultraSoundExamQuery->toSql());
             $ultraSoundExaminations = $ultraSoundExamQuery->get();
@@ -6825,7 +6851,7 @@ class HospitalImpl implements HospitalInterface{
                 $dentalExamQuery->whereDate('pde.created_at', '=', $receiptDate);
             }
             $dentalExamQuery->select('pde.id as examination_id', 'pde.patient_id', 'pde.hospital_id', 'dei.examination_name',
-                'pdei.id as examination_item_id','pdei.id as id', 'pde.examination_date');
+                'pdei.id as examination_item_id','pdei.id as id', 'pde.examination_date','pdei.fees');
 
             //dd($ultraSoundExamQuery->toSql());
             $dentalExaminations = $dentalExamQuery->get();
@@ -6833,7 +6859,10 @@ class HospitalImpl implements HospitalInterface{
             $xrayExamQuery = DB::table('patient_xray_examination_item as pxei');
             $xrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
             $xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_item_id');
+
+
             //$xrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_id');
+
             $xrayExamQuery->where('pxe.patient_id', '=', $patientId);
             $xrayExamQuery->where('pxe.hospital_id', '=', $hospitalId);
             //$dentalExamQuery->where('pus.is_value_set', '=', 1);
@@ -6847,7 +6876,7 @@ class HospitalImpl implements HospitalInterface{
                 $xrayExamQuery->whereDate('pxe.created_at', '=', $receiptDate);
             }
             $xrayExamQuery->select('pxe.id as examination_id', 'pxe.patient_id', 'pxe.hospital_id', 'xe.examination_name',
-                'pxei.id as examination_item_id','pxei.id as id', 'pxe.examination_date');
+                'pxei.id as examination_item_id','pxei.id as id', 'pxe.examination_date','pxei.fees');
 
             //dd($xrayExamQuery->toSql());
             $xrayExaminations = $xrayExamQuery->get();
@@ -10304,6 +10333,8 @@ class HospitalImpl implements HospitalInterface{
 
             if(!is_null($labFeeReceipt))
             {
+                $patientPaymentHistory= $this->saveLabFeeReceiptHistory($labReceiptsVM,$labFeeReceipt->id);
+
                 /*if(!is_null($bloodTests) && !empty($bloodTests))
                 {
                     foreach($bloodTests as $bloodTest)
@@ -10737,6 +10768,7 @@ class HospitalImpl implements HospitalInterface{
         $labFeeReceipt->hospital_id = $labReceiptsVM->getHospitalId();
         $labFeeReceipt->doctor_id = $labReceiptsVM->getDoctorId();
         $labFeeReceipt->total_fees = $labReceiptsVM->getTotalFees();
+        $labFeeReceipt->paid_amount = $labReceiptsVM->getPaidAmount();//by ramana
         $labFeeReceipt->lab_receipt_date = $labReceiptsVM->getLabReceiptDate();
         $labFeeReceipt->created_by = $labReceiptsVM->getCreatedBy();
         $labFeeReceipt->modified_by = $labReceiptsVM->getUpdatedBy();
@@ -10768,7 +10800,7 @@ class HospitalImpl implements HospitalInterface{
             $query->where('lfr.hospital_id', '=', $hospitalId);
             $query->orderBy('lfr.created_at', 'DESC');
 
-            $query->select('lfr.id as receiptId', 'lfr.patient_id', 'p.name', 'p.pid', 'lfr.total_fees', 'lfr.lab_receipt_date');
+            $query->select('lfr.id as receiptId', 'lfr.patient_id', 'p.name', 'p.pid', 'lfr.total_fees', 'lfr.lab_receipt_date','lfr.paid_amount');
 
             //dd($query->toSql());
             $labReceipts = $query->get();
@@ -10789,6 +10821,7 @@ class HospitalImpl implements HospitalInterface{
 
         return $labReceipts;
     }
+
 
     /*Symptom section -- End */
 
@@ -10896,5 +10929,259 @@ class HospitalImpl implements HospitalInterface{
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    /*NEW ADDITION RAMANA*/
+
+    //NEWLY ADDED RAMANA
+    public function getExaminationDatesByDate($patientId, $hospitalId,$date)
+    {
+
+
+
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            $latestBloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $latestBloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
+            $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
+            $latestBloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
+            $latestBloodExamQuery->where('pbe.examination_date','=',$date);
+
+
+            $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
+            $latestBloodExamQuery->where('pbei.is_value_set', '=', 1);
+            $latestBloodExamQuery->select('pbe.id as examinationId', 'pbei.id as examinationItemId', 'pbe.patient_id',
+                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.test_readings','be.default_normal_values','be.is_parent','be1.examination_name AS parent_examination_name');
+            $bloodExaminations = $latestBloodExamQuery->get();
+
+
+
+            //dd($latestComplaintsQuery->toSql());
+
+            //dd($latestComplaints);
+
+
+
+            $latestUrineExamQuery = DB::table('patient_urine_examination as pue');
+            $latestUrineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
+            $latestUrineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
+            $latestUrineExamQuery->join('urine_examination as ue1', 'ue1.id', '=', 'ue.parent_id');
+            $latestUrineExamQuery->where('pue.examination_date','=',$date);
+
+
+
+            $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
+            $latestUrineExamQuery->where('puei.is_value_set', '=', 1);
+            $latestUrineExamQuery->select('pue.id as examinationId', 'puei.id as examinationItemId',
+                'pue.patient_id', 'ue.examination_name', 'pue.examination_date','puei.test_readings','ue.normal_default_values','ue.is_parent','ue1.examination_name as parent_examination_name');
+            $latestUrineExaminations = $latestUrineExamQuery->get();
+
+
+
+            $latestMotionExamQuery = DB::table('patient_motion_examination as pme');
+            $latestMotionExamQuery->join('patient_motion_examination_item as pmei', 'pmei.patient_motion_examination_id', '=', 'pme.id');
+            $latestMotionExamQuery->join('motion_examination as me', 'me.id', '=', 'pmei.motion_examination_id');
+            $latestMotionExamQuery->where('pme.examination_date','=',$date);
+
+            $latestMotionExamQuery->where('pme.patient_id', '=', $patientId);
+            $latestMotionExamQuery->where('pmei.is_value_set', '=', 1);
+
+            $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.id as examinationItemId',
+                'pme.patient_id', 'me.examination_name', 'pme.examination_date','pmei.test_readings');
+            $latestMotionExaminations = $latestMotionExamQuery->get();
+
+
+            $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
+                'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
+            $patientQuery->where('p.patient_id', '=', $patientId);
+            $patientDetails = $patientQuery->first();
+
+            $hospitalQuery = DB::table('hospital as h')->select('h.id', 'h.hospital_id', 'h.hospital_name', 'h.address', 'c.city_name',
+                'co.name');
+            $hospitalQuery->join('cities as c', 'c.id', '=', 'h.city');
+            $hospitalQuery->join('countries as co', 'co.id', '=', 'h.country');
+            $hospitalQuery->where('h.hospital_id', '=', $hospitalId);
+            $hospitalDetails = $hospitalQuery->first();
+
+
+            $examinationDates['patientDetails'] = $patientDetails;
+            $examinationDates['recentBloodTests'] = $bloodExaminations;
+            $examinationDates['hospitalDetails'] = $hospitalDetails;
+            $examinationDates['recentUrineExaminations'] = $latestUrineExaminations;
+            $examinationDates['recentMotionExaminations'] = $latestMotionExaminations;
+
+
+
+            //dd($examinationDates);
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
+        }
+
+        //dd($patientLabTests);
+        return $examinationDates;
+    }
+    /**
+     * Get lab receipt details for the patient
+     * @param $hid,$pid,$rid,$newpaidamount
+     * @throws $hospitalException
+     * @return String | null
+     * @author Ramana
+     */
+
+    function updateLabPatientFee($hid,$pid,$rid,$newpaidamount,$paidamount,$paymenttype){
+        try
+        {
+
+            $updateValues = array('lfr.paid_amount' => $newpaidamount);
+            $query = DB::table('lab_fee_receipt as lfr')->where('lfr.id', '=', $rid);
+            $query->where('lfr.patient_id','=',$pid);
+            $query->where('lfr.hospital_id','=',$hid);
+            //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+            $status=$query->update($updateValues);
+
+
+
+            $patientPaymentHistory = new PatientPaymentHistory();
+
+            $patientPaymentHistory->patient_id = $pid;
+            $patientPaymentHistory->receipt_id=$rid;
+            $patientPaymentHistory->hospital_id = $hid;
+            //$patientPaymentHistory->doctor_id =
+            // $patientPaymentHistory->total_fees = $labReceiptsVM->getTotalFees();
+            $patientPaymentHistory->paid_amount = $paidamount;
+            $patientPaymentHistory->payment_type = $paymenttype;
+
+
+            $patientPaymentHistory->created_by = "Admin";
+            $patientPaymentHistory->modified_by = "Admin";
+            $patientPaymentHistory->created_at = date("Y-m-d H:i:s");
+            $patientPaymentHistory->updated_at =date("Y-m-d H:i:s");
+
+            $patientPaymentHistory->save();
+
+            return $status;
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $exc);
+        }
+
+    }
+
+
+    /**
+     * Get lab receipt details for the patient
+     * @param $patientId, $hospitalId, $feeReceiptId
+     * @throws $hospitalException
+     * @return array | null
+     * @author RAMANA
+     */
+
+    public function getPaymentHistory($hospitalId, $patientId, $feeReceiptId)
+    {
+        $paymentHistory = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if(is_null($patientUser))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+            //DB::connection()->enableQueryLog();
+
+            $paymentHistoryQuery = DB::table('patient_payment_history as pph');
+            //$bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbe.blood_examination_id');
+            // $bloodExamQuery->join('pbei.patient_motion_examination_id', '=', 'be.id')
+
+            $paymentHistoryQuery->where('pph.patient_id', '=', $patientId);
+            $paymentHistoryQuery->where('pph.hospital_id', '=', $hospitalId);
+            $paymentHistoryQuery->where('pph.receipt_id', '=', $feeReceiptId);
+            $paymentHistoryQuery->select('pph.payment_type','pph.paid_amount','pph.created_at');
+
+            // dd($bloodExamQuery->toSql());
+            $paymentHistory = $paymentHistoryQuery->get();
+
+
+            // $labReceiptDetails['patientDetails'] = $patientDetails;
+
+            //dd($patientLabTests);
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $queryEx);
+        }
+        catch(UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $exc);
+        }
+
+        return $paymentHistory;
+    }
+
+    private function saveLabFeeReceiptHistory(PatientLabReceiptViewModel $labReceiptsVM,$receipt_id)
+    {
+        $patientPaymentHistory = new PatientPaymentHistory();
+
+        $patientPaymentHistory->patient_id = $labReceiptsVM->getPatientId();
+        $patientPaymentHistory->receipt_id=$receipt_id;
+        $patientPaymentHistory->hospital_id = $labReceiptsVM->getHospitalId();
+        $patientPaymentHistory->doctor_id = $labReceiptsVM->getDoctorId();
+        // $patientPaymentHistory->total_fees = $labReceiptsVM->getTotalFees();
+        $patientPaymentHistory->paid_amount = $labReceiptsVM->getPaidAmount();
+        $patientPaymentHistory->payment_type = $labReceiptsVM->getPaymentType();
+
+        $patientPaymentHistory->created_by = $labReceiptsVM->getCreatedBy();
+        $patientPaymentHistory->modified_by = $labReceiptsVM->getUpdatedBy();
+        $patientPaymentHistory->created_at = $labReceiptsVM->getCreatedAt();
+        $patientPaymentHistory->updated_at = $labReceiptsVM->getUpdatedAt();
+
+        $patientPaymentHistory->save();
+
+        return $patientPaymentHistory;
+
     }
 }

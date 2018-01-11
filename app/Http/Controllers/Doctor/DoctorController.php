@@ -6130,8 +6130,10 @@ class DoctorController extends Controller
             //dd($labReceiptDetails);
             $patientDetails = $this->hospitalService->getPatientProfile($patientId);
 
-            //dd($labTestDetails);
-            return view('portal.hospital-patient-print-receipt-details', compact('labReceiptDetails','patientDetails'));
+            $paymentHistory=$this->hospitalService->getPaymentHistory($hospitalId, $patientId, $feeReceiptId);
+
+            // dd($paymentHistory);
+            return view('portal.hospital-patient-print-receipt-details', compact('labReceiptDetails', 'patientDetails','paymentHistory'));
 
         }
         catch(HospitalException $hospitalExc)
@@ -7778,7 +7780,10 @@ class DoctorController extends Controller
             //dd($labReceiptDetails);
             $patientDetails = $this->hospitalService->getPatientProfile($patientId);
 
-            //dd($labTestDetails);
+            //dd($labTestDetails)
+            $paymentHistory=$this->hospitalService->getPaymentHistory($hospitalId, $patientId, $feeReceiptId);
+
+            // dd($paymentHistory);
 
 
         }
@@ -7798,7 +7803,8 @@ class DoctorController extends Controller
             //return redirect('exception')->with('message', trans('messages.SupportTeam'));
         }
 
-        return view('portal.doctor-patient-print-receipt-details', compact('labReceiptDetails','patientDetails'));
+        return view('portal.doctor-patient-print-receipt-details', compact('labReceiptDetails', 'patientDetails','paymentHistory'));
+        ;
     }
 
 
@@ -9276,5 +9282,136 @@ class DoctorController extends Controller
 
         //return $responseJson;
     }
+/*NEW ADDITION */
 
+
+    //RAMANA FRONT HOS
+
+
+    public function PatientLabDetailsResultsByHospitalForFront($hid, $patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+            //dd($patientExaminations);
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.hospital-patient-labReport', compact('patientExaminations', 'patientDetails'));
+
+    }
+    /*
+        * auth:RAMANA
+        * */
+    public function updateLabPatientFee($hid, $pid, $rid, $totalpaidamount,$paidamount, $paymenttype)
+    {
+
+        try {
+
+            // dd($hid . $pid . $rid . $newpaidamount);
+            if ($paymenttype == 1) {
+                $paymenttype = "cash";
+            } else if ($paymenttype == 2) {
+                $paymenttype = "cheque";
+            } else {
+                $paymenttype = "card";
+            }
+            // dd("tes".$paymenttype);
+            $status = $this->hospitalService->updateLabPatientFee($hid, $pid, $rid, $totalpaidamount,$paidamount, $paymenttype);
+            // if ($status == 1)
+            // Session::put('success', "Succesfully updated");
+            // else
+            //   Session::put('success', "Fail please Try later");
+
+        } catch (HospitalException $hospitalExc) {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+
+    }
+//RAMANA
+    public function PatientLabDetailsResultsByHospitalForDoctor($doctorId, $hid, $patientId)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+            //dd($patientExaminations);
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-patient-lab-results', compact('patientExaminations', 'patientDetails'));
+
+    }
+
+
+//RAMANA
+    public function PatientLabReportsByHospitalForDoctor($hid, $patientId, $date)
+    {
+        $patientDetails = null;
+        $patientPrescriptions = null;
+        $labTests = null;
+        $patientAppointment = null;
+        //$jsonResponse = null;
+        //dd('Inside patient details');
+        try {
+            $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
+            // $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
+            $patientExaminations = HospitalServiceFacade::getExaminationDatesByDate($patientId, $hid, $date);
+            //dd($patientExaminations);
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-hospital-patient-labReport', compact('patientExaminations', 'patientDetails'));
+
+    }
 }

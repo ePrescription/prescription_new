@@ -100,6 +100,8 @@ $profile_menu="0";
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/prescription-details" title="Medical Prescription"><i class="fa fa-file-text-o"></i> </a>
                                                     &nbsp;&nbsp;
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i> </a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/lab-details-results" title="Print Patient Lab Results"><i class="fa fa-folder-o"></i> </a>
+
                                                     &nbsp;&nbsp;
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/lab-report-download" title="Lab Report Download"><i class="fa fa-download"></i> </a>
                                                     <!--

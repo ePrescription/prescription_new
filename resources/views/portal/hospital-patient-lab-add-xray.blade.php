@@ -82,6 +82,9 @@
 <input type="hidden" class="form-control" name="patientId" value="{{$patientDetails[0]->patient_id}}" required="required" />
 <input type="hidden" class="form-control" name="hospitalId" value="{{$hid}}" required="required" />
 <input type="submit" name="addmotion" value="Save" class="btn btn-success"/>
+    <input type="button" value="Cancel" class="btn btn-info waves-effect waves-light" onclick="window.location.href='{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients';"/>
+
+
 </div>
 </div>
 </form>

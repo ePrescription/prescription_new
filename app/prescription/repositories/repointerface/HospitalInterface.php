@@ -194,4 +194,14 @@ interface HospitalInterface {
 
     public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM);
 
+
+    /*NEW ADDITION RAMANA*/
+
+    public function updateLabPatientFee($hid,$pid,$rid,$newpaidamount,$paidamount,$paymenttype);//ramana
+
+    public function getPaymentHistory($hospitalId, $patientId, $feeReceiptId);//ramana
+
+    public function getExaminationDatesByDate($patientId, $hid,$date);//ramana
+
+
 }

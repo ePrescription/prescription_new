@@ -17,101 +17,105 @@ $patient_menu="1";
 $profile_menu="0";
 ?>
 @section('content')
-<div class="wrapper">
+    <div class="wrapper">
     @include('portal.hospital-header')
     <!-- Left side column. contains the logo and sidebar -->
-    <!-- sidebar: style can be found in sidebar.less -->
+        <!-- sidebar: style can be found in sidebar.less -->
     @include('portal.hospital-sidebar')
     <!-- /.sidebar -->
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-page">
-        <!-- Start content -->
-        <div class="content">
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
 
-            <div class="hidden">
-                <div class="page-header-title">
-                    <h4 class="page-title">Patient Receipts List</h4>
+                <div class="hidden">
+                    <div class="page-header-title">
+                        <h4 class="page-title">Patient Receipts List</h4>
 
+                    </div>
                 </div>
-            </div>
 
-            <div class="page-content-wrapper ">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
+                <div class="page-content-wrapper ">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
 
-                            <div style="float:right;margin: 10px;">
-                                <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
-                                    <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
-                                </a>
-                            </div>
+                                <div style="float:right;margin: 10px;">
+                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patients">
+                                        <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
+                                    </a>
+                                </div>
 
-                            <div class="panel panel-primary">
-                                <div class="panel-body">
+                                <div class="panel panel-primary">
+                                    <div class="panel-body">
 
-                                    <h4 class="m-b-30 m-t-0">Patient Receipts List</h4>
+                                        <h4 class="m-b-30 m-t-0">Patient Receipts List</h4>
 
-                                    @if (session()->has('message'))
-                                        <div class="col_full login-title">
+                                        @if (session()->has('message'))
+                                            <div class="col_full login-title">
                                         <span style="color:red;">
                                             <b>{{session('message')}}</b>
                                         </span>
-                                        </div>
-                                    @endif
+                                            </div>
+                                        @endif
 
-                                    @if (session()->has('success'))
-                                        <div class="col_full login-title">
+                                        @if (session()->has('success'))
+                                            <div class="col_full login-title">
                                         <span style="color:green;">
                                             <b>{{session('success')}}</b>
                                         </span>
+                                            </div>
+                                        @endif
+                                        <div>
+                                            PID ( Patient Identification)
                                         </div>
-                                    @endif
-                                    <div>
-                                        PID ( Patient Identification)
-                                    </div>
-                                    <table id="datatable" class="table table-striped table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Patient ID</th>
-                                            <th>Name in Full</th>
-                                            <th>Fee Amount</th>
-                                            <th>Receipt Date</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($labReceipts as $labReceipt)
+                                        <table id="datatable" class="table table-striped table-bordered">
+                                            <thead>
                                             <tr>
-                                                <td>{{$labReceipt->receiptId}}</td>
-                                                <td>{{$labReceipt->pid}}</td>
-                                                <td>{{$labReceipt->name}}</td>
-                                                <td>{{$labReceipt->total_fees}}</td>
-                                                <td>{{$labReceipt->lab_receipt_date}}</td>
-                                                <td>
-
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$labReceipt->patient_id}}/receiptdetails?feereceipt={{$labReceipt->receiptId}}" title="Lab Profile"><i class="fa fa-eye"></i> </a>
-
-                                                </td>
+                                                <th>ID</th>
+                                                <th>Patient ID</th>
+                                                <th>Name in Full</th>
+                                                <th>Fee Amount</th>
+                                                <th>Paid Amount</th>
+                                                <th>Due Amount</th>
+                                                <th>Receipt Date</th>
+                                                <th>Action</th>
                                             </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div><!-- /.panel-body -->
-                            </div><!-- /.panel -->
+                                            </thead>
+                                            <tbody>
+                                            @foreach($labReceipts as $labReceipt)
+                                                <tr>
+                                                    <td>{{$labReceipt->receiptId}}</td>
+                                                    <td>{{$labReceipt->pid}}</td>
+                                                    <td>{{$labReceipt->name}}</td>
+                                                    <td>{{$labReceipt->total_fees}}</td>
+                                                    <td>{{$labReceipt->paid_amount}}</td>
+                                                    <td><?php echo abs($labReceipt->total_fees-$labReceipt->paid_amount); ?></td>
+                                                    <td>{{$labReceipt->lab_receipt_date}}</td>
+                                                    <td>
+
+                                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$labReceipt->patient_id}}/receiptdetails?feereceipt={{$labReceipt->receiptId}}" title="Lab Profile"><i class="fa fa-eye"></i> </a>
+
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div><!-- /.panel-body -->
+                                </div><!-- /.panel -->
 
 
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container -->
-            </div><!-- /.content-wrapper -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container -->
+                </div><!-- /.content-wrapper -->
 
-        </div><!-- ./content -->
-    </div><!-- ./content-page -->
-    @include('portal.doctor-footer')
+            </div><!-- ./content -->
+        </div><!-- ./content-page -->
+        @include('portal.doctor-footer')
 
-</div><!-- ./wrapper -->
+    </div><!-- ./wrapper -->
 
 
 @endsection

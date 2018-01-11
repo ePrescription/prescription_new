@@ -3238,4 +3238,91 @@ class HospitalService {
     }
 
     /*Symptom section -- End */
+
+
+
+/*NEW ADDITION RAMANA*/
+
+    /**
+     * Get lab receipt details for the patient
+     * @param $patientId, $hospitalId, $feeReceiptId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Ramana
+     */
+    public function updateLabPatientFee($hid,$pid,$rid,$newpaidamount,$paidamount,$paymenttype)
+    {
+        $status = null;
+
+        try
+        {
+            $status = $this->hospitalRepo->updateLabPatientFee($hid,$pid,$rid,$newpaidamount,$paidamount,$paymenttype);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LABTEST_FEES_STATUS_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+
+    /**
+     * Get lab receipt details for the patient
+     * @param $patientId, $hospitalId, $feeReceiptId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Ramana
+     */
+
+    public function getPaymentHistory($hospitalId, $patientId, $feeReceiptId)
+    {
+        $paymentHistory = null;
+
+        try
+        {
+            $paymentHistory = $this->hospitalRepo->getPaymentHistory($hospitalId, $patientId, $feeReceiptId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $exc);
+        }
+
+        return $paymentHistory;
+    }
+
+    /**
+     * Get patient latest appointment dates
+     * @param $patientId, $hospitalId,$date
+     * @throws $hospitalException
+     * @return array | null
+     * @author RAMANA
+     */
+    public function getExaminationDatesByDate($patientId, $hospitalId,$date)
+    {
+        $examinationDates = null;
+
+        try
+        {
+            $examinationDates = $this->hospitalRepo->getExaminationDatesByDate($patientId, $hospitalId,$date);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
+        }
+
+        return $examinationDates;
+    }
 }

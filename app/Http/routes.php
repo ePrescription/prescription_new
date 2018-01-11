@@ -123,6 +123,10 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
         return view('portal.hospital-dashboard');
     });
     */
+    //NEW BY RAMANA
+
+    Route::get('rest/api/{hospitalId}/patient/{patientId}/lab-details-results', array('as' => 'hospital.patientlabReportsresults', 'uses' => 'DoctorController@PatientLabDetailsResultsByHospitalForFront'));
+    Route::get('rest/api/hospital/{hospitalId}/patient/{patientId}/{date}/lab-reports', array('as' => 'hospital.patientlabreports', 'uses' => 'DoctorController@PatientLabReportsByHospitalForDoctor'));
 
 
     Route::get('{id}/dashboard', array('as' => 'patient.dashboard', 'uses' => 'DoctorController@getDashboardDetailsForFront'));
@@ -275,6 +279,10 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('rest/api/{patientId}/scandetails', array('as' => 'doctor.scandetails', 'uses' => 'DoctorController@getPatientScanDetails'));
     Route::get('rest/api/{patientId}/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@getPatientDentalTests'));
     Route::get('rest/api/{patientId}/xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorController@getPatientXrayTests'));
+
+    //Ramana
+    Route::post('rest/api/hospital/{hid}/patient/{pid}/receiptid/{rid}/amount/{totalpaidamount}/{paidamount}/paymenttype/{paymenttype}/lab-fee-update',array('as' => 'doctor.lab-fee-update', 'uses' => 'DoctorController@updateLabPatientFee'));
+
 
     //RECEIPT
 
@@ -606,6 +614,10 @@ Route::group(['prefix' => 'doctor'], function()
 
 //Prescription
         Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/prescription-details', array('as' => 'hospital.patientdetails', 'uses' => 'DoctorController@PatientPrescriptionDetailsByHospitalForDoctor'));
+//RAMANA
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/lab-details', array('as' => 'hospital.patientlabdetails', 'uses' => 'DoctorController@PatientLabDetailsByHospitalForDoctor'));
+        Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/lab-details-results', array('as' => 'hospital.patientlabdetailsresults', 'uses' => 'DoctorController@PatientLabDetailsResultsByHospitalForDoctor'));
+        Route::get('hospital/{hospitalId}/patient/{patientId}/{date}/lab-reports', array('as' => 'hospital.patientlabreports', 'uses' => 'DoctorController@PatientLabReportsByHospitalForDoctor'));
 
 
 

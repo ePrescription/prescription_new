@@ -109,8 +109,13 @@ $profile_menu="0";
                                                             &nbsp;&nbsp;
                                                             <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/prescription-details" title="Medical Prescription"><i class="fa fa-file-text-o"></i> </a>
                                                             &nbsp;&nbsp;
+
                                                             <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i> </a>
-                                                            &nbsp;&nbsp;
+&nbsp;
+
+                                                            <!--ADDED BY RAMANA --->    <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/lab-details-results" title="Print Patient lab Tests"><i class="fa fa-folder-o"></i> </a>
+
+                                                                &nbsp;&nbsp;
                                                             <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/lab-report-download" title="Lab Report Download"><i class="fa fa-download"></i> </a>
                                                             &nbsp;&nbsp;
                                                             <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/labreceipts" title="Lab Receipts"><i class="fa fa-money"></i> </a>

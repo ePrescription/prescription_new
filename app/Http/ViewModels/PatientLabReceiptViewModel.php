@@ -17,6 +17,8 @@ class PatientLabReceiptViewModel
     private $totalFees;
     private $labReceiptDate;
     private $bloodTests;
+    private $paidAmount;// by ramana
+    private $paymentType;//by ramana
     private $motionTests;
     private $urineTests;
     private $scanTests;
@@ -295,7 +297,38 @@ class PatientLabReceiptViewModel
         $this->updatedAt = $updatedAt;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPaidAmount()
+    {
+        return $this->paidAmount;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function setPaidAmount($paidAmount)
+    {
+        $this->paidAmount=$paidAmount;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function setPaymentType($paymentType)
+    {
+        $this->paymentType=$paymentType;
+    }
 
 
 }
