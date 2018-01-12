@@ -895,7 +895,7 @@ $time_array=array(
                         required: true,
                         number: true,
                         minlength: 10,
-                        maxlength: 11
+                        maxlength: 10
                     },
                     age: {
                         required: true,
@@ -921,11 +921,11 @@ $time_array=array(
                     telephone: {
                         required: "Please provide a valid mobile number",
                         minlength: "Your mobile number must be 10 characters long",
-                        maxlength: "Your mobile number must be 11 characters long"
+                        maxlength: "Your mobile number must be 10 characters long"
                     },
                     age: "Please provide a valid age",
                     appointmentDate: "Please provide a valid Date",
-                    fee: "Please provide a valid Amounr"
+                    fee: "Please provide a valid Amount"
                 },
                 // Make sure the form is submitted to the destination defined
                 // in the "action" attribute of the form when valid
