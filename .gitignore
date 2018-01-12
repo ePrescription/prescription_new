@@ -5,4 +5,5 @@ Homestead.yaml
 Homestead.json
 /bootstrap/compiled.php
 .env
+.idea
 .composer.lock
