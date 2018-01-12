@@ -196,12 +196,15 @@ interface HospitalInterface {
 
 
     /*NEW ADDITION RAMANA*/
+     //ramana start 12-01-2018
 
     public function updateLabPatientFee($hid,$pid,$rid,$newpaidamount,$paidamount,$paymenttype);//ramana
 
     public function getPaymentHistory($hospitalId, $patientId, $feeReceiptId);//ramana
 
     public function getExaminationDatesByDate($patientId, $hid,$date);//ramana
+
+     //ramana end 12-01-2018
 
 
 }

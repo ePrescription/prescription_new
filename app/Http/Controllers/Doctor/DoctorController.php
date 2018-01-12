@@ -7779,10 +7779,10 @@ class DoctorController extends Controller
             $labReceiptDetails = $this->hospitalService->getPatientReceiptDetails($hospitalId, $patientId, $feeReceiptId);
             //dd($labReceiptDetails);
             $patientDetails = $this->hospitalService->getPatientProfile($patientId);
-
+            //added by Ramana start 12-01-2018
             //dd($labTestDetails)
             $paymentHistory=$this->hospitalService->getPaymentHistory($hospitalId, $patientId, $feeReceiptId);
-
+            //end 12-01-2018
             // dd($paymentHistory);
 
 
@@ -9285,7 +9285,7 @@ class DoctorController extends Controller
 /*NEW ADDITION */
 
 
-    //RAMANA FRONT HOS
+    //RAMANA FRONT Hof start 12-01-2018
 
 
     public function PatientLabDetailsResultsByHospitalForFront($hid, $patientId)
@@ -9414,4 +9414,5 @@ class DoctorController extends Controller
         return view('portal.doctor-hospital-patient-labReport', compact('patientExaminations', 'patientDetails'));
 
     }
+    //Ramana end  12-01-2018
 }

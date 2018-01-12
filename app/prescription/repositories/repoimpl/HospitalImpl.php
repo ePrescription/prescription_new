@@ -10335,7 +10335,7 @@ class HospitalImpl implements HospitalInterface{
 
             if(!is_null($labFeeReceipt))
             {
-                $patientPaymentHistory= $this->saveLabFeeReceiptHistory($labReceiptsVM,$labFeeReceipt->id);
+                $patientPaymentHistory= $this->saveLabFeeReceiptHistory($labReceiptsVM,$labFeeReceipt->id);//by ramana 12-01-2018
 
                 /*if(!is_null($bloodTests) && !empty($bloodTests))
                 {
@@ -10934,7 +10934,7 @@ class HospitalImpl implements HospitalInterface{
 
     /*NEW ADDITION RAMANA*/
 
-    //NEWLY ADDED RAMANA
+    //NEWLY ADDED RAMANA Start 12-01-2018
     public function getExaminationDatesByDate($patientId, $hospitalId,$date)
     {
 
@@ -11163,6 +11163,14 @@ class HospitalImpl implements HospitalInterface{
         return $paymentHistory;
     }
 
+    /**
+     * Get lab receipt details for the patient
+     * @param $labReceiptsVM,$receipt_id
+     * @throws $hospitalException
+     * @return array | null
+     * @author RAMANA
+     */
+
     private function saveLabFeeReceiptHistory(PatientLabReceiptViewModel $labReceiptsVM,$receipt_id)
     {
         $patientPaymentHistory = new PatientPaymentHistory();
@@ -11185,4 +11193,5 @@ class HospitalImpl implements HospitalInterface{
         return $patientPaymentHistory;
 
     }
+    //ramana end 12-01-2018
 }

@@ -786,8 +786,10 @@ class PatientProfileMapper
         $labReceiptsVM->setHospitalId($receiptObj->hospitalId);
         $labReceiptsVM->setDoctorId(property_exists($receiptObj, 'doctorId') ? $receiptObj->doctorId : null);
         //$labReceiptsVM->setDoctorId($receiptObj->doctorId);
+         //ramana start 12-01-2018
         $labReceiptsVM->setPaidAmount( $receiptObj->paidamount);//by ramana
         $labReceiptsVM->setPaymentType( $receiptObj->paymenttype );//by ramana
+        //ramana end 12-01-2018
         $labReceiptsVM->setTotalFees($receiptObj->totalFees);
         $labReceiptsVM->setLabReceiptDate(date("Y-m-d H:i:s"));
         //$labReceiptsVM->setBloodTests()

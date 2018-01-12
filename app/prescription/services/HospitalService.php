@@ -3242,6 +3242,7 @@ class HospitalService {
 
 
 /*NEW ADDITION RAMANA*/
+//ramana start 12-01-2018
 
     /**
      * Get lab receipt details for the patient
@@ -3325,4 +3326,5 @@ class HospitalService {
 
         return $examinationDates;
     }
+    //ramana end 12-01-2018
 }
