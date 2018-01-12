@@ -208,6 +208,8 @@ $profile_menu="0";
     {!!  Html::script(asset('theme/assets/plugins/datatables/dataTables.keyTable.min.js')) !!}
     {!!  Html::script(asset('theme/assets/plugins/datatables/dataTables.responsive.min.js')) !!}
     {!!  Html::script(asset('theme/assets/plugins/datatables/responsive.bootstrap.min.js')) !!}
+
+
     {!!  Html::script(asset('theme/assets/plugins/datatables/dataTables.scroller.min.js')) !!}
 
     <!-- Datatable init js -->
@@ -215,8 +217,8 @@ $profile_menu="0";
 
     {!!  Html::script(asset('theme/assets/js/app.js')) !!}
 
-
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <style>
         /* The Modal (background) */
@@ -267,7 +269,7 @@ $profile_menu="0";
 
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
-
+console.log(span);
         // When the user clicks on the button, open the modal
         btn.onclick = function() {
             modal.style.display = "block";

@@ -259,7 +259,7 @@ $time_array=array(
                                                 </div>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Martial Status <span class="red">*</span></label>
+                                                    <label class="col-sm-3 control-label">Marital Status <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" id="married1" name="maritalStatus" value="1" required="required" />&nbsp;&nbsp;Married
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
