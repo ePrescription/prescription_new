@@ -6530,7 +6530,7 @@ class HospitalImpl implements HospitalInterface{
             $bloodExamQuery->where('pbe.fee_receipt_id', '=', $feeReceiptId);
             $bloodExamQuery->whereNotNull('pbei.fees');
             $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date',
-                    'pbei.fees');
+                    'pbei.fees', 'be1.examination_name as parent_examination_name');
 
             //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
@@ -6566,6 +6566,7 @@ class HospitalImpl implements HospitalInterface{
 
             $urineExamQuery->where('puei.is_value_set', '=', 1);
             $urineExamQuery->select('pue.id', 'ue1.examination_name as parent_examination_name','pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date', 'puei.fees');
+            //$urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date', 'puei.fees');
 
             //  $urineExamQuery->select('pue.id', 'pue.patient_id', 'pue.hospital_id', 'ue.examination_name', 'pue.examination_date',
             // 'puei.fees');
