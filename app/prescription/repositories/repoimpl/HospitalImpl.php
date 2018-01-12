@@ -6584,7 +6584,7 @@ class HospitalImpl implements HospitalInterface{
             $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date',
                 'pusi.fees');
             $ultraSoundExamQuery->where('pusi.is_value_set', '=', 1);
-            $ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date','pusi.fees');
+            //$ultraSoundExamQuery->select('pus.id', 'pus.patient_id', 'pus.hospital_id', 'us.examination_name', 'pus.examination_date','pusi.fees');
 
             //dd($bloodExamQuery->toSql());
             $ultraSoundExaminations = $ultraSoundExamQuery->get();
