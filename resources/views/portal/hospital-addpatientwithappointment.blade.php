@@ -286,13 +286,13 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group col-md-12">
+                                                <!-- <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">C/o</label>
                                                     <div class="col-sm-9">
                                                         <input type="text" class="form-control" name="careof" id="careof" value="" />
                                                         @if ($errors->has('careof'))<p class="error" style="">{!!$errors->first('careof')!!}</p>@endif
                                                     </div>
-                                                </div>
+                                                </div> -->
 
 
                                                 <div class="form-group col-md-12">

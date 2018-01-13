@@ -45,7 +45,7 @@ $profile_menu="0";
 
                                     <div class="row">
 
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-2" style="margin-bottom:12px">
                                             @if($patientDetails[0]->patient_photo=="")
 
                                                 <img src="{{URL::to('/')}}/uploads/patient_photo/noimage.png"  />

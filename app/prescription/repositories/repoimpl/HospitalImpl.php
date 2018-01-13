@@ -6729,23 +6729,26 @@ class HospitalImpl implements HospitalInterface{
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
             $bloodExamQuery->where('pbei.is_value_set', '=', 1);
+            //$bloodExamQuery->where('be.id', '=', 'be1.parent_id');
             $bloodExamQuery->where(function($query){
                 $query->where('pbei.is_fees_paid', '=', 0);
                 $query->orWhereNull('pbei.is_fees_paid');
             });
+            $bloodExamQuery->groupBy('be1.parent_id');
             //$bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
                 $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
             }
             $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'pbei.id as examination_item_id',
-                'be.examination_name', 'pbe.examination_date','pbei.fees','be1.examination_name as parent_examination_name');
+                'be.examination_name', 'pbe.examination_date','pbei.fees',
+                'be1.id as parent_examination_id', 'be1.examination_name as parent_examination_name');
 
             //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
             //$query = DB::getQueryLog();
             //dd($query);
-            //dd($bloodExaminations);
+            dd($bloodExaminations);
 
             $urineExamQuery = DB::table('patient_urine_examination as pue');
             $urineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
@@ -10325,7 +10328,7 @@ class HospitalImpl implements HospitalInterface{
             $dentalTests = $labReceiptsVM->getDentalTests();
             $xrayTests = $labReceiptsVM->getXrayTests();
 
-            //dd($dentalTests);
+            dd($bloodTests);
             //dd($isDentalTest);
 
             //dd($dentalTests[0]['id']);

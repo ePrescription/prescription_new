@@ -2443,17 +2443,24 @@ class DoctorController extends Controller
             {
                 $destinationPath = 'uploads/patient_photo'; // upload path
                 $extension = Input::file('patient_photo')->getClientOriginalExtension(); // getting file extension
-                $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
+                //$fileName = rand(11111, 99999) . '.' . $extension; // renameing image
+                $fileName = $patientProfileRequest->name.'_'.time() . '.' . $extension; // renameing image
                 $upload_success = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
+                $fileLocation = $destinationPath.'/'.$fileName;
 
-                $patientProfileRequest->patientPhoto = $fileName;
+                //$patientProfileRequest->patientPhoto = $fileName;
+                //$patientProfileRequest['patientPhoto'] = $fileName;
+                $patientProfileRequest['patientPhoto'] = $fileLocation;
+                //dd($patientProfileRequest);
             }
             else
             {
-                $patientProfileRequest->patientPhoto = "";
+                //$patientProfileRequest->patientPhoto = "";
+                $patientProfileRequest['patientPhoto'] = "";
             }
 
             $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
+            //dd($patientProfileVM);
             $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 
             if($status)
