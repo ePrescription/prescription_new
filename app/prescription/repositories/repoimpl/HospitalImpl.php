@@ -10336,7 +10336,7 @@ class HospitalImpl implements HospitalInterface{
 
             if(!is_null($labFeeReceipt))
             {
-                $patientPaymentHistory= $this->saveLabFeeReceiptHistory($labReceiptsVM,$labFeeReceipt->id);//by ramana 12-01-2018
+                //$patientPaymentHistory= $this->saveLabFeeReceiptHistory($labReceiptsVM,$labFeeReceipt->id);//by ramana 12-01-2018
 
                 /*if(!is_null($bloodTests) && !empty($bloodTests))
                 {
@@ -10738,6 +10738,8 @@ class HospitalImpl implements HospitalInterface{
 
 
                 }
+
+                $this->saveLabFeeReceiptHistory($labReceiptsVM, $labFeeReceipt->id);//by ramana 12-01-2018
             }
             //dd($bloodTests);
 
@@ -11177,7 +11179,7 @@ class HospitalImpl implements HospitalInterface{
         $patientPaymentHistory = new PatientPaymentHistory();
 
         $patientPaymentHistory->patient_id = $labReceiptsVM->getPatientId();
-        $patientPaymentHistory->receipt_id=$receipt_id;
+        $patientPaymentHistory->receipt_id = $receipt_id;
         $patientPaymentHistory->hospital_id = $labReceiptsVM->getHospitalId();
         $patientPaymentHistory->doctor_id = $labReceiptsVM->getDoctorId();
         // $patientPaymentHistory->total_fees = $labReceiptsVM->getTotalFees();
