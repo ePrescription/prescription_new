@@ -50,7 +50,7 @@ $profile_menu="0";
                                     <h4 class="m-t-0 m-b-30">Patient Details</h4>
 
                                     <div class="row">
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-2" style="margin-bottom:12px">
                                             @if($patientDetails[0]->patient_photo=="")
 
                                                 <img src="{{URL::to('/')}}/uploads/patient_photo/noimage.png"  />
@@ -204,9 +204,24 @@ $profile_menu="0";
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6">
-
+                                                        <label class="col-sm-6 control-label">Marital Status</label>
+                                                        <div class="col-sm-6">
+                                                            @if($patientDetails[0]->married==1) Married @else Unmarried @endif
+                                                        </div>
                                                     </div>
-                                                    </p>
+                                                    <div class="form-group col-md-6">
+                                                        <label class="col-sm-6 control-label">Occupation</label>
+                                                        <div class="col-sm-6">
+                                                            {{$patientDetails[0]->occupation}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label class="col-sm-6 control-label">DOB</label>
+                                                        <div class="col-sm-6">
+                                                            {{$patientDetails[0]->dob}}
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <div class="tab-pane" id="profile">
                                                     <p>
