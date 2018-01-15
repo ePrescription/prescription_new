@@ -3327,4 +3327,40 @@ class HospitalService {
         return $examinationDates;
     }
     //ramana end 12-01-2018
+
+    /**
+     * Upload patient lab test documents
+     * @param $labDocumentsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientLabDocuments($labDocumentsVM)
+    {
+        $status = true;
+
+        try
+        {
+            //dd('Inside edit lab in service');
+            DB::transaction(function() use ($labDocumentsVM, &$status)
+            {
+                //$status = $this->hospitalRepo->uploadPatientLabDocuments($labDocumentsVM);
+                $status = $this->hospitalRepo->uploadPatientApiLabDocuments($labDocumentsVM);
+            });
+
+        }
+        catch(HospitalException $profileExc)
+        {
+            $status = false;
+            throw $profileExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $ex);
+        }
+
+        return $status;
+    }
 }

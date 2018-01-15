@@ -10917,6 +10917,93 @@ class HospitalImpl implements HospitalInterface{
         return $status;
     }
 
+    /**
+     * Upload patient lab test documents
+     * @param $labDocumentsVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientApiLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM)
+    {
+        $labDocuments = null;
+        $status = true;
+
+        try
+        {
+            $patientId = $labDocumentsVM->getPatientId();
+            $labId = $labDocumentsVM->getLabId();
+            //$labDocuments = $labDocumentsVM->getPatientLabDocuments();
+            //dd($labDocuments);
+
+            $labDocuments = $labDocumentsVM->getDoctorUploads();
+            //dd($labDocuments);
+
+            if (!is_null($labDocuments))
+            {
+                $labDocument = new PatientDocuments();
+                $labDocument->patient_id = $patientId;
+                $labDocument->lab_id = $labId;
+                $labDocument->document_upload_date = $labDocumentsVM->getDocumentUploadDate();
+                $labDocument->created_by = $labDocumentsVM->getCreatedBy();
+                $labDocument->modified_by = $labDocumentsVM->getUpdatedBy();
+                $labDocument->created_at = $labDocumentsVM->getCreatedAt();
+                $labDocument->updated_at = $labDocumentsVM->getUpdatedAt();
+                $labDocument->save();
+
+                foreach($labDocuments as $key => $value)
+                {
+
+                    $filename = $value->getClientOriginalName();
+                    $extension = $value->getClientOriginalExtension();
+                    //$randomName = $this->generateUniqueFileName();
+                    $diskStorage = env('DISK_STORAGE');
+
+                    //$documentPath = 'medical_document/' . 'patient_document_'.$filename . '.' . $extension;
+                    $documentPath = 'medical_document/' . 'patient_document_'.$patientId.'/'.time().'_'.$filename;
+
+                    //Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
+                    Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
+
+                    $labDocumentItems = new PatientDocumentItems();
+
+                    //$labDocumentItems->test_category_name = $labDocumentsVM->getTestCategoryName();
+                    //$labDocumentItems->document_name = $labDocumentsVM->getDocumentName();
+                    $labDocumentItems->document_path = $documentPath;
+                    //$labDocumentItems->document_upload_date = (date("Y-m-d H:i:s"));
+                    $labDocumentItems->document_filename = $filename;
+                    $labDocumentItems->document_extension = $extension;
+                    $labDocumentItems->document_upload_status = 1;
+                    $labDocumentItems->created_by = $labDocumentsVM->getCreatedBy();
+                    $labDocumentItems->modified_by = $labDocumentsVM->getUpdatedBy();
+                    $labDocumentItems->created_at = $labDocumentsVM->getCreatedAt();
+                    $labDocumentItems->updated_at = $labDocumentsVM->getUpdatedAt();
+
+                    $labDocument->patientdocumentitems()->save($labDocumentItems);
+
+                }
+
+                //dd('File saved ');
+
+            }
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
     private function generateUniqueFileName()
     {
         $i = 0;

@@ -17,6 +17,7 @@ use App\Http\ViewModels\PatientDiagnosisViewModel;
 use App\Http\ViewModels\PatientDrugHistoryViewModel;
 use App\Http\ViewModels\PatientFamilyIllnessViewModel;
 use App\Http\ViewModels\PatientGeneralExaminationViewModel;
+use App\Http\ViewModels\PatientLabDocumentsViewModel;
 use App\Http\ViewModels\PatientLabReceiptViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
 use App\Http\ViewModels\PatientPersonalHistoryViewModel;
@@ -105,6 +106,31 @@ class PatientProfileMapper
         $profileVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $profileVM;
+    }
+
+    public static function setLabApiDocumentDetails(Request $uploadRequest)
+    {
+        $labDocumentsVM = new PatientLabDocumentsViewModel();
+
+        $userName = 'Admin';
+        $files = $uploadRequest->allFiles();
+
+        //dd($files);
+
+        $resultsObj = (object) $uploadRequest->all();
+
+        $labDocumentsVM->setDoctorUploads($files);
+        //$labDocumentsVM->setDocumentName($uploadRequest['document_name']);
+        $labDocumentsVM->setPatientId($resultsObj->patientId);
+        $labDocumentsVM->setLabId($resultsObj->providerId);
+        $labDocumentsVM->setDocumentUploadDate(date("Y-m-d"));
+
+        $labDocumentsVM->setCreatedBy($userName);
+        $labDocumentsVM->setUpdatedBy($userName);
+        $labDocumentsVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $labDocumentsVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $labDocumentsVM;
     }
 
     public static function setPatientAppointment(Request $patientAppointmentRequest)

@@ -718,7 +718,7 @@ class LabController extends Controller
     /**
      * Upload patient lab test documents
      * @param $uploadRequest
-     * @throws $hospitalException
+     * @throws $userException
      * @return true | false
      * @author Baskar
      */

@@ -19,6 +19,8 @@ class PatientLabDocumentsViewModel
     private $documentPath;
     private $patientLabDocuments;
 
+    private $doctorUploads;
+
     private $createdBy;
     private $updatedBy;
     private $createdAt;
@@ -27,6 +29,7 @@ class PatientLabDocumentsViewModel
     public function __construct()
     {
         $this->patientLabDocuments = array();
+        //$this->doctorUploads = array();
         //$this->testCategoryName = array();
         //$this->documentName = array();
     }
@@ -142,6 +145,22 @@ class PatientLabDocumentsViewModel
     {
         //$this->patientLabDocuments = $patientLabDocuments;
         $this->patientLabDocuments[] = $patientLabDocuments;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDoctorUploads()
+    {
+        return $this->doctorUploads;
+    }
+
+    /**
+     * @param array $doctorUploads
+     */
+    public function setDoctorUploads($doctorUploads)
+    {
+        $this->doctorUploads = $doctorUploads;
     }
 
     /**

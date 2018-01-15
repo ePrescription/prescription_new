@@ -16,6 +16,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
 use Input;
+use File;
+use Storage;
 
 class DoctorApiController extends Controller
 {
@@ -2972,6 +2974,7 @@ class DoctorApiController extends Controller
         $status = true;
         //$jsonResponse = null;
         $fileName = null;
+        $filename1 = null;
         $fileLocation = null;
         $msg = null;
 
@@ -2989,6 +2992,10 @@ class DoctorApiController extends Controller
                 //dd($destinationPath);
                 //$extension = Input::file('patient_photo')->getClientOriginalExtension(); // getting file extension
                 $extension = $patientProfileRequest->file('photo')->getClientOriginalExtension(); // getting file extension
+                //$filename1 = $patientProfileRequest->file('photo')->getClientOriginalName();
+                //dd($filename1);
+
+                //dd($fileName1);
                 $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
                 //$status = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
                 //$status = Input::file('patient_photo')->move($destinationPath, $fileName); // uploading file to given path
@@ -3024,5 +3031,92 @@ class DoctorApiController extends Controller
 
         return $responseJson;
 
+    }
+
+    /**
+     * Upload patient lab test documents
+     * @param $uploadRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientLabDocuments(Request $uploadRequest)
+    {
+        $status = true;
+        $labDocumentsVM = null;
+        $responseJson = null;
+        $files = null;
+        //dd('Inside lab controller fsdfdsfdsfsdfds');
+
+        try
+        {
+            //$files = $uploadRequest->allFiles();
+            //$obj = (object)$uploadRequest->all();
+            //dd($obj);
+            $labDocumentsVM = PatientProfileMapper::setLabApiDocumentDetails($uploadRequest);
+            //dd($labDocumentsVM);
+
+
+            /*foreach($files as $key => $value)
+            {
+                dd($value);
+                //dd($value->getClientOriginalName());
+                //$extension = $file->getClientOriginalExtension();
+
+                $documentContents = File::get($value);
+
+                $filename = $value->getClientOriginalName();
+                $extension = $value->getClientOriginalExtension();
+
+                $randomName = $this->generateUniqueFileName();
+                $diskStorage = env('DISK_STORAGE');
+
+                $documentPath = 'medical_document/' . 'patient_document_' . $filename.$randomName . '.' . $extension;
+
+                Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
+                //dd('File saved');
+            }*/
+
+            //dd('File Saved');
+
+            $status = $this->hospitalService->uploadPatientLabDocuments($labDocumentsVM);
+            //dd('File Saved inside controller');
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_SUCCESS));
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR));
+                $responseJson->sendSuccessResponse();
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    private function generateUniqueFileName()
+    {
+        $i = 0;
+        $randomString = mt_rand(1, 9);
+        do {
+            $randomString .= mt_rand(0, 9);
+        } while (++$i < 7);
+
+        return $randomString;
     }
 }
