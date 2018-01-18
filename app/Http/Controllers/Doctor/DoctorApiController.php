@@ -3080,12 +3080,14 @@ class DoctorApiController extends Controller
 
             //dd('File Saved');
 
-            $status = $this->hospitalService->uploadPatientLabDocuments($labDocumentsVM);
+            //$status = $this->hospitalService->uploadPatientLabDocuments($labDocumentsVM);
+            $filePath = $this->hospitalService->uploadPatientLabDocuments($labDocumentsVM);
             //dd('File Saved inside controller');
 
             if($status)
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_SUCCESS));
+                $responseJson->setObj($filePath);
                 $responseJson->sendSuccessResponse();
             }
             else
@@ -3101,7 +3103,7 @@ class DoctorApiController extends Controller
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }

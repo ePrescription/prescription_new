@@ -3339,14 +3339,16 @@ class HospitalService {
     public function uploadPatientLabDocuments($labDocumentsVM)
     {
         $status = true;
+        $filePath = null;
 
         try
         {
             //dd('Inside edit lab in service');
-            DB::transaction(function() use ($labDocumentsVM, &$status)
+            DB::transaction(function() use ($labDocumentsVM, &$status, &$filePath)
             {
                 //$status = $this->hospitalRepo->uploadPatientLabDocuments($labDocumentsVM);
-                $status = $this->hospitalRepo->uploadPatientApiLabDocuments($labDocumentsVM);
+                //$status = $this->hospitalRepo->uploadPatientApiLabDocuments($labDocumentsVM);
+                $filePath = $this->hospitalRepo->uploadPatientApiLabDocuments($labDocumentsVM);
             });
 
         }
@@ -3361,6 +3363,7 @@ class HospitalService {
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $ex);
         }
 
-        return $status;
+        return $filePath;
+        //return $status;
     }
 }

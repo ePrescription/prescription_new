@@ -10892,6 +10892,8 @@ class HospitalImpl implements HospitalInterface{
 
                     $labDocument->patientdocumentitems()->save($labDocumentItems);
 
+
+
                 }
             }
         }
@@ -10929,15 +10931,25 @@ class HospitalImpl implements HospitalInterface{
     {
         $labDocuments = null;
         $status = true;
+        $appPath = null;
+        $filePath = null;
+        $filePathArray = null;
 
         try
         {
             $patientId = $labDocumentsVM->getPatientId();
             $labId = $labDocumentsVM->getLabId();
+
+            $app_path = storage_path('app');
+            //dd($app_path);
             //$labDocuments = $labDocumentsVM->getPatientLabDocuments();
             //dd($labDocuments);
 
             $labDocuments = $labDocumentsVM->getDoctorUploads();
+            $diskStorage = env('DISK_STORAGE');
+            $storageBasePath = env('STORAGE_BASE_PATH');
+            $i = 0;
+
             //dd($labDocuments);
 
             if (!is_null($labDocuments))
@@ -10955,16 +10967,17 @@ class HospitalImpl implements HospitalInterface{
                 foreach($labDocuments as $key => $value)
                 {
 
+
                     $filename = $value->getClientOriginalName();
                     $extension = $value->getClientOriginalExtension();
                     //$randomName = $this->generateUniqueFileName();
-                    $diskStorage = env('DISK_STORAGE');
+
 
                     //$documentPath = 'medical_document/' . 'patient_document_'.$filename . '.' . $extension;
                     $documentPath = 'medical_document/' . 'patient_document_'.$patientId.'/'.time().'_'.$filename;
 
-                    //Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
-                    Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
+                    Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
+                    //Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
 
                     $labDocumentItems = new PatientDocumentItems();
 
@@ -10982,9 +10995,18 @@ class HospitalImpl implements HospitalInterface{
 
                     $labDocument->patientdocumentitems()->save($labDocumentItems);
 
+                    //$filePath  = Storage::disk($diskStorage)->getDriver()->getAdapter()->getPathPrefix();
+
+                    //$filePath = storage_path('app/'.$documentPath);
+                    $filePath = $storageBasePath.Storage::url('app/'.$documentPath);
+                    //$filePath = Storage::disk($diskStorage)->url($documentPath);
+                    $filePathArray[$i] = $filePath;
+                    $i = $i + 1;
+
+
                 }
 
-                //dd('File saved ');
+                //dd('$filePathArray');
 
             }
         }
@@ -11001,7 +11023,8 @@ class HospitalImpl implements HospitalInterface{
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
         }
 
-        return $status;
+        return $filePathArray;
+        //return $status;
     }
 
     private function generateUniqueFileName()
@@ -11030,10 +11053,6 @@ class HospitalImpl implements HospitalInterface{
     //NEWLY ADDED RAMANA Start 12-01-2018
     public function getExaminationDatesByDate($patientId, $hospitalId,$date)
     {
-
-
-
-
         try
         {
             $patientUser = User::find($patientId);
