@@ -71,20 +71,20 @@ $profile_menu="0";
 
                                             <div class="row">
 
+                                                <div class="col-lg-2" style="margin-bottom:12px">
+                                                    @if($patientDetails[0]->patient_photo=="")
 
-                                                <div class="col-lg-12" style="width:100%;float:left;">
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
-                                                        @if($patientDetails[0]->patient_photo!="" || $patientDetails[0]->patient_photo!=null )
-                                                            <center><img
-                                                                        src="/uploads/patient_photo/{{$patientDetails[0]->patient_photo}}"
-                                                                        width="150px" height="150px"></center>
-                                                        @else
-                                                            <center><img
-                                                                        src="/uploads/patient_photo/patient_default_photo.png"
-                                                                        width="150px" height="150px"></center>
+                                                        <img src="{{URL::to('/')}}/uploads/patient_photo/noimage.png"  />
 
-                                                        @endif
-                                                    </div>
+                                                    @else
+
+                                                        <img src="{{URL::to('/')}}/{{$patientDetails[0]->patient_photo}}"  style="width:100px;" />
+
+                                                    @endif
+                                                </div>
+
+                                                <div class="col-lg-10">
+
 
                                                     <div class="form-group col-md-4" style="width:33%;float:left;">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">PID</label>
