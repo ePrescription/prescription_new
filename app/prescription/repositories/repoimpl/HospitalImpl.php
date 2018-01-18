@@ -6734,7 +6734,7 @@ class HospitalImpl implements HospitalInterface{
                 $query->where('pbei.is_fees_paid', '=', 0);
                 $query->orWhereNull('pbei.is_fees_paid');
             });
-            $bloodExamQuery->groupBy('be1.parent_id');
+            //$bloodExamQuery->groupBy('be1.parent_id');
             //$bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
             if(!is_null($receiptDate))
             {
@@ -6748,7 +6748,7 @@ class HospitalImpl implements HospitalInterface{
             $bloodExaminations = $bloodExamQuery->get();
             //$query = DB::getQueryLog();
             //dd($query);
-            dd($bloodExaminations);
+            //dd($bloodExaminations);
 
             $urineExamQuery = DB::table('patient_urine_examination as pue');
             $urineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
