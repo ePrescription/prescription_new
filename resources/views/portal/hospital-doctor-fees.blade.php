@@ -76,7 +76,7 @@ $profile_menu="0";
                                             <th>View</th>
                                         </tr>
                                         </thead>
-
+                                        <tbody>
                                         @foreach($feeReceipts as $fee)
                                             <tr>
                                                 <td>{{$fee->receiptId}}</td>

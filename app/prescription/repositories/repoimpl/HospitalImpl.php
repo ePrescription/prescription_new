@@ -70,13 +70,10 @@ use App\prescription\utilities\Helper;
 use App\prescription\utilities\UserType;
 use App\Role;
 use App\User;
-use Carbon\Carbon;
-use Config as CA;
-use Crypt;
-use Exception;
-use File;
-use Illuminate\Database\QueryException;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
+use Exception;
 use Numbers_Words;
 use Storage;
 
@@ -9404,7 +9401,8 @@ class HospitalImpl implements HospitalInterface
         $isScanTest = false;
         $isUltrasoundTest = false;
 
-        try {
+        try
+        {
             $patientId = $labReceiptsVM->getPatientId();
             $patientUser = User::find($patientId);
 
@@ -9429,7 +9427,8 @@ class HospitalImpl implements HospitalInterface
 
             //dd($labFeeReceipt->id);
 
-            if (!is_null($labFeeReceipt)) {
+            if(!is_null($labFeeReceipt))
+            {
                 //$patientPaymentHistory= $this->saveLabFeeReceiptHistory($labReceiptsVM,$labFeeReceipt->id);//by ramana 12-01-2018
 
                 /*if(!is_null($bloodTests) && !empty($bloodTests))
@@ -9449,22 +9448,27 @@ class HospitalImpl implements HospitalInterface
                     }
                 }*/
 
-                if (!is_null($bloodTests) && !empty($bloodTests)) {
+                if(!is_null($bloodTests) && !empty($bloodTests))
+                {
                     //dd($dentalTests);
                     $examinationId = $bloodTests[0]['id'];
 
-                    foreach ($bloodTests as $bloodTest) {
-                        if ($bloodTest['fees'] > 0) {
+                    foreach($bloodTests as $bloodTest)
+                    {
+                        if($bloodTest['fees'] > 0)
+                        {
                             $isBloodTest = true;
                             break;
                         }
                     }
 
-                    if ($isBloodTest) {
+                    if($isBloodTest)
+                    {
                         $bloodExamination = PatientBloodExamination::where('id', '=', $examinationId)->first();
                         //dd($dentalExamination);
 
-                        if (!is_null($bloodExamination)) {
+                        if(!is_null($bloodExamination))
+                        {
                             $bloodExamination->fee_receipt_id = $labFeeReceipt->id;
                             $bloodExamination->updated_at = $labReceiptsVM->getUpdatedAt();
 
@@ -9473,8 +9477,10 @@ class HospitalImpl implements HospitalInterface
                         }
                         //dd($dentalExamination);
 
-                        foreach ($bloodTests as $bloodTest) {
-                            if ($bloodTest['fees'] > 0) {
+                        foreach($bloodTests as $bloodTest)
+                        {
+                            if($bloodTest['fees'] > 0)
+                            {
                                 $updateValues = array('pbei.fees' => $bloodTest['fees'], 'pbei.is_fees_paid' => 1,
                                     'pbei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_blood_examination_item as pbei')->where('pbei.id', '=', $bloodTest['item_id']);
@@ -9504,22 +9510,27 @@ class HospitalImpl implements HospitalInterface
                     }
                 }*/
 
-                if (!is_null($urineTests) && !empty($urineTests)) {
+                if(!is_null($urineTests) && !empty($urineTests))
+                {
                     //dd($dentalTests);
                     $examinationId = $urineTests[0]['id'];
 
-                    foreach ($urineTests as $urineTest) {
-                        if ($urineTest['fees'] > 0) {
+                    foreach($urineTests as $urineTest)
+                    {
+                        if($urineTest['fees'] > 0)
+                        {
                             $isUrineTest = true;
                             break;
                         }
                     }
 
-                    if ($isUrineTest) {
+                    if($isUrineTest)
+                    {
                         $urineExamination = PatientUrineExamination::where('id', '=', $examinationId)->first();
                         //dd($dentalExamination);
 
-                        if (!is_null($urineExamination)) {
+                        if(!is_null($urineExamination))
+                        {
                             $urineExamination->fee_receipt_id = $labFeeReceipt->id;
                             $urineExamination->updated_at = $labReceiptsVM->getUpdatedAt();
 
@@ -9528,8 +9539,10 @@ class HospitalImpl implements HospitalInterface
                         }
                         //dd($dentalExamination);
 
-                        foreach ($urineTests as $urineTest) {
-                            if ($urineTest['fees'] > 0) {
+                        foreach($urineTests as $urineTest)
+                        {
+                            if($urineTest['fees'] > 0)
+                            {
                                 $updateValues = array('puei.fees' => $urineTest['fees'], 'puei.is_fees_paid' => 1,
                                     'puei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_urine_examination_item as puei')->where('puei.id', '=', $urineTest['item_id']);
@@ -9559,22 +9572,27 @@ class HospitalImpl implements HospitalInterface
                     }
                 }*/
 
-                if (!is_null($motionTests) && !empty($motionTests)) {
+                if(!is_null($motionTests) && !empty($motionTests))
+                {
                     //dd($dentalTests);
                     $examinationId = $motionTests[0]['id'];
 
-                    foreach ($motionTests as $motionTest) {
-                        if ($motionTest['fees'] > 0) {
+                    foreach($motionTests as $motionTest)
+                    {
+                        if($motionTest['fees'] > 0)
+                        {
                             $isMotionTest = true;
                             break;
                         }
                     }
 
-                    if ($isMotionTest) {
+                    if($isMotionTest)
+                    {
                         $motionExamination = PatientMotionExamination::where('id', '=', $examinationId)->first();
                         //dd($dentalExamination);
 
-                        if (!is_null($motionExamination)) {
+                        if(!is_null($motionExamination))
+                        {
                             $motionExamination->fee_receipt_id = $labFeeReceipt->id;
                             $motionExamination->updated_at = $labReceiptsVM->getUpdatedAt();
 
@@ -9583,8 +9601,10 @@ class HospitalImpl implements HospitalInterface
                         }
                         //dd($dentalExamination);
 
-                        foreach ($motionTests as $motionTest) {
-                            if ($motionTest['fees'] > 0) {
+                        foreach($motionTests as $motionTest)
+                        {
+                            if($motionTest['fees'] > 0)
+                            {
                                 $updateValues = array('pmei.fees' => $motionTest['fees'], 'pmei.is_fees_paid' => 1,
                                     'pmei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_motion_examination_item as pmei')->where('pmei.id', '=', $motionTest['item_id']);
@@ -9614,22 +9634,27 @@ class HospitalImpl implements HospitalInterface
                     }
                 }*/
 
-                if (!is_null($scanTests) && !empty($scanTests)) {
+                if(!is_null($scanTests) && !empty($scanTests))
+                {
                     //dd($dentalTests);
                     $examinationId = $scanTests[0]['id'];
 
-                    foreach ($scanTests as $scanTest) {
-                        if ($scanTest['fees'] > 0) {
+                    foreach($scanTests as $scanTest)
+                    {
+                        if($scanTest['fees'] > 0)
+                        {
                             $isScanTest = true;
                             break;
                         }
                     }
 
-                    if ($isScanTest) {
+                    if($isScanTest)
+                    {
                         $scanExamination = PatientScanExamination::where('id', '=', $examinationId)->first();
                         //dd($dentalExamination);
 
-                        if (!is_null($scanExamination)) {
+                        if(!is_null($scanExamination))
+                        {
                             $scanExamination->fee_receipt_id = $labFeeReceipt->id;
                             $scanExamination->updated_at = $labReceiptsVM->getUpdatedAt();
 
@@ -9638,8 +9663,10 @@ class HospitalImpl implements HospitalInterface
                         }
                         //dd($dentalExamination);
 
-                        foreach ($scanTests as $scanTest) {
-                            if ($scanTest['fees'] > 0) {
+                        foreach($scanTests as $scanTest)
+                        {
+                            if($scanTest['fees'] > 0)
+                            {
                                 $updateValues = array('psi.fees' => $scanTest['fees'], 'psi.is_fees_paid' => 1,
                                     'psi.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_scan_item as psi')->where('psi.id', '=', $scanTest['item_id']);
@@ -9669,22 +9696,27 @@ class HospitalImpl implements HospitalInterface
                     }
                 }*/
 
-                if (!is_null($ultraSoundTests) && !empty($ultraSoundTests)) {
+                if(!is_null($ultraSoundTests) && !empty($ultraSoundTests))
+                {
                     //dd($dentalTests);
                     $examinationId = $ultraSoundTests[0]['id'];
 
-                    foreach ($ultraSoundTests as $ultraSoundTest) {
-                        if ($ultraSoundTest['fees'] > 0) {
+                    foreach($ultraSoundTests as $ultraSoundTest)
+                    {
+                        if($ultraSoundTest['fees'] > 0)
+                        {
                             $isUltrasoundTest = true;
                             break;
                         }
                     }
 
-                    if ($isUltrasoundTest) {
+                    if($isUltrasoundTest)
+                    {
                         $ultraSoundExamination = PatientUltrasoundExamination::where('id', '=', $examinationId)->first();
                         //dd($dentalExamination);
 
-                        if (!is_null($ultraSoundExamination)) {
+                        if(!is_null($ultraSoundExamination))
+                        {
                             $ultraSoundExamination->fee_receipt_id = $labFeeReceipt->id;
                             $ultraSoundExamination->updated_at = $labReceiptsVM->getUpdatedAt();
 
@@ -9693,8 +9725,10 @@ class HospitalImpl implements HospitalInterface
                         }
                         //dd($dentalExamination);
 
-                        foreach ($ultraSoundTests as $ultraSoundTest) {
-                            if ($ultraSoundTest['fees'] > 0) {
+                        foreach($ultraSoundTests as $ultraSoundTest)
+                        {
+                            if($ultraSoundTest['fees'] > 0)
+                            {
                                 $updateValues = array('pusi.fees' => $ultraSoundTest['fees'], 'pusi.is_fees_paid' => 1,
                                     'pusi.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_ultra_sound_item as pusi')->where('pusi.id', '=', $ultraSoundTest['item_id']);
@@ -9707,22 +9741,27 @@ class HospitalImpl implements HospitalInterface
 
                 }
 
-                if (!is_null($dentalTests) && !empty($dentalTests)) {
+                if(!is_null($dentalTests) && !empty($dentalTests))
+                {
                     //dd($dentalTests);
                     $examinationId = $dentalTests[0]['id'];
 
-                    foreach ($dentalTests as $dentalTest) {
-                        if ($dentalTest['fees'] > 0) {
+                    foreach($dentalTests as $dentalTest)
+                    {
+                        if($dentalTest['fees'] > 0)
+                        {
                             $isDentalTest = true;
                             break;
                         }
                     }
 
-                    if ($isDentalTest) {
+                    if($isDentalTest)
+                    {
                         $dentalExamination = PatientDentalExamination::where('id', '=', $examinationId)->first();
                         //dd($dentalExamination);
 
-                        if (!is_null($dentalExamination)) {
+                        if(!is_null($dentalExamination))
+                        {
                             $dentalExamination->fee_receipt_id = $labFeeReceipt->id;
                             $dentalExamination->updated_at = $labReceiptsVM->getUpdatedAt();
 
@@ -9731,8 +9770,10 @@ class HospitalImpl implements HospitalInterface
                         }
                         //dd($dentalExamination);
 
-                        foreach ($dentalTests as $dentalTest) {
-                            if ($dentalTest['fees'] > 0) {
+                        foreach($dentalTests as $dentalTest)
+                        {
+                            if($dentalTest['fees'] > 0)
+                            {
                                 $updateValues = array('pdei.fees' => $dentalTest['fees'], 'pdei.is_fees_paid' => 1,
                                     'pdei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_dental_examination_item as pdei')->where('pdei.id', '=', $dentalTest['item_id']);
@@ -9745,22 +9786,27 @@ class HospitalImpl implements HospitalInterface
 
                 }
 
-                if (!is_null($xrayTests) && !empty($xrayTests)) {
+                if(!is_null($xrayTests) && !empty($xrayTests))
+                {
                     //dd($dentalTests);
                     $examinationId = $xrayTests[0]['id'];
 
-                    foreach ($xrayTests as $xrayTest) {
-                        if ($xrayTest['fees'] > 0) {
+                    foreach($xrayTests as $xrayTest)
+                    {
+                        if($xrayTest['fees'] > 0)
+                        {
                             $isXrayTest = true;
                             break;
                         }
                     }
 
-                    if ($isXrayTest) {
+                    if($isXrayTest)
+                    {
                         $xrayExamination = PatientXRayExamination::where('id', '=', $examinationId)->first();
                         //dd($dentalExamination);
 
-                        if (!is_null($xrayExamination)) {
+                        if(!is_null($xrayExamination))
+                        {
                             $xrayExamination->fee_receipt_id = $labFeeReceipt->id;
                             $xrayExamination->updated_at = $labReceiptsVM->getUpdatedAt();
 
@@ -9769,8 +9815,10 @@ class HospitalImpl implements HospitalInterface
                         }
                         //dd($dentalExamination);
 
-                        foreach ($xrayTests as $xrayTest) {
-                            if ($xrayTest['fees'] > 0) {
+                        foreach($xrayTests as $xrayTest)
+                        {
+                            if($xrayTest['fees'] > 0)
+                            {
                                 $updateValues = array('pxei.fees' => $xrayTest['fees'], 'pxei.is_fees_paid' => 1,
                                     'pxei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_xray_examination_item as pxei')->where('pxei.id', '=', $xrayTest['item_id']);
@@ -9788,14 +9836,20 @@ class HospitalImpl implements HospitalInterface
             }
             //dd($bloodTests);
 
-        } catch (QueryException $queryEx) {
+        }
+        catch(QueryException $queryEx)
+        {
             //dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_SAVE_ERROR, $queryEx);
-        } catch (UserNotFoundException $userExc) {
+        }
+        catch(UserNotFoundException $userExc)
+        {
             //dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
-        } catch (Exception $exc) {
+        }
+        catch(Exception $exc)
+        {
             //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_SAVE_ERROR, $exc);
@@ -9827,7 +9881,7 @@ class HospitalImpl implements HospitalInterface
 
     /**
      * Get lab receipts for the patient
-     * @param $patientId , $hospitalId
+     * @param $patientId, $hospitalId
      * @throws $hospitalException
      * @return array | null
      * @author Baskar
@@ -9837,22 +9891,27 @@ class HospitalImpl implements HospitalInterface
     {
         $labReceipts = null;
 
-        try {
+        try
+        {
             $query = DB::table('lab_fee_receipt as lfr')->join('patient as p', 'p.patient_id', '=', 'lfr.patient_id');
             $query->where('lfr.patient_id', '=', $patientId);
             $query->where('lfr.hospital_id', '=', $hospitalId);
             $query->orderBy('lfr.created_at', 'DESC');
 
-            $query->select('lfr.id as receiptId', 'lfr.patient_id', 'p.name', 'p.pid', 'lfr.total_fees', 'lfr.lab_receipt_date', 'lfr.paid_amount');
+            $query->select('lfr.id as receiptId', 'lfr.patient_id', 'p.name', 'p.pid', 'lfr.total_fees', 'lfr.lab_receipt_date','lfr.paid_amount');
 
             //dd($query->toSql());
             $labReceipts = $query->get();
 
-        } catch (QueryException $queryEx) {
+        }
+        catch(QueryException $queryEx)
+        {
             //dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_LIST_ERROR, $queryEx);
-        } catch (Exception $exc) {
+        }
+        catch(Exception $exc)
+        {
             //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPTS_LIST_ERROR, $exc);
@@ -9876,12 +9935,14 @@ class HospitalImpl implements HospitalInterface
         $labDocuments = null;
         $status = true;
 
-        try {
+        try
+        {
             $patientId = $labDocumentsVM->getPatientId();
             $labId = $labDocumentsVM->getLabId();
             $labDocuments = $labDocumentsVM->getPatientLabDocuments();
 
-            if (!is_null($labDocuments)) {
+            if (!is_null($labDocuments))
+            {
                 $labDocument = new PatientDocuments();
                 $labDocument->patient_id = $patientId;
                 $labDocument->lab_id = $labId;
@@ -9892,7 +9953,8 @@ class HospitalImpl implements HospitalInterface
                 $labDocument->updated_at = $labDocumentsVM->getUpdatedAt();
                 $labDocument->save();
 
-                foreach ($labDocuments as $document) {
+                foreach ($labDocuments as $document)
+                {
                     $uploadPath = $document['document_upload_path'];
                     $documentContents = File::get($uploadPath);
 
@@ -9923,15 +9985,21 @@ class HospitalImpl implements HospitalInterface
 
                 }
             }
-        } catch (QueryException $queryEx) {
+        }
+        catch(QueryException $queryEx)
+        {
             //dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
-        } catch (UserNotFoundException $userExc) {
+        }
+        catch(UserNotFoundException $userExc)
+        {
             //dd($userExc);
             $status = false;
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
-        } catch (Exception $exc) {
+        }
+        catch(Exception $exc)
+        {
             //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
@@ -9956,7 +10024,8 @@ class HospitalImpl implements HospitalInterface
         $filePath = null;
         $filePathArray = null;
 
-        try {
+        try
+        {
             $patientId = $labDocumentsVM->getPatientId();
             $labId = $labDocumentsVM->getLabId();
 
@@ -9972,7 +10041,8 @@ class HospitalImpl implements HospitalInterface
 
             //dd($labDocuments);
 
-            if (!is_null($labDocuments)) {
+            if (!is_null($labDocuments))
+            {
                 $labDocument = new PatientDocuments();
                 $labDocument->patient_id = $patientId;
                 $labDocument->lab_id = $labId;
@@ -9983,7 +10053,8 @@ class HospitalImpl implements HospitalInterface
                 $labDocument->updated_at = $labDocumentsVM->getUpdatedAt();
                 $labDocument->save();
 
-                foreach ($labDocuments as $key => $value) {
+                foreach($labDocuments as $key => $value)
+                {
 
 
                     $filename = $value->getClientOriginalName();
@@ -9992,7 +10063,7 @@ class HospitalImpl implements HospitalInterface
 
 
                     //$documentPath = 'medical_document/' . 'patient_document_'.$filename . '.' . $extension;
-                    $documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . time() . '_' . $filename;
+                    $documentPath = 'medical_document/' . 'patient_document_'.$patientId.'/'.time().'_'.$filename;
 
                     Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
                     //Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
@@ -10016,7 +10087,7 @@ class HospitalImpl implements HospitalInterface
                     //$filePath  = Storage::disk($diskStorage)->getDriver()->getAdapter()->getPathPrefix();
 
                     //$filePath = storage_path('app/'.$documentPath);
-                    $filePath = $storageBasePath . Storage::url('app/' . $documentPath);
+                    $filePath = $storageBasePath.Storage::url('app/'.$documentPath);
                     //$filePath = Storage::disk($diskStorage)->url($documentPath);
                     $filePathArray[$i] = $filePath;
                     $i = $i + 1;
@@ -10027,11 +10098,15 @@ class HospitalImpl implements HospitalInterface
                 //dd('$filePathArray');
 
             }
-        } catch (QueryException $queryEx) {
+        }
+        catch(QueryException $queryEx)
+        {
             //dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $queryEx);
-        } catch (Exception $exc) {
+        }
+        catch(Exception $exc)
+        {
             //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
@@ -10052,8 +10127,7 @@ class HospitalImpl implements HospitalInterface
         return $randomString;
     }
 
-    private function generateRandomString($length = 9)
-    {
+    private function generateRandomString($length = 9) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -10066,12 +10140,14 @@ class HospitalImpl implements HospitalInterface
     /*NEW ADDITION RAMANA*/
 
     //NEWLY ADDED RAMANA Start 12-01-2018
-    public function getExaminationDatesByDate($patientId, $hospitalId, $date)
+    public function getExaminationDatesByDate($patientId, $hospitalId,$date)
     {
-        try {
+        try
+        {
             $patientUser = User::find($patientId);
 
-            if (is_null($patientUser)) {
+            if(is_null($patientUser))
+            {
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
 
@@ -10079,13 +10155,13 @@ class HospitalImpl implements HospitalInterface
             $latestBloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
             $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
             $latestBloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
-            $latestBloodExamQuery->where('pbe.examination_date', '=', $date);
+            $latestBloodExamQuery->where('pbe.examination_date','=',$date);
 
 
             $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $latestBloodExamQuery->where('pbei.is_value_set', '=', 1);
             $latestBloodExamQuery->select('pbe.id as examinationId', 'pbei.id as examinationItemId', 'pbe.patient_id',
-                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date', 'pbei.test_readings', 'be.default_normal_values', 'be.is_parent', 'be1.examination_name AS parent_examination_name');
+                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.test_readings','be.default_normal_values','be.is_parent','be1.examination_name AS parent_examination_name');
             $bloodExaminations = $latestBloodExamQuery->get();
 
 
@@ -10098,26 +10174,27 @@ class HospitalImpl implements HospitalInterface
             $latestUrineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
             $latestUrineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
             $latestUrineExamQuery->join('urine_examination as ue1', 'ue1.id', '=', 'ue.parent_id');
-            $latestUrineExamQuery->where('pue.examination_date', '=', $date);
+            $latestUrineExamQuery->where('pue.examination_date','=',$date);
+
 
 
             $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
             $latestUrineExamQuery->where('puei.is_value_set', '=', 1);
             $latestUrineExamQuery->select('pue.id as examinationId', 'puei.id as examinationItemId',
-                'pue.patient_id', 'ue.examination_name', 'pue.examination_date', 'puei.test_readings', 'ue.normal_default_values', 'ue.is_parent', 'ue1.examination_name as parent_examination_name');
+                'pue.patient_id', 'ue.examination_name', 'pue.examination_date','puei.test_readings','ue.normal_default_values','ue.is_parent','ue1.examination_name as parent_examination_name');
             $latestUrineExaminations = $latestUrineExamQuery->get();
 
 
             $latestMotionExamQuery = DB::table('patient_motion_examination as pme');
             $latestMotionExamQuery->join('patient_motion_examination_item as pmei', 'pmei.patient_motion_examination_id', '=', 'pme.id');
             $latestMotionExamQuery->join('motion_examination as me', 'me.id', '=', 'pmei.motion_examination_id');
-            $latestMotionExamQuery->where('pme.examination_date', '=', $date);
+            $latestMotionExamQuery->where('pme.examination_date','=',$date);
 
             $latestMotionExamQuery->where('pme.patient_id', '=', $patientId);
             $latestMotionExamQuery->where('pmei.is_value_set', '=', 1);
 
             $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.id as examinationItemId',
-                'pme.patient_id', 'me.examination_name', 'pme.examination_date', 'pmei.test_readings');
+                'pme.patient_id', 'me.examination_name', 'pme.examination_date','pmei.test_readings');
             $latestMotionExaminations = $latestMotionExamQuery->get();
 
 
@@ -10141,15 +10218,22 @@ class HospitalImpl implements HospitalInterface
             $examinationDates['recentMotionExaminations'] = $latestMotionExaminations;
 
 
+
             //dd($examinationDates);
 
-        } catch (QueryException $queryEx) {
+        }
+        catch(QueryException $queryEx)
+        {
             //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $queryEx);
-        } catch (UserNotFoundException $userExc) {
+        }
+        catch(UserNotFoundException $userExc)
+        {
             //dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
-        } catch (Exception $exc) {
+        }
+        catch(Exception $exc)
+        {
             //dd($exc);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
         }
@@ -10160,28 +10244,29 @@ class HospitalImpl implements HospitalInterface
 
     /**
      * Get lab receipt details for the patient
-     * @param $hid ,$pid,$rid,$newpaidamount
+     * @param $hid,$pid,$rid,$newpaidamount
      * @throws $hospitalException
      * @return String | null
      * @author Ramana
      */
 
-    function updateLabPatientFee($hid, $pid, $rid, $newpaidamount, $paidamount, $paymenttype)
-    {
-        try {
+    function updateLabPatientFee($hid,$pid,$rid,$newpaidamount,$paidamount,$paymenttype){
+        try
+        {
 
             $updateValues = array('lfr.paid_amount' => $newpaidamount);
             $query = DB::table('lab_fee_receipt as lfr')->where('lfr.id', '=', $rid);
-            $query->where('lfr.patient_id', '=', $pid);
-            $query->where('lfr.hospital_id', '=', $hid);
+            $query->where('lfr.patient_id','=',$pid);
+            $query->where('lfr.hospital_id','=',$hid);
             //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-            $status = $query->update($updateValues);
+            $status=$query->update($updateValues);
+
 
 
             $patientPaymentHistory = new PatientPaymentHistory();
 
             $patientPaymentHistory->patient_id = $pid;
-            $patientPaymentHistory->receipt_id = $rid;
+            $patientPaymentHistory->receipt_id=$rid;
             $patientPaymentHistory->hospital_id = $hid;
             //$patientPaymentHistory->doctor_id =
             // $patientPaymentHistory->total_fees = $labReceiptsVM->getTotalFees();
@@ -10192,19 +10277,25 @@ class HospitalImpl implements HospitalInterface
             $patientPaymentHistory->created_by = "Admin";
             $patientPaymentHistory->modified_by = "Admin";
             $patientPaymentHistory->created_at = date("Y-m-d H:i:s");
-            $patientPaymentHistory->updated_at = date("Y-m-d H:i:s");
+            $patientPaymentHistory->updated_at =date("Y-m-d H:i:s");
 
             $patientPaymentHistory->save();
 
             return $status;
 
-        } catch (QueryException $queryEx) {
+        }
+        catch(QueryException $queryEx)
+        {
             //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $queryEx);
-        } catch (UserNotFoundException $userExc) {
+        }
+        catch(UserNotFoundException $userExc)
+        {
             //dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
-        } catch (Exception $exc) {
+        }
+        catch(Exception $exc)
+        {
             //dd($exc);
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $exc);
         }
@@ -10214,7 +10305,7 @@ class HospitalImpl implements HospitalInterface
 
     /**
      * Get lab receipt details for the patient
-     * @param $patientId , $hospitalId, $feeReceiptId
+     * @param $patientId, $hospitalId, $feeReceiptId
      * @throws $hospitalException
      * @return array | null
      * @author RAMANA
@@ -10224,10 +10315,12 @@ class HospitalImpl implements HospitalInterface
     {
         $paymentHistory = null;
 
-        try {
+        try
+        {
             $patientUser = User::find($patientId);
 
-            if (is_null($patientUser)) {
+            if(is_null($patientUser))
+            {
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
             //DB::connection()->enableQueryLog();
@@ -10239,7 +10332,7 @@ class HospitalImpl implements HospitalInterface
             $paymentHistoryQuery->where('pph.patient_id', '=', $patientId);
             $paymentHistoryQuery->where('pph.hospital_id', '=', $hospitalId);
             $paymentHistoryQuery->where('pph.receipt_id', '=', $feeReceiptId);
-            $paymentHistoryQuery->select('pph.payment_type', 'pph.paid_amount', 'pph.created_at');
+            $paymentHistoryQuery->select('pph.payment_type','pph.paid_amount','pph.created_at');
 
             // dd($bloodExamQuery->toSql());
             $paymentHistory = $paymentHistoryQuery->get();
@@ -10249,13 +10342,19 @@ class HospitalImpl implements HospitalInterface
 
             //dd($patientLabTests);
 
-        } catch (QueryException $queryEx) {
+        }
+        catch(QueryException $queryEx)
+        {
             //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $queryEx);
-        } catch (UserNotFoundException $userExc) {
+        }
+        catch(UserNotFoundException $userExc)
+        {
             //dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
-        } catch (Exception $exc) {
+        }
+        catch(Exception $exc)
+        {
             //dd($exc);
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR, $exc);
         }
@@ -10265,13 +10364,13 @@ class HospitalImpl implements HospitalInterface
 
     /**
      * Get lab receipt details for the patient
-     * @param $labReceiptsVM ,$receipt_id
+     * @param $labReceiptsVM,$receipt_id
      * @throws $hospitalException
      * @return array | null
      * @author RAMANA
      */
 
-    private function saveLabFeeReceiptHistory(PatientLabReceiptViewModel $labReceiptsVM, $receipt_id)
+    private function saveLabFeeReceiptHistory(PatientLabReceiptViewModel $labReceiptsVM,$receipt_id)
     {
         $patientPaymentHistory = new PatientPaymentHistory();
 
