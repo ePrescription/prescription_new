@@ -186,6 +186,8 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     //Fee Receipts
     Route::get('rest/api/{hospitalId}/doctor/{doctorId}/feereceipts', array('as' => 'hospital.feereceipts', 'uses' => 'DoctorController@getFeeReceiptsForFront'));
+
+
     Route::get('rest/api/receipt/{receiptId}/details', array('as' => 'hospital.feereceiptdetails', 'uses' => 'DoctorController@getReceiptDetailsForFront'));
     Route::get('rest/api/{hospitalId}/addfeereceipt', array('as' => 'hospital.addfeereceipt', 'uses' => 'DoctorController@addFeeReceiptForFront'));
     Route::post('rest/api/savefeereceipt', array('as' => 'hospital.feereceipt', 'uses' => 'DoctorController@saveFeeReceiptForFront'));
@@ -284,7 +286,17 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::post('rest/api/hospital/{hid}/patient/{pid}/receiptid/{rid}/amount/{totalpaidamount}/{paidamount}/paymenttype/{paymenttype}/lab-fee-update',array('as' => 'doctor.lab-fee-update', 'uses' => 'DoctorController@updateLabPatientFee'));
 
      //ramana end 12-01-2018
+
+
+    //RAMANA NEW  start  19-01-2018
+
+   Route::post('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
+   // Route::get('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
+
+//RAMANA NEW  End  19-01-2018
+   // rest/api/hospital/1/doctor/3/patient/PIDiACFkjJyD/reciept/360/updatepatientpaymentstatus
     //RECEIPT
+
 
 
     Route::get('rest/api/{hospitalId}/patient/{patientId}/labtestreceipts', array('as' => 'patient.labtestreceipts', 'uses' => 'DoctorController@getLabTestDetailsForReceipt'));
@@ -758,6 +770,13 @@ Route::group(['prefix' => 'lab'], function()
         //Route::get('rest/api/{labId}/changepassword', array('as' => 'lab.changepassword', 'uses' => 'LabController@editChangePassword'));
         //Route::post('rest/api/lab', array('as' => 'lab.editlab', 'uses' => 'LabController@editLab'));
         //Route::get('rest/api/lab', array('as' => 'lab.editlab', 'uses' => 'LabController@saveChangesPassword'));
+
+      /*RAMANA NEW 19-01-2018*/
+
+        Route::get('{labId}/hospital/{hid}/patient/{patientId}/details', array('as' => 'lab.patientdetails', 'uses' => 'LabController@PatientDetailsForLab'));
+
+        Route::get('{labId}/hospital/{hid}/patient/{patientId}/lab-details-results', array('as' => 'hospital.patientlabdetailsresults', 'uses' => 'LabController@PatientLabDetailsResultsByHospitalForLab'));
+
     });
 });
 

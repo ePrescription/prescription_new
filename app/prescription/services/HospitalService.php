@@ -3326,6 +3326,29 @@ class HospitalService {
 
         return $examinationDates;
     }
+
+    //RAMANA NEW
+    public function updatePatientFeeStatus($hid,$did,$pid,$rid)
+    {
+        $status = null;
+
+        try
+        {
+            $status = $this->hospitalRepo->updatePatientFeeStatus($hid,$did,$pid,$rid);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::APPOINTMENT_LIST_ERROR, $exc);
+        }
+
+        return $status;
+    }
+
+
     //ramana end 12-01-2018
 
     /**
@@ -3366,4 +3389,6 @@ class HospitalService {
         return $filePath;
         //return $status;
     }
+
+
 }

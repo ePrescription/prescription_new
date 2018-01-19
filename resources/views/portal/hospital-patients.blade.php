@@ -101,6 +101,7 @@ $profile_menu="0";
                                                     &nbsp;&nbsp;
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i> </a>
                                                    <!-- By Ramana 12-01-2018-->
+                                                    &nbsp;
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/lab-details-results" title="Print Patient Lab Results"><i class="fa fa-folder-o"></i> </a>
 
                                                     &nbsp;&nbsp;

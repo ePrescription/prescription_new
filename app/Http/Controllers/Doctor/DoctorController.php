@@ -2460,7 +2460,7 @@ class DoctorController extends Controller
             }
 
             $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
-            //dd($patientProfileVM);
+           // dd($patientProfileVM);
             $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 
             if($status)
@@ -9422,4 +9422,40 @@ class DoctorController extends Controller
 
     }
     //Ramana end  12-01-2018
+
+    //Ramana Start 19-01-2018
+
+    public function updatePatientFeeStatus($hid,$did, $pid, $rid)
+    {
+
+        try {
+
+            // dd($hid . $pid . $rid . $newpaidamount);
+
+
+            // dd("tes".$hid);
+           $status = $this->hospitalService->updatePatientFeeStatus($hid,$did, $pid, $rid);
+             if ($status == 1)
+           // Session::put('success', "Succesfully updated");
+                 echo 'Succesfully updated';
+             else
+             //  Session::put('success', "Fail please Try later");
+                 echo 'Fail please Try later';
+
+        } catch (HospitalException $hospitalExc) {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', $errorMsg . " " . trans('messages.SupportTeam'));
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message', trans('messages.SupportTeam'));
+        }
+
+    }
+
+
 }

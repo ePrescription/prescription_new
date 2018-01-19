@@ -72,10 +72,11 @@ $profile_menu="0";
                                             <th>Patient Name in Full</th>
                                             <th>Doctor Name in Full</th>
                                             <th>Doctor Fee</th>
+                                            <th>Payment Status</th>
                                             <th>View</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+
                                         @foreach($feeReceipts as $fee)
                                             <tr>
                                                 <td>{{$fee->receiptId}}</td>
@@ -83,6 +84,20 @@ $profile_menu="0";
                                                 <td>{{$fee->patientName}}</td>
                                                 <td>{{$fee->doctorName}}</td>
                                                 <td>{{$fee->fee}}</td>
+                                                @if($fee->payment_status==0)
+
+                                                <td>UN PAID
+                                                    &nbsp;
+                                                    <input style="float:left;" type="button"
+                                                           name="addreceipt" value="Pay"
+                                                           class="btn btn-success"
+                                                           onclick="javascript:feeUpdate('{{Auth::user()->id}}','{{$fee->doctor_id}}','{{$fee->patientId}}','{{$fee->receiptId}}')"/>
+                                                </td>
+
+
+                                                @else
+                                                    <td>PAID</td>
+                                                    @endif
                                                 <td>
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/receipt/{{$fee->receiptId}}/details" style="float:rightx;">View Details</a>
                                                     <br/>
@@ -108,6 +123,49 @@ $profile_menu="0";
 
 @endsection
 @section('scripts')
+    <script>
+        function feeUpdate(hospital_id,doctor_id,patient_id,rid) {
+
+           var hid=hospital_id;
+           var did=doctor_id;
+           var pid=patient_id;
+           var rid=rid;
+            //alert(hid+"--"+did+"--"+pid+"--"+rid);
+
+            var ask=window.confirm('Do you Want to Pay..?')
+            if(ask){
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/hospital/' + hid + '/doctor/' + did + '/patient/'+pid+'/receipt/'+rid+'/updatepatientpaymentstatus';
+            $.ajax({
+                url: callurl,
+                type: "Post",
+                data: {},
+                success: function (data) {
+                    alert(data);
+
+                    location.reload();
+
+
+                    //var result=data.split("separate");
+                    // $("#patientblooddiv1").html(result[1]);
+                    //$("#DivIdToPrint").html(data);
+
+
+
+                }
+            });
+
+}
+        }
+
+
+    </script>
+
+
+
+
+
     <!-- Datatables-->
     {!!  Html::script(asset('theme/assets/plugins/datatables/jquery.dataTables.min.js')) !!}
     {!!  Html::script(asset('theme/assets/plugins/datatables/dataTables.bootstrap.js')) !!}

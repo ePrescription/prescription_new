@@ -205,6 +205,8 @@ interface HospitalInterface {
 
     public function getExaminationDatesByDate($patientId, $hid,$date);//ramana
 
+    public function updatePatientFeeStatus($hid,$did,$pid,$rid);
+
      //ramana end 12-01-2018
 
 
