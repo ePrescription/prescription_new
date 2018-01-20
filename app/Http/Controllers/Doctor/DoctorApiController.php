@@ -3178,7 +3178,7 @@ class DoctorApiController extends Controller
             $document = $this->hospitalService->downloadPatientReports($documentId);
             $filePath = $path.$document->document_path;
             //dd($document->document_path);
-            dd($filePath);
+            //dd($filePath);
 
             if(!is_null($document))
             {
