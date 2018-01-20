@@ -10065,8 +10065,8 @@ class HospitalImpl implements HospitalInterface
                     //$documentPath = 'medical_document/' . 'patient_document_'.$filename . '.' . $extension;
                     $documentPath = 'medical_document/' . 'patient_document_'.$patientId.'/'.time().'_'.$filename;
 
-                    Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
-                    //Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
+                    //Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
+                    Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
 
                     $labDocumentItems = new PatientDocumentItems();
 
