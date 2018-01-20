@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Config;
 use Input;
 use File;
 use Storage;
+use Crypt;
 
 class DoctorApiController extends Controller
 {
@@ -3182,7 +3183,10 @@ class DoctorApiController extends Controller
 
             if(!is_null($document))
             {
-               $contents = Storage::disk($diskStorage)->get($document->document_path);
+                $file = Storage::disk($diskStorage)->get($document->document_path);
+
+                //$file = Storage::disk('s3')->get($entry->document_upload_path);
+                $contents = Crypt::decrypt($file);
 
                 return response()->make($contents, 200, array(
                     'Content-Type' => 'application/octet-stream',
