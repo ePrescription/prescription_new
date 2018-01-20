@@ -12,6 +12,8 @@ return [
     'rid_prefix' => 'HVMR',
     'default_rid' => '1000001',
 
+    'STORAGE_BASE_PATH' => 'http://daiwiksoft.co.in/storage/app/',
+
     'locale' => 'en_IN',
     'currency' => 'INR',
 

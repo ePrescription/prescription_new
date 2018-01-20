@@ -673,6 +673,8 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/print', array('as' => 'hospital.patientprintdetails', 'uses' => 'DoctorController@PatientPrintDetailsByHospitalForDoctor'));
         Route::post('patient/labreports', array('as' => 'doctor.labtestreports', 'uses' => 'DoctorApiController@uploadPatientLabDocuments'));
 
+        Route::get('{doctorId}/patient/{patientId}/reports', array('as' => 'doctor.patientreports', 'uses' => 'DoctorApiController@getPatientReports'));
+        Route::get('{doctorId}/patient/reports/{reportId}/download', array('as' => 'doctor.downloadreports', 'uses' => 'DoctorApiController@downloadPatientReports'));
 
 
     });

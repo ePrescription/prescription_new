@@ -3080,14 +3080,14 @@ class DoctorApiController extends Controller
 
             //dd('File Saved');
 
-            //$status = $this->hospitalService->uploadPatientLabDocuments($labDocumentsVM);
-            $filePath = $this->hospitalService->uploadPatientLabDocuments($labDocumentsVM);
+            $status = $this->hospitalService->uploadPatientLabDocuments($labDocumentsVM);
+            //$filePath = $this->hospitalService->uploadPatientLabDocuments($labDocumentsVM);
             //dd('File Saved inside controller');
 
             if($status)
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_SUCCESS));
-                $responseJson->setObj($filePath);
+                //$responseJson->setObj($filePath);
                 $responseJson->sendSuccessResponse();
             }
             else
@@ -3109,6 +3109,96 @@ class DoctorApiController extends Controller
         }
 
         return $responseJson;
+    }
+
+    /**
+     * Get patient reports
+     * @param $doctorId, $patientId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function getPatientReports($doctorId, $patientId)
+    {
+        $reports = null;
+
+        try
+        {
+            $reports = $this->hospitalService->getPatientReports($doctorId, $patientId);
+            //dd($generalExamination);
+
+            if(!is_null($reports) && !empty($reports))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_REPORTS_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($reports));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_NO_REPORTS_FOUND));
+            }
+
+            $responseJson->setObj($reports);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_REPORTS_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Download patient reports
+     * @param $documentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientReports($doctorId, $documentId)
+    {
+        $document = null;
+        $path =  Config::get('constants.STORAGE_BASE_PATH');
+        //$path =  'http://localhost:8082/prescription_new/storage/app/';
+        $diskStorage = env('DISK_STORAGE');
+
+        try
+        {
+            $document = $this->hospitalService->downloadPatientReports($documentId);
+            $filePath = $path.$document->document_path;
+            //dd($document->document_path);
+            dd($filePath);
+
+            if(!is_null($document))
+            {
+               $contents = Storage::disk($diskStorage)->get($document->document_path);
+
+                return response()->make($contents, 200, array(
+                    'Content-Type' => 'application/octet-stream',
+                    'Content-Disposition' => 'attachment; filename="' . pathinfo($filePath, PATHINFO_BASENAME) . '"'
+                ));
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_REPORTS_DOWNLOAD_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
     }
 
     private function generateUniqueFileName()

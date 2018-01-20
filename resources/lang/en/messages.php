@@ -347,4 +347,11 @@
         "897" => "Unable to save test results",
         "898" => "Successfully saved test results",
 
+        "899" => "Unable to download patient reports",
+        "900" => "Successfully downloaded the patient reports",
+
+        "901" => "Sorry, unable to get patient reports",
+        "902" => "Successfully retrieved patient reports",
+        "903" => "No reports available for the patient"
+
     ];
