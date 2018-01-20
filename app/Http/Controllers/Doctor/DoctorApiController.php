@@ -15,6 +15,8 @@ use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
+use Illuminate\Support\Facades\Config;
+
 use Input;
 use File;
 use Storage;
