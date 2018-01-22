@@ -76,6 +76,8 @@ use Illuminate\Database\QueryException;
 use Exception;
 use Numbers_Words;
 use Storage;
+use Carbon\Carbon;
+use Config as CA;
 
 //by ramana
 
@@ -2881,7 +2883,7 @@ class HospitalImpl implements HospitalInterface
                 $query->orderBy('dp.created_at', 'DESC');
                 $query->select('dp.id as receiptId', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as PID',
                     'p.relationship', 'p.patient_spouse_name as spouseName',
-                    'p.telephone as contactNumber', 'd.name as doctorName', 'dp.fee', 'dp.payment_type', 'p.payment_status','dp.doctor_id');
+                    'p.telephone as contactNumber', 'd.name as doctorName', 'dp.fee', 'dp.payment_type', 'p.payment_status','dp.doctor_id','dp.created_at','dp.updated_at');
                 // dd($query->toSql());
                 $feeReceipts = $query->get();
                 // dd($feeReceipts);
@@ -2973,6 +2975,7 @@ class HospitalImpl implements HospitalInterface
         $hospitalId = null;
         $feeWords = null;
         $fees = null;
+        $payment_status=null;
 
         $patientDetails = null;
         $doctorDetails = null;
@@ -2983,8 +2986,10 @@ class HospitalImpl implements HospitalInterface
             /*RAMANA ADDED*/
 
             $feeDetailsQuery = DB::table('doctor_appointment as dp')->where('dp.id', '=', $receiptId);
+           $feeDetailsQuery->join('patient as p', 'p.patient_id', '=', 'dp.patient_id');
+
             $feeDetailsQuery->select('dp.id as receiptId', 'dp.patient_id as patientId', 'dp.doctor_id as doctorId',
-                'dp.hospital_id as hospitalId', 'dp.fee');
+                'dp.hospital_id as hospitalId', 'dp.fee','p.payment_status');
 
 
             /* $feeDetailsQuery = DB::table('fee_receipt as fr')->where('fr.id', '=', $receiptId);
@@ -2993,12 +2998,14 @@ class HospitalImpl implements HospitalInterface
  */
             $feeInfo = $feeDetailsQuery->first();
 
-            dd($feeInfo);
+            //dd($feeInfo);
 
             $doctorId = $feeInfo->doctorId;
             $hospitalId = $feeInfo->hospitalId;
             $patientId = $feeInfo->patientId;
             $fees = $feeInfo->fee;
+            $payment_status=$feeInfo->payment_status;
+//dd($feeInfo);
 
             $feeWords = $this->convertFee($fees);
             //dd($feeWords);
@@ -3006,9 +3013,10 @@ class HospitalImpl implements HospitalInterface
             //$feeDetails = (array)$feeInfo;
             $feeDetails['inWords'] = $feeWords;
             $feeDetails['fee'] = $fees;
+            $feeDetails['payment_status'] = $payment_status;
 
             //array_push($feeDetails, $feeWords);
-            //dd($feeDetails);
+           //dd($feeDetails);
 
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
                 'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
@@ -9418,7 +9426,7 @@ class HospitalImpl implements HospitalInterface
             $dentalTests = $labReceiptsVM->getDentalTests();
             $xrayTests = $labReceiptsVM->getXrayTests();
 
-            dd($bloodTests);
+           // dd($bloodTests);
             //dd($isDentalTest);
 
             //dd($dentalTests[0]['id']);
@@ -10402,15 +10410,26 @@ class HospitalImpl implements HospitalInterface
 //RAMANA NEW
     function updatePatientFeeStatus($hid, $did, $pid, $rid)
     {
+      //  $updateValues=null;
+       // $query=null;
+
         try {
-             //dd($hid.$pid);
-            $updateValues = array('p.payment_status' => 1);
+          //   dd( date("Y-m-d H:i:s"));
+            $updateValues = array('p.payment_status' => 1,);
             $query = DB::table('patient as p')->where('p.patient_id', '=', $pid);
-           // $query->where('dp.hospital_id', '=', $hid);
+            $updateValues1 = array('dp.updated_at' => date("Y-m-d H:i:s"));
+            $query1 = DB::table('doctor_appointment as dp')->where('dp.patient_id', '=', $pid);
+
+            $query1->where('dp.patient_id', '=', $pid);
+            $query1->update($updateValues1);
+
+
+            // $query->where('dp.hospital_id', '=', $hid);
            // $query->where('dp.doctor_id', '=', $did);
             //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
-           //dd($query);
+          // dd($query);
 
+//,'doctor_appointment.updated_at' => date("Y-m-d H:i:s")
             $status = $query->update($updateValues);
 //dd($pid.$status);
 
