@@ -10065,8 +10065,8 @@ class HospitalImpl implements HospitalInterface
                     //$documentPath = 'medical_document/' . 'patient_document_'.$filename . '.' . $extension;
                     $documentPath = 'medical_document/' . 'patient_document_'.$patientId.'/'.time().'_'.$filename;
 
-                    Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
-                    //Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
+                    //Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
+                    Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
 
                     $labDocumentItems = new PatientDocumentItems();
 
@@ -10087,10 +10087,17 @@ class HospitalImpl implements HospitalInterface
                     //$filePath  = Storage::disk($diskStorage)->getDriver()->getAdapter()->getPathPrefix();
 
                     //$filePath = storage_path('app/'.$documentPath);
-                    $filePath = $storageBasePath.Storage::url('app/'.$documentPath);
+
+                    //$filePath = $storageBasePath.Storage::url('app/'.$documentPath);
+
+                    //$url = Storage::disk($diskStorage)->url('app/'.$documentPath);
+                    //$url = Storage::url($documentPath);
+                    //$url = storage_path($documentPath);
+                    //$filePath = asset('storage/'.$filename);
+
                     //$filePath = Storage::disk($diskStorage)->url($documentPath);
-                    $filePathArray[$i] = $filePath;
-                    $i = $i + 1;
+                    //$filePathArray[$i] = $filePath;
+                    //$i = $i + 1;
 
 
                 }
@@ -10112,8 +10119,8 @@ class HospitalImpl implements HospitalInterface
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $exc);
         }
 
-        return $filePathArray;
-        //return $status;
+        //return $filePathArray;
+        return $status;
     }
 
     private function generateUniqueFileName()
@@ -10442,4 +10449,73 @@ class HospitalImpl implements HospitalInterface
     }
 
     //ramana end 12-01-2018
+
+    /**
+     * Get patient reports
+     * @param $doctorId, $patientId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function getPatientReports($doctorId, $patientId)
+    {
+        $reports = null;
+
+        try
+        {
+            $query = DB::table('patient_document as pd')->join('patient_document_items as pdi', 'pdi.patient_document_id', '=', 'pd.id');
+            $query->where('pd.patient_id', '=', $patientId);
+            $query->select('pd.id', 'pd.patient_id', 'pd.document_upload_date', 'pdi.id as document_id',
+                'pdi.test_category_name', 'pdi.document_filename');
+
+            $reports = $query->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $exc);
+        }
+
+        return $reports;
+    }
+
+    /**
+     * Download patient reports
+     * @param $documentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientReports($documentId)
+    {
+        $document = null;
+
+        try
+        {
+            $query = DB::table('patient_document_items as pdi')->where('pdi.id', '=', $documentId);
+            $query->select('pdi.id', 'pdi.document_path');
+
+            $document = $query->first();
+            //dd($document);
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_DOWNLOAD_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_DOWNLOAD_ERROR, $exc);
+        }
+
+        return $document;
+    }
 }

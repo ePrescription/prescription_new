@@ -195,6 +195,9 @@ interface HospitalInterface {
     public function uploadPatientLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM);
     public function uploadPatientApiLabDocuments(PatientLabDocumentsViewModel $labDocumentsVM);
 
+    public function getPatientReports($doctorId, $patientId);
+    public function downloadPatientReports($documentId);
+
 
     /*NEW ADDITION RAMANA*/
      //ramana start 12-01-2018

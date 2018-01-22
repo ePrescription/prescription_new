@@ -3307,6 +3307,7 @@ class HospitalService {
      * @return array | null
      * @author RAMANA
      */
+
     public function getExaminationDatesByDate($patientId, $hospitalId,$date)
     {
         $examinationDates = null;
@@ -3370,8 +3371,8 @@ class HospitalService {
             DB::transaction(function() use ($labDocumentsVM, &$status, &$filePath)
             {
                 //$status = $this->hospitalRepo->uploadPatientLabDocuments($labDocumentsVM);
-                //$status = $this->hospitalRepo->uploadPatientApiLabDocuments($labDocumentsVM);
-                $filePath = $this->hospitalRepo->uploadPatientApiLabDocuments($labDocumentsVM);
+                $status = $this->hospitalRepo->uploadPatientApiLabDocuments($labDocumentsVM);
+                //$filePath = $this->hospitalRepo->uploadPatientApiLabDocuments($labDocumentsVM);
             });
 
         }
@@ -3386,8 +3387,64 @@ class HospitalService {
             throw new HospitalException(null, ErrorEnum::PATIENT_LAB_DOCUMENTS_UPLOAD_ERROR, $ex);
         }
 
-        return $filePath;
-        //return $status;
+        //return $filePath;
+        return $status;
+    }
+
+    /**
+     * Get patient reports
+     * @param $doctorId, $patientId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function getPatientReports($doctorId, $patientId)
+    {
+        $reports = null;
+
+        try
+        {
+            $reports = $this->hospitalRepo->getPatientReports($doctorId, $patientId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $exc);
+        }
+
+        return $reports;
+    }
+
+    /**
+     * Download patient reports
+     * @param $documentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientReports($documentId)
+    {
+        $document = null;
+
+        try
+        {
+            $document = $this->hospitalRepo->downloadPatientReports($documentId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_DOWNLOAD_ERROR, $exc);
+        }
+
+        return $document;
     }
 
 
