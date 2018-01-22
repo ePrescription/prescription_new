@@ -3712,7 +3712,7 @@ class DoctorController extends Controller
         try
         {
             $feeReceipts = $this->hospitalService->getFeeReceipts($hospitalId, $doctorId);
-            //dd($feeReceipts);
+           // dd($feeReceipts);
             /*
             if(!empty($feeReceipts))
             {
@@ -3752,7 +3752,7 @@ class DoctorController extends Controller
     {
         $feeReceiptDetails = null;
         $responseJson = null;
-        //dd($receiptId);
+       // dd($receiptId);
 
         try
         {

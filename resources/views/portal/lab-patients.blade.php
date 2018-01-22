@@ -46,6 +46,7 @@ $profile_menu="0";
                                 <div class="panel-body">
                                     <h4 class="m-b-30 m-t-0">Lab Patients Details List</h4>
 
+                                    <a href="{{URL::to('/')}}/lab/rest/api/{{Session::get('LoginUserHospital')}}/addpatientwithappointment" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Appointment</b></button></a>
 
                                     @if (session()->has('message'))
                                         <div class="col_full login-title">

@@ -71,6 +71,8 @@ $profile_menu="0";
                                             <th>Patient ID</th>
                                             <th>Patient Name in Full</th>
                                             <th>Doctor Name in Full</th>
+                                            <th>Appointment Date</th>
+                                            <th>Payment Date</th>
                                             <th>Doctor Fee</th>
                                             <th>Payment Status</th>
                                             <th>View</th>
@@ -83,6 +85,12 @@ $profile_menu="0";
                                                 <td>{{$fee->PID}}</td>
                                                 <td>{{$fee->patientName}}</td>
                                                 <td>{{$fee->doctorName}}</td>
+                                                <td>{{$fee->created_at}}</td>
+                                                @if($fee->payment_status==0)
+                                                <td>-:-</td>
+                                                @else
+                                                    <td>{{$fee->updated_at}}</td>
+                                                @endif
                                                 <td>{{$fee->fee}}</td>
                                                 @if($fee->payment_status==0)
 

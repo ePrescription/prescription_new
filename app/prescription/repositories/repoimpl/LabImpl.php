@@ -39,6 +39,7 @@ use Storage;
 use File;
 use Crypt;
 
+
 class LabImpl implements LabInterface
 {
     /**
@@ -108,12 +109,12 @@ class LabImpl implements LabInterface
                 'p.gender', 'p.telephone', 'p.married', 'p.email', 'p.address', 'p.careof');
             $query->join('hospital_patient as hp', 'hp.patient_id', '=', 'p.patient_id');
             //$query->join('patient_labtest as pl', 'hp.patient_id', '=', 'p.patient_id');
-            $query->join('patient_labtest as pl', function($query)
+           /* $query->join('patient_labtest as pl', function($query)
             {
                 $query->on('pl.patient_id', '=', 'p.patient_id');
                 $query->on('pl.patient_id', '=', 'hp.patient_id');
                 $query->on('pl.hospital_id', '=', 'hp.hospital_id');
-            });
+            });*/
             $query->where('hp.hospital_id', '=', $hospitalId);
 
             //$query->orderBy('hp.created_at', 'DESC');

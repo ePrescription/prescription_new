@@ -85,10 +85,13 @@ $profile_menu="0";
                     </div>
                 </div>
 
+
                 <div class="container-fluid" style="float: right;margin: 10px;">
 
                     <div class="row">
                         <div class="col-lg-12">
+                            <button type="button" value="Cancel" class="btn btn-info waves-effect waves-light"
+                                    onclick="window.history.back();">Back</button>
 
                             <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
 
@@ -262,7 +265,11 @@ $profile_menu="0";
 
                                                                 <div class="col-md-12">
                                                                     <div class="form-group col-md-12">
-                                                                        Received Rs: {{$feeReceiptDetails['feeDetails']['fee']}} ( In Words {{$feeReceiptDetails['feeDetails']['inWords']}} ) with thanks towards doctor consultation charges
+                                                                        @if($feeReceiptDetails['feeDetails']['payment_status'])
+                                                                            <b style="color: green;">Received </b>Rs: {{$feeReceiptDetails['feeDetails']['fee']}} ( In Words {{$feeReceiptDetails['feeDetails']['inWords']}} ) with thanks towards doctor consultation charges
+                                                                       @else
+                                                                           <b style="color: red;"> Pending </b>Rs: {{$feeReceiptDetails['feeDetails']['fee']}} ( In Words {{$feeReceiptDetails['feeDetails']['inWords']}} ) with thanks towards doctor consultation charges
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-1"></div>

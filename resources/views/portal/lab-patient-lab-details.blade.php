@@ -68,8 +68,8 @@ $profile_menu="0";
                                     <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>
 
-                                    <div style="float:right; display:none;">
-                                        <a style="margin: 0px 10px;" href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/labtestreceipts?hospitalId={{Auth::user()->id}}">
+                                    <div style="float:right; display:block;">
+                                        <a style="margin: 0px 10px;" href="{{URL::to('/')}}/lab/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/labtestreceipts?hospitalId={{Session::get('LoginUserHospital')}}">
                                             <button class="btn btn-error waves-effect waves-light">Generate Receipt</button>
                                         </a>
                                     </div>
@@ -418,7 +418,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-
+                                                        <a href="#" data-href="#{{URL::to('/')}}/lab/rest/api/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-bloodtests" onclick="javascript:ajaxloadbloodform1({{Session::get('LoginUserHospital')}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Blood Test </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientblooddiv"></div>
@@ -436,6 +436,7 @@ $profile_menu="0";
                                                         </select>
 
 
+                                                        <a href="#" data-href="#{{URL::to('/')}}/lab/rest/api/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-motiontest" onclick="javascript:ajaxloadmotionform1({{Session::get('LoginUserHospital')}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Motion Test </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientmotiondiv"></div>
@@ -454,6 +455,7 @@ $profile_menu="0";
                                                         </select>
 
 
+                                                        <a href="#" data-href="#{{URL::to('/')}}/lab/rest/api/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-urine" onclick="javascript:ajaxloadurineform1({{Session::get('LoginUserHospital')}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Urine Test </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patienturinediv"></div>
@@ -471,6 +473,8 @@ $profile_menu="0";
                                                         </select>
 
 
+
+                                                        <a href="#" data-href="#{{URL::to('/')}}/lab/rest/api/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-ultra" onclick="javascript:ajaxloadultraform1({{Session::get('LoginUserHospital')}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Ultra Sound Test </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientultradiv"></div>
@@ -488,12 +492,12 @@ $profile_menu="0";
                                                         </select>
 
 
+                                                        <a href="#" data-href="#{{URL::to('/')}}/lab/rest/api/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-bloodtests" onclick="javascript:ajaxloadscanform1({{Session::get('LoginUserHospital')}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Scan Test </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientscandiv"></div>
                                                     </p>
                                                 </div>
-
                                                 <div class="tab-pane" id="dental">
                                                     <p>
                                                     <div class="col-md-12">
@@ -506,12 +510,13 @@ $profile_menu="0";
                                                         </select>
 
 
+
+                                                        <a href="#" data-href="#{{URL::to('/')}}/lab/rest/api/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-bloodtests" onclick="javascript:ajaxloaddentalform1({{Session::get('LoginUserHospital')}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Dental Test </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientdentaldiv"></div>
                                                     </p>
                                                 </div>
-
                                                 <div class="tab-pane" id="xray">
                                                      <p>
                                                     <div class="col-md-12">
@@ -524,6 +529,7 @@ $profile_menu="0";
                                                         </select>
 
 
+                                                        <a href="#" data-href="#{{URL::to('/')}}/lab/rest/api/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-lab-bloodtests" onclick="javascript:ajaxloadxrayform1({{Session::get('LoginUserHospital')}},{{$patientDetails[0]->patient_id}});" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add X-Ray Test </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientxraydiv"></div>
@@ -758,11 +764,14 @@ $profile_menu="0";
 
         }
 
-        function ajaxloadbloodform(did,hid,pid) {
+        function ajaxloadbloodform1(hid,pid) {
             $("#patientblooddiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
-            var callurl = BASEURL + 'doctor/' + did + '/hospital/' + hid + '/patient/' + pid + '/add-lab-bloodtests';
+
+            var callurl = BASEURL + 'lab/rest/api/' + hid + '/patient/' + pid + '/add-lab-bloodtests';
+         //  alert(callurl);
+
             $.ajax({
                 url: callurl,
                 type: "get",
@@ -782,6 +791,62 @@ $profile_menu="0";
                 }
             });
         }
+
+
+        function ajaxloadbloodform(did,hid,pid) {
+            $("#patientblooddiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'doctor/' + did + '/hospital/' + hid + '/patient/' + pid + '/add-lab-bloodtests';
+           // alert(callurl);
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientblooddiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
+                }
+            });
+        }
+        function ajaxloadmotionform1(hid,pid) {
+            $("#patientmotiondiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'lab/rest/api/' + hid + '/patient/' + pid + '/add-lab-motiontests';
+
+        //  alert(callurl);
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientmotiondiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
+                }
+            });
+        }
+
+
+
 
         function ajaxloadmotionform(did,hid,pid) {
             $("#patientmotiondiv").html("LOADING...");
@@ -807,7 +872,30 @@ $profile_menu="0";
                 }
             });
         }
-
+        function ajaxloadurineform1(hid,pid) {
+            $("#patienturinediv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'lab/rest/api/' + hid + '/patient/' + pid + '/add-lab-urinetests';
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patienturinediv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
+                }
+            });
+        }
         function ajaxloadurineform(did,hid,pid) {
             $("#patienturinediv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
@@ -832,6 +920,32 @@ $profile_menu="0";
                 }
             });
         }
+        function ajaxloadultraform1(hid,pid) {
+            $("#patientultradiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'lab/rest/api/' + hid + '/patient/' + pid + '/add-lab-ultrasoundtests';
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientultradiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
+                }
+            });
+        }
+
+
 
         function ajaxloadultraform(did,hid,pid) {
             $("#patientultradiv").html("LOADING...");
@@ -857,7 +971,30 @@ $profile_menu="0";
                 }
             });
         }
-
+        function ajaxloadscanform1(hid,pid) {
+            $("#patientscandiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'lab/rest/api/' + hid + '/patient/' + pid + '/add-lab-scantests';
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientscandiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
+                }
+            });
+        }
         function ajaxloadscanform(did,hid,pid) {
             $("#patientscandiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
@@ -869,6 +1006,30 @@ $profile_menu="0";
                 data: {"id": pid, "status": status},
                 success: function (data) {
                     $("#patientscandiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
+                }
+            });
+        }
+        function ajaxloaddentalform1(hid,pid) {
+            $("#patientdentaldiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'lab/rest/api/' + hid + '/patient/' + pid + '/add-lab-dentaltests';
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientdentaldiv").html(data);
                     $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
                     $( "input#TestTime" ).timepicker({
                         timeFormat: 'HH:mm:ss',
@@ -907,7 +1068,30 @@ $profile_menu="0";
                 }
             });
         }
-
+        function ajaxloadxrayform1(hid,pid) {
+            $("#patientxraydiv").html("LOADING...");
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'lab/rest/api/' + hid + '/patient/' + pid + '/add-lab-xraytests';
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": pid, "status": status},
+                success: function (data) {
+                    $("#patientxraydiv").html(data);
+                    $( "#TestDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "input#TestTime" ).timepicker({
+                        timeFormat: 'HH:mm:ss',
+                        interval: 60,
+                        defaultTime: '{{date('H:i:s')}}',
+                        startTime: '00:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true
+                    });
+                }
+            });
+        }
         function ajaxloadxrayform(did,hid,pid) {
             $("#patientxraydiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
