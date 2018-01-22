@@ -673,6 +673,8 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/print', array('as' => 'hospital.patientprintdetails', 'uses' => 'DoctorController@PatientPrintDetailsByHospitalForDoctor'));
         Route::post('patient/labreports', array('as' => 'doctor.labtestreports', 'uses' => 'DoctorApiController@uploadPatientLabDocuments'));
 
+        Route::get('{doctorId}/patient/{patientId}/reports', array('as' => 'doctor.patientreports', 'uses' => 'DoctorApiController@getPatientReports'));
+        Route::get('{doctorId}/patient/reports/{reportId}/download', array('as' => 'doctor.downloadreports', 'uses' => 'DoctorApiController@downloadPatientReports'));
 
 
     });
@@ -776,6 +778,40 @@ Route::group(['prefix' => 'lab'], function()
         Route::get('{labId}/hospital/{hid}/patient/{patientId}/details', array('as' => 'lab.patientdetails', 'uses' => 'LabController@PatientDetailsForLab'));
 
         Route::get('{labId}/hospital/{hid}/patient/{patientId}/lab-details-results', array('as' => 'hospital.patientlabdetailsresults', 'uses' => 'LabController@PatientLabDetailsResultsByHospitalForLab'));
+
+        /*Ramana New 20-01-2018*/
+
+        Route::get('rest/api/{hospitalId}/addpatientwithappointment', array('as' => 'lab.addpatientwithappointment', 'uses' => 'LabController@addPatientWithAppointmentByHospitalForLab'));
+
+        Route::post('rest/api/{hospitalId}/savepatientwithappointment', array('as' => 'lab.savepatientwithappointment', 'uses' => 'LabController@savePatientWithAppointmentByHospitalForLab'));
+
+        Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-bloodtests', array('as' => 'lab.patientlabbloodtests', 'uses' => 'LabController@AddPatientLabBloodTestsByHospitalForLab'));
+        Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-motiontests', array('as' => 'lab.patientlabmotiontests', 'uses' => 'LabController@AddPatientLabMotionTestsByHospitalForLab'));
+        Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-urinetests', array('as' => 'lab.patientlaburinetests', 'uses' => 'LabController@AddPatientLabUrineTestsByHospitalForLab'));
+        Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-ultrasoundtests', array('as' => 'lab.patientlabultrasoundtests', 'uses' => 'LabController@AddPatientLabUltrasoundTestsByHospitalForLab'));
+        Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-scantests', array('as' => 'lab.patientlabscantests', 'uses' => 'LabController@AddPatientLabScanTestsByHospitalForLab'));
+        Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-dentaltests', array('as' => 'lab.patientlabdentaltests', 'uses' => 'LabController@addPatientDentalTestsForLab'));
+        Route::get('rest/api/{hospitalId}/patient/{patientId}/add-lab-xraytests', array('as' => 'lab.patientlabxraytests', 'uses' => 'LabController@addPatientXrayTestsForLab'));
+
+
+
+
+
+        Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'LabController@savePatientBloodTests'));
+        Route::post('rest/api/motiontests', array('as' => 'doctor.savemotiontests', 'uses' => 'LabController@savePatientMotionTests'));
+        Route::post('rest/api/urinetests', array('as' => 'doctor.saveurinetests', 'uses' => 'LabController@savePatientUrineTests'));
+        Route::post('rest/api/scandetails', array('as' => 'doctor.savescantests', 'uses' => 'LabController@savePatientScanDetails'));
+        Route::post('rest/api/dentaltests', array('as' => 'doctor.savedentaltests', 'uses' => 'LabController@savePatientDentalTests'));
+        Route::post('rest/api/ultrasoundtests', array('as' => 'doctor.saveultrasoundtests', 'uses' => 'LabController@savePatientUltraSoundTests'));
+        Route::post('rest/api/xraytests', array('as' => 'doctor.savexraytests', 'uses' => 'LabController@savePatientXrayTests'));
+
+
+        Route::get('{hospitalId}/patient/{patientId}/labtestreceipts', array('as' => 'patient.labtestreceipts', 'uses' => 'LabController@getLabTestDetailsForReceipt'));
+
+        Route::post('savelabreceipts', array('as' => 'patient.savelabreceipts', 'uses' => 'LabController@saveLabReceiptDetailsForPatient'));
+
+
+
 
     });
 });
