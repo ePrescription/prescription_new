@@ -362,13 +362,21 @@ $time_array=array(
                                                     <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
                                                     <div class="col-sm-9">
 
-                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" >
+                                                        <!--Modified By prasanth Start 24-01-2018 -->
+                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="javascript:getTokenId({{Auth::user()->id}},this.value);">
+                                                            <!--Modified By prasanth Start 24-01-2018 -->
                                                             <option value="">--CHOOSE--</option>
                                                             @foreach($doctors as $doctor)
                                                                 <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
                                                             @endforeach
                                                         </select>
                                                         @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-12" id="token" style="display: none;">
+                                                    <label class="col-sm-3 control-label">Token ID<span class="red">*</span></label>
+                                                    <div class="col-sm-9">
+                                                        <b>Your Token ID:</b><p  name="tokenId" id="tokenId"  required="required" readonly style="font-size: 20px;color: blue;"></p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -783,6 +791,29 @@ $time_array=array(
                         terms += '<option value="'+index+'">'+value+'</option>';
                     });
                     $("#appointmentTime").html(terms);
+
+                }
+            });
+
+
+        }
+
+
+        //New BY PRASANTH 24-01-2018
+
+        function getTokenId(hid,did) {
+
+            var BASEURL = "{{ URL::to('/') }}/";
+            var status = 1;
+            var callurl = BASEURL + 'fronthospital/rest/api/hospital/'+hid+'/doctor/' + did + '/tokenid';
+            //alert(callurl);
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"id": hid, "status": status},
+                success: function (data) {
+                    document.getElementById('token').style.display='block';
+                    $("#tokenId").html(data);
 
                 }
             });

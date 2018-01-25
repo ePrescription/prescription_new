@@ -72,6 +72,7 @@ $profile_menu="0";
                                             <th>Doctor Name in Full</th>
                                             <th>Doctor Department</th>
                                             <th>Doctor Designation</th>
+                                            <th>Tokens Count</th>
                                             <th>View</th>
                                         </tr>
                                         </thead>
@@ -82,6 +83,7 @@ $profile_menu="0";
                                                 <td>{{$doctor->doctorName}}</td>
                                                 <td>{{$doctor->department}}</td>
                                                 <td>{{$doctor->designation}}</td>
+                                                <td>{{$doctor->token_count}}</td>
                                                 <td>
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/doctor/{{$doctor->doctorId}}/feereceipts" style="float:rightx;">View Bills</a>
                                                     <br/>

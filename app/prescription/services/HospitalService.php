@@ -3448,4 +3448,58 @@ class HospitalService {
     }
 
 
+    /**
+     * Get the latest Token_Id of patient for doctor appointment
+     * @param $hospitalId
+     * @throws $hospitalException
+     * @return Number | 0
+     * @author Prasanth
+     */
+
+    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId)
+    {
+        $TokenId = null;
+
+        try
+        {
+            $TokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR, $exc);
+        }
+        return $TokenId;
+    }
+
+    /**
+     * Get the total patient information of  doctor appointment
+     * @param $patientId
+     * @throws $hospitalException
+     * @return Array | Null
+     * @author Prasanth
+     */
+
+    public function getPatientAppointmentLabel($patientId,$Id)
+    {
+        $doctorappointments = null;
+
+        try
+        {
+            $doctorappointments = $this->hospitalRepo->getPatientAppointmentLabel($patientId,$Id);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR, $exc);
+        }
+        return $doctorappointments;
+    }
+
 }

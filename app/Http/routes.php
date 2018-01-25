@@ -307,7 +307,16 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     //Route::get('rest/api/savelabreceipts', array('as' => 'patient.savelabreceipts', 'uses' => 'DoctorController@saveLabReceiptDetailsForPatient'));
 
     //Route::get('rest/api/{hospitalId}/patient/{patientId}/receiptdetails', array('as' => 'patient.receiptdetails', 'uses' => 'DoctorController@getPatientReceiptDetails'));
-});
+
+    //NEW BY PRASANTH 24-01-2018//
+    Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/tokenid', array('as' => 'patient.tokenid', 'uses' => 'DoctorController@getTokenIdByHospitalIdandDoctorId'));
+
+    Route::get('rest/api/patient/{patientId}/receipt/{receiptId}/appointmentlabel', array('as' => 'patient.tokenid', 'uses' => 'DoctorController@getPatientAppointmentLabel'));
+
+
+
+
+    });
 
 Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
 {
@@ -809,6 +818,8 @@ Route::group(['prefix' => 'lab'], function()
         Route::get('{hospitalId}/patient/{patientId}/labtestreceipts', array('as' => 'patient.labtestreceipts', 'uses' => 'LabController@getLabTestDetailsForReceipt'));
 
         Route::post('savelabreceipts', array('as' => 'patient.savelabreceipts', 'uses' => 'LabController@saveLabReceiptDetailsForPatient'));
+
+        Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/tokenid', array('as' => 'patient.tokenid', 'uses' => 'LabController@getTokenIdByHospitalIdandDoctorId'));
 
 
 

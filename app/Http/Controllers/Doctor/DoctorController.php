@@ -8610,7 +8610,13 @@ class DoctorController extends Controller
 
     }
 
-
+    /**
+     * Save patient investigations and diagnosis
+     * @param $diagnosisRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
     public function AddPatientLabBloodTestsByHospitalForDoctor($doctorId,$hid,$patientId)
     {
         $patientDetails = null;
@@ -9454,6 +9460,79 @@ class DoctorController extends Controller
             Log::error($msg);
             //return redirect('exception')->with('message', trans('messages.SupportTeam'));
         }
+
+    }
+
+    /**
+     * Gets Latest TokenId of patient for doctor appointment
+     * @param $hospitalId,$doctorId
+     * @throws $hospitalException
+     * @return count|0
+     * @author Prasanth
+     */
+   public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId){
+
+    $TokenID = null;
+    //$jsonResponse = null;
+    $responseJson = null;
+    $count = 0;
+    try
+    {
+        $TokenID = $this->hospitalService->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId);
+
+       // $responseJson->setObj($TokenID);
+       // $responseJson->sendSuccessResponse();
+
+    }
+    catch(HospitalException $hospitalExc)
+    {
+        //$prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+        /*$responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+        $errorMsg = $hospitalExc->getMessageForCode();
+        $msg = AppendMessage::appendMessage($hospitalExc);
+        Log::error($msg);*/
+        $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+        $responseJson->sendErrorResponse($hospitalExc);
+    }
+    catch(Exception $exc)
+    {
+        //dd($exc);
+        /*$responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+        $msg = AppendMessage::appendGeneralException($exc);
+        Log::error($msg);*/
+        $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+        $responseJson->sendUnExpectedExpectionResponse($exc);
+    }
+
+    //return $jsonResponse;
+    return $TokenID;
+ }
+
+    public function getPatientAppointmentLabel($patientId,$Id){
+
+        $doctorappointments = null;
+        //$jsonResponse = null;
+        $responseJson = null;
+        $count = 0;
+        try
+        {
+            $doctorappointments = $this->hospitalService->getPatientAppointmentLabel($patientId,$Id);
+
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        //dd($doctorappointments);
+        return view('portal.hospital-patient-label', compact('doctorappointments'));
 
     }
 

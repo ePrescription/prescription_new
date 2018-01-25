@@ -207,7 +207,7 @@ $profile_menu="0";
 
                                                                                             <input type="hidden" class="form-control" name="labTests[bloodTests][{{$i}}][id]" value="{{$patientBloodTestValue->id}}" required="required" />
                                                                                             <input type="hidden" class="form-control" name="labTests[bloodTests][{{$i}}][item_id]" value="{{$patientBloodTestValue->examination_item_id}}" required="required" />
-                                                                                            <input id="fee" type="hidden" min="0" class="form-control testprice1" name="labTests[bloodTests][{{$i}}][fees]" value="{{$patientBloodTestValue->fees}}" required="required" />
+                                                                                            <input id="fee" type="hidden" min="0" class="form-control testprice1" name="labTests[bloodTests][{{$i}}][fees]" value="1" required="required" />
 
                                                                                         @endif
 
@@ -279,7 +279,7 @@ $profile_menu="0";
 
                                                                                             <input type="hidden" class="form-control" name="labTests[urineTests][{{$i}}][id]" value="{{$patientUrineTestValue->id}}" required="required" />
                                                                                             <input type="hidden" class="form-control" name="labTests[urineTests][{{$i}}][item_id]" value="{{$patientUrineTestValue->examination_item_id}}" required="required" />
-                                                                                            <input id="fee" type="hidden" min="0" class="form-control testprice1" name="labTests[urineTests][{{$i}}][fees]" value="{{$patientUrineTestValue->fees}}" required="required" />
+                                                                                            <input id="fee" type="hidden" min="0" class="form-control testprice1" name="labTests[urineTests][{{$i}}][fees]" value="1" required="required" />
 
                                                                                         @endif
 

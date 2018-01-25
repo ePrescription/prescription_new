@@ -1327,6 +1327,15 @@ class LabController extends Controller
         }
     }
 
+    /**
+     * Shows hospital lab detail results
+     * @param $lid,$hid, $patientId
+     * @throws $HospitalException
+     * @return view->portal.lab-patient-lab-results page
+     * @author Ramana
+     */
+
+
     /*RAMANA 19-01-2018*/
     public function PatientLabDetailsResultsByHospitalForLab($lid,$hid, $patientId)
     {
@@ -1363,6 +1372,14 @@ class LabController extends Controller
 
     }
 
+    /**
+     * Shows hospital,doctors,specialities
+     * @param $hospitalId
+     * @throws $HospitalException
+     * @return view->portal.lab-addpatientwithappointment page
+     * @author Ramana
+     */
+
     /*Ramana New 20-01-2018*/
 
     public function addPatientWithAppointmentByHospitalForLab($hospitalId)
@@ -1393,7 +1410,13 @@ class LabController extends Controller
 
         return view('portal.lab-addpatientwithappointment',compact('patients','doctors','specialties'));
     }
-
+    /**
+     * save patient book appointment
+     * @param PatientProfileWebRequest
+     * @throws $HospitalException
+     * @return true|false
+     * @author Ramana
+     */
 
     public function savePatientWithAppointmentByHospitalForLab(PatientProfileWebRequest $patientProfileRequest)
     {
@@ -1471,6 +1494,15 @@ class LabController extends Controller
         //return $jsonResponse;
 
     }
+
+    /**
+     * to Add patient blood test in lab
+     * @param $hid,$patientId
+     * @throws $HospitalException
+     * @return "lab-patient-lab-add-blood"  page
+     * @author Ramana
+     */
+
     public function AddPatientLabBloodTestsByHospitalForLab($hid,$patientId)
     {
         $patientDetails = null;
@@ -1508,6 +1540,14 @@ class LabController extends Controller
         return view('portal.lab-patient-lab-add-blood',compact('patientBloodTests','patientDetails','hid'));
 
     }
+
+    /**
+     * to Add patient Motion test in lab
+     * @param $hid,$patientId
+     * @throws $HospitalException
+     * @return "lab-patient-lab-add-motion"  page
+     * @author Ramana
+     */
     public function AddPatientLabMotionTestsByHospitalForLab($hid,$patientId)
     {
         $patientDetails = null;
@@ -1538,6 +1578,14 @@ class LabController extends Controller
         return view('portal.lab-patient-lab-add-motion',compact('patientMotionTests','patientDetails','hid'));
 
     }
+
+    /**
+     * to Add patient urine test in lab
+     * @param $hid,$patientId
+     * @throws $HospitalException
+     * @return "lab-patient-lab-add-urine"  page
+     * @author Ramana
+     */
 
     public function AddPatientLabUrineTestsByHospitalForLab($hid,$patientId)
     {
@@ -1571,6 +1619,14 @@ class LabController extends Controller
 
     }
 
+    /**
+     * to Add patient ultrasound test in lab
+     * @param $hid,$patientId
+     * @throws $HospitalException
+     * @return "lab-patient-lab-add-ultrasound"  page
+     * @author Ramana
+     */
+
 
     public function AddPatientLabUltraSoundTestsByHospitalForLab($hid,$patientId)
     {
@@ -1603,6 +1659,13 @@ class LabController extends Controller
 
     }
 
+    /**
+     * to Add patient scan test in lab
+     * @param $hid,$patientId
+     * @throws $HospitalException
+     * @return "lab-patient-lab-add-scan"  page
+     * @author Ramana
+     */
 
     public function AddPatientLabScanTestsByHospitalForLab($hid,$patientId)
     {
@@ -1636,6 +1699,13 @@ class LabController extends Controller
 
     }
 
+    /**
+     * to Add patient dental test in lab
+     * @param $hid,$patientId
+     * @throws $HospitalException
+     * @return "lab-patient-lab-add-dental"  page
+     * @author Ramana
+     */
     public function addPatientDentalTestsForLab($hid, $patientId)
     {
         $patientDetails = null;
@@ -1671,7 +1741,13 @@ class LabController extends Controller
         return view('portal.lab-patient-lab-add-dental',compact('dentalExaminationCategory','dentalExaminations','patientDetails','hid'));
 
     }
-
+    /**
+     * to Add patient xray test in lab
+     * @param $hid,$patientId
+     * @throws $HospitalException
+     * @return "lab-patient-lab-add-xray"  page
+     * @author Ramana
+     */
     public function addPatientXrayTestsForLab($hid, $patientId)
     {
         $patientDetails = null;
@@ -1821,7 +1897,7 @@ class LabController extends Controller
      * @param $examinationRequest
      * @throws $hospitalException
      * @return true | false
-     * @author Baskar
+     * @author Ramana
      */
 
     public function savePatientUltraSoundTests(Request $examinationRequest)
@@ -1872,7 +1948,7 @@ class LabController extends Controller
      * @param $examinationRequest
      * @throws $hospitalException
      * @return true | false
-     * @author Baskar
+     * @author Ramana
      */
 
     public function savePatientUrineTests(Request $examinationRequest)
@@ -1922,7 +1998,7 @@ class LabController extends Controller
      * @param $scanRequest
      * @throws $hospitalException
      * @return true | false
-     * @author Baskar
+     * @author Ramana
      */
 
     public function savePatientScanDetails(Request $scanRequest)
@@ -1990,7 +2066,7 @@ class LabController extends Controller
      * @param $xrayRequest
      * @throws $hospitalException
      * @return true | false
-     * @author Baskar
+     * @author Ramana
      */
 
     public function savePatientXRayTests(Request $xrayRequest)
@@ -2055,7 +2131,7 @@ class LabController extends Controller
      * @param $dentalRequest
      * @throws $hospitalException
      * @return true | false
-     * @author Baskar
+     * @author Ramana
      */
 
     public function savePatientDentalTests(Request $dentalRequest)
@@ -2102,6 +2178,17 @@ class LabController extends Controller
         //return $responseJson;
         return redirect('lab/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$dentalRequest->patientId.'/add-lab-dental');
     }
+
+    /**
+     * to get lab test details receipt in lab
+     * @param $hid, $patientId, Request $receiptRequest
+     * @throws $hospitalException
+     * @return "portal.lab-patient-receipt-details" page
+     * @author Ramana
+     */
+
+
+
     public function getLabTestDetailsForReceipt($hid, $patientId, Request $receiptRequest)
     {
         $labTestDetails = null;
@@ -2144,6 +2231,14 @@ class LabController extends Controller
             //return redirect('exception')->with('message', trans('messages.SupportTeam'));
         }
     }
+
+    /**
+     * to Save lab receipt details  in lab
+     * @param $labReceiptRequest
+     * @throws $hospitalException
+     * @return "portal.lab-patient-receipt-details" page
+     * @author Ramana
+     */
 
     public function saveLabReceiptDetailsForPatient(Request $labReceiptRequest)
     {
@@ -2251,6 +2346,51 @@ class LabController extends Controller
             Log::error($msg);
         }
     }
+    /**
+     * Gets Latest TokenId of patient for doctor appointment
+     * @param $hospitalId,$doctorId
+     * @throws $hospitalException
+     * @return count|0
+     * @author Prasanth
+     */
+    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId){
 
+        $TokenID = null;
+        //$jsonResponse = null;
+        $responseJson = null;
+        $count = 0;
+        try
+        {
+            $TokenID = HospitalServiceFacade::getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId);
+
+
+         //  dd($TokenID);
+          //  $responseJson->setObj($TokenID);
+           // $responseJson->sendSuccessResponse();
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //$prescriptionResult = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+            /*$responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);*/
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            /*$responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);*/
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        //return $jsonResponse;
+        return $TokenID;
+    }
 
 }
