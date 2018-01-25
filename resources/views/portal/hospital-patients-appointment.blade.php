@@ -137,8 +137,13 @@ $profile_menu="0";
                                                     <a href="#" data-data="{{URL::to('/')}}/fronthospital/patients/appointments/{{$patient->appointment_id}}/transferappointment?appointmentId={{$patient->appointment_id}}" title="Transfer Appointment" onclick="OpenBox('{{$patient->patient_id}}','{{$patient->appointment_id}}')"> <i class="fa fa-exchange"></i> </a>
                                                     &nbsp;&nbsp;
                                                     <a href="{{URL::to('/')}}/fronthospital/patients/appointments/{{$patient->appointment_id}}/cancelappointment?appointmentId={{$patient->appointment_id}}" title="Cancel Appointment" onclick="return confirm('Are you sure ?')"><i class="fa fa-times"></i> </a>
+                                                    &nbsp;
 
-                                                    <!--
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/patient/{{$patient->patient_id}}/receipt/{{$patient->id}}/appointmentlabel" title="View Patient Appointment Label"><i class="fa fa-print"></i> </a>
+
+                                                <!--
+
+
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i> </a>
                                                     &nbsp;&nbsp;
                                                     <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/medical-details" title="Medical Profile"><i class="fa fa-medkit"></i></a>

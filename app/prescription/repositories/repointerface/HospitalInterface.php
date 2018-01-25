@@ -212,5 +212,13 @@ interface HospitalInterface {
 
      //ramana end 12-01-2018
 
+    //ADDITION START BY PRASANTH 24-01-2018//
+    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId);
+    public function getPatientAppointmentLabel($patientId,$Id);
+    //ADDITION END BY PRASANTH 24-01-2018//
+
+
+
+
 
 }

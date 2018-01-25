@@ -104,7 +104,7 @@
                                     {{$recentTest->examination_name}}
                                 </td>
 
-                                <td > {{$recentTest->test_readings}}</td>
+                                <td > {{$recentTest->test_readings}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$recentTest->units}}</td>
                                 <td >{{$recentTest->default_normal_values}}</td>
 
                             </tr>
