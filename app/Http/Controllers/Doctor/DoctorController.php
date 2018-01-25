@@ -7811,7 +7811,7 @@ class DoctorController extends Controller
         }
 
         return view('portal.doctor-patient-print-receipt-details', compact('labReceiptDetails', 'patientDetails','paymentHistory'));
-        ;
+
     }
 
 
