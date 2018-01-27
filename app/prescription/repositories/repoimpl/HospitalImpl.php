@@ -2306,13 +2306,13 @@ class HospitalImpl implements HospitalInterface
 
         $patientUserId = null;
         $appointmentDate=null;
-        $patientTokenId=null;
+        //$patientTokenId=null;
 
         try {
             $patientId = $patientProfileVM->getPatientId();
             $hospitalId = $patientProfileVM->getHospitalId();
             $doctorId = $patientProfileVM->getDoctorId();
-            $appointmentDate=$patientProfileVM->getAppointmentDate();
+            $appointmentDate = $patientProfileVM->getAppointmentDate();
             //dd($appointmentDate);
 
             $hospitalUser = User::find($hospitalId);
@@ -2335,11 +2335,13 @@ class HospitalImpl implements HospitalInterface
             $doctorUser = $doctorQuery->first();
             //dd($doctorUser);
             //BY PARASANTH START 24-01-2018 //
-            $patientTokenQuery = DB::table('doctor_appointment as dp');
+
+            /*$patientTokenQuery = DB::table('doctor_appointment as dp');
             $patientTokenQuery->where('dp.hospital_id', '=', $hospitalId)->where('dp.doctor_id', '=', $doctorId)->where('appointment_date','=',$appointmentDate);
             $patientTokenQuery->select(DB::raw('count(token_id) as token_count'))->get();
-            $patientTokenId=$patientTokenQuery->first();
-            $patientTokenId=$patientTokenId->token_count;
+            $patientToken = $patientTokenQuery->first();
+            $patientTokenId = $patientToken->token_count;*/
+
            //dd($patientTokenId->token_count);
             //BY PARASANTH END 24-01-2018 //
 
@@ -2412,7 +2414,7 @@ class HospitalImpl implements HospitalInterface
                 }*/
             }
            //BY PARASANTH START 24-01-2018 //
-            $this->savePatientAppointment($patientProfileVM, $doctorUser, $patientUserId,$patientTokenId);
+            $this->savePatientAppointment($patientProfileVM, $doctorUser, $patientUserId);
 
             //BY PARASANTH END 24-01-2018//
 
@@ -2519,13 +2521,10 @@ class HospitalImpl implements HospitalInterface
         //return $patient;
     }
 
-    private function savePatientAppointment(PatientProfileViewModel $patientProfileVM, User $doctorUser, $patientUserId,$patientTokenId)
+    private function savePatientAppointment(PatientProfileViewModel $patientProfileVM, User $doctorUser, $patientUserId)
     {
         //$appointments = $patientProfileVM->getAppointment();
         //dd($doctorUser);
-
-
-
 
         $appointmentStatus = AppointmentType::APPOINTMENT_OPEN;
         $doctorAppointment = new DoctorAppointments();
@@ -2539,7 +2538,9 @@ class HospitalImpl implements HospitalInterface
         $doctorAppointment->appointment_status_id = $appointmentStatus;
         //BY PRASANTH 24-01-2018 START//
 
-        $patientTokenId=intval($patientTokenId)+1;
+        $patientTokenId = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorUser->id, $patientProfileVM->getAppointmentDate());
+        //dd($patientTokenId);
+        //$patientTokenId=intval($patientTokenId)+1;
         $doctorAppointment->token_id = $patientTokenId;
         //BY PRASANTH 24-01-2018 END//
         $doctorAppointment->referral_type = $patientProfileVM->getReferralType();
@@ -2586,6 +2587,44 @@ class HospitalImpl implements HospitalInterface
             $doctorAppointment->save();
         }*/
 
+    }
+
+    private function generateTokenId($hospitalId, $doctorId, $appointmentDate)
+    {
+        //$defaultTokenId = trans('constants.token_id');
+        $defaultTokenId = CA::get('constants.token_id');
+        //$maxVal = 0;
+
+        /*$maxId = DB::table('doctor_appointment')->max('token_id');*/
+
+        $maxId = DoctorAppointments::where('hospital_id', '=', $hospitalId)
+            ->where('doctor_id', '=', $doctorId)
+            ->where('appointment_date','=',$appointmentDate)->max('token_id');
+
+        //dd($maxId);
+
+        //$maxVal = $maxId + 1;
+
+        //dd($maxId);
+
+        /*$patientTokenQuery = DB::table('doctor_appointment as da');
+        $patientTokenQuery->where('da.hospital_id', '=', $hospitalId)->where('da.doctor_id', '=', $doctorId)
+            ->where('appointment_date','=',$appointmentDate);
+        $patientTokenQuery->select(DB::raw('count(token_id) as token_count'))->get();
+        $patientToken = $patientTokenQuery->first();
+        $patientTokenId = $patientToken->token_count;*/
+
+        if($maxId == 0 || $maxId == "")
+        {
+            //$maxVal = intval($defaultValue);
+            $maxVal = $defaultTokenId;
+        }
+        else
+        {
+            $maxVal = $maxId + 1;
+        }
+
+        return $maxVal;
     }
 
     /**
