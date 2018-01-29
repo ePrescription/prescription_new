@@ -268,7 +268,6 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::post('rest/api/motiontests', array('as' => 'doctor.savemotiontests', 'uses' => 'DoctorController@savePatientMotionTests'));
 
 
-
     Route::post('rest/api/bloodtests', array('as' => 'doctor.savebloodtests', 'uses' => 'DoctorController@savePatientBloodTests'));
     Route::post('rest/api/scandetails', array('as' => 'doctor.savescandetails', 'uses' => 'DoctorController@savePatientScanDetails'));
     Route::post('rest/api/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@savePatientDentalTests'));
@@ -287,7 +286,6 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
      //ramana end 12-01-2018
 
-
     //RAMANA NEW  start  19-01-2018
 
    Route::post('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
@@ -296,8 +294,6 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 //RAMANA NEW  End  19-01-2018
    // rest/api/hospital/1/doctor/3/patient/PIDiACFkjJyD/reciept/360/updatepatientpaymentstatus
     //RECEIPT
-
-
 
     Route::get('rest/api/{hospitalId}/patient/{patientId}/labtestreceipts', array('as' => 'patient.labtestreceipts', 'uses' => 'DoctorController@getLabTestDetailsForReceipt'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/receiptdetails', array('as' => 'patient.receiptdetails', 'uses' => 'DoctorController@getPatientReceiptDetails'));
@@ -309,9 +305,15 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     //Route::get('rest/api/{hospitalId}/patient/{patientId}/receiptdetails', array('as' => 'patient.receiptdetails', 'uses' => 'DoctorController@getPatientReceiptDetails'));
 
     //NEW BY PRASANTH 24-01-2018//
+
+    //To Display Running Count of the TokenID Based On HospitalID And DoctorID in Doctor Dashboard
+
     Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/tokenid', array('as' => 'patient.tokenid', 'uses' => 'DoctorController@getTokenIdByHospitalIdandDoctorId'));
 
-    Route::get('rest/api/patient/{patientId}/receipt/{receiptId}/appointmentlabel', array('as' => 'patient.tokenid', 'uses' => 'DoctorController@getPatientAppointmentLabel'));
+   // It is to generate patientAppointment Admit Card in frontdesk
+
+    /*NOTE::  (appointmentlabel=patientAppointment Admit Card)*/
+    Route::get('rest/api/patient/{patientId}/receipt/{receiptId}/appointmentlabel', array('as' => 'patient.admitcard', 'uses' => 'DoctorController@getPatientAppointmentLabel'));
 
 
 
@@ -818,6 +820,8 @@ Route::group(['prefix' => 'lab'], function()
         Route::get('{hospitalId}/patient/{patientId}/labtestreceipts', array('as' => 'patient.labtestreceipts', 'uses' => 'LabController@getLabTestDetailsForReceipt'));
 
         Route::post('savelabreceipts', array('as' => 'patient.savelabreceipts', 'uses' => 'LabController@saveLabReceiptDetailsForPatient'));
+
+        //To Generate the TokenID Based On HospitalID And DoctorID
 
         Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/tokenid', array('as' => 'patient.tokenid', 'uses' => 'LabController@getTokenIdByHospitalIdandDoctorId'));
 

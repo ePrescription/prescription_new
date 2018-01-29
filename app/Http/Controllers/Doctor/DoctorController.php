@@ -9295,11 +9295,23 @@ class DoctorController extends Controller
 
         //return $responseJson;
     }
-/*NEW ADDITION */
+
+
+
+
+    /*NEW ADDITION */
 
 
     //RAMANA FRONT Hof start 12-01-2018
 
+
+    /**
+     * To Display patient Lab tests
+     * @param $hid, $patientId
+     * @throws $HospitalException
+     * @return Array|null
+     * @author Ramana
+     */
 
     public function PatientLabDetailsResultsByHospitalForFront($hid, $patientId)
     {
@@ -9329,9 +9341,17 @@ class DoctorController extends Controller
         return view('portal.hospital-patient-labReport', compact('patientExaminations', 'patientDetails'));
 
     }
-    /*
-        * auth:RAMANA
-        * */
+
+    /**
+     * To Update Patient Lab tests fees
+     * @param $hid, $pid, $rid, $totalpaidamount,$paidamount, $paymenttype
+     * @throws $HospitalException
+     * @return true|false
+     * @author Ramana
+     */
+
+
+
     public function updateLabPatientFee($hid, $pid, $rid, $totalpaidamount,$paidamount, $paymenttype)
     {
 
@@ -9366,7 +9386,13 @@ class DoctorController extends Controller
         }
 
     }
-//RAMANA
+    /**
+     * To Update Patient Lab tests fees
+     * @param $hid, $pid, $rid, $totalpaidamount,$paidamount, $paymenttype
+     * @throws $HospitalException
+     * @return true|false
+     * @author Ramana
+     */
     public function PatientLabDetailsResultsByHospitalForDoctor($doctorId, $hid, $patientId)
     {
         $patientDetails = null;
@@ -9396,6 +9422,13 @@ class DoctorController extends Controller
 
     }
 
+    /**
+     * To Display patient Lab Test Based on Date
+     * @param $hid, $patientId, $date
+     * @throws $HospitalException
+     * @return Array|null
+     * @author Ramana
+     */
 
 //RAMANA
     public function PatientLabReportsByHospitalForDoctor($hid, $patientId, $date)
@@ -9430,6 +9463,14 @@ class DoctorController extends Controller
     //Ramana end  12-01-2018
 
     //Ramana Start 19-01-2018
+    /**
+     * To Update patient Appointment Fee Status (Paid/Unpaid)
+     * @param $hid,$did, $pid, $rid
+     * @throws $HospitalException
+     * @return True|false
+     * @author Ramana
+     */
+
 
     public function updatePatientFeeStatus($hid,$did, $pid, $rid)
     {
@@ -9507,6 +9548,14 @@ class DoctorController extends Controller
     //return $jsonResponse;
     return $TokenID;
  }
+
+    /**
+     * To Display the PatientAppointmentAdmitCard in FrontDesk
+     * @param $patientId,$Id
+     * @throws $hospitalException
+     * @return Array|Null
+     * @author Prasanth
+     */
 
     public function getPatientAppointmentLabel($patientId,$Id){
 

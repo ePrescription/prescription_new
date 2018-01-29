@@ -2538,7 +2538,7 @@ class HospitalImpl implements HospitalInterface
         $doctorAppointment->appointment_category = $patientProfileVM->getAppointmentCategory();
         $doctorAppointment->appointment_status_id = $appointmentStatus;
         //BY PRASANTH 24-01-2018 START//
-
+        //we are adding+1 for existing count value for display current TokenID
         $patientTokenId=intval($patientTokenId)+1;
         $doctorAppointment->token_id = $patientTokenId;
         //BY PRASANTH 24-01-2018 END//
@@ -10618,6 +10618,15 @@ class HospitalImpl implements HospitalInterface
 
     }
 
+
+    /**
+     * To display PatientAppointmentAdmitCard in FrontDesk
+     * @param $patientId,$Id
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Prasanth
+     */
+
 public function getPatientAppointmentLabel($patientId,$Id){
     $doctorappointments = null;
 
@@ -10627,12 +10636,10 @@ public function getPatientAppointmentLabel($patientId,$Id){
         $query = DB::table('doctor_appointment as dp')->join('doctor as d', 'd.doctor_id', '=', 'dp.doctor_id');
         $query->join('hospital as h', 'h.hospital_id', '=', 'dp.hospital_id');
         $query->join('patient as p', 'p.patient_id', '=', 'dp.patient_id');
-
         $query->where('dp.patient_id', '=', $patientId);
         $query->where('dp.id', '=', $Id);
         $query->select('d.name', 'd.specialty', 'dp.appointment_date', 'dp.appointment_time as time','dp.token_id',
             'dp.brief_history', 'h.hospital_name', 'h.email', 'h.address as hsaddress', 'h.telephone','p.name as patient_name','p.patient_id as patient_id','p.telephone as telephone','p.gender','p.address')->get();
-
 
         $doctorappointments = $query->first();
 

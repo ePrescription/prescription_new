@@ -1373,7 +1373,7 @@ class LabController extends Controller
     }
 
     /**
-     * Shows hospital,doctors,specialities
+     * Shows hospital,doctors,specialities in lab portal
      * @param $hospitalId
      * @throws $HospitalException
      * @return view->portal.lab-addpatientwithappointment page
@@ -1411,7 +1411,7 @@ class LabController extends Controller
         return view('portal.lab-addpatientwithappointment',compact('patients','doctors','specialties'));
     }
     /**
-     * save patient book appointment
+     * save patient book appointment in lab portal
      * @param PatientProfileWebRequest
      * @throws $HospitalException
      * @return true|false

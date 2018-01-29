@@ -3497,7 +3497,7 @@ class HospitalService {
         }
         catch(Exception $exc)
         {
-            throw new HospitalException(null, ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR, $exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINT_DETAILS_ERROR, $exc);
         }
         return $doctorappointments;
     }
