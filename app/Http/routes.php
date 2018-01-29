@@ -313,7 +313,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
    // It is to generate patientAppointment Admit Card in frontdesk
 
     /*NOTE::  (appointmentlabel=patientAppointment Admit Card)*/
-    Route::get('rest/api/patient/{patientId}/receipt/{receiptId}/appointmentlabel', array('as' => 'patient.admitcard', 'uses' => 'DoctorController@getPatientAppointmentLabel'));
+    Route::get('rest/api/patient/{patientId}/doctorappointmentid/{doctorappointmentid}/appointmentlabel', array('as' => 'patient.admitcard', 'uses' => 'DoctorController@getPatientAppointmentLabel'));
 
 
 

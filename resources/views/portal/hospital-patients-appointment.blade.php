@@ -139,7 +139,7 @@ $profile_menu="0";
                                                     <a href="{{URL::to('/')}}/fronthospital/patients/appointments/{{$patient->appointment_id}}/cancelappointment?appointmentId={{$patient->appointment_id}}" title="Cancel Appointment" onclick="return confirm('Are you sure ?')"><i class="fa fa-times"></i> </a>
                                                     &nbsp;
 
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/patient/{{$patient->patient_id}}/receipt/{{$patient->id}}/appointmentlabel" title="View Patient Appointment Label"><i class="fa fa-print"></i> </a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/patient/{{$patient->patient_id}}/doctorappointmentid/{{$patient->id}}/appointmentlabel" title="View Patient Appointment Label"><i class="fa fa-print"></i> </a>
 
                                                 <!--
 
