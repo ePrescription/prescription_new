@@ -525,6 +525,7 @@ class PharmacyController extends Controller
 
             $prescriptionMailInfo = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SUCCESS));
             $prescriptionMailInfo->setObj("Mail Sent Successfully");
+            $prescriptionMailInfo->sendSuccessResponse();
 
         }
         catch(PharmacyException $pharmacyExc)
