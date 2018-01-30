@@ -36,6 +36,7 @@ use App\prescription\model\entities\LabFeeReceipt;
 use App\prescription\model\entities\LabTestDetails;
 use App\prescription\model\entities\Patient;
 use App\prescription\model\entities\PatientBloodExamination;
+use App\prescription\model\entities\PatientBloodExaminationFees;
 use App\prescription\model\entities\PatientBloodExaminationItems;
 use App\prescription\model\entities\PatientComplaintDetails;
 use App\prescription\model\entities\PatientComplaints;
@@ -8919,6 +8920,8 @@ class HospitalImpl implements HospitalInterface
                         $bloodExamination->bloodexaminationitems()->save($bloodExaminationItems);
                     }
 
+                    //$this
+
                 }
 
                 $this->setPatientLabTests($patientId, $hospitalId);
@@ -8927,19 +8930,24 @@ class HospitalImpl implements HospitalInterface
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
             }
         } catch (QueryException $queryEx) {
-            dd($queryEx);
+            //dd($queryEx);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR, $queryEx);
         } catch (UserNotFoundException $userExc) {
             //dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         } catch (Exception $exc) {
-            dd($exc);
+            //dd($exc);
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_SAVE_ERROR, $exc);
         }
 
         return $status;
+    }
+
+    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM)
+    {
+        $patientBloodExamFees = new PatientBloodExaminationFees();
     }
 
     /**
