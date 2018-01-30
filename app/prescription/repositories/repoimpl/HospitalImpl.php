@@ -1299,7 +1299,7 @@ class HospitalImpl implements HospitalInterface
             $labTestInfo = $labTestQuery->get();
 
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.pid',
-                'pl.labtest_date', 'p.telephone', 'p.email');
+                 'p.telephone', 'p.email');
             $patientQuery->join('patient_labtest as pl', 'pl.patient_id', '=', 'p.patient_id');
             $patientQuery->where('pl.id', '=', $labTestId);
             $patientDetails = $patientQuery->get();
