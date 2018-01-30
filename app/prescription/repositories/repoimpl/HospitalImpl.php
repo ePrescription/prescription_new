@@ -79,6 +79,7 @@ use Numbers_Words;
 use Storage;
 use Carbon\Carbon;
 use Config as CA;
+use Crypt;
 
 //by ramana
 
@@ -8945,9 +8946,11 @@ class HospitalImpl implements HospitalInterface
         return $status;
     }
 
-    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM)
+    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM, $bloodExamination)
     {
         $patientBloodExamFees = new PatientBloodExaminationFees();
+
+
     }
 
     /**
