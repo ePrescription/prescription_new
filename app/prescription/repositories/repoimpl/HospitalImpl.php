@@ -1294,7 +1294,7 @@ class HospitalImpl implements HospitalInterface
             $query->where('pp.id', '=', $prescriptionId);*/
 
             $labTestQuery = DB::table('patient_labtest as pl')->select('pl.id as labtestId', 'pl.unique_id as LTID',
-                'pl.brief_description', 'pl.labtest_date');
+                'pl.brief_description');
             $labTestQuery->where('pl.id', '=', $labTestId);
             $labTestInfo = $labTestQuery->get();
 
@@ -1318,7 +1318,7 @@ class HospitalImpl implements HospitalInterface
                 'l.id', DB::raw('TRIM(UPPER(l.test_name)) as test_name'),
                 DB::raw('TRIM(UPPER(l.test_name)) as test_category'),
                 //'l.test_category',
-                'ld.brief_description', 'pl.labtest_date', 'ld.labtest_report');
+                'ld.brief_description', 'ld.labtest_report');
             $query->join('patient_labtest as pl', 'pl.id', '=', 'ld.patient_labtest_id');
             $query->join('labtest as l', 'l.id', '=', 'ld.labtest_id');
             $query->where('pl.id', '=', $labTestId);
