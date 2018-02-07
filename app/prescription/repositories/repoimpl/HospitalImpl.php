@@ -1934,14 +1934,17 @@ class HospitalImpl implements HospitalInterface
             //dd($currentDate);
             //$currentDate = '2017-09-20';
 
+            //DB::connection()->enableQueryLog();
             //dd($currentDate);
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $query->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             if (!is_null($doctorId)) {
                 $query->where('da.doctor_id', '=', $doctorId);
             }
-            $query->whereDate('da.appointment_date', '>=', $fromDate);
-            $query->whereDate('da.appointment_date', '<=', $toDate);
+            //$query->whereDate('da.appointment_date', '>=', $fromDate);
+            $query->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$query->whereDate('da.appointment_date', '<=', $toDate);
+            $query->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $query->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_OPEN);
             $query->whereNotNull('da.appointment_date');
             $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
@@ -1952,20 +1955,25 @@ class HospitalImpl implements HospitalInterface
             //DB::connection()->enableQueryLog();
             //$appointments = $query->get();
             //$query = DB::getQueryLog();
-            $lastQuery = end($query);
+            //$lastQuery = end($query);
             //dd($query);
 
             //dd($query->toSql());
 
             $openAppointments = $query->get();
+            //$query = DB::getQueryLog();
+            //dd($query);
+
 
             $transferredQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $transferredQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             if (!is_null($doctorId)) {
                 $transferredQuery->where('da.doctor_id', '=', $doctorId);
             }
-            $transferredQuery->whereDate('da.appointment_date', '>=', $fromDate);
-            $transferredQuery->whereDate('da.appointment_date', '<=', $toDate);
+            //$transferredQuery->whereDate('da.appointment_date', '>=', $fromDate);
+            $transferredQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$transferredQuery->whereDate('da.appointment_date', '<=', $toDate);
+            $transferredQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $transferredQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_TRANSFERRED);
             $transferredQuery->whereNotNull('da.appointment_date');
             $transferredQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
@@ -1980,8 +1988,10 @@ class HospitalImpl implements HospitalInterface
             if (!is_null($doctorId)) {
                 $cancelledQuery->where('da.doctor_id', '=', $doctorId);
             }
-            $cancelledQuery->whereDate('da.appointment_date', '>=', $fromDate);
-            $cancelledQuery->whereDate('da.appointment_date', '<=', $toDate);
+            //$cancelledQuery->whereDate('da.appointment_date', '>=', $fromDate);
+            $cancelledQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$cancelledQuery->whereDate('da.appointment_date', '<=', $toDate);
+            $cancelledQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $cancelledQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_CANCELLED);
             $cancelledQuery->whereNotNull('da.appointment_date');
             $cancelledQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');

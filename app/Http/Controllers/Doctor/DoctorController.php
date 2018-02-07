@@ -26,6 +26,7 @@ use App\Http\Requests\DoctorLoginRequest;
 use App\Http\Requests\PatientProfileRequest;
 use App\Http\Requests\EditPatientProfileRequest;
 use App\Http\Requests\PatientProfileWebRequest;
+use App\Http\Requests\FutureAppointmentRequest;
 use App\Http\Requests\NewAppointmentRequest;
 use App\Http\Requests\FeeReceiptRequest;
 
@@ -7410,7 +7411,7 @@ class DoctorController extends Controller
      * @author Baskar
      */
 
-    public function getFutureAppointmentsForDashboard($hospitalId, Request $appointmentRequest)
+    public function getFutureAppointmentsForDashboard($hospitalId, FutureAppointmentRequest $appointmentRequest)
     {
         $futureAppointments = null;
         //dd($hospitalId.'--'.$doctorId);
