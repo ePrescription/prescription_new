@@ -12,4 +12,9 @@ class PatientBloodExamination extends Model
     {
         return $this->hasMany('App\prescription\model\entities\PatientBloodExaminationItems', 'patient_blood_examination_id');
     }
+
+    public function bloodexaminationfees()
+    {
+        return $this->hasMany('App\prescription\model\entities\PatientBloodExaminationFees', 'patient_blood_examination_id');
+    }
 }

@@ -6248,6 +6248,27 @@ class HospitalImpl implements HospitalInterface
                 'be.examination_name', 'pbe.examination_date', 'pbei.fees',
                 'be1.id as parent_examination_id', 'be1.examination_name as parent_examination_name');
 
+            /*$bloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $bloodExamQuery->join('patient_blood_examination_fees as pbef', 'pbef.patient_blood_examination_id', '=', 'pbe.id');
+            $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbef.blood_examination_id');
+            $bloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
+            $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
+            $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
+            //$bloodExamQuery->where('pbei.is_value_set', '=', 1);
+            //$bloodExamQuery->where('be.id', '=', 'be1.parent_id');
+            $bloodExamQuery->where(function ($query) {
+                $query->where('pbef.is_fees_paid', '=', 0);
+                $query->orWhereNull('pbef.is_fees_paid');
+            });
+            //$bloodExamQuery->groupBy('be1.parent_id');
+            //$bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
+            if (!is_null($receiptDate)) {
+                $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
+            }
+            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'pbef.id as examination_item_id',
+                'be.examination_name', 'pbe.examination_date', 'pbef.fees',
+                'be1.id as parent_examination_id', 'be1.examination_name as parent_examination_name');*/
+
             //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
             //$query = DB::getQueryLog();
@@ -8921,7 +8942,14 @@ class HospitalImpl implements HospitalInterface
                         $bloodExamination->bloodexaminationitems()->save($bloodExaminationItems);
                     }
 
-                    //$this
+                    /*$patientBloodExamFees = new PatientBloodExaminationFees();
+                    $patientBloodExamFees->blood_examination_id = $examinationId;
+                    $patientBloodExamFees->created_by = $patientBloodVM->getCreatedBy();
+                    $patientBloodExamFees->modified_by = $patientBloodVM->getUpdatedBy();
+                    $patientBloodExamFees->created_at = $patientBloodVM->getCreatedAt();
+                    $patientBloodExamFees->updated_at = $patientBloodVM->getUpdatedAt();
+                    $bloodExamination->bloodexaminationfees()->save($patientBloodExamFees);*/
+
 
                 }
 
@@ -8946,9 +8974,10 @@ class HospitalImpl implements HospitalInterface
         return $status;
     }
 
-    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM, $bloodExamination)
+    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM, $bloodExamination, $examination)
     {
         $patientBloodExamFees = new PatientBloodExaminationFees();
+        //$patientBloodExamFees->
 
 
     }
@@ -9586,7 +9615,11 @@ class HospitalImpl implements HospitalInterface
                                 $updateValues = array('pbei.fees' => $bloodTest['fees'], 'pbei.is_fees_paid' => 1,
                                     'pbei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_blood_examination_item as pbei')->where('pbei.id', '=', $bloodTest['item_id']);
-                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+
+                                /*$updateValues = array('pbef.fees' => $bloodTest['fees'], 'pbef.is_fees_paid' => 1,
+                                    'pbef.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_blood_examination_fees as pbef')->where('pbef.id', '=', $bloodTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));*/
                                 $query->update($updateValues);
                             }
 
