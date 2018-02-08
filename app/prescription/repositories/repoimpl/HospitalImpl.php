@@ -783,7 +783,7 @@ class HospitalImpl implements HospitalInterface
                 });*/
                 $query->where('usr.delete_status', '=', 1);
                 $query->where('hp.hospital_id', $hospitalId);
-                $query->where('p.name', 'LIKE', '%' . $keyword . '%');
+                $query->where('p.name', 'LIKE', '%' . $keyword . '%' )->orWhere('p.patient_id','LIKE', '%' . $keyword . '%')->orWhere('p.pid','LIKE', '%' . $keyword . '%');
 
                 //dd($query->toSql());
 
