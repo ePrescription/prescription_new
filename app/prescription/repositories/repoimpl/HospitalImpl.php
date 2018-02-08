@@ -29,6 +29,7 @@ use App\Http\ViewModels\PatientScanViewModel;
 use App\Http\ViewModels\PatientSymptomsViewModel;
 use App\Http\ViewModels\PatientUrineExaminationViewModel;
 use App\Http\ViewModels\PatientXRayViewModel;
+use App\prescription\model\entities\Doctor;
 use App\prescription\model\entities\DoctorAppointments;
 use App\prescription\model\entities\DoctorReferral;
 use App\prescription\model\entities\FeeReceipt;
@@ -10294,6 +10295,7 @@ class HospitalImpl implements HospitalInterface
     //NEWLY ADDED RAMANA Start 12-01-2018
     public function getExaminationDatesByDate($patientId, $hospitalId,$date)
     {
+        $doctorinfo=[];
         try
         {
             $patientUser = User::find($patientId);
@@ -10313,7 +10315,7 @@ class HospitalImpl implements HospitalInterface
             $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $latestBloodExamQuery->where('pbei.is_value_set', '=', 1);
             $latestBloodExamQuery->select('pbe.id as examinationId', 'pbei.id as examinationItemId', 'pbe.patient_id',
-                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.test_readings','be.default_normal_values','be.is_parent','be1.examination_name AS parent_examination_name','be.units');
+                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.test_readings','be.default_normal_values','be.is_parent','be1.examination_name AS parent_examination_name','be.units','pbe.doctor_id');
             $bloodExaminations = $latestBloodExamQuery->get();
 
 
@@ -10333,7 +10335,7 @@ class HospitalImpl implements HospitalInterface
             $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
             $latestUrineExamQuery->where('puei.is_value_set', '=', 1);
             $latestUrineExamQuery->select('pue.id as examinationId', 'puei.id as examinationItemId',
-                'pue.patient_id', 'ue.examination_name', 'pue.examination_date','puei.test_readings','ue.normal_default_values','ue.is_parent','ue1.examination_name as parent_examination_name');
+                'pue.patient_id', 'ue.examination_name', 'pue.examination_date','puei.test_readings','ue.normal_default_values','ue.is_parent','ue1.examination_name as parent_examination_name','pue.doctor_id');
             $latestUrineExaminations = $latestUrineExamQuery->get();
 
 
@@ -10346,12 +10348,12 @@ class HospitalImpl implements HospitalInterface
             $latestMotionExamQuery->where('pmei.is_value_set', '=', 1);
 
             $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.id as examinationItemId',
-                'pme.patient_id', 'me.examination_name', 'pme.examination_date','pmei.test_readings');
+                'pme.patient_id', 'me.examination_name', 'pme.examination_date','pmei.test_readings','pme.doctor_id');
             $latestMotionExaminations = $latestMotionExamQuery->get();
 
 
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
-                'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
+                'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address','p.gender','p.age');
             $patientQuery->where('p.patient_id', '=', $patientId);
             $patientDetails = $patientQuery->first();
 
@@ -10362,12 +10364,29 @@ class HospitalImpl implements HospitalInterface
             $hospitalQuery->where('h.hospital_id', '=', $hospitalId);
             $hospitalDetails = $hospitalQuery->first();
 
+                       $D=count($bloodExaminations)>0?$bloodExaminations[0]->doctor_id:null;
+                       $U=count($latestUrineExaminations)>0?$latestUrineExaminations[0]->doctor_id:null;
+                       $M=count($latestMotionExaminations)>0?$latestMotionExaminations[0]->doctor_id:null;
+                       $doctor_id=null;
+                        if($D!=null)$doctor_id=$D;
+                        if($U!=null)$doctor_id=$U;
+                        if($M!=null)$doctor_id=$M;
+                        if($doctor_id!=null){
+                            $doctorinfo=Doctor::find($doctor_id);
+
+                          //  dd($doctorinfo);
+                        }
+
+           // dd($doctorinfo);
+
+
 
             $examinationDates['patientDetails'] = $patientDetails;
             $examinationDates['recentBloodTests'] = $bloodExaminations;
             $examinationDates['hospitalDetails'] = $hospitalDetails;
             $examinationDates['recentUrineExaminations'] = $latestUrineExaminations;
             $examinationDates['recentMotionExaminations'] = $latestMotionExaminations;
+            $examinationDates['doctorDetails']=$doctorinfo;
 
 
 
