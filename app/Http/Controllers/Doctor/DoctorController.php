@@ -9443,7 +9443,7 @@ class DoctorController extends Controller
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             // $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
             $patientExaminations = HospitalServiceFacade::getExaminationDatesByDate($patientId, $hid, $date);
-            //dd($patientExaminations);
+         //   dd($patientExaminations);
         } catch (HospitalException $hospitalExc) {
             //dd($hospitalExc);
             //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));

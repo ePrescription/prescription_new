@@ -420,7 +420,7 @@ $profile_menu="0";
                     // alert(data)
                     var result=data.split("separate");
                     $("#patientblooddiv1").html(result[1]);
-                    $("#DivIdToPrint").html(result[0]+result[1]);
+                    $("#DivIdToPrint").html("<br><br><br><br>"+result[0]+result[1]);
 
 
 

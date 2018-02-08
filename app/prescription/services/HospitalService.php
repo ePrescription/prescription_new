@@ -3114,7 +3114,7 @@ class HospitalService {
 
         try
         {
-            DB::transaction(function() use ($patientUltraSoundVM, &$status)
+            DB::transaction(function() use ($patientUltraSoundVM, & $status)
             {
                 //$status = $this->hospitalRepo->savePatientUltraSoundTests($patientUltraSoundVM);
                 $status = $this->hospitalRepo->savePatientUltraSoundTestsNew($patientUltraSoundVM);
