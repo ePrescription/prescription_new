@@ -1934,14 +1934,17 @@ class HospitalImpl implements HospitalInterface
             //dd($currentDate);
             //$currentDate = '2017-09-20';
 
+            //DB::connection()->enableQueryLog();
             //dd($currentDate);
             $query = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $query->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             if (!is_null($doctorId)) {
                 $query->where('da.doctor_id', '=', $doctorId);
             }
-            $query->whereDate('da.appointment_date', '>=', $fromDate);
-            $query->whereDate('da.appointment_date', '<=', $toDate);
+            //$query->whereDate('da.appointment_date', '>=', $fromDate);
+            $query->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$query->whereDate('da.appointment_date', '<=', $toDate);
+            $query->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $query->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_OPEN);
             $query->whereNotNull('da.appointment_date');
             $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
@@ -1952,20 +1955,25 @@ class HospitalImpl implements HospitalInterface
             //DB::connection()->enableQueryLog();
             //$appointments = $query->get();
             //$query = DB::getQueryLog();
-            $lastQuery = end($query);
+            //$lastQuery = end($query);
             //dd($query);
 
             //dd($query->toSql());
 
             $openAppointments = $query->get();
+            //$query = DB::getQueryLog();
+            //dd($query);
+
 
             $transferredQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $transferredQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             if (!is_null($doctorId)) {
                 $transferredQuery->where('da.doctor_id', '=', $doctorId);
             }
-            $transferredQuery->whereDate('da.appointment_date', '>=', $fromDate);
-            $transferredQuery->whereDate('da.appointment_date', '<=', $toDate);
+            //$transferredQuery->whereDate('da.appointment_date', '>=', $fromDate);
+            $transferredQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$transferredQuery->whereDate('da.appointment_date', '<=', $toDate);
+            $transferredQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $transferredQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_TRANSFERRED);
             $transferredQuery->whereNotNull('da.appointment_date');
             $transferredQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
@@ -1980,8 +1988,10 @@ class HospitalImpl implements HospitalInterface
             if (!is_null($doctorId)) {
                 $cancelledQuery->where('da.doctor_id', '=', $doctorId);
             }
-            $cancelledQuery->whereDate('da.appointment_date', '>=', $fromDate);
-            $cancelledQuery->whereDate('da.appointment_date', '<=', $toDate);
+            //$cancelledQuery->whereDate('da.appointment_date', '>=', $fromDate);
+            $cancelledQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$cancelledQuery->whereDate('da.appointment_date', '<=', $toDate);
+            $cancelledQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $cancelledQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_CANCELLED);
             $cancelledQuery->whereNotNull('da.appointment_date');
             $cancelledQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
@@ -6248,6 +6258,27 @@ class HospitalImpl implements HospitalInterface
                 'be.examination_name', 'pbe.examination_date', 'pbei.fees',
                 'be1.id as parent_examination_id', 'be1.examination_name as parent_examination_name');
 
+            /*$bloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $bloodExamQuery->join('patient_blood_examination_fees as pbef', 'pbef.patient_blood_examination_id', '=', 'pbe.id');
+            $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbef.blood_examination_id');
+            $bloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
+            $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
+            $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
+            //$bloodExamQuery->where('pbei.is_value_set', '=', 1);
+            //$bloodExamQuery->where('be.id', '=', 'be1.parent_id');
+            $bloodExamQuery->where(function ($query) {
+                $query->where('pbef.is_fees_paid', '=', 0);
+                $query->orWhereNull('pbef.is_fees_paid');
+            });
+            //$bloodExamQuery->groupBy('be1.parent_id');
+            //$bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
+            if (!is_null($receiptDate)) {
+                $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
+            }
+            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'pbef.id as examination_item_id',
+                'be.examination_name', 'pbe.examination_date', 'pbef.fees',
+                'be1.id as parent_examination_id', 'be1.examination_name as parent_examination_name');*/
+
             //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
             //$query = DB::getQueryLog();
@@ -8921,7 +8952,14 @@ class HospitalImpl implements HospitalInterface
                         $bloodExamination->bloodexaminationitems()->save($bloodExaminationItems);
                     }
 
-                    //$this
+                    /*$patientBloodExamFees = new PatientBloodExaminationFees();
+                    $patientBloodExamFees->blood_examination_id = $examinationId;
+                    $patientBloodExamFees->created_by = $patientBloodVM->getCreatedBy();
+                    $patientBloodExamFees->modified_by = $patientBloodVM->getUpdatedBy();
+                    $patientBloodExamFees->created_at = $patientBloodVM->getCreatedAt();
+                    $patientBloodExamFees->updated_at = $patientBloodVM->getUpdatedAt();
+                    $bloodExamination->bloodexaminationfees()->save($patientBloodExamFees);*/
+
 
                 }
 
@@ -8946,9 +8984,10 @@ class HospitalImpl implements HospitalInterface
         return $status;
     }
 
-    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM, $bloodExamination)
+    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM, $bloodExamination, $examination)
     {
         $patientBloodExamFees = new PatientBloodExaminationFees();
+        //$patientBloodExamFees->
 
 
     }
@@ -9586,7 +9625,11 @@ class HospitalImpl implements HospitalInterface
                                 $updateValues = array('pbei.fees' => $bloodTest['fees'], 'pbei.is_fees_paid' => 1,
                                     'pbei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_blood_examination_item as pbei')->where('pbei.id', '=', $bloodTest['item_id']);
-                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+
+                                /*$updateValues = array('pbef.fees' => $bloodTest['fees'], 'pbef.is_fees_paid' => 1,
+                                    'pbef.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_blood_examination_fees as pbef')->where('pbef.id', '=', $bloodTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));*/
                                 $query->update($updateValues);
                             }
 
