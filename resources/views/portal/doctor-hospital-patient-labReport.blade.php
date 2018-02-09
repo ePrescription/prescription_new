@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-12">
-                    <label class="col-sm-3 control-label" style="width:30%;float:left;font-size: 12px; font-weight: bold; ">Address</label>
+                    <label class="col-sm-3 control-label" style="width:30%;float:left;font-size: 12px; font-weight: bold; ">City/Town</label>
                     <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: bold;">
                         {{$patientExaminations['patientDetails']->address==""? "----":$patientExaminations['patientDetails']->address }}
                     </div>
@@ -20,15 +20,14 @@
                 <div class="form-group col-md-12">
                     <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Ref.DR</label>
                     <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: bold; ">
-                        {{count($patientExaminations['doctorDetails'])>0?$examinationDates['doctorDetails']->name:"---"}}
+                        {{count($patientExaminations['doctorDetails'])>0?$patientExaminations['doctorDetails']->name:"---"}}
                     </div>
                 </div>
 
-
                 <div class="form-group col-md-12">
-                    <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Address</label>
+                    <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Receipt ID</label>
                     <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: bold; ">
-                        {{$patientExaminations['hospitalDetails']->hospital_name}}
+                        {{count($patientExaminations['recieptId'])>0?$patientExaminations['recieptId']:"---"}}
                     </div>
                 </div>
                 <div class="form-group col-md-12">
@@ -67,14 +66,14 @@
                 <div class="form-group col-md-12">
                     <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Sample No</label>
                     <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: bold;">
-                        <b>-t-</b>
+                        {{"----"}}
 
                     </div>
                 </div>
                 <div class="form-group col-md-12">
                     <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Specimen</label>
                     <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: bold;">
-                        <b>-t-</b>
+                        {{"----"}}
                     </div>
                 </div>
 
@@ -138,7 +137,7 @@
         @endif
         @if(count($patientExaminations['recentMotionExaminations'])>0)
 
-            <div class="form-group" style="background-color: #ffff99; color: black;">
+            <div class="form-group" style="color: black;">
                 <label class="col-sm-12 control-label">Motion Test
                     - {{$patientExaminations['recentMotionExaminations'][0]->examination_date}}</label>
             </div>
@@ -162,7 +161,7 @@
         @endif
         @if(count($patientExaminations['recentUrineExaminations'])>0)
 
-            <div class="form-group" style="background-color: #ffff99; color: black;">
+            <div class="form-group" style="color: black;">
                 <label class="col-sm-12 control-label">Urine Test
                     - {{$patientExaminations['recentUrineExaminations'][0]->examination_date}}</label>
             </div>
@@ -208,4 +207,6 @@
 
 
     </div>
+    separate
+    {{$patientExaminations['recieptStatus']}}
 

@@ -419,8 +419,15 @@ $profile_menu="0";
                 success: function (data) {
                     // alert(data)
                     var result=data.split("separate");
+                    if(result[2].trim()=='paid'){
+                        document.getElementById("btn").style.display = "block";
+
+                    }else{
+                        document.getElementById("btn").style.display = "none";
+                    }
+
                     $("#patientblooddiv1").html(result[1]);
-                    $("#DivIdToPrint").html(result[0]+result[1]);
+                    $("#DivIdToPrint").html("<br><br><br><br>"+result[0]+result[1]);
 
 
 
