@@ -978,17 +978,19 @@ class HospitalImpl implements HospitalInterface
 
     public function cancelAppointment($appointmentId)
     {
-        $status = true;
+        $status = false;
 
         try {
             $doctorAppointment = DoctorAppointments::find($appointmentId);
 
             if (!is_null($doctorAppointment)) {
+                $status = true;
                 $doctorAppointment->appointment_status_id = AppointmentType::APPOINTMENT_CANCELLED;
                 //$doctorAppointment->created_at = date("Y-m-d H:i:s");
                 $doctorAppointment->updated_at = date("Y-m-d H:i:s");
                 $doctorAppointment->save();
             }
+
         } catch (QueryException $queryEx) {
             $status = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_CANCEL_APPOINTMENT_ERROR, $queryEx);
@@ -1010,7 +1012,7 @@ class HospitalImpl implements HospitalInterface
 
     public function transferAppointment($appointmentId, $doctorId)
     {
-        $status = true;
+        $status = false;
 
         try {
             //dd($doctorId);
@@ -1041,12 +1043,14 @@ class HospitalImpl implements HospitalInterface
             //dd($doctorAppointment);
 
             if (!is_null($doctorAppointment)) {
+                $status = true;
                 $doctorAppointment->doctor_id = $doctorId;
                 $doctorAppointment->appointment_status_id = AppointmentType::APPOINTMENT_TRANSFERRED;
                 //$doctorAppointment->created_at = date("Y-m-d H:i:s");
                 $doctorAppointment->updated_at = date("Y-m-d H:i:s");
                 $doctorAppointment->save();
             }
+
         } catch (QueryException $queryEx) {
             //dd($queryEx);
             $status = false;
