@@ -33,6 +33,7 @@ use App\prescription\model\entities\Doctor;
 use App\prescription\model\entities\DoctorAppointments;
 use App\prescription\model\entities\DoctorReferral;
 use App\prescription\model\entities\FeeReceipt;
+use App\prescription\model\entities\HospitalPatient;
 use App\prescription\model\entities\LabFeeReceipt;
 use App\prescription\model\entities\LabTestDetails;
 use App\prescription\model\entities\Patient;
@@ -2264,8 +2265,9 @@ class HospitalImpl implements HospitalInterface
             $patient->address = $patientProfileVM->getAddress();
             $patient->city = $patientProfileVM->getCity();
             $patient->country = $patientProfileVM->getCountry();
-            $pid = $this->generateRandomString();
-            $patient->pid = 'PID' . $pid;
+            /*Generated For BikKina Specific request*/
+            $pid = $this->generatePID($hospitalId);
+            $patient->pid = 'PID'.date('Ym') . $pid;
             //$patient->pid = 'PID'.md5(uniqid(rand()));
             $patient->telephone = $patientProfileVM->getTelephone();
             $patient->email = $patientProfileVM->getEmail();
@@ -2367,8 +2369,10 @@ class HospitalImpl implements HospitalInterface
                 $user = $this->registerNewPatient($patientProfileVM);
                 $this->attachPatientRole($user);
                 $patient = new Patient();
-                $pid = $this->generateRandomString();
-                $patient->pid = 'PID' . $pid;
+
+                /*Generated For BikKina Specific request*/
+                $pid = $this->generatePID($hospitalId);
+                $patient->pid = 'PID'.date('Ym') . $pid;
                 //$patient->pid = 'PID'.crc32(uniqid(rand()));
                 $patient->email = $patientProfileVM->getEmail();
 
@@ -10289,7 +10293,32 @@ class HospitalImpl implements HospitalInterface
         }
         return $randomString;
     }
+    /*2018-02-09 By Prasanth*/
+    /*Note: we are generating PID based on Current Month and Year of existed patient Count
+      and we are setting 0001 when New month start
+    */
+    private function generatePID($hospitalId) {
+        $count = 0;
 
+        $current_month = date('m');
+        $current_year = date('Y');
+
+       $count=DB::table('hospital_patient')->whereMonth('created_at','=',$current_month)->whereYear('created_at','=',$current_year)->where('hospital_id','=',$hospitalId)->select(DB::raw('count(patient_id) as count'))->get();
+       //dd($count[0]->count);
+        $count=intval($count[0]->count)+1;
+       $length=strlen($count);
+       switch ($length){
+           case 1: $count="000".$count;
+           break;
+           case 2: $count="00".$count;
+               break;
+           case 3: $count="0".$count;
+               break;
+           default :$count;
+
+       }
+        return $count;
+    }
     /*NEW ADDITION RAMANA*/
 
     //NEWLY ADDED RAMANA Start 12-01-2018
