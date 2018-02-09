@@ -2816,7 +2816,6 @@ class HospitalImpl implements HospitalInterface
     }
 
 
-
     public function getProfile($hospitalId)
     {
         $hospitalProfile = null;
@@ -6249,6 +6248,27 @@ class HospitalImpl implements HospitalInterface
                 'be.examination_name', 'pbe.examination_date', 'pbei.fees',
                 'be1.id as parent_examination_id', 'be1.examination_name as parent_examination_name');
 
+            /*$bloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $bloodExamQuery->join('patient_blood_examination_fees as pbef', 'pbef.patient_blood_examination_id', '=', 'pbe.id');
+            $bloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbef.blood_examination_id');
+            $bloodExamQuery->join('blood_examination as be1', 'be1.id', '=', 'be.parent_id');
+            $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
+            $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
+            //$bloodExamQuery->where('pbei.is_value_set', '=', 1);
+            //$bloodExamQuery->where('be.id', '=', 'be1.parent_id');
+            $bloodExamQuery->where(function ($query) {
+                $query->where('pbef.is_fees_paid', '=', 0);
+                $query->orWhereNull('pbef.is_fees_paid');
+            });
+            //$bloodExamQuery->groupBy('be1.parent_id');
+            //$bloodExamQuery->where('pbe.is_fees_paid', '=', 0);
+            if (!is_null($receiptDate)) {
+                $bloodExamQuery->whereDate('pbe.created_at', '=', $receiptDate);
+            }
+            $bloodExamQuery->select('pbe.id', 'pbe.patient_id', 'pbe.hospital_id', 'pbef.id as examination_item_id',
+                'be.examination_name', 'pbe.examination_date', 'pbef.fees',
+                'be1.id as parent_examination_id', 'be1.examination_name as parent_examination_name');*/
+
             //dd($bloodExamQuery->toSql());
             $bloodExaminations = $bloodExamQuery->get();
             //$query = DB::getQueryLog();
@@ -8922,7 +8942,14 @@ class HospitalImpl implements HospitalInterface
                         $bloodExamination->bloodexaminationitems()->save($bloodExaminationItems);
                     }
 
-                    //$this
+                    /*$patientBloodExamFees = new PatientBloodExaminationFees();
+                    $patientBloodExamFees->blood_examination_id = $examinationId;
+                    $patientBloodExamFees->created_by = $patientBloodVM->getCreatedBy();
+                    $patientBloodExamFees->modified_by = $patientBloodVM->getUpdatedBy();
+                    $patientBloodExamFees->created_at = $patientBloodVM->getCreatedAt();
+                    $patientBloodExamFees->updated_at = $patientBloodVM->getUpdatedAt();
+                    $bloodExamination->bloodexaminationfees()->save($patientBloodExamFees);*/
+
 
                 }
 
@@ -8947,9 +8974,10 @@ class HospitalImpl implements HospitalInterface
         return $status;
     }
 
-    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM, $bloodExamination)
+    private function savePatientBloodTestsFees(PatientUrineExaminationViewModel $patientBloodVM, $bloodExamination, $examination)
     {
         $patientBloodExamFees = new PatientBloodExaminationFees();
+        //$patientBloodExamFees->
 
 
     }
@@ -9587,7 +9615,11 @@ class HospitalImpl implements HospitalInterface
                                 $updateValues = array('pbei.fees' => $bloodTest['fees'], 'pbei.is_fees_paid' => 1,
                                     'pbei.updated_at' => $labReceiptsVM->getUpdatedAt());
                                 $query = DB::table('patient_blood_examination_item as pbei')->where('pbei.id', '=', $bloodTest['item_id']);
-                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));
+
+                                /*$updateValues = array('pbef.fees' => $bloodTest['fees'], 'pbef.is_fees_paid' => 1,
+                                    'pbef.updated_at' => $labReceiptsVM->getUpdatedAt());
+                                $query = DB::table('patient_blood_examination_fees as pbef')->where('pbef.id', '=', $bloodTest['item_id']);
+                                //$query->update(array('pbe.fees' => $bloodTest['fees'], 'pbe.is_fees_paid' => 1));*/
                                 $query->update($updateValues);
                             }
 
@@ -10246,7 +10278,32 @@ class HospitalImpl implements HospitalInterface
         }
         return $randomString;
     }
+    /*2018-02-09 By Prasanth*/
+    /*Note: we are generating PID based on Current Month and Year of existed patient Count
+      and we are setting 0001 when New month start
+    */
+    private function generatePID($hospitalId) {
+        $count = 0;
 
+        $current_month = date('m');
+        $current_year = date('Y');
+
+       $count=DB::table('hospital_patient')->whereMonth('created_at','=',$current_month)->whereYear('created_at','=',$current_year)->where('hospital_id','=',$hospitalId)->select(DB::raw('count(patient_id) as count'))->get();
+       //dd($count[0]->count);
+        $count=intval($count[0]->count)+1;
+       $length=strlen($count);
+       switch ($length){
+           case 1: $count="000".$count;
+           break;
+           case 2: $count="00".$count;
+               break;
+           case 3: $count="0".$count;
+               break;
+           default :$count;
+
+       }
+        return $count;
+    }
     /*NEW ADDITION RAMANA*/
 
     //NEWLY ADDED RAMANA Start 12-01-2018
@@ -10272,7 +10329,7 @@ class HospitalImpl implements HospitalInterface
             $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $latestBloodExamQuery->where('pbei.is_value_set', '=', 1);
             $latestBloodExamQuery->select('pbe.id as examinationId', 'pbei.id as examinationItemId', 'pbe.patient_id',
-                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.test_readings','be.default_normal_values','be.is_parent','be1.examination_name AS parent_examination_name','be.units','pbe.doctor_id');
+                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.test_readings','be.default_normal_values','be.is_parent','be1.examination_name AS parent_examination_name','be.units','pbe.doctor_id','pbe.fee_receipt_id');
             $bloodExaminations = $latestBloodExamQuery->get();
 
 
@@ -10292,7 +10349,7 @@ class HospitalImpl implements HospitalInterface
             $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
             $latestUrineExamQuery->where('puei.is_value_set', '=', 1);
             $latestUrineExamQuery->select('pue.id as examinationId', 'puei.id as examinationItemId',
-                'pue.patient_id', 'ue.examination_name', 'pue.examination_date','puei.test_readings','ue.normal_default_values','ue.is_parent','ue1.examination_name as parent_examination_name','pue.doctor_id');
+                'pue.patient_id', 'ue.examination_name', 'pue.examination_date','puei.test_readings','ue.normal_default_values','ue.is_parent','ue1.examination_name as parent_examination_name','pue.doctor_id','pue.fee_receipt_id');
             $latestUrineExaminations = $latestUrineExamQuery->get();
 
 
@@ -10305,7 +10362,7 @@ class HospitalImpl implements HospitalInterface
             $latestMotionExamQuery->where('pmei.is_value_set', '=', 1);
 
             $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.id as examinationItemId',
-                'pme.patient_id', 'me.examination_name', 'pme.examination_date','pmei.test_readings','pme.doctor_id');
+                'pme.patient_id', 'me.examination_name', 'pme.examination_date','pmei.test_readings','pme.doctor_id','pme.fee_receipt_id');
             $latestMotionExaminations = $latestMotionExamQuery->get();
 
 
@@ -10324,6 +10381,18 @@ class HospitalImpl implements HospitalInterface
             $D=count($bloodExaminations)>0?$bloodExaminations[0]->doctor_id:null;
             $U=count($latestUrineExaminations)>0?$latestUrineExaminations[0]->doctor_id:null;
             $M=count($latestMotionExaminations)>0?$latestMotionExaminations[0]->doctor_id:null;
+
+
+            $DID=count($bloodExaminations)>0?$bloodExaminations[0]->fee_receipt_id:null;
+            $UID=count($latestUrineExaminations)>0?$latestUrineExaminations[0]->fee_receipt_id:null;
+            $MID=count($latestMotionExaminations)>0?$latestMotionExaminations[0]->fee_receipt_id:null;
+
+            $receiptID=null;
+            if($DID!=null)$receiptID=$DID;
+            if($UID!=null)$receiptID=$UID;
+            if($MID!=null)$receiptID=$MID;
+
+
             $doctor_id=null;
             if($D!=null)$doctor_id=$D;
             if($U!=null)$doctor_id=$U;
@@ -10333,11 +10402,20 @@ class HospitalImpl implements HospitalInterface
 
                 //  dd($doctorinfo);
             }
+            $receiptStatus="notpaid";
+            if($receiptID!=null){
+                $LabDetails=LabFeeReceipt::find($receiptID);
+
+                $receiptStatus=(($LabDetails->total_fees-$LabDetails->paid_amount)==0)?"paid":"notpaid";
+
+
+                //  dd($doctorinfo);
+            }
 
             // dd($doctorinfo);
 
-
-
+            $examinationDates['recieptId'] = $receiptID;
+            $examinationDates['recieptStatus'] = $receiptStatus;
             $examinationDates['patientDetails'] = $patientDetails;
             $examinationDates['recentBloodTests'] = $bloodExaminations;
             $examinationDates['hospitalDetails'] = $hospitalDetails;
