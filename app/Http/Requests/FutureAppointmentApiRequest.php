@@ -26,7 +26,7 @@ class FutureAppointmentApiRequest extends BasePrescriptionRequest
         $rules = [];
 
         //$rules['fromDate'] = 'required | after:today';
-        $rules['fromDate'] = 'required';
+        //$rules['fromDate'] = 'required';
         $rules['toDate'] = 'required | after:fromDate';
 
         return $rules;

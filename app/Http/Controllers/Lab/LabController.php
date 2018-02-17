@@ -532,8 +532,9 @@ class LabController extends Controller
                 $m->to($to)->subject($subject);
             });
 
-            $labMailInfo = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::LAB_DETAILS_SUCCESS));
+            $labMailInfo = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::LAB_DETAILS_SUCCESS));
             $labMailInfo->setObj("Mail Sent Successfully");
+            $labMailInfo->sendSuccessResponse();
         }
         catch(LabException $labExc)
         {

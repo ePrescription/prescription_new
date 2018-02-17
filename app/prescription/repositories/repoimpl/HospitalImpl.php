@@ -1300,12 +1300,12 @@ class HospitalImpl implements HospitalInterface
             $query->where('pp.id', '=', $prescriptionId);*/
 
             $labTestQuery = DB::table('patient_labtest as pl')->select('pl.id as labtestId', 'pl.unique_id as LTID',
-                'pl.brief_description');
+                'pl.brief_description', 'pl.labtest_date');
             $labTestQuery->where('pl.id', '=', $labTestId);
             $labTestInfo = $labTestQuery->get();
 
             $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.pid',
-                 'p.telephone', 'p.email');
+                'pl.labtest_date', 'p.telephone', 'p.email');
             $patientQuery->join('patient_labtest as pl', 'pl.patient_id', '=', 'p.patient_id');
             $patientQuery->where('pl.id', '=', $labTestId);
             $patientDetails = $patientQuery->get();
@@ -1324,7 +1324,7 @@ class HospitalImpl implements HospitalInterface
                 'l.id', DB::raw('TRIM(UPPER(l.test_name)) as test_name'),
                 DB::raw('TRIM(UPPER(l.test_name)) as test_category'),
                 //'l.test_category',
-                'ld.brief_description', 'ld.labtest_report');
+                'ld.brief_description', 'pl.labtest_date', 'ld.labtest_report');
             $query->join('patient_labtest as pl', 'pl.id', '=', 'ld.patient_labtest_id');
             $query->join('labtest as l', 'l.id', '=', 'ld.labtest_id');
             $query->where('pl.id', '=', $labTestId);
@@ -1931,12 +1931,33 @@ class HospitalImpl implements HospitalInterface
         //$visitedAppointments = null;
         $transferredAppointments = null;
         $cancelledAppointments = null;
+        $isFromDate = false;
         //$postponedAppointments = null;
 
         try {
-            //$currentDate = Carbon::now()->format('Y-m-d');
+            $currentDate = date("Y-m-d");
+            //dd($fromDate);
+
+            //$currentDateTime = Carbon::now()->format('Y-m-d H:i:s');
+            //$date =
+
+            //dd(date("Y-m-d H:i:s"));
+            //dd($fromDate);
             //dd($currentDate);
-            //$currentDate = '2017-09-20';
+
+            if($fromDate == $currentDate)
+            {
+                $isFromDate = true;
+                $currentDateTime = Carbon::now()->format('Y-m-d H:i:s');
+            }
+
+            if (is_null($fromDate) || empty($fromDate)) {
+                //$query->where('da.doctor_id', '=', $doctorId);
+                $isFromDate = true;
+                $currentDateTime = Carbon::now()->format('Y-m-d H:i:s');
+            }
+
+            //dd($currentDateTime);
 
             //DB::connection()->enableQueryLog();
             //dd($currentDate);
@@ -1945,13 +1966,27 @@ class HospitalImpl implements HospitalInterface
             if (!is_null($doctorId)) {
                 $query->where('da.doctor_id', '=', $doctorId);
             }
+            //dd($currentDateTime);
             //$query->whereDate('da.appointment_date', '>=', $fromDate);
-            $query->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$query->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>', $fromDate);
             //$query->whereDate('da.appointment_date', '<=', $toDate);
+            //AND TIMESTAMP(DATE_FORMAT(da.appointment_date, "%Y-%m-%d"), TIME_FORMAT(da.appointment_time, '%H:%i:%s')) > NOW()
+            //if((is_null($fromDate) || empty($fromDate)) && !is_null($currentDateTime))
+            if($isFromDate)
+            {
+                //$query->whereDate(DB::raw('TIMESTAMP(DATE_FORMAT(da.appointment_date, "%Y-%m-%d"), TIME_FORMAT(da.appointment_time, "%H:%i:%s"))'), '>', $currentDateTime);
+                $query->where(DB::raw('TIMESTAMP(DATE_FORMAT(da.appointment_date, "%Y-%m-%d"), TIME_FORMAT(da.appointment_time, "%H:%i:%s"))'), '>', $currentDateTime);
+            }
+            else
+            {
+                $query->where(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>', $fromDate);
+            }
+
             $query->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $query->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_OPEN);
             $query->whereNotNull('da.appointment_date');
             $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            //$query->select('da.*');
             $query->groupBy('da.appointment_category');
 
             //dd($query->toSql());
@@ -1967,6 +2002,7 @@ class HospitalImpl implements HospitalInterface
             $openAppointments = $query->get();
             //$query = DB::getQueryLog();
             //dd($query);
+            //dd($openAppointments);
 
 
             $transferredQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
@@ -1975,7 +2011,16 @@ class HospitalImpl implements HospitalInterface
                 $transferredQuery->where('da.doctor_id', '=', $doctorId);
             }
             //$transferredQuery->whereDate('da.appointment_date', '>=', $fromDate);
-            $transferredQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$transferredQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            if($isFromDate)
+            {
+                //$query->whereDate(DB::raw('TIMESTAMP(DATE_FORMAT(da.appointment_date, "%Y-%m-%d"), TIME_FORMAT(da.appointment_time, "%H:%i:%s"))'), '>', $currentDateTime);
+                $query->where(DB::raw('TIMESTAMP(DATE_FORMAT(da.appointment_date, "%Y-%m-%d"), TIME_FORMAT(da.appointment_time, "%H:%i:%s"))'), '>', $currentDateTime);
+            }
+            else
+            {
+                $query->where(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>', $fromDate);
+            }
             //$transferredQuery->whereDate('da.appointment_date', '<=', $toDate);
             $transferredQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $transferredQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_TRANSFERRED);
@@ -1993,7 +2038,16 @@ class HospitalImpl implements HospitalInterface
                 $cancelledQuery->where('da.doctor_id', '=', $doctorId);
             }
             //$cancelledQuery->whereDate('da.appointment_date', '>=', $fromDate);
-            $cancelledQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            //$cancelledQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>=', $fromDate);
+            if($isFromDate)
+            {
+                //$query->whereDate(DB::raw('TIMESTAMP(DATE_FORMAT(da.appointment_date, "%Y-%m-%d"), TIME_FORMAT(da.appointment_time, "%H:%i:%s"))'), '>', $currentDateTime);
+                $query->where(DB::raw('TIMESTAMP(DATE_FORMAT(da.appointment_date, "%Y-%m-%d"), TIME_FORMAT(da.appointment_time, "%H:%i:%s"))'), '>', $currentDateTime);
+            }
+            else
+            {
+                $query->where(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '>', $fromDate);
+            }
             //$cancelledQuery->whereDate('da.appointment_date', '<=', $toDate);
             $cancelledQuery->whereDate(DB::raw('DATE_FORMAT(da.appointment_date, "%Y-%m-%d")'), '<=', $toDate);
             $cancelledQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_CANCELLED);
@@ -2267,7 +2321,6 @@ class HospitalImpl implements HospitalInterface
             $patient->address = $patientProfileVM->getAddress();
             $patient->city = $patientProfileVM->getCity();
             $patient->country = $patientProfileVM->getCountry();
-            /*Generated For BikKina Specific request*/
             $pid = $this->generatePID($hospitalId);
             $patient->pid = 'PID'.date('Ym') . $pid;
             //$patient->pid = 'PID'.md5(uniqid(rand()));
@@ -2371,8 +2424,6 @@ class HospitalImpl implements HospitalInterface
                 $user = $this->registerNewPatient($patientProfileVM);
                 $this->attachPatientRole($user);
                 $patient = new Patient();
-
-                /*Generated For BikKina Specific request*/
                 $pid = $this->generatePID($hospitalId);
                 $patient->pid = 'PID'.date('Ym') . $pid;
                 //$patient->pid = 'PID'.crc32(uniqid(rand()));
@@ -10346,7 +10397,7 @@ class HospitalImpl implements HospitalInterface
             $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $latestBloodExamQuery->where('pbei.is_value_set', '=', 1);
             $latestBloodExamQuery->select('pbe.id as examinationId', 'pbei.id as examinationItemId', 'pbe.patient_id',
-                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.test_readings','be.default_normal_values','be.is_parent','be1.examination_name AS parent_examination_name','be.units','pbe.doctor_id');
+                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date','pbei.test_readings','be.default_normal_values','be.is_parent','be.id','be1.examination_name AS parent_examination_name','be.units','pbe.doctor_id','pbe.fee_receipt_id');
             $bloodExaminations = $latestBloodExamQuery->get();
 
 
@@ -10366,7 +10417,7 @@ class HospitalImpl implements HospitalInterface
             $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
             $latestUrineExamQuery->where('puei.is_value_set', '=', 1);
             $latestUrineExamQuery->select('pue.id as examinationId', 'puei.id as examinationItemId',
-                'pue.patient_id', 'ue.examination_name', 'pue.examination_date','puei.test_readings','ue.normal_default_values','ue.is_parent','ue1.examination_name as parent_examination_name','pue.doctor_id');
+                'pue.patient_id', 'ue.examination_name', 'pue.examination_date','puei.test_readings','ue.normal_default_values','ue.is_parent','ue.id','ue1.examination_name as parent_examination_name','pue.doctor_id','pue.fee_receipt_id');
             $latestUrineExaminations = $latestUrineExamQuery->get();
 
 
@@ -10379,7 +10430,7 @@ class HospitalImpl implements HospitalInterface
             $latestMotionExamQuery->where('pmei.is_value_set', '=', 1);
 
             $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.id as examinationItemId',
-                'pme.patient_id', 'me.examination_name', 'pme.examination_date','pmei.test_readings','pme.doctor_id');
+                'pme.patient_id', 'me.examination_name', 'pme.examination_date','pmei.test_readings','pme.doctor_id','me.id','pme.fee_receipt_id');
             $latestMotionExaminations = $latestMotionExamQuery->get();
 
 
@@ -10398,6 +10449,18 @@ class HospitalImpl implements HospitalInterface
                        $D=count($bloodExaminations)>0?$bloodExaminations[0]->doctor_id:null;
                        $U=count($latestUrineExaminations)>0?$latestUrineExaminations[0]->doctor_id:null;
                        $M=count($latestMotionExaminations)>0?$latestMotionExaminations[0]->doctor_id:null;
+
+
+            $DID=count($bloodExaminations)>0?$bloodExaminations[0]->fee_receipt_id:null;
+            $UID=count($latestUrineExaminations)>0?$latestUrineExaminations[0]->fee_receipt_id:null;
+            $MID=count($latestMotionExaminations)>0?$latestMotionExaminations[0]->fee_receipt_id:null;
+
+            $receiptID=null;
+            if($DID!=null)$receiptID=$DID;
+            if($UID!=null)$receiptID=$UID;
+            if($MID!=null)$receiptID=$MID;
+
+
                        $doctor_id=null;
                         if($D!=null)$doctor_id=$D;
                         if($U!=null)$doctor_id=$U;
@@ -10407,11 +10470,20 @@ class HospitalImpl implements HospitalInterface
 
                           //  dd($doctorinfo);
                         }
+            $receiptStatus="notpaid";
+            if($receiptID!=null){
+                $LabDetails=LabFeeReceipt::find($receiptID);
+
+                $receiptStatus=(($LabDetails->total_fees-$LabDetails->paid_amount)==0)?"paid":"notpaid";
+
 
            // dd($doctorinfo);
+            }
 
+            // dd($doctorinfo);
 
-
+            $examinationDates['recieptId'] = $receiptID;
+            $examinationDates['recieptStatus'] = $receiptStatus;
             $examinationDates['patientDetails'] = $patientDetails;
             $examinationDates['recentBloodTests'] = $bloodExaminations;
             $examinationDates['hospitalDetails'] = $hospitalDetails;
