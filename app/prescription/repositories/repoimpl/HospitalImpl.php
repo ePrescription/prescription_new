@@ -1926,6 +1926,7 @@ class HospitalImpl implements HospitalInterface
         $appointments = null;
         $totalAmount = null;
         $futureAppointments = null;
+        $currentDateTime = null;
 
         $openAppointments = null;
         //$visitedAppointments = null;
@@ -2321,6 +2322,7 @@ class HospitalImpl implements HospitalInterface
             $patient->address = $patientProfileVM->getAddress();
             $patient->city = $patientProfileVM->getCity();
             $patient->country = $patientProfileVM->getCountry();
+            /*Generated For BikKina Specific request*/
             $pid = $this->generatePID($hospitalId);
             $patient->pid = 'PID'.date('Ym') . $pid;
             //$patient->pid = 'PID'.md5(uniqid(rand()));
@@ -2424,6 +2426,8 @@ class HospitalImpl implements HospitalInterface
                 $user = $this->registerNewPatient($patientProfileVM);
                 $this->attachPatientRole($user);
                 $patient = new Patient();
+
+                /*Generated For BikKina Specific request*/
                 $pid = $this->generatePID($hospitalId);
                 $patient->pid = 'PID'.date('Ym') . $pid;
                 //$patient->pid = 'PID'.crc32(uniqid(rand()));
@@ -3139,7 +3143,7 @@ class HospitalImpl implements HospitalInterface
             /*RAMANA ADDED*/
 
             $feeDetailsQuery = DB::table('doctor_appointment as dp')->where('dp.id', '=', $receiptId);
-           $feeDetailsQuery->join('patient as p', 'p.patient_id', '=', 'dp.patient_id');
+            $feeDetailsQuery->join('patient as p', 'p.patient_id', '=', 'dp.patient_id');
 
             $feeDetailsQuery->select('dp.id as receiptId', 'dp.patient_id as patientId', 'dp.doctor_id as doctorId',
                 'dp.hospital_id as hospitalId', 'dp.fee','p.payment_status');
@@ -10446,9 +10450,9 @@ class HospitalImpl implements HospitalInterface
             $hospitalQuery->where('h.hospital_id', '=', $hospitalId);
             $hospitalDetails = $hospitalQuery->first();
 
-                       $D=count($bloodExaminations)>0?$bloodExaminations[0]->doctor_id:null;
-                       $U=count($latestUrineExaminations)>0?$latestUrineExaminations[0]->doctor_id:null;
-                       $M=count($latestMotionExaminations)>0?$latestMotionExaminations[0]->doctor_id:null;
+            $D=count($bloodExaminations)>0?$bloodExaminations[0]->doctor_id:null;
+            $U=count($latestUrineExaminations)>0?$latestUrineExaminations[0]->doctor_id:null;
+            $M=count($latestMotionExaminations)>0?$latestMotionExaminations[0]->doctor_id:null;
 
 
             $DID=count($bloodExaminations)>0?$bloodExaminations[0]->fee_receipt_id:null;
@@ -10461,15 +10465,15 @@ class HospitalImpl implements HospitalInterface
             if($MID!=null)$receiptID=$MID;
 
 
-                       $doctor_id=null;
-                        if($D!=null)$doctor_id=$D;
-                        if($U!=null)$doctor_id=$U;
-                        if($M!=null)$doctor_id=$M;
-                        if($doctor_id!=null){
-                            $doctorinfo=Doctor::find($doctor_id);
+            $doctor_id=null;
+            if($D!=null)$doctor_id=$D;
+            if($U!=null)$doctor_id=$U;
+            if($M!=null)$doctor_id=$M;
+            if($doctor_id!=null){
+                $doctorinfo=Doctor::find($doctor_id);
 
-                          //  dd($doctorinfo);
-                        }
+                //  dd($doctorinfo);
+            }
             $receiptStatus="notpaid";
             if($receiptID!=null){
                 $LabDetails=LabFeeReceipt::find($receiptID);
@@ -10477,7 +10481,7 @@ class HospitalImpl implements HospitalInterface
                 $receiptStatus=(($LabDetails->total_fees-$LabDetails->paid_amount)==0)?"paid":"notpaid";
 
 
-           // dd($doctorinfo);
+                //  dd($doctorinfo);
             }
 
             // dd($doctorinfo);
@@ -10845,39 +10849,39 @@ class HospitalImpl implements HospitalInterface
      * @author Prasanth
      */
 
-public function getPatientAppointmentLabel($patientId,$Id){
-    $doctorappointments = null;
+    public function getPatientAppointmentLabel($patientId,$Id){
+        $doctorappointments = null;
 
-    try
-    {
-      //  dd($patientId.'--'.$Id);
-        $query = DB::table('doctor_appointment as dp')->join('doctor as d', 'd.doctor_id', '=', 'dp.doctor_id');
-        $query->join('hospital as h', 'h.hospital_id', '=', 'dp.hospital_id');
-        $query->join('patient as p', 'p.patient_id', '=', 'dp.patient_id');
-        $query->where('dp.patient_id', '=', $patientId);
-        $query->where('dp.id', '=', $Id);
-        $query->select('d.name', 'd.specialty', 'dp.appointment_date', 'dp.appointment_time as time','dp.token_id',
-            'dp.brief_history', 'h.hospital_name', 'h.email', 'h.address as hsaddress', 'h.telephone','p.name as patient_name','p.patient_id as patient_id','p.telephone as telephone','p.gender','p.address')->get();
+        try
+        {
+            //  dd($patientId.'--'.$Id);
+            $query = DB::table('doctor_appointment as dp')->join('doctor as d', 'd.doctor_id', '=', 'dp.doctor_id');
+            $query->join('hospital as h', 'h.hospital_id', '=', 'dp.hospital_id');
+            $query->join('patient as p', 'p.patient_id', '=', 'dp.patient_id');
+            $query->where('dp.patient_id', '=', $patientId);
+            $query->where('dp.id', '=', $Id);
+            $query->select('d.name', 'd.specialty', 'dp.appointment_date', 'dp.appointment_time as time','dp.token_id',
+                'dp.brief_history', 'h.hospital_name', 'h.email', 'h.address as hsaddress', 'h.telephone','p.name as patient_name','p.patient_id as patient_id','p.telephone as telephone','p.gender','p.address')->get();
 
-        $doctorappointments = $query->first();
+            $doctorappointments = $query->first();
 
-       // dd($doctorappointments);
+            // dd($doctorappointments);
+
+        }
+        catch(QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $exc);
+        }
+
+        return $doctorappointments;
 
     }
-    catch(QueryException $queryEx)
-    {
-        //dd($queryEx);
-        throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $queryEx);
-    }
-    catch(Exception $exc)
-    {
-        //dd($exc);
-        throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $exc);
-    }
-
-    return $doctorappointments;
-
-}
 
 
 }
