@@ -14,6 +14,7 @@ use App\prescription\utilities\Exception\HospitalException;
 use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use App\Http\Requests\FutureAppointmentApiRequest;
 
 use Illuminate\Support\Facades\Config;
 
@@ -273,7 +274,7 @@ class DoctorApiController extends Controller
      * @author Baskar
      */
 
-    public function getFutureAppointmentsForDashboard($hospitalId, $doctorId, Request $appointmentRequest)
+    public function getFutureAppointmentsForDashboard($doctorId, $hospitalId, FutureAppointmentApiRequest $appointmentRequest)
     {
         $futureAppointments = null;
 
@@ -281,6 +282,7 @@ class DoctorApiController extends Controller
         {
             $fromDate = $appointmentRequest->get('fromDate');
             $toDate = $appointmentRequest->get('toDate');
+            //dd($toDate);
 
             $futureAppointments = $this->hospitalService->getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId);
 
