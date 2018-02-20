@@ -2732,7 +2732,7 @@ class DoctorController extends Controller
         {
 
             Mail::send('emails.send', $data, function ($m) {
-                $m->from('info@daiwiksoft.com', 'Learning Laravel');
+                $m->from('prescriptionapp1@gmail.com', 'Learning Laravel');
                 //$m->to('baskar2271@yahoo.com')->subject('Learning laravel test mail');
                 $m->to('baskar2271@yahoo.com')->subject('Learning laravel test mail');
             });
@@ -7411,7 +7411,7 @@ class DoctorController extends Controller
      * @author Baskar
      */
 
-    public function getFutureAppointmentsForDashboard($hospitalId, FutureAppointmentRequest $appointmentRequest)
+    public function getFutureAppointmentsForDashboard($hospitalId, Request $appointmentRequest)
     {
         $futureAppointments = null;
         //dd($hospitalId.'--'.$doctorId);
@@ -7438,7 +7438,7 @@ class DoctorController extends Controller
 
         $dashboardDetails = $futureAppointments;
         //return $futureAppointments;
-        //dd($dashboardDetails);
+        dd($dashboardDetails);
         return view('portal.hospital-future-appointment-dashboard',compact('dashboardDetails'));
         //return $responseJson;
     }
@@ -7470,7 +7470,7 @@ class DoctorController extends Controller
         $dashboardDetails = $futureAppointments;
         //return $futureAppointments;
         //dd($dashboardDetails);
-        return view('portal.hospital-future-appointment-dashboard',compact('dashboardDetails'));
+        return view('portal.doctor-future-appointment-dashboard',compact('dashboardDetails'));
         //return $responseJson;
     }
 
@@ -7486,11 +7486,15 @@ class DoctorController extends Controller
     {
         $patients = null;
         $categoryType = $appointmentRequest->get('appointmentCategory');
-        //dd($hospitalId);
-        //dd($categoryType);
+        $fromDate = $appointmentRequest->get('fromDate');
+        $toDate = $appointmentRequest->get('toDate');
+        $status = $appointmentRequest->get('statusId');
+
+       // dd($hospitalId."--".$status);
+        //dd($categoryType."Hospital--Method");
         try
         {
-            $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId, $categoryType);
+            $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId,$categoryType,null,$fromDate,$toDate,$status);
             $doctors = $this->hospitalService->getDoctorsByHospitalId($hospitalId);
             /*
             if(!is_null($patients) && !empty($patients))
@@ -7536,12 +7540,15 @@ class DoctorController extends Controller
     {
         $patients = null;
         $categoryType = $appointmentRequest->get('appointmentCategory');
+        $fromDate = $appointmentRequest->get('fromDate');
+        $toDate = $appointmentRequest->get('toDate');
+        $status = $appointmentRequest->get('statusId');
         //dd('Inside appointment category function');
         //dd($hospitalId);
-        //dd($categoryType);
+       // dd($categoryType."Doctor--Method");
         try
         {
-            $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId);
+            $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId,$fromDate,$toDate,$status);
             $doctors = $this->hospitalService->getDoctorsByHospitalId($hospitalId);
             /*
             if(!is_null($patients) && !empty($patients))
@@ -9512,7 +9519,7 @@ class DoctorController extends Controller
      * @return count|0
      * @author Prasanth
      */
-   public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId){
+   public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date){
 
     $TokenID = null;
     //$jsonResponse = null;
@@ -9520,7 +9527,7 @@ class DoctorController extends Controller
     $count = 0;
     try
     {
-        $TokenID = $this->hospitalService->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId);
+        $TokenID = $this->hospitalService->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date);
 
        // $responseJson->setObj($TokenID);
        // $responseJson->sendSuccessResponse();

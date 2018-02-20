@@ -59,7 +59,7 @@ interface HospitalInterface {
     public function getFutureAppointmentsForDashboard($fromDate, $toDate, $hospitalId, $doctorId = null);
 
     public function getDashboardDetailsForDoctor($hospitalId, $doctorId);
-    public function getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId = null);
+    public function getPatientsByAppointmentCategory($hospitalId,$categoryType,$doctorId = null,$fromDate=null,$toDate=null,$status=null);
     public function getPatientsByAppointmentDate($hospitalId, $doctorId, $appointmentDate);
 
     public function getPatientAppointmentDates($patientId, $hospitalId);
@@ -214,7 +214,7 @@ interface HospitalInterface {
 
     //ADDITION START BY PRASANTH 24-01-2018//
     /*To Get TokenID Count To Display*/
-    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId);
+    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date);
     /*To Display PatientAppointmentAdmitCard Details in FrontDesk*/
     public function getPatientAppointmentLabel($patientId,$Id);
     //ADDITION END BY PRASANTH 24-01-2018//

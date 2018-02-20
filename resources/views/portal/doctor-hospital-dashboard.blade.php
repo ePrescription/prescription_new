@@ -82,8 +82,11 @@ $profile_menu="0";
                                         $noAppointments = "0";
                                     }
 
+
                                     ?>
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=1">
                                     {{$noAppointments}}
+                                        </a>
                                 </td>
                                 <td>
 
@@ -111,7 +114,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=1">
                                             {{$noAppointments}}
                                         </a>
 
@@ -143,7 +146,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=1">
                                             {{$noAppointments}}
                                         </a>
 
@@ -174,7 +177,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=1">
                                             {{$noAppointments}}
                                         </a>
 
@@ -210,7 +213,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=2">
                                             {{$noAppointments}}
                                         </a>
                                 </td>
@@ -240,7 +243,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=2">
                                             {{$noAppointments}}
                                         </a>
 
@@ -272,7 +275,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=2">
                                             {{$noAppointments}}
                                         </a>
 
@@ -303,7 +306,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=2">
                                             {{$noAppointments}}
                                         </a>
 
@@ -339,7 +342,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=3">
                                             {{$noAppointments}}
                                         </a>
                                 </td>
@@ -369,8 +372,9 @@ $profile_menu="0";
                                     }
 
                                     ?>
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=3">
                                     {{$noAppointments}}
-
+                                        </a>
 
                                 </td>
                                 <td>
@@ -399,7 +403,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=3">
                                             {{$noAppointments}}
                                         </a>
 
@@ -430,7 +434,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=3">
                                             {{$noAppointments}}
                                         </a>
 
@@ -466,7 +470,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=4">
                                             {{$noAppointments}}
                                         </a>
 
@@ -497,7 +501,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=4">
                                             {{$noAppointments}}
                                         </a>
 
@@ -529,7 +533,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=4">
                                             {{$noAppointments}}
                                         </a>
 
@@ -560,7 +564,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=4">
                                             {{$noAppointments}}
                                         </a>
 
@@ -596,7 +600,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=5">
                                             {{$noAppointments}}
                                         </a>
                                 </td>
@@ -626,7 +630,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=5">
                                             {{$noAppointments}}
                                         </a>
 
@@ -658,7 +662,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=5">
                                             {{$noAppointments}}
                                         </a>
 
@@ -689,7 +693,7 @@ $profile_menu="0";
                                     }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=5">
                                             {{$noAppointments}}
                                         </a>
 
@@ -762,6 +766,7 @@ $profile_menu="0";
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
             var callurl = BASEURL + 'doctor/rest/api/' + did + '/hospital/' + hid + '/futureappointments';
+
 
             if(hid!=0)
             {
