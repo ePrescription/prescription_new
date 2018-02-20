@@ -81,7 +81,7 @@ $profile_menu="0";
                                         }
 
                                     ?>
-                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=1">
                                             {{$noAppointments}}
                                         </a>
                                     </td>
@@ -111,7 +111,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=1">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -143,7 +143,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=1">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -174,7 +174,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=1">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -210,7 +210,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=2">
                                                 {{$noAppointments}}
                                             </a>
                                     </td>
@@ -240,7 +240,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=2">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -272,7 +272,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=2">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -303,7 +303,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=2">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -339,7 +339,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=3">
                                                 {{$noAppointments}}
                                             </a>
                                     </td>
@@ -369,7 +369,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=3">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -401,7 +401,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=3">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -432,7 +432,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=3">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -468,7 +468,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=4">
                                                 {{$noAppointments}}
                                             </a>
                                     </td>
@@ -498,7 +498,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=4">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -530,7 +530,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=4">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -561,7 +561,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=4">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -597,7 +597,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=5">
                                                 {{$noAppointments}}
                                             </a>
                                     </td>
@@ -627,7 +627,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=5">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -659,7 +659,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=5">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -690,7 +690,7 @@ $profile_menu="0";
                                         }
 
                                         ?>
-                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory={{$selected_value}}&statusId=5">
                                                 {{$noAppointments}}
                                             </a>
 
@@ -764,6 +764,7 @@ $profile_menu="0";
         var BASEURL = "{{ URL::to('/') }}/";
         var status = 1;
         var callurl = BASEURL + 'fronthospital/' + hid + '/futureappointments';
+
 
         if(hid!=0)
         {

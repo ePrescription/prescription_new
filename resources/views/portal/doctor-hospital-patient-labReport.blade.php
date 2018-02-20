@@ -405,9 +405,10 @@ $defaultvalues = array(
     ),
     array(
         "id" =>11,
-        "min" =>13.5,
-        "max" =>17.5,
+        "min" =>12.8,
+        "max" =>16.8,
     ),
+
 
 
 

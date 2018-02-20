@@ -620,13 +620,13 @@ class HospitalService {
      * @author Baskar
      */
 
-    public function getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId = null)
+    public function getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId = null,$fromDate=null,$toDate=null,$status=null)
     {
         $patients = null;
 
         try
         {
-            $patients = $this->hospitalRepo->getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId);
+            $patients = $this->hospitalRepo->getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId,$fromDate,$toDate,$status);
         }
         catch(HospitalException $hospitalExc)
         {
@@ -3456,13 +3456,13 @@ class HospitalService {
      * @author Prasanth
      */
 
-    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId)
+    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date)
     {
         $TokenId = null;
 
         try
         {
-            $TokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId);
+            $TokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date);
         }
         catch(HospitalException $hospitalExc)
         {

@@ -14,7 +14,7 @@
     </div>
     <!-- Button mobile view to collapse sidebar menu -->
     <div class="navbar navbar-default" role="navigation">
-        <div class="container">
+        <div class="container" style="padding-right: 0px; padding-left: 0px;">
             <div class="">
                 <div class="pull-left">
                     <button type="button" class="button-menu-mobile open-left waves-effect waves-light">

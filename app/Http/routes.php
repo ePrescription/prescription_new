@@ -114,6 +114,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Pharmacy'), func
     Route::get('rest/api/prescription/{prescriptionId}', array('as' => 'patient.prescriptiondetails', 'uses' => 'PharmacyController@getPrescriptionDetailsForHospital'));
 });
 
+//Route::get('Doctor/{doctorId}/hospital/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForDoctor'));
 
 Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), function()
 {
@@ -134,7 +135,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     Route::get('{hospitalId}/futureappointments', array('as' => 'hospital.futureappointments', 'uses' => 'DoctorController@getFutureAppointmentsForDashboard'));
 
-
+//CHECK
     Route::get('rest/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForFront'));
 
     Route::get('patients/appointments/{appointmentId}/details', array('as' => 'patient.appointmentdetails', 'uses' => 'DoctorController@getAppointmentDetails'));
@@ -308,7 +309,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     //To Display Running Count of the TokenID Based On HospitalID And DoctorID in Doctor Dashboard
 
-    Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/tokenid', array('as' => 'patient.tokenid', 'uses' => 'DoctorController@getTokenIdByHospitalIdandDoctorId'));
+    Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/date/{date}/tokenid', array('as' => 'patient.tokenid', 'uses' => 'DoctorController@getTokenIdByHospitalIdandDoctorId'));
 
    // It is to generate patientAppointment Admit Card in frontdesk
 
@@ -583,7 +584,7 @@ Route::group(['prefix' => 'doctor'], function()
         //Route::post('{doctorId}/hospital/{hospitalId}/savepatientwithappointment', array('as' => 'hospital.savepatientwithappointment', 'uses' => 'DoctorController@savePatientWithAppointmentByHospitalForDoctor'));
 
         Route::post('{doctorId}/photo', array('as' => 'hospital.savepatientphoto', 'uses' => 'DoctorApiController@savePatientPhoto'));
-
+//Check
         Route::get('{doctorId}/hospital/{hospitalId}/patients/appointments', array('as' => 'patient.appointmentcategory', 'uses' => 'DoctorController@getPatientsByAppointmentCategoryForDoctor'));
         Route::get('{doctorId}/hospital/{hospitalId}/appointments', array('as' => 'patient.appointmentdate', 'uses' => 'DoctorApiController@getPatientsByAppointmentDate'));
 

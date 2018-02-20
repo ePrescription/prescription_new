@@ -4,11 +4,15 @@
 
                     <div class="row">
                         <h4 class="page-title">Future's Appointments</h4>
+                           <?php
+                             $fromDate=$dashboardDetails['fromDate'];
+                             $toDate=$dashboardDetails['toDate'];
+                           ?>
 
                         <table id="datatable" class="table table-striped table-bordered">
                             <thead>
                             <tr>
-                                <th> </th>
+                                <th></th>
                                 <th>Normal</th>
                                 <th>Special</th>
                                 <th>Pregnancy</th>
@@ -24,8 +28,10 @@
                                         Open
                                     </td>
                                     <td>
-
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Normal&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=1">
                                     <?php
+                                            $fromDate=$dashboardDetails['fromDate'];
+                                            $toDate=$dashboardDetails['toDate'];
                                         $openAppointments = $dashboardDetails['openAppointments'];
                                         $selected_value = "Normal";
 
@@ -50,9 +56,10 @@
 
                                     ?>
                                         {{$noAppointments}}
+                                        </a>
                                     </td>
                                     <td>
-
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Special&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=1">
                                         <?php
                                         $openAppointments = $dashboardDetails['openAppointments'];
                                         $selected_value = "Special";
@@ -79,10 +86,10 @@
                                         ?>
                                         {{$noAppointments}}
 
-
+                                        </a>
                                     </td>
                                     <td>
-
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Pregnancy&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=1">
                                         <?php
                                         $openAppointments = $dashboardDetails['openAppointments'];
                                         $selected_value = "Pregnancy";
@@ -108,10 +115,10 @@
 
                                         ?>
                                         {{$noAppointments}}
-
+                                        </a>
                                     </td>
                                     <td>
-
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Online&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=1">
                                         <?php
                                         $openAppointments = $dashboardDetails['openAppointments'];
                                         $selected_value = "Online";
@@ -137,7 +144,7 @@
 
                                         ?>
                                         {{$noAppointments}}
-
+                                        </a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -145,6 +152,7 @@
                                         Transferred
                                     </td>
                                     <td>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Normal&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=3">
 
                                         <?php
                                         $openAppointments = $dashboardDetails['transferredAppointments'];
@@ -171,8 +179,11 @@
 
                                         ?>
                                         {{$noAppointments}}
+                                        </a>
                                     </td>
+
                                     <td>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Special&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=3">
 
                                         <?php
                                         $openAppointments = $dashboardDetails['transferredAppointments'];
@@ -199,12 +210,13 @@
 
                                         ?>
                                         {{$noAppointments}}
-
+                                        </a>
 
                                     </td>
                                     <td>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Pregnancy&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=3">
 
-                                        <?php
+                                    <?php
                                         $openAppointments = $dashboardDetails['transferredAppointments'];
                                         $selected_value = "Pregnancy";
 
@@ -229,9 +241,11 @@
 
                                         ?>
                                         {{$noAppointments}}
+                                        </a>
 
                                     </td>
                                     <td>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Online&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=3">
 
                                         <?php
                                         $openAppointments = $dashboardDetails['transferredAppointments'];
@@ -258,6 +272,7 @@
 
                                         ?>
                                         {{$noAppointments}}
+                                        </a>
 
                                     </td>
                                 </tr>
@@ -266,6 +281,7 @@
                                         Cancelled
                                     </td>
                                     <td>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Normal&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=5">
 
                                         <?php
                                         $openAppointments = $dashboardDetails['cancelledAppointments'];
@@ -292,8 +308,10 @@
 
                                         ?>
                                         {{$noAppointments}}
+                                        </a>
                                     </td>
                                     <td>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Special&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=5">
 
                                         <?php
                                         $openAppointments = $dashboardDetails['cancelledAppointments'];
@@ -320,10 +338,11 @@
 
                                         ?>
                                         {{$noAppointments}}
-
+                                        </a>
 
                                     </td>
                                     <td>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Pregnancy&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=5">
 
                                         <?php
                                         $openAppointments = $dashboardDetails['cancelledAppointments'];
@@ -350,9 +369,11 @@
 
                                         ?>
                                         {{$noAppointments}}
+                                        </a>
 
                                     </td>
                                     <td>
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/appointments?appointmentCategory=Online&fromDate={{$fromDate}}&toDate={{$toDate}}&statusId=5">
 
                                         <?php
                                         $openAppointments = $dashboardDetails['cancelledAppointments'];
@@ -379,6 +400,7 @@
 
                                         ?>
                                         {{$noAppointments}}
+                                        </a>
 
                                     </td>
                                 </tr>
