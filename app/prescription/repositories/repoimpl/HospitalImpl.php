@@ -2427,9 +2427,8 @@ class HospitalImpl implements HospitalInterface
                 $this->attachPatientRole($user);
                 $patient = new Patient();
 
-                /*Generated For BikKina Specific request*/
-                $pid = $this->generatePID($hospitalId);
-                $patient->pid = 'PID'.date('Ym') . $pid;
+                $pid = $this->generateRandomString();
+                $patient->pid = 'PID' . $pid;
                 //$patient->pid = 'PID'.crc32(uniqid(rand()));
                 $patient->email = $patientProfileVM->getEmail();
 
