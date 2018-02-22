@@ -227,17 +227,10 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Email <span class="red">*</span></label>
+                                                    <label class="col-sm-3 control-label">DOB</label>
                                                     <div class="col-sm-9">
-                                                        <input type="email" class="form-control" id="email" name="email" value="" required="required" />
-                                                        @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Mobile <span class="red">*</span></label>
-                                                    <div class="col-sm-9">
-                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" maxlength="10"/>
-                                                        @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
+                                                        <input type="date" class="form-control" name="dob" id="dob" value="" />
+                                                        @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -257,6 +250,31 @@ $time_array=array(
                                                         @if ($errors->has('gender'))<p class="error" style="">{!!$errors->first('gender')!!}</p>@endif
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Address</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea class="form-control" id="address" name="address"></textarea>
+                                                        @if ($errors->has('address'))<p class="error" style="">{!!$errors->first('address')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Email </label>
+                                                    <div class="col-sm-9">
+                                                        <input type="email" class="form-control" id="email" name="email" value="" required="required" />
+                                                        @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Mobile </label>
+                                                    <div class="col-sm-9">
+                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" maxlength="10"/>
+                                                        @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Marital Status <span class="red">*</span></label>
@@ -295,13 +313,7 @@ $time_array=array(
                                                 </div> -->
 
 
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">DOB</label>
-                                                    <div class="col-sm-9">
-                                                        <input type="date" class="form-control" name="dob" id="dob" value="" />
-                                                        @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
-                                                    </div>
-                                                </div>
+
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Relationship</label>
@@ -328,13 +340,6 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Address</label>
-                                                    <div class="col-sm-9">
-                                                        <textarea class="form-control" id="address" name="address"></textarea>
-                                                        @if ($errors->has('address'))<p class="error" style="">{!!$errors->first('address')!!}</p>@endif
-                                                    </div>
-                                                </div>
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Photo</label>
@@ -479,6 +484,9 @@ $time_array=array(
                                                         <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" required="required" />&nbsp;&nbsp;Cash
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <input type="radio" class="form-controlx" id="payment2" name="paymentType" value="Card" required="required" />&nbsp;&nbsp;Card
+
+                                                       &nbsp; <input type="radio" class="form-controlx" id="payment3" name="paymentType" value="Cashless" required="required" />&nbsp;&nbsp;Cashless
+
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -808,13 +816,15 @@ $time_array=array(
 
             var BASEURL = "{{ URL::to('/') }}/";
             var date=$("#appointmentDate").val();
+            var type=$("#appointmentCategory").val();
+
             var status = 1;
             var callurl = BASEURL + 'fronthospital/rest/api/hospital/'+hid+'/doctor/' + did + '/date/'+date+'/tokenid';
             //alert(callurl);
             $.ajax({
                 url: callurl,
                 type: "get",
-                data: {"id": hid, "status": status},
+                data: {"id": hid, "status": status,"appointmentCategory":type},
                 success: function (data) {
                     document.getElementById('token').style.display='block';
                     $("#tokenId").html(data);

@@ -140,6 +140,8 @@ $profile_menu="0";
 
                                             </div>
                                         </div>
+                                        <div class="row">
+
                                         <div class="col-lg-10">
 
 
@@ -213,6 +215,8 @@ $profile_menu="0";
                                                 <?php $dates[count($dates)]=$generalExaminationDate->examination_date; ?>
                                             @endif
                                         @endforeach
+                                    <div class="row">
+                                        <div class="col-lg-12">
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="blood">
                                                 <p>
@@ -249,7 +253,7 @@ $profile_menu="0";
             <!-- End Right content here -->
 
 
-        </div><!-- ./wrapper -->
+        <!-- ./wrapper -->
 
         @endsection
 

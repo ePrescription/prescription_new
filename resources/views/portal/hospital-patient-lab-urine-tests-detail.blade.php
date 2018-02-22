@@ -30,7 +30,7 @@
 
 
                                     <?php $displaySet=0; ?>
-                                    <form action="{{URL::to('/')}}/lab/rest/patient/urinetestresults" role="form" method="POST" class="display form-horizontal">
+                                    <form action="{{URL::to('/')}}/lab/rest/patient/urinetestresults" role="form" method="POST" onsubmit="return submitForm(this);" class="display form-horizontal">
                                     <div class="form-group">
                                         @foreach($recentTest as $recentTestDate)
                                             @if($displaySet==0)
@@ -75,7 +75,9 @@
 
 
                                                             @if($recentTestValue->readingStatus==1)
-                                                                {{$recentTestValue->readings}}
+                                                                <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
+                                                                <input type="text" class="updatefields" disabled="disabled" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->readings}}">
+
                                                             @else
                                                                 <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
                                                                 <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->readings}}">
@@ -95,7 +97,20 @@
                                     </div>
 
                                     @if($recentTestValue->readingStatus==1)
+                                            <div class="col-sm-12 form-group" style="display: block" id="buttonTest">
+                                                <div class="col-sm-4"></div>
+                                                <div class="col-sm-6">
+                                                    <button type="button" name="addurine" id="visible" value="Update" onclick="UpdateAction()" class="btn btn-success">Update</button>
+                                                </div>
+                                            </div>
 
+                                            <div class="col-sm-12 form-group" style="display: none" id="updatepart">
+                                                <div class="col-sm-4"></div>
+                                                <div class="col-sm-6">
+                                                    <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
+                                                    <input type="submit" name="addurine" value="Update Report" class="btn btn-success"/>
+                                                </div>
+                                            </div>
                                     @else
 
                                         <div class="col-sm-12 form-group">
@@ -313,4 +328,15 @@
     </div> <!-- End row -->
 
 </div><!-- container -->
+<script>
+    function UpdateAction(){
+        document.getElementById("visible").style.display="none";
+        document.getElementById("updatepart").style.display="block";
+        $("input[class='updatefields']").prop( "disabled", false );;
+
+    }
+    function submitForm() {
+        return confirm('Do you really want to Save Results?');
+    }
+</script>
 

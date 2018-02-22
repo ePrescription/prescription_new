@@ -214,7 +214,7 @@ interface HospitalInterface {
 
     //ADDITION START BY PRASANTH 24-01-2018//
     /*To Get TokenID Count To Display*/
-    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date);
+    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request);
     /*To Display PatientAppointmentAdmitCard Details in FrontDesk*/
     public function getPatientAppointmentLabel($patientId,$Id);
     //ADDITION END BY PRASANTH 24-01-2018//

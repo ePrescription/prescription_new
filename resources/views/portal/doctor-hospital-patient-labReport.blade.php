@@ -463,7 +463,7 @@ separate
                                 </tr>
 
                             @endif
-                            <tr style="font-size: 14px;font-weight: regular; align-content: center">
+                            <tr style="font-size: 14px;font-weight: normal; align-content: center">
                                 <td >
                                     @if($recentTest->is_parent==0)
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -493,9 +493,9 @@ separate
                 <table style="width:100%;float:left;">
                     @foreach($patientExaminations['recentMotionExaminations'] as $recentTest)
                         <tr style="font-size: 14px; align-content: center">
-                            <td>{{$recentTest->examination_name}}</td>
-                            <td>{{$recentTest->test_readings}}</td>
-                            <td>&nbsp;</td>
+                            <td style="width:33%;float:left;">{{$recentTest->examination_name}}</td>
+                            <td style="width:33%;float:left;">{{$recentTest->test_readings}}</td>
+                            <td style="width:33%;float:left;"></td>
                         </tr>
 
 
@@ -525,7 +525,7 @@ separate
                             </tr>
 
                         @endif
-                        <tr style="font-size: 14px;font-weight: bold; align-content: center">
+                        <tr style="font-size: 14px;font-weight: normal; align-content: center">
 
                             <td style="width:33%;float:left;">
                                 @if($recentTest->is_parent==0)

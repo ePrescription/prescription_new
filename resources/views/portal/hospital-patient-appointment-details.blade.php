@@ -203,7 +203,12 @@ $profile_menu="0";
                                                             {{$appointmentDetails['appointmentDetails'][0]->fee}}
                                                         </div>
                                                     </div>
-
+                                                    <div class="form-group col-md-6">
+                                                        <label class="col-sm-3 control-label" style="width:30%;float:left;">Token ID</label>
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
+                                                            {{$appointmentDetails['appointmentDetails'][0]->token_id}}
+                                                        </div>
+                                                    </div>
                                                     <div class="form-group col-md-6">
 
                                                     </div>

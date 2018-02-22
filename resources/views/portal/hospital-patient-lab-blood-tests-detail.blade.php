@@ -24,7 +24,7 @@
             @if(count($bloodTests)>0)
                 <h4 class="m-t-0 m-b-30">Blood Test Details</h4>
                 @foreach($bloodTests as $recentTest)
-                <form action="{{URL::to('/')}}/lab/rest/patient/bloodtestresults" role="form" method="POST" class="display form-horizontal">
+                <form action="{{URL::to('/')}}/lab/rest/patient/bloodtestresults" role="form" method="POST" onsubmit="return submitForm(this);" class="display form-horizontal">
 
                 <?php $displaySet=0; ?>
                     <div class="form-group">
@@ -56,6 +56,7 @@
                             $recentTestKeyValue=array_keys($recentTest,$recentTestValueGroup);
                             if($recentTestKeyValueName!=$recentTestKeyValue[0]) {
                             $recentTestKeyValueName = $recentTestKeyValue[0];
+
                             ?>
                             <tr>
                                 <td colspan="3">
@@ -67,18 +68,43 @@
                             @if($recentTestValue->isValueSet==1)
                                 <td class="col-sm-4" style="text-align: right;">
 
-                                    {{$recentTestValue->examinationName}}
+                                    <?php
+                                        $finalvalue="";
+                                      $val1="Serum Glucose (F)";
+                                      $val2="Serum Glucose (PP)";
+                                      $val3="Serum Glucose (R)";
+                                      if($recentTestValue->examinationName==$val1){
+                                          $finalvalue="Fasting--     Serum Glucose (F)";
+                                      }else if($recentTestValue->examinationName==$val2){
+                                          $finalvalue="Post Prandial--     Serum Glucose (PP)";
+                                      }else if($recentTestValue->examinationName==$val3){
+                                          $finalvalue="Random--     Serum Glucose (R)";
+                                      }else{
+                                          $finalvalue=$recentTestValue->examinationName;
+                                      }
+
+                                    ?>
+
+                                    {{$finalvalue}}
                                 </td>
                                 <td class="col-sm-4" >
 
-
                                     @if($recentTestValue->readingStatus==1)
-                                        {{$recentTestValue->readings}}
+                                       <div  style="display: block" >
+                                       <!-- {{$recentTestValue->readings}} -->
+                                           <input   type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
+                                           <input class="updatefields"  disabled="disabled" type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->readings}}" >
+
+                                       </div>
+
                                     @else
+
                                     <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
                                     <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->readings}}">
+
                                     @endif
                                 </td>
+
                                 <td class="col-sm-4" >
                                     {{$recentTestValue->examinationDefaultValue}}
                                     <?php /* ?> {{$recentTestValue->readingStatus}} <?php */ ?>
@@ -93,6 +119,21 @@
                     </div>
 
                 @if($recentTestValue->readingStatus==1)
+                        <div class="col-sm-12 form-group" style="display: block" id="buttonTest">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-6">
+                                <button type="button" name="addblood" id="visible" value="Update" onclick="UpdateAction()" class="btn btn-success">Update</button>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 form-group" style="display: none" id="updatepart">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-6">
+                                <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
+                                <input type="submit" name="addblood" value="Update Report" class="btn btn-success"/>
+                            </div>
+                        </div>
+
 
                 @else
 
@@ -314,3 +355,18 @@
 </div> <!-- End row -->
 
 </div><!-- container -->
+<script>
+    function UpdateAction(){
+
+        document.getElementById("visible").style.display="none";
+        document.getElementById("updatepart").style.display="block";
+        $("input[class='updatefields']").prop( "disabled", false );;
+
+    }
+</script>
+<script>
+    function submitForm() {
+        return confirm('Do you really want to Save Results?');
+    }
+
+</script>
