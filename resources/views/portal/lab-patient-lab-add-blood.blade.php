@@ -26,7 +26,7 @@
 
                     @if(count($patientBloodTests)>0)
 
-                        <form action="{{URL::to('/')}}/lab/rest/api/bloodtests" role="form" method="POST"
+                        <form action="{{URL::to('/')}}/lab/rest/api/bloodtests" role="form" onsubmit="return submitForm(this);" method="POST"
                               class="form-horizontal ">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Test Date</label>
@@ -95,4 +95,11 @@
         </div> <!-- col -->
     </div> <!-- End row -->
 
+
 </div><!-- container -->
+<script>
+    function submitForm() {
+        return confirm('Do you really want to Submit the Tests?');
+    }
+
+</script>

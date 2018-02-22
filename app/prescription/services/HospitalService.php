@@ -3456,13 +3456,13 @@ class HospitalService {
      * @author Prasanth
      */
 
-    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date)
+    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request)
     {
         $TokenId = null;
 
         try
         {
-            $TokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date);
+            $TokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request);
         }
         catch(HospitalException $hospitalExc)
         {

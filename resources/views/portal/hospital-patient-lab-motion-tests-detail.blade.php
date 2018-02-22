@@ -25,7 +25,7 @@
                 <h4 class="m-t-0 m-b-30">Motion Test Details</h4>
                 @foreach($motionTests as $recentTest)
                     <?php $displaySet=0; ?>
-                    <form action="{{URL::to('/')}}/lab/rest/patient/motiontestresults" role="form" method="POST" class="display form-horizontal">
+                    <form action="{{URL::to('/')}}/lab/rest/patient/motiontestresults" role="form" method="POST" onsubmit="return submitForm(this);" class="display form-horizontal">
                     <div class="form-group">
                         @foreach($recentTest as $recentTestDate)
                             @if($displaySet==0)
@@ -57,7 +57,9 @@
 
 
                                             @if($recentTestValue->ReadingStatus==1)
-                                                {{$recentTestValue->Reading}}
+                                                <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
+                                                <input type="text" class="updatefields" disabled="disabled"  name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->Reading}}">
+
                                             @else
                                                 <input type="hidden" name="testResults[{{$i}}][examinationId]" value="{{$recentTestValue->patientExaminationItemId}}">
                                                 <input type="text" name="testResults[{{$i}}][examinationValue]" value="{{$recentTestValue->Reading}}">
@@ -76,6 +78,20 @@
                     </div>
 
                         @if($recentTestValue->ReadingStatus==1)
+                            <div class="col-sm-12 form-group" style="display: block" id="buttonTest">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-6">
+                                    <button type="button" name="addblood" id="visible" value="Update" onclick="UpdateAction()" class="btn btn-success">Update</button>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 form-group" style="display: none" id="updatepart">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-6">
+                                    <input type="hidden" class="form-control" name="patientId" value="{{$patientId}}" required="required" />
+                                    <input type="submit" name="addblood" value="Update Report" class="btn btn-success"/>
+                                </div>
+                            </div>
 
                         @else
 
@@ -261,3 +277,18 @@
 </div> <!-- End row -->
 
 </div><!-- container -->
+<script>
+    function UpdateAction(){
+
+        document.getElementById("visible").style.display="none";
+        document.getElementById("updatepart").style.display="block";
+        $("input[class='updatefields']").prop( "disabled", false );;
+
+    }
+</script>
+<script>
+    function submitForm() {
+        return confirm('Do you really want to Save Results?');
+    }
+
+</script>

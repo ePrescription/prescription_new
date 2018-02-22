@@ -2141,9 +2141,14 @@ class HospitalImpl implements HospitalInterface
                // dd("TEST FRMDATE");
             }else{
                 $query->where('da.appointment_date', '=', date('Y-m-d'));
-                //dd("TEST FRMDATE");
+              //  dd("TEST FRMDATE".date('Y-m-d'));
             }
-            $query->where('da.appointment_status_id', '=' ,$status);
+            if(!is_null($status)){
+                $query->where('da.appointment_status_id', '=' , $status);
+
+            }else{
+                $query->whereIn('da.appointment_status_id',[1,2,3]);
+            }
             $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.patient_id', 'p.name as name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
                 'da.id', 'da.id as appointment_id', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time');
@@ -2256,7 +2261,7 @@ class HospitalImpl implements HospitalInterface
             $query->where('hd.hospital_id', $hospitalId);
             $query->where('da.patient_id', $patientId);
             $query->select('p.id', 'p.patient_id', 'p.pid', 'p.name as patient_name', 'h.hospital_id', 'h.hospital_name',
-                'd.doctor_id', 'd.name', 'da.id as appointment_id', 'da.appointment_date', 'da.appointment_time', 'da.brief_history as notes');
+                'd.doctor_id', 'd.name', 'da.id as appointment_id', 'da.appointment_date', 'da.appointment_time', 'da.brief_history as notes','da.token_id');
 
             //
             $appointments = $query->paginate();
@@ -2303,7 +2308,7 @@ class HospitalImpl implements HospitalInterface
             $query->where('da.id', $appointmentId);
             $query->select('da.appointment_category', 'da.appointment_date', 'da.appointment_time',
                 'da.brief_history as notes', 'da.fee', 'da.referral_type', 'da.referral_doctor',
-                'da.referral_hospital', 'da.referral_hospital_location');
+                'da.referral_hospital', 'da.referral_hospital_location','da.token_id');
 
             //
             $appointments = $query->get();
@@ -9013,7 +9018,7 @@ class HospitalImpl implements HospitalInterface
                         $categoryQuery = DB::table('blood_examination as be')->where('be.parent_id', '=', $examinationId);
                         $categoryQuery->where('be.has_child', '!=', 1);
                         $categoryQuery->where('be.status', '=', 1);
-                        $categoryQuery->select('id','isValueSet');
+                        $categoryQuery->select('id');
 
                         //dd($categoryQuery->toSql());
 
@@ -10851,13 +10856,17 @@ class HospitalImpl implements HospitalInterface
      * @author Prasanth
      */
 
-    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date){
+    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request){
         $patientTokenId = null;
 
         try
         {
             $patientTokenQuery = DB::table('doctor_appointment as dp');
-            $patientTokenQuery->where('dp.hospital_id', '=', $hospitalId)->where('dp.doctor_id', '=', $doctorId)->where('dp.appointment_date','=',$date);
+            $patientTokenQuery->where('dp.hospital_id', '=', $hospitalId)
+            ->where('dp.doctor_id', '=', $doctorId)
+            ->where('dp.appointment_date','=',$date)
+            ->where('dp.appointment_category','=',$request->input("appointmentCategory"));
+
             $patientTokenQuery->select(DB::raw('count(token_id) as token_count'))->get();
             $patientTokenId=$patientTokenQuery->first();
            // dd($date);

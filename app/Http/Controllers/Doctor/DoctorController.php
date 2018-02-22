@@ -2928,7 +2928,6 @@ class DoctorController extends Controller
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
         }
-
         return view('portal.hospital-patient-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
 
     }
@@ -9519,7 +9518,7 @@ class DoctorController extends Controller
      * @return count|0
      * @author Prasanth
      */
-   public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date){
+   public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,Request $request){
 
     $TokenID = null;
     //$jsonResponse = null;
@@ -9527,7 +9526,7 @@ class DoctorController extends Controller
     $count = 0;
     try
     {
-        $TokenID = $this->hospitalService->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date);
+        $TokenID = $this->hospitalService->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request);
 
        // $responseJson->setObj($TokenID);
        // $responseJson->sendSuccessResponse();

@@ -24,7 +24,7 @@
                     <!-- form start -->
                     @if(count($xrayExaminations)>0)
 
-                    <form action="{{URL::to('/')}}/lab/rest/api/xraytests" role="form" method="POST" class="form-horizontal ">
+                    <form action="{{URL::to('/')}}/lab/rest/api/xraytests" role="form" onsubmit="return submitForm(this);" method="POST" class="form-horizontal ">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Test Date</label>
                             <div class="col-sm-4">
@@ -96,3 +96,8 @@
     </div> <!-- End row -->
 
 </div><!-- container -->
+<script>
+    function submitForm() {
+        return confirm('Do you really want to Submit the Tests?');
+    }
+</script>

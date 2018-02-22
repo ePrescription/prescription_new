@@ -77,3 +77,9 @@
     </div> <!-- End row -->
 
 </div><!-- container -->
+<script>
+    function submitForm() {
+        return confirm('Do you really want to Submit the Tests?');
+    }
+
+</script>

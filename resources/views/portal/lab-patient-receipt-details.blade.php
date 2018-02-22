@@ -499,9 +499,8 @@ $profile_menu="0";
 
 
                                                                                 <div style="float:left;margin:0px 20px;">
-                                                                                    <a href="{{URL::to('/')}}/lab/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-details">
-                                                                                        <button type="button" class="btn btn-warning waves-effect waves-light">Cancel</button>
-                                                                                    </a>
+                                                                                        <button type="button" onclick="window.history.back();" class="btn btn-warning waves-effect waves-light">Cancel</button>
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>
