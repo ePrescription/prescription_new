@@ -10872,7 +10872,8 @@ class HospitalImpl implements HospitalInterface
            // dd($date);
           //  dd($patientTokenQuery->toSql().Carbon::now()->format('Y-m-d'));
 //dd($patientTokenId);
-            $patientTokenId=intval($patientTokenId->token_count)+1;
+            $patientTokenId = intval($patientTokenId->token_count)+1;
+            //dd($patientTokenId);
 
 
         }
