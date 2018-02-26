@@ -239,8 +239,8 @@ class PatientProfileWebRequest extends Request
         $rules['name'] = 'required';
         //$rules['address'] = 'required';
 
-        $rules['telephone'] = 'required | numeric | digits:10';
-        $rules['email'] = 'required | email';
+        //$rules['telephone'] = 'required | numeric | digits:10';
+        //$rules['email'] = 'required | email';
         /*if($profile->patientId == 0)
         {
             $rules['email'] = 'email | unique:users,email';

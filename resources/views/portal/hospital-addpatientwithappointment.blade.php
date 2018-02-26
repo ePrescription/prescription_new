@@ -262,14 +262,14 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Email </label>
                                                     <div class="col-sm-9">
-                                                        <input type="email" class="form-control" id="email" name="email" value="" required="required" />
+                                                        <input type="email" class="form-control" id="email" name="email" value="" />
                                                         @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Mobile </label>
                                                     <div class="col-sm-9">
-                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" maxlength="10"/>
+                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value=""  maxlength="10"/>
                                                         @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
                                                     </div>
                                                 </div>
@@ -819,7 +819,7 @@ $time_array=array(
             var type=$("#appointmentCategory").val();
 
             var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/hospital/'+hid+'/doctor/' + did + '/date/'+date+'/tokenid';
+            var callurl = BASEURL + 'fronthospital/rest/api/hospital/'+hid+'/doctor/' + did + '/date/'+date+'/tokenId';
             //alert(callurl);
             $.ajax({
                 url: callurl,
@@ -930,18 +930,18 @@ $time_array=array(
                         required: true,
                         lettersonly: true
                     },
-                    email: {
-                        required: true,
+                  //  email: {
+                      //  required: true,
                         // Specify that email should be validated
                         // by the built-in "email" rule
-                        email: true
-                    },
-                    telephone: {
-                        required: true,
-                        number: true,
-                        minlength: 10,
-                        maxlength: 10
-                    },
+                     //   email: true
+                  //  },
+                    //telephone: {
+                     //   required: true,
+                   //     number: true,
+                   //     minlength: 10,
+                   //     maxlength: 10
+                   // },
                     age: {
                         required: true,
                         number: true,
@@ -962,12 +962,12 @@ $time_array=array(
                         required: "Please enter your name",
                         lettersonly: "Your name must be characters"
                     },
-                    email: "Please enter a valid email address",
-                    telephone: {
-                        required: "Please provide a valid mobile number",
-                        minlength: "Your mobile number must be 10 characters long",
-                        maxlength: "Your mobile number must be 10 characters long"
-                    },
+                 //   email: "Please enter a valid email address",
+                  //  telephone: {
+                    //    required: "Please provide a valid mobile number",
+                   //     minlength: "Your mobile number must be 10 characters long",
+                     //   maxlength: "Your mobile number must be 10 characters long"
+                    //},
                     age: "Please provide a valid age",
                     appointmentDate: "Please provide a valid Date",
                     fee: "Please provide a valid Amount"

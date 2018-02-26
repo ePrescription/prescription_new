@@ -37,7 +37,7 @@ class PatientProfileMapper
     public static function setPatientProfile(Request $patientProfileRequest)
     {
 
-        //dd($patientProfileRequest);
+      //  dd($patientProfileRequest);
         $profileVM = new PatientProfileViewModel();
         $profile = (object) $patientProfileRequest->all();
 

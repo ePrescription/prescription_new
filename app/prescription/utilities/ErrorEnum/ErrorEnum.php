@@ -395,6 +395,13 @@ class ErrorEnum extends Enum{
     const PATIENT_REPORTS_LIST_SUCCESS = 902;
     const PATIENT_NO_REPORTS_FOUND = 903;
 
+
+    /**/
+const HOSPITAL_PATIENT_TOKEN_ID_ERROR=904;
+const PATIENT_FEE_STATUS_ERROR=905;
+
+    /**/
+
     //const PATIENT_LAB_
 
 }
