@@ -309,7 +309,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     //To Display Running Count of the TokenID Based On HospitalID And DoctorID in Doctor Dashboard
 
-    Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/date/{date}/tokenid', array('as' => 'patient.tokenid', 'uses' => 'DoctorController@getTokenIdByHospitalIdandDoctorId'));
+    Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/date/{date}/tokenId', array('as' => 'patient.tokenId', 'uses' => 'DoctorController@getTokenIdByHospitalIdandDoctorId'));
 
    // It is to generate patientAppointment Admit Card in frontdesk
 

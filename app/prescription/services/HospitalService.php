@@ -3343,7 +3343,7 @@ class HospitalService {
         }
         catch(Exception $exc)
         {
-            throw new HospitalException(null, ErrorEnum::APPOINTMENT_LIST_ERROR, $exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_FEE_STATUS_ERROR, $exc);
         }
 
         return $status;
@@ -3456,13 +3456,13 @@ class HospitalService {
      * @author Prasanth
      */
 
-    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request)
+    public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,$appointmentCategory)
     {
         $TokenId = null;
 
         try
         {
-            $TokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request);
+            $TokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$appointmentCategory);
         }
         catch(HospitalException $hospitalExc)
         {
@@ -3470,7 +3470,7 @@ class HospitalService {
         }
         catch(Exception $exc)
         {
-            throw new HospitalException(null, ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR, $exc);
+            throw new HospitalException(null, ErrorEnum::HOSPITAL_PATIENT_TOKEN_ID_ERROR, $exc);
         }
         return $TokenId;
     }

@@ -10768,12 +10768,12 @@ class HospitalImpl implements HospitalInterface
 
         } catch (QueryException $queryExc) {
             //dd($queryExc);
-            throw new HospitalException(null, ErrorEnum::FEE_RECEIPT_LIST_ERROR, $queryExc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_FEE_STATUS_ERROR, $queryExc);
         } catch (UserNotFoundException $userExc) {
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         } catch (Exception $exc) {
             //dd($exc);
-            throw new HospitalException(null, ErrorEnum::FEE_RECEIPT_LIST_ERROR, $exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_FEE_STATUS_ERROR, $exc);
         }
 
     }
@@ -10857,7 +10857,7 @@ class HospitalImpl implements HospitalInterface
      * @author Prasanth
      */
 
-    public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request){
+    public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,$appointmentCategory){
         $patientTokenId = null;
 
         try
@@ -10866,26 +10866,22 @@ class HospitalImpl implements HospitalInterface
             $patientTokenQuery->where('dp.hospital_id', '=', $hospitalId)
             ->where('dp.doctor_id', '=', $doctorId)
             ->where('dp.appointment_date','=',$date)
-            ->where('dp.appointment_category','=',$request->input("appointmentCategory"));
+            ->where('dp.appointment_category','=',$appointmentCategory);
 
             $patientTokenQuery->select(DB::raw('count(token_id) as token_count'))->get();
             $patientTokenId=$patientTokenQuery->first();
-           // dd($date);
-          //  dd($patientTokenQuery->toSql().Carbon::now()->format('Y-m-d'));
-//dd($patientTokenId);
             $patientTokenId=intval($patientTokenId->token_count)+1;
-
 
         }
         catch(QueryException $queryEx)
         {
             //dd($queryEx);
-            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $queryEx);
+            throw new HospitalException(null, ErrorEnum::HOSPITAL_PATIENT_TOKEN_ID_ERROR, $queryEx);
         }
         catch(Exception $exc)
         {
             //dd($exc);
-            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $exc);
+            throw new HospitalException(null, ErrorEnum::HOSPITAL_PATIENT_TOKEN_ID_ERROR, $exc);
         }
 //dd($patientTokenId);
         return $patientTokenId;
@@ -10923,12 +10919,12 @@ class HospitalImpl implements HospitalInterface
         catch(QueryException $queryEx)
         {
             //dd($queryEx);
-            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINT_DETAILS_ERROR, $queryEx);
         }
         catch(Exception $exc)
         {
             //dd($exc);
-            throw new HospitalException(null, ErrorEnum::PATIENT_REPORTS_LIST_ERROR, $exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_APPOINT_DETAILS_ERROR, $exc);
         }
 
         return $doctorappointments;

@@ -9518,7 +9518,7 @@ class DoctorController extends Controller
      * @return count|0
      * @author Prasanth
      */
-   public function getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,Request $request){
+   public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,Request $request){
 
     $TokenID = null;
     //$jsonResponse = null;
@@ -9526,11 +9526,12 @@ class DoctorController extends Controller
     $count = 0;
     try
     {
-        $TokenID = $this->hospitalService->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$request);
+        $appointmentCategory=$request->input("appointmentCategory");
 
-       // $responseJson->setObj($TokenID);
-       // $responseJson->sendSuccessResponse();
-
+        if($appointmentCategory){
+            $TokenID = $this->hospitalService->getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,$appointmentCategory);
+        }
+       // dd($TokenID);
     }
     catch(HospitalException $hospitalExc)
     {
@@ -9539,7 +9540,7 @@ class DoctorController extends Controller
         $errorMsg = $hospitalExc->getMessageForCode();
         $msg = AppendMessage::appendMessage($hospitalExc);
         Log::error($msg);*/
-        $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+        $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_PATIENT_TOKEN_ID_ERROR));
         $responseJson->sendErrorResponse($hospitalExc);
     }
     catch(Exception $exc)
@@ -9548,7 +9549,7 @@ class DoctorController extends Controller
         /*$responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
         $msg = AppendMessage::appendGeneralException($exc);
         Log::error($msg);*/
-        $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_DOCTOR_LIST_ERROR));
+        $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::HOSPITAL_PATIENT_TOKEN_ID_ERROR));
         $responseJson->sendUnExpectedExpectionResponse($exc);
     }
 
