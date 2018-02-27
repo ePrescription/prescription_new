@@ -9518,20 +9518,22 @@ class DoctorController extends Controller
      * @return count|0
      * @author Prasanth
      */
-   public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,Request $request){
+   public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date, Request $request)
+   {
+       $tokenId = null;
 
-    $TokenID = null;
-    //$jsonResponse = null;
     $responseJson = null;
+       $appointmentCategory = null;
     $count = 0;
     try
     {
+           if($request->has('appointmentCategory'))
+           {
         $appointmentCategory=$request->input("appointmentCategory");
+           }
 
-        if($appointmentCategory){
-            $TokenID = $this->hospitalService->getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,$appointmentCategory);
-        }
-       // dd($TokenID);
+           $tokenId = $this->hospitalService->getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,$appointmentCategory);
+
     }
     catch(HospitalException $hospitalExc)
     {
@@ -9553,8 +9555,7 @@ class DoctorController extends Controller
         $responseJson->sendUnExpectedExpectionResponse($exc);
     }
 
-    //return $jsonResponse;
-    return $TokenID;
+       return $tokenId;
  }
 
     /**

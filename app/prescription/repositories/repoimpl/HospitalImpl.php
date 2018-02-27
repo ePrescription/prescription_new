@@ -10853,11 +10853,12 @@ class HospitalImpl implements HospitalInterface
      * Gets Latest Patient token_Id based on doctor and hospital
      * @param $hospitalId,$doctorId
      * @throws $hospitalException
-     * @return count
+     * @return $patientTokenId
      * @author Prasanth
      */
 
-    public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,$appointmentCategory){
+    public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,$appointmentCategory)
+    {
         $patientTokenId = null;
 
         try
@@ -10865,8 +10866,12 @@ class HospitalImpl implements HospitalInterface
             $patientTokenQuery = DB::table('doctor_appointment as dp');
             $patientTokenQuery->where('dp.hospital_id', '=', $hospitalId)
             ->where('dp.doctor_id', '=', $doctorId)
-            ->where('dp.appointment_date','=',$date)
-            ->where('dp.appointment_category','=',$appointmentCategory);
+            ->where('dp.appointment_date','=',$date);
+
+            if(!is_null($appointmentCategory))
+            {
+                $patientTokenQuery->where('dp.appointment_category','=',$appointmentCategory);
+            }
 
             $patientTokenQuery->select(DB::raw('count(token_id) as token_count'))->get();
             $patientTokenId=$patientTokenQuery->first();
@@ -10883,7 +10888,7 @@ class HospitalImpl implements HospitalInterface
             //dd($exc);
             throw new HospitalException(null, ErrorEnum::HOSPITAL_PATIENT_TOKEN_ID_ERROR, $exc);
         }
-//dd($patientTokenId);
+
         return $patientTokenId;
 
     }
