@@ -3458,11 +3458,11 @@ class HospitalService {
 
     public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date,$appointmentCategory)
     {
-        $TokenId = null;
+        $tokenId = null;
 
         try
         {
-            $TokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$appointmentCategory);
+            $tokenId = $this->hospitalRepo->getTokenIdByHospitalIdandDoctorId($hospitalId,$doctorId,$date,$appointmentCategory);
         }
         catch(HospitalException $hospitalExc)
         {
@@ -3472,7 +3472,7 @@ class HospitalService {
         {
             throw new HospitalException(null, ErrorEnum::HOSPITAL_PATIENT_TOKEN_ID_ERROR, $exc);
         }
-        return $TokenId;
+        return $tokenId;
     }
 
     /**

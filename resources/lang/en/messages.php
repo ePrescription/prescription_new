@@ -354,7 +354,7 @@
         "902" => "Successfully retrieved patient reports",
         "903" => "No reports available for the patient",
 
-        "904" =>"Unable to load hospital patient token id",
+        "904" =>"Unable to get hospital patient token id",
         "905" =>"unable to update patient fee status"
 
     ];

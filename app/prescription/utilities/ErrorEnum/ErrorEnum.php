@@ -397,8 +397,8 @@ class ErrorEnum extends Enum{
 
 
     /**/
-const HOSPITAL_PATIENT_TOKEN_ID_ERROR=904;
-const PATIENT_FEE_STATUS_ERROR=905;
+    const HOSPITAL_PATIENT_TOKEN_ID_ERROR=904;
+    const PATIENT_FEE_STATUS_ERROR=905;
 
     /**/
 
