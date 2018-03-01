@@ -229,7 +229,7 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">DOB</label>
                                                     <div class="col-sm-9">
-                                                        <input type="date" class="form-control" name="dob" id="dob" value="" />
+                                                        <input type="date" class="form-control" name="dob" id="dob" value="" onblur="calculateAge(this.value)" />
                                                         @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
                                                     </div>
                                                 </div>
@@ -481,11 +481,11 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Payment Type <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" required="required" />&nbsp;&nbsp;Cash
+                                                        <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" onclick="enableAmount()" required="required" />&nbsp;&nbsp;Cash
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" id="payment2" name="paymentType" value="Card" required="required" />&nbsp;&nbsp;Card
+                                                        <input type="radio" class="form-controlx" id="payment2" name="paymentType" value="Card" onclick="enableAmount()" required="required" />&nbsp;&nbsp;Card
 
-                                                       &nbsp; <input type="radio" class="form-controlx" id="payment3" name="paymentType" value="Cashless" required="required" />&nbsp;&nbsp;Cashless
+                                                       &nbsp; <input type="radio" class="form-controlx" id="payment3" name="paymentType" value="Cashless" onclick="disableAmount()" required="required" />&nbsp;&nbsp;Cashless
 
                                                     </div>
                                                 </div>
@@ -834,6 +834,31 @@ $time_array=array(
 
 
         }
+        //New By prasanth for Age Calculation
+        function getAge(date) {
+            var now = new Date();
+            var diff_ms = Date.now() - date.getTime();
+            var age_dt = new Date(diff_ms);
+            return Math.abs(age_dt.getUTCFullYear() - 1970);
+        };
+
+        function calculateAge(dob) {
+            var dateofbirth=$("#dob").val();
+           var dateOfBirth = new Date(dateofbirth+" 00:00:00");
+            var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
+           // calculate age
+            //alert(age);
+            $("#age").val(age);
+        }
+        function disableAmount(){
+            $("#fee").val(0).prop('disabled',true);
+        }
+        function enableAmount(){
+            $("#fee").val(200).prop('disabled',false);
+        }
+
+
+
     </script>
 
 
