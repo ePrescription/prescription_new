@@ -6725,7 +6725,7 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientMotionTests = DB::select('select * from motion_examination where status = ?', [1]);
+            $patientMotionTests = DB::select('select * from motion_examination where status = ? order by sequence_by asc', [1]);
 
         }
         catch(HospitalException $hospitalExc)

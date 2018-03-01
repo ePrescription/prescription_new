@@ -220,7 +220,6 @@ $time_array=array(
 -->
                                                     </div>
                                                 </div>
-
                                                 <h4 class="m-t-0 m-b-30">Patient Info</h4>
 
                                                 <div class="form-group col-md-12">
@@ -231,17 +230,10 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Email <span class="red">*</span></label>
+                                                    <label class="col-sm-3 control-label">DOB</label>
                                                     <div class="col-sm-9">
-                                                        <input type="email" class="form-control" id="email" name="email" value="" required="required" />
-                                                        @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Mobile <span class="red">*</span></label>
-                                                    <div class="col-sm-9">
-                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" maxlength="10"/>
-                                                        @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
+                                                        <input type="date" class="form-control" name="dob" id="dob" value="" onblur="calculateAge(this.value)" />
+                                                        @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -263,7 +255,32 @@ $time_array=array(
                                                 </div>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Marital Status <span class="red">*</span></label>
+                                                    <label class="col-sm-3 control-label">Address</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea class="form-control" id="address" name="address"></textarea>
+                                                        @if ($errors->has('address'))<p class="error" style="">{!!$errors->first('address')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Email </label>
+                                                    <div class="col-sm-9">
+                                                        <input type="email" class="form-control" id="email" name="email" value="" />
+                                                        @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Mobile </label>
+                                                    <div class="col-sm-9">
+                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value=""  maxlength="10"/>
+                                                        @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Marital Status<span class="red">*</span> </label>
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" id="married1" name="maritalStatus" value="1" required="required" />&nbsp;&nbsp;Married
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
@@ -299,13 +316,7 @@ $time_array=array(
                                                 </div> -->
 
 
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">DOB</label>
-                                                    <div class="col-sm-9">
-                                                        <input type="date" class="form-control" name="dob" id="dob" value="" />
-                                                        @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
-                                                    </div>
-                                                </div>
+
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Relationship</label>
@@ -332,13 +343,6 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Address</label>
-                                                    <div class="col-sm-9">
-                                                        <textarea class="form-control" id="address" name="address"></textarea>
-                                                        @if ($errors->has('address'))<p class="error" style="">{!!$errors->first('address')!!}</p>@endif
-                                                    </div>
-                                                </div>
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Photo</label>
@@ -350,6 +354,8 @@ $time_array=array(
 
                                                 <h4 class="m-t-0 m-b-30">Appointment Info</h4>
 
+
+
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Appointment Type <span class="red">*</span></label>
                                                     <div class="col-sm-9">
@@ -360,26 +366,6 @@ $time_array=array(
                                                             <option value="Pregnancy">Pregnancy</option>
                                                         </select>
                                                         @if ($errors->has('appointmentCategory'))<p class="error" style="">{!!$errors->first('appointmentCategory')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
-                                                    <div class="col-sm-9">
-                                                           <!--Modified By prasanth Start 24-01-2018 -->
-                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="javascript:getTokenId({{Session::get('LoginUserHospital')}},this.value);">
-                                                            <!--Modified By prasanth Start 24-01-2018 -->
-                                                            <option value="">--CHOOSE--</option>
-                                                            @foreach($doctors as $doctor)
-                                                                <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12" id="token" style="display: none;">
-                                                    <label class="col-sm-3 control-label">Token ID<span class="red">*</span></label>
-                                                    <div class="col-sm-9">
-                                                        <b>Your Token ID:</b><p  name="tokenId" id="tokenId"  required="required" readonly style="font-size: 20px;color: blue;"></p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -404,6 +390,28 @@ $time_array=array(
                                                         @if ($errors->has('appointmentTime'))<p class="error" style="">{!!$errors->first('appointmentTime')!!}</p>@endif
                                                     </div>
                                                 </div>
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
+                                                    <div class="col-sm-9">
+
+                                                        <!--Modified By prasanth Start 24-01-2018 -->
+                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="javascript:getTokenId({{Session::get('LoginUserHospital')}},this.value);">
+                                                            <!--Modified By prasanth Start 24-01-2018 -->
+                                                            <option value="">--CHOOSE--</option>
+                                                            @foreach($doctors as $doctor)
+                                                                <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-12" id="token" style="display: none;">
+                                                    <label class="col-sm-3 control-label">Token ID<span class="red">*</span></label>
+                                                    <div class="col-sm-9">
+                                                        <b>Your Token ID:</b><p  name="tokenId" id="tokenId"  required="required" readonly style="font-size: 20px;color: blue;"></p>
+                                                    </div>
+                                                </div>
+
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Brief History <span class="red">*</span></label>
                                                     <div class="col-sm-9">
@@ -476,9 +484,12 @@ $time_array=array(
                                                     <div class="form-group col-md-12">
                                                         <label class="col-sm-3 control-label">Payment Type <span class="red">*</span></label>
                                                         <div class="col-sm-9">
-                                                            <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" required="required" />&nbsp;&nbsp;Cash
+                                                            <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" onclick="enableAmount()" required="required" />&nbsp;&nbsp;Cash
                                                             &nbsp;&nbsp;&nbsp;&nbsp;
-                                                            <input type="radio" class="form-controlx" id="payment2" name="paymentType" value="Card" required="required" />&nbsp;&nbsp;Card
+                                                            <input type="radio" class="form-controlx" id="payment2" name="paymentType" value="Card" onclick="enableAmount()" required="required" />&nbsp;&nbsp;Card
+
+                                                            &nbsp; <input type="radio" class="form-controlx" id="payment3" name="paymentType" value="Cashless" onclick="disableAmount()" required="required" />&nbsp;&nbsp;Cashless
+
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
@@ -806,13 +817,16 @@ $time_array=array(
         function getTokenId(hid,did) {
 
             var BASEURL = "{{ URL::to('/') }}/";
+            var date=$("#appointmentDate").val();
+            var type=$("#appointmentCategory").val();
+
             var status = 1;
-            var callurl = BASEURL + 'lab/rest/api/hospital/'+hid+'/doctor/' + did + '/tokenid';
-            //alert(callurl);
+            var callurl = BASEURL + 'fronthospital/rest/api/hospital/'+hid+'/doctor/' + did + '/date/'+date+'/tokenId';
+          //  alert(callurl);
             $.ajax({
                 url: callurl,
                 type: "get",
-                data: {"id": hid, "status": status},
+                data: {"id": hid, "status": status,"appointmentCategory":type},
                 success: function (data) {
                     document.getElementById('token').style.display='block';
                     $("#tokenId").html(data);
@@ -822,6 +836,30 @@ $time_array=array(
 
 
         }
+        //New By prasanth for Age Calculation
+        function getAge(date) {
+            var now = new Date();
+            var diff_ms = Date.now() - date.getTime();
+            var age_dt = new Date(diff_ms);
+            return Math.abs(age_dt.getUTCFullYear() - 1970);
+        };
+
+        function calculateAge(dob) {
+            var dateofbirth=$("#dob").val();
+            var dateOfBirth = new Date(dateofbirth+" 00:00:00");
+            var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
+            // calculate age
+            //alert(age);
+            $("#age").val(age);
+        }
+        function disableAmount(){
+            $("#fee").val(0).prop('disabled',true);
+        }
+        function enableAmount(){
+            $("#fee").val(200).prop('disabled',false);
+        }
+
+
     </script>
 
 

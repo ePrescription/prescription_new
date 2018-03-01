@@ -2658,7 +2658,7 @@ class HospitalImpl implements HospitalInterface
        // $patientTokenId=intval($patientTokenId)+1;
 
 
-        $patientTokenId = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorUser->id, $patientProfileVM->getAppointmentDate());
+        $patientTokenId = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorUser->id, $patientProfileVM->getAppointmentDate(),$patientProfileVM->getAppointmentCategory());
         //dd($patientTokenId);
         //$patientTokenId=intval($patientTokenId)+1;
         $doctorAppointment->token_id = $patientTokenId;
@@ -2709,7 +2709,7 @@ class HospitalImpl implements HospitalInterface
 
     }
 
-    private function generateTokenId($hospitalId, $doctorId, $appointmentDate)
+    private function generateTokenId($hospitalId, $doctorId, $appointmentDate,$appointmentCategory)
     {
         //$defaultTokenId = trans('constants.token_id');
         $defaultTokenId = CA::get('constants.token_id');
@@ -2719,6 +2719,7 @@ class HospitalImpl implements HospitalInterface
 
         $maxId = DoctorAppointments::where('hospital_id', '=', $hospitalId)
             ->where('doctor_id', '=', $doctorId)
+            ->where('appointment_category','=',$appointmentCategory)
             ->where('appointment_date','=',$appointmentDate)->max('token_id');
 
         //dd($maxId);
@@ -4786,6 +4787,8 @@ class HospitalImpl implements HospitalInterface
                 $urineTestQuery->where('pue.examination_date', '=', $urineTestDate);
                 $urineTestQuery->where('pue.examination_time', '=', $time->examination_time);
                 $urineTestQuery->where('puei.is_value_set', '=', 1);
+                $urineTestQuery->orderBy('ue1.sequence_by','asc');
+
                 $urineTestQuery->groupBy('ue.parent_id');
                 $urineTestQuery->select('ue.parent_id', 'ue1.examination_name AS parent_examination_name');
                 $urineTests = $urineTestQuery->get();
@@ -4910,6 +4913,8 @@ class HospitalImpl implements HospitalInterface
                 $motionTestQuery->where('pme.examination_date', '=', $motionTestDate);
                 $motionTestQuery->where('pme.examination_time', '=', $time->examination_time);
                 $motionTestQuery->where('pmei.is_value_set', '=', 1);
+                $motionTestQuery->orderBy('me.sequence_by','asc');
+
                 $motionTestQuery->orderBy('pme.examination_time', 'DESC');
                 $motionTestQuery->select('pme.id as patientExaminationId', 'pme.patient_id', 'pme.hospital_id', 'me.id as examinationId',
                     'me.examination_name as examinationName', 'me.normal_default_values as examinationDefaultValue', 'pme.examination_date as examinationDate',
@@ -4951,7 +4956,6 @@ class HospitalImpl implements HospitalInterface
         $finalBloodTests = null;
 
         //$bloodTestRecord = null;
-
         //$accommodations = array();
         $patientBloodTests = array();
         //$patientBloodTests = null;
@@ -5030,6 +5034,8 @@ class HospitalImpl implements HospitalInterface
             $timeQuery->select('pbe.examination_time');
             $timeQuery->groupBy('pbe.examination_time');
             $timeQuery->orderBy('pbe.examination_time', 'desc');
+          //  $timeQuery->orderBy('pbe.sequence_by', 'desc');
+
 
             $examinationTime = $timeQuery->get();
 
@@ -5159,8 +5165,10 @@ class HospitalImpl implements HospitalInterface
                 $bloodTestQuery->where('pbe.examination_date', '=', $bloodTestDate);
                 $bloodTestQuery->where('pbe.examination_time', '=', $time->examination_time);
                 $bloodTestQuery->where('pbei.is_value_set', '=', 1);
+                $bloodTestQuery->orderBy('be1.sequence_by','asc');
                 $bloodTestQuery->groupBy('be.parent_id');
                 $bloodTestQuery->select('be.parent_id', 'be1.examination_name AS parent_examination_name');
+
                 $bloodTests = $bloodTestQuery->get();
 
                 foreach ($bloodTests as $bloodTest) {
@@ -5633,6 +5641,7 @@ class HospitalImpl implements HospitalInterface
             $query = DB::table('blood_examination as be')->where('be.status', '=', 1);
             $query->where('be.is_parent', '=', 1);
             $query->select('be.id', 'be.examination_name');
+            $query->orderBy('be.sequence_by','asc');
 
             $bloodTests = $query->get();
         } catch (QueryException $queryEx) {
@@ -5662,6 +5671,7 @@ class HospitalImpl implements HospitalInterface
             $query = DB::table('urine_examination as ue')->where('ue.status', '=', 1);
             $query->where('ue.is_parent', '=', 1);
             $query->select('ue.id', 'ue.examination_name');
+            $query->orderBy('ue.sequence_by','asc');
 
             $urineTests = $query->get();
         } catch (QueryException $queryEx) {
@@ -6349,6 +6359,8 @@ class HospitalImpl implements HospitalInterface
             $bloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $bloodExamQuery->where('pbe.hospital_id', '=', $hospitalId);
             $bloodExamQuery->where('pbei.is_value_set', '=', 1);
+            $bloodExamQuery->orderBy('be1.sequence_by', 'asc');
+
             //$bloodExamQuery->where('be.id', '=', 'be1.parent_id');
             $bloodExamQuery->where(function ($query) {
                 $query->where('pbei.is_fees_paid', '=', 0);
@@ -6397,6 +6409,8 @@ class HospitalImpl implements HospitalInterface
             $urineExamQuery->where('pue.patient_id', '=', $patientId);
             $urineExamQuery->where('pue.hospital_id', '=', $hospitalId);
             $urineExamQuery->where('puei.is_value_set', '=', 1);
+            $urineExamQuery->orderBy('ue1.sequence_by',  'asc');
+
             $urineExamQuery->where(function ($query) {
                 $query->where('puei.is_fees_paid', '=', 0);
                 $query->orWhereNull('puei.is_fees_paid');
@@ -6417,6 +6431,8 @@ class HospitalImpl implements HospitalInterface
             $motionExamQuery->where('pme.patient_id', '=', $patientId);
             $motionExamQuery->where('pme.hospital_id', '=', $hospitalId);
             $motionExamQuery->where('pmei.is_value_set', '=', 1);
+            $motionExamQuery->orderBy('me.sequence_by','asc');
+
             //$motionExamQuery->where('pme.is_fees_paid', '=', 0);
             $motionExamQuery->where(function ($query) {
                 $query->where('pmei.is_fees_paid', '=', 0);
