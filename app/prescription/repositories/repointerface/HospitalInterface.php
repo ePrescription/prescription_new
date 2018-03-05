@@ -218,9 +218,7 @@ interface HospitalInterface {
     /*To Display PatientAppointmentAdmitCard Details in FrontDesk*/
     public function getPatientAppointmentLabel($patientId,$Id);
     //ADDITION END BY PRASANTH 24-01-2018//
-
-
-
+    public function getPatientsCount($hospitalId);
 
 
 }

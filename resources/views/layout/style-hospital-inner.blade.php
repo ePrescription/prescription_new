@@ -9,4 +9,52 @@
         padding-top: 1px !important;
     }
 </style>
+
+<style>
+    .dropbtn {
+        background-color: #3498DB;
+        color: White;
+        padding: 10px;
+        font-size: 16px;
+        /*border: none;*/
+
+
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color:white;
+        min-width: 400px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        border: 1px solid black;
+        overflow: hidden;
+        white-space: nowrap;
+        line-height: 3px;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+
+    }
+
+    .dropdown-content a:hover {background-color: #ddd}
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #848484;
+    }
+</style>
 @yield('styles')

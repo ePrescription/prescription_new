@@ -142,6 +142,37 @@ class HospitalService {
     }
 
     /**
+     * Get  Patient Count To display
+     * @param $hospitalId
+     * @throws $hospitalException
+     * @return Count
+     * @author Prasanth
+     */
+    public function getPatientsCount($hospitalId)
+    {
+        $patientcount = null;
+
+        try
+        {
+            $patientcount = $this->hospitalRepo->getPatientsCount($hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_TOTAL_COUNT_ERROR, $exc);
+        }
+
+        return $patientcount;
+    }
+
+
+
+
+
+    /**
      * Get list of hospitals for the doctor
      * @param $email
      * @throws $hospitalException

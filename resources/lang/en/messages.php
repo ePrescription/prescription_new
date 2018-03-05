@@ -355,6 +355,8 @@
         "903" => "No reports available for the patient",
 
         "904" =>"Unable to get hospital patient token id",
-        "905" =>"unable to update patient fee status"
+        "905" =>"unable to update patient fee status",
+
+        "906" =>"unable to get patient total count"
 
     ];

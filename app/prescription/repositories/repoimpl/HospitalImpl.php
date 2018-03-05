@@ -227,6 +227,39 @@ class HospitalImpl implements HospitalInterface
     }
 
     /**
+     * Get list of doctors for the hospital
+     * @param $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientsCount($hospitalId)
+    {
+        $count = null;
+
+        try {
+
+            $query= DB::table('doctor_appointment')->where('hospital_id','=',$hospitalId)->where('patient_id', DB::raw("(select max(`patient_id`) from doctor_appointment)"));
+           // $query = DB::table('doctor_appointment as dp')
+                //$query->ma
+           // dd($query->toSql());
+            $count = $query->get();
+        } catch (QueryException $queryEx) {
+            throw new HospitalException(null, ErrorEnum::PATIENT_TOTAL_COUNT_ERROR, $queryEx);
+        } catch (Exception $exc) {
+            throw new HospitalException(null, ErrorEnum::PATIENT_TOTAL_COUNT_ERROR, $exc);
+        }
+
+        return $count;
+
+
+    }
+
+
+
+
+    /**
      * Get list of hospitals for the doctor
      * @param $email
      * @throws $hospitalException
@@ -774,7 +807,7 @@ class HospitalImpl implements HospitalInterface
             $hospitalUser = User::find($hospitalId);
 
             if (!is_null($hospitalUser)) {
-                $query = DB::table('patient as p')->select('p.id', 'p.patient_id as patientId', 'p.name');
+                $query = DB::table('patient as p')->select('p.id', 'p.patient_id as patientId', 'p.name','p.pid');
                 $query->join('users as usr', 'usr.id', '=', 'p.patient_id');
                 $query->join('hospital_patient as hp', 'hp.patient_id', '=', 'p.patient_id');
                 /*$query->join('hospital_patient as hp', function($join){
@@ -2412,7 +2445,7 @@ class HospitalImpl implements HospitalInterface
     public function savePatientProfile(PatientProfileViewModel $patientProfileVM)
     {
         //dd('Inside save profile');
-        $status = true;
+        $status = null;
         $user = null;
         $patientId = null;
         $patient = null;
@@ -2432,9 +2465,10 @@ class HospitalImpl implements HospitalInterface
             //dd($appointmentDate);
 
             $hospitalUser = User::find($hospitalId);
+            $status['status'] = true;
 
             if (is_null($hospitalUser)) {
-                $status = false;
+                $status['status'] = false;
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND);
             }
 
@@ -2472,6 +2506,10 @@ class HospitalImpl implements HospitalInterface
                 $patient = new Patient();
 
                 $pid = $this->generateRandomString();
+                $status['pid']='PID' . $pid;
+                $status['tokenId']=$this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(),$patientProfileVM->getAppointmentCategory());
+
+                dd($status['tokenId']);
                 $patient->pid = 'PID' . $pid;
                 //$patient->pid = 'PID'.crc32(uniqid(rand()));
                 $patient->email = $patientProfileVM->getEmail();
@@ -2515,7 +2553,7 @@ class HospitalImpl implements HospitalInterface
                 $patientUserId = $patient->patient_id;
 
                 if (is_null($patient)) {
-                    $status = false;
+                    $status['status'] = false;
                     throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND);
                 }
                 //dd($patient);
@@ -2542,19 +2580,20 @@ class HospitalImpl implements HospitalInterface
 
         } catch (QueryException $queryEx) {
             //dd($queryEx);
-            $status = false;
+            $status['status'] = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $queryEx);
         } catch (UserNotFoundException $userExc) {
             //dd($userExc);
-            $status = false;
+            $status['status'] = false;
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         } catch (Exception $exc) {
             //dd($exc);
-            $status = false;
+            $status['status'] = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $exc);
         }
 
         return $status;
+       // dd($status);
         //return $patient;
     }
 
@@ -2661,6 +2700,7 @@ class HospitalImpl implements HospitalInterface
         $patientTokenId = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorUser->id, $patientProfileVM->getAppointmentDate(),$patientProfileVM->getAppointmentCategory());
         //dd($patientTokenId);
         //$patientTokenId=intval($patientTokenId)+1;
+      //  $status['tokenId']=$patientTokenId;
         $doctorAppointment->token_id = $patientTokenId;
         //BY PRASANTH 24-01-2018 END//
         $doctorAppointment->referral_type = $patientProfileVM->getReferralType();
@@ -10543,12 +10583,11 @@ class HospitalImpl implements HospitalInterface
 
                 $receiptStatus=(($LabDetails->total_fees-$LabDetails->paid_amount)==0)?"paid":"notpaid";
 
-
-                //  dd($doctorinfo);
+                //dd($LabDetails);
             }
 
             // dd($doctorinfo);
-
+            $examinationDates['recieptDetails'] = $LabDetails;
             $examinationDates['recieptId'] = $receiptID;
             $examinationDates['recieptStatus'] = $receiptStatus;
             $examinationDates['patientDetails'] = $patientDetails;
@@ -10579,7 +10618,7 @@ class HospitalImpl implements HospitalInterface
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
         }
 
-        //dd($patientLabTests);
+       // dd($examinationDates);
         return $examinationDates;
     }
 

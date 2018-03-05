@@ -75,6 +75,8 @@ $time_array=array(
 <style>
     span.red {color:red;margin:0 10px;}
 </style>
+
+
 @section('content')
     <div class="wrapper">
     @include('portal.lab-header')
@@ -105,24 +107,35 @@ $time_array=array(
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
                                         <h4 class="m-t-0 m-b-30">New Patient Appointment</h4>
+
+                                        @if (session()->has('tokenId'))
+                                            <div style="float:right;">
+                                         <span style="color:red;">
+                                             <h3>TokenID:{{session('tokenId')}}</h3>
+                                           <h3>PID:{{session('pid')}}</h3>
+
+                                     </span>
+                                            </div>
+                                        @endif
+
+
                                         <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
 
 
 
                                         @if (session()->has('message'))
                                             <div class="col_full login-title">
-                                <span style="color:red;">
-                                    <b>{{session('message')}}</b>
-                                </span>
+                                           <span style="color:red;">
+                                          <b>{{session('message')}}</b>
+                                           </span>
                                             </div>
                                         @endif
 
                                         @if (session()->has('success'))
                                             <div class="col_full login-title">
-                                <span style="color:green;">
-                                    <b>{{session('success')}}</b>
-                                </span>
-                                            </div>
+                                       <span style="color:green;">
+                                         <b>{{session('success')}}</b>
+                                       </span></div>
                                     @endif
 
 
@@ -194,11 +207,11 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Patient Visiting <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="radio" class="form-controlx" name="visiting" value="1" required="required" checked onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;First time
+                                                   <!--     <input type="radio" class="form-controlx" name="visiting" value="1" required="required" checked onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;First time
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <input type="radio" class="form-controlx" name="visiting" value="2" required="required" onclick="javascript:visitPatient(2);" />&nbsp;&nbsp;Followup
-                                                        &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" name="visiting" value="1" required="required" onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;Appointment
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;-->
+                                                        <input type="radio" class="form-controlx" name="visiting" value="1" checked required="required" onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;Appointment
                                                     </div>
                                                 </div>
 
@@ -289,7 +302,7 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group col-md-12">
+                                               <!-- <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Occupation</label>
                                                     <div class="col-sm-9">
                                                         <select class="form-control" name="occupation" id="occupation">
@@ -318,7 +331,7 @@ $time_array=array(
 
 
 
-                                                <div class="form-group col-md-12">
+                                              <!--  <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Relationship</label>
                                                     <div class="col-sm-9">
                                                         <select class="form-control" name="relationship" id="relationship">
@@ -342,7 +355,7 @@ $time_array=array(
                                                         @if ($errors->has('spouseName'))<p class="error" style="">{!!$errors->first('spouseName')!!}</p>@endif
                                                     </div>
                                                 </div>
-
+                                               -->
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Photo</label>
@@ -413,15 +426,20 @@ $time_array=array(
                                                 </div>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Brief History <span class="red">*</span></label>
+                                                    <label class="col-sm-3 control-label">Brief History </label>
                                                     <div class="col-sm-9">
-                                                        <textarea class="form-control" name="briefHistory" required="required"></textarea>
+                                                        <textarea class="form-control" name="briefHistory" ></textarea>
                                                         @if ($errors->has('briefHistory'))<p class="error" style="">{!!$errors->first('briefHistory')!!}</p>@endif
                                                     </div>
                                                 </div>
 
+                                                <input type="hidden" class="form-controlx" name="referralType" value="1" required="required" checked onclick="javascript:referralTypePatient(1);" />&nbsp;&nbsp;
+                                                <input type="hidden" class="form-controlx" id="payment1" name="paymentType" value="Cash" checked required="required" />
+                                                <input type="hidden" min="0" class="form-control" id="fee" name="fee" value="0" required="required" />
+                                                <input type="hidden" class="form-controlx" id="paymentstatus1" name="paymentStatus" checked value="1" required="required" />
 
-                                                <h4 class="m-t-0 m-b-30">Referral Info</h4>
+
+                                            <!--     <h4 class="m-t-0 m-b-30">Referral Info</h4>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Referral Type <span class="red">*</span></label>
                                                     <div class="col-sm-9">
@@ -435,7 +453,7 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
-                                                <div id="referralTypeInfo" style="display:none;">
+                                             <div id="referralTypeInfo" style="display:none;">
                                                     <div class="form-group col-md-12">
                                                         <label class="col-sm-3 control-label">Doctor Specialization <span class="red">*</span></label>
                                                         <div class="col-sm-6">
@@ -449,36 +467,36 @@ $time_array=array(
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <!-- Trigger/Open The Modal -->
-                                                            <button type="button" id="myBtn">Add Referred Doctor</button>
+                                                <!--   <button type="button" id="myBtn">Add Referred Doctor</button>
 
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">Referred By <span class="red">*</span></label>
-                                                        <div class="col-sm-9">
+                                              </div>
+                                          </div>
+                                          <div class="form-group col-md-12">
+                                              <label class="col-sm-3 control-label">Referred By <span class="red">*</span></label>
+                                              <div class="col-sm-9">
 
 
-                                                            <select name="referralDoctor" id="referralDoctor" class="form-control" onchange="javascript:getDoctorInfo();">
-                                                                <option value="">--CHOOSE--</option>
-                                                            </select>
+                                                  <select name="referralDoctor" id="referralDoctor" class="form-control" onchange="javascript:getDoctorInfo();">
+                                                      <option value="">--CHOOSE--</option>
+                                                  </select>
 
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">Hospital Name </label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" class="form-control" name="referralHospital" id="referralHospital" value="" readonly />
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="col-sm-3 control-label">Hospital Location </label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" class="form-control" name="hospitalLocation" id="hospitalLocation" value="" readonly />
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                              </div>
+                                          </div>
+                                          <div class="form-group col-md-12">
+                                              <label class="col-sm-3 control-label">Hospital Name </label>
+                                              <div class="col-sm-9">
+                                                  <input type="text" class="form-control" name="referralHospital" id="referralHospital" value="" readonly />
+                                              </div>
+                                          </div>
+                                          <div class="form-group col-md-12">
+                                              <label class="col-sm-3 control-label">Hospital Location </label>
+                                              <div class="col-sm-9">
+                                                  <input type="text" class="form-control" name="hospitalLocation" id="hospitalLocation" value="" readonly />
+                                              </div>
+                                          </div>
+                                      </div>-->
 
-                                                <div id="paymentTypeInfo" style="display:block;">
+                                            <!--   <div id="paymentTypeInfo" style="display:block;">
                                                     <h4 class="m-t-0 m-b-30">Payment Info</h4>
 
                                                     <div class="form-group col-md-12">
@@ -508,7 +526,7 @@ $time_array=array(
                                                             @if ($errors->has('paymentStatus'))<p class="error" style="">{!!$errors->first('paymentStatus')!!}</p>@endif
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>-->
 
 
                                             </div>
@@ -1027,7 +1045,7 @@ $time_array=array(
 
     <script>
         $( function() {
-            $( "#appointmentDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+            $( "#appointmentDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() }).datepicker("setDate", new Date());
         } );
     </script>
 

@@ -43,7 +43,22 @@ $profile_menu="0";
 
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+                                    <div class="dropdown">
+                                        <button class="dropbtn"><img src="{{URL::to('/')}}/images/menu.png" width="20"/>Menu</button>
+                                        <div class="dropdown-content">
+                                            <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i>View Profile</a>
+                                            &nbsp;&nbsp;
+                                            <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i>Lab Profile </a>
 
+                                            <!-- By Ramana 19-01-2018-->
+                                            &nbsp;
+                                            <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-details-results" title="Print Patient Lab Results"><i class="fa fa-folder-o"></i>Print Patient Lab Results </a>
+                                            &nbsp;
+                                            <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-upload" title="Lab Report Upload"><i class="fa fa-upload"></i>Lab Report Upload </a>
+                                            &nbsp;&nbsp;
+                                            <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-download" title="Lab Report Download"><i class="fa fa-download"></i> Lab Report Download</a>
+                                        </div>
+                                    </div>
 
 
                                     <div style="float:right;">
