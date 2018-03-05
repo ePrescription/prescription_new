@@ -849,8 +849,8 @@ $time_array=array(
         };
 
         function calculateAge(dob) {
-            var dateofbirth=$("#dob").val();
-           var dateOfBirth = new Date(dateofbirth+" 00:00:00");
+            var dateofbirth=("#dob").val();
+            var dateOfBirth = new Date(dateofbirth+" 00:00:00");
             var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
            // calculate age
             //alert(age);
