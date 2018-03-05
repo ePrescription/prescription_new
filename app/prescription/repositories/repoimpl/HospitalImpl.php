@@ -2509,7 +2509,7 @@ class HospitalImpl implements HospitalInterface
                 $status['pid']='PID' . $pid;
                 $status['tokenId']=$this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(),$patientProfileVM->getAppointmentCategory());
 
-                dd($status['tokenId']);
+              //  dd($status['tokenId']);
                 $patient->pid = 'PID' . $pid;
                 //$patient->pid = 'PID'.crc32(uniqid(rand()));
                 $patient->email = $patientProfileVM->getEmail();
