@@ -39,6 +39,29 @@ $profile_menu="0";
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
+
+                                    <div class="dropdown">
+                                        <button class="dropbtn"><img src="{{URL::to('/')}}/images/menu.png" width="20"/>Menu</button>
+                                        <div class="dropdown-content">
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details" title="View Profile"><i class="fa fa-user-circle"></i>View Profile </a>
+                                            &nbsp;&nbsp;
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/medical-details" title="Medical Profile"><i class="fa fa-medkit"></i>Medical Profile</a>
+                                            &nbsp;&nbsp;
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/prescription-details" title="Medical Prescription"><i class="fa fa-file-text-o"></i>Medical Prescription </a>
+                                            &nbsp;&nbsp;
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i>Lab Profile </a>
+                                            <!-- By Ramana 12-01-2018-->
+                                            &nbsp;
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/lab-details-results" title="Print Patient Lab Results"><i class="fa fa-folder-o"></i>Print Patient Lab Results </a>
+
+                                            &nbsp;&nbsp;
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/lab-report-download" title="Lab Report Download"><i class="fa fa-download"></i>Lab Report Download </a>
+                                           &nbsp;&nbsp;
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/labreceipts" title="Lab Receipts"><i class="fa fa-money"></i> Lab Receipts</a>
+                                            &nbsp;&nbsp;
+                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/print" title="Print Medical Profile"><i class="fa fa-print"></i> Print Medical Profile</a>
+                                        </div>
+                                    </div>
                                     <div style="float:right;">
                                         <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>

@@ -101,8 +101,12 @@ $time_array=array(
                             <div class="panel panel-primary">
                                 <div class="panel-body">
                                     <h4 class="m-t-0 m-b-30">New Patient Appointment</h4>
+
+
+
                                     <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
 
+                                    <div style="float:left;"><h3>Patient ID: <b class="error">{{intval($patientCount[0]->patient_id)+1}}</b></h3></div>
 
 
                                     @if (session()->has('message'))
@@ -203,17 +207,18 @@ $time_array=array(
                                                     <div class="col-sm-9">
                                                         <!--
                                                         <input type="text" class="form-control" name="searchPatient" value="" id="autocomplete-ajax" />
-                                                        -->
 
-                                                        <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">title="Select for a state" search><option></option></select>
-                                                        <!--
+
+
+                                                        <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);"  title="Select for a state"  search><option></option></select>
+                                                        -->
                                                         <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">
                                                             <option value="">--CHOOSE PATIENT--</option>
                                                             @foreach($patients as $patient)
                                                                 <option value="{{$patient->patient_id}}" >{{$patient->pid}} - {{$patient->name}}</option>
                                                             @endforeach
                                                         </select>
-                                                        -->
+
                                                     </div>
                                                 </div>
 
@@ -410,9 +415,9 @@ $time_array=array(
                                                 </div>
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Brief History <span class="red">*</span></label>
+                                                    <label class="col-sm-3 control-label">Brief History<!-- <span class="red">*</span>--></label>
                                                     <div class="col-sm-9">
-                                                        <textarea class="form-control" name="briefHistory" required="required"></textarea>
+                                                        <textarea class="form-control" name="briefHistory" ></textarea>
                                                         @if ($errors->has('briefHistory'))<p class="error" style="">{!!$errors->first('briefHistory')!!}</p>@endif
                                                     </div>
                                                 </div>
@@ -564,11 +569,13 @@ $time_array=array(
                 var terms = {};
                 console.log(data.result);
                 $.each(data.result, function (i, val) {
-                    terms[val.patientId] = val.name;
+                    terms[val.patientId] = val.pid+'--'+val.name;
                 });
 
                 return terms;
             });
+
+
         });
     </script>
 
@@ -613,7 +620,6 @@ $time_array=array(
             else
             {
                 $("#searchPatientBox").show();
-
                 $('input#name').attr('readonly', true);
                 $('input#email').attr('readonly', true);
                 $('input#telephone').attr('readonly', true);
@@ -1026,7 +1032,7 @@ $time_array=array(
 
     <script>
         $( function() {
-            $( "#appointmentDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+            $( "#appointmentDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() }).datepicker("setDate", new Date());
         } );
     </script>
 

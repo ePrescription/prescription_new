@@ -46,10 +46,6 @@ $profile_menu="0";
                                         <button class="btn btn-info waves-effect waves-light">Back to Patients List</button>
                                     </a>
                                 </div>
-
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-
                                         <h4 class="m-b-30 m-t-0">Patient Receipts List</h4>
 
                                         @if (session()->has('message'))

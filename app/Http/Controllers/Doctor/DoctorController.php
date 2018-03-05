@@ -2406,6 +2406,7 @@ class DoctorController extends Controller
             $patients = HospitalServiceFacade::getPatientsByHospital($hospitalId, $keyword = null);
             $doctors = HospitalServiceFacade::getDoctorsByHospitalId($hospitalId);
             $specialties = HospitalServiceFacade::getAllSpecialties();
+            $patientCount=HospitalServiceFacade::getPatientsCount($hospitalId);
 
         }
         catch(HospitalException $hospitalExc)
@@ -2421,8 +2422,7 @@ class DoctorController extends Controller
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
         }
-
-        return view('portal.hospital-addpatientwithappointment',compact('patients','doctors','specialties'));
+        return view('portal.hospital-addpatientwithappointment',compact('patients','doctors','specialties','patientCount'));
     }
 
 
@@ -2464,17 +2464,22 @@ class DoctorController extends Controller
            // dd($patientProfileVM);
             $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 
-            if($status)
+            //dd($status);
+
+            if($status['status'])
             {
                 //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
 
                 $msg = "Patient Profile Added Successfully.";
-                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('success',$msg);
+                $tokenId=$status['tokenId'];
+                $pid=$status['pid'];
+
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('success',$msg)->with('tokenId',$tokenId)->with('pid',$pid);
             }
             else
             {
                 $msg = "Patient Details Invalid / Incorrect! Try Again.";
-                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg);
+                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addpatientwithappointment')->with('message',$msg)->with('tokenId',"")->with('pid',"");
             }
 
         }
@@ -2879,7 +2884,7 @@ class DoctorController extends Controller
 
             $responseJson->setObj($patientNames);
             $responseJson->sendSuccessResponse();
-            //dd($jsonResponse);
+            //dd($responseJson);
         }
         catch(HospitalException $hospitalExc)
         {
@@ -9515,7 +9520,7 @@ class DoctorController extends Controller
      * Gets Latest TokenId of patient for doctor appointment
      * @param $hospitalId,$doctorId
      * @throws $hospitalException
-     * @return count|0
+     * @return $tokenId
      * @author Prasanth
      */
    public function getTokenIdByHospitalIdAndDoctorId($hospitalId,$doctorId,$date, Request $request)

@@ -1458,17 +1458,19 @@ class LabController extends Controller
              //dd($patientProfileVM);
             $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 //dd($status);
-            if($status)
+            if($status['status'])
             {
                 //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
-               // rest/api/{labId}/hospital/{hospitalId}/addpatientwithappointment
+
                 $msg = "Patient Profile Added Successfully.";
-                return redirect('lab/rest/api/'.Session::get('LoginUserHospital').'/addpatientwithappointment')->with('success',$msg);
+                $tokenId=$status['tokenId'];
+                $pid=$status['pid'];
+                return redirect('lab/rest/api/'.Session::get('LoginUserHospital').'/addpatientwithappointment')->with('success',$msg)->with('tokenId',$tokenId)->with('pid',$pid);
             }
             else
             {
                 $msg = "Patient Details Invalid / Incorrect! Try Again.";
-                return redirect('lab/rest/api/'.Session::get('LoginUserHospital').'/addpatientwithappointment')->with('message',$msg);
+                return redirect('lab/rest/api/'.Session::get('LoginUserHospital').'/addpatientwithappointment')->with('message',$msg)->with('tokenId',"")->with('pid',"");
             }
 
         }

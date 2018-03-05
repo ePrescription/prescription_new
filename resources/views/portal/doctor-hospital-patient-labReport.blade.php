@@ -81,6 +81,15 @@
                     {{$patientExaminations['recentBloodTests'][0]->examination_date}}
                 </div>
             </div>
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Reciept Date&Time</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{count($patientExaminations['recieptDetails'])>0?$patientExaminations['recieptDetails']->created_at:"---"}}
+
+                </div>
+            </div>
+
         </div>
 
     </div>
