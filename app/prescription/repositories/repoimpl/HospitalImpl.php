@@ -245,12 +245,19 @@ class HospitalImpl implements HospitalInterface
                 //$query->ma
            // dd($query->toSql());
             $count = $query->get();
+
+            if(count($count)<=0){
+                $count=1;
+            }else{
+                $count= intval($count[0]->patient_id)+1;
+            }
         } catch (QueryException $queryEx) {
             throw new HospitalException(null, ErrorEnum::PATIENT_TOTAL_COUNT_ERROR, $queryEx);
         } catch (Exception $exc) {
             throw new HospitalException(null, ErrorEnum::PATIENT_TOTAL_COUNT_ERROR, $exc);
         }
 
+       //dd($count);
         return $count;
 
 
@@ -480,7 +487,7 @@ class HospitalImpl implements HospitalInterface
             //dd($query->toSql());
 
             $patientDetails = $query->get();
-            //dd($patientDetails);
+
         } catch (QueryException $queryEx) {
             throw new HospitalException(null, ErrorEnum::PATIENT_DETAILS_ERROR, $queryEx);
         } catch (Exception $exc) {
@@ -2462,7 +2469,7 @@ class HospitalImpl implements HospitalInterface
             $hospitalId = $patientProfileVM->getHospitalId();
             $doctorId = $patientProfileVM->getDoctorId();
             $appointmentDate=$patientProfileVM->getAppointmentDate();
-            //dd($appointmentDate);
+            //dd($patientProfileVM);
 
             $hospitalUser = User::find($hospitalId);
             $status['status'] = true;
