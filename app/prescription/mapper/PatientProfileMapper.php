@@ -64,7 +64,8 @@ class PatientProfileMapper
         $profileVM->setNationality(property_exists($profile, 'nationality') ? $profile->nationality : null);
         $profileVM->setGender(property_exists($profile, 'gender') ? $profile->gender : null);
         //$profileVM->setGender($profile->gender);
-        $profileVM->setMaritalStatus(property_exists($profile, 'married') ? $profile->married : null);
+        /*For Marital Status*/
+        $profileVM->setMaritalStatus(property_exists($profile, 'maritalStatus') ? $profile->maritalStatus : null);
 
         $profileVM->setHospitalId(property_exists($profile, 'hospitalId') ? $profile->hospitalId : null);
         $profileVM->setDoctorId(property_exists($profile, 'doctorId') ? $profile->doctorId : null);
@@ -105,6 +106,7 @@ class PatientProfileMapper
         $profileVM->setCreatedAt(date("Y-m-d H:i:s"));
         $profileVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
+       //dd($profileVM);
         return $profileVM;
     }
 

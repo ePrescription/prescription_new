@@ -106,7 +106,7 @@ $time_array=array(
 
                                     <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
 
-                                    <div style="float:left;"><h3>Patient ID: <b class="error">{{intval($patientCount[0]->patient_id)+1}}</b></h3></div>
+                                  <!--  <div style="float:left;"><h3>Patient ID: <b class="error">{{$patientCount}}</b></h3></div>-->
 
 
                                     @if (session()->has('message'))
@@ -286,7 +286,7 @@ $time_array=array(
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" id="married1" name="maritalStatus" value="1" required="required" />&nbsp;&nbsp;Married
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" id="married2" name="maritalStatus" value="0" required="required" />&nbsp;&nbsp;Unmarried
+                                                        <input type="radio" class="form-controlx" id="married2" name="maritalStatus" value="2" required="required" />&nbsp;&nbsp;Unmarried
                                                         @if ($errors->has('maritalStatus'))<p class="error" style="">{!!$errors->first('maritalStatus')!!}</p>@endif
                                                     </div>
                                                 </div>
@@ -653,6 +653,7 @@ $time_array=array(
                     //alert(data.result[0].id);
                     console.log(data);
                     //$("#patienturinediv").html(data);
+
                     $("input#name").val(data.result[0].name);
                     $("input#email").val(data.result[0].email);
                     $("input#telephone").val(data.result[0].telephone);
@@ -662,7 +663,7 @@ $time_array=array(
                     {
                         $("input#gender1").attr('checked', 'checked');
                     }
-                    if(data.result[0].gender==2)
+                    if(data.result[0].gender==0)
                     {
                         $("input#gender2").attr('checked', 'checked');
                     }

@@ -2408,6 +2408,7 @@ class DoctorController extends Controller
             $specialties = HospitalServiceFacade::getAllSpecialties();
             $patientCount=HospitalServiceFacade::getPatientsCount($hospitalId);
 
+
         }
         catch(HospitalException $hospitalExc)
         {
@@ -2953,7 +2954,7 @@ class DoctorController extends Controller
             $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
             //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
             $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
-            //dd($patientAppointment);
+
         }
         catch(HospitalException $hospitalExc)
         {
@@ -2970,7 +2971,7 @@ class DoctorController extends Controller
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
         }
-
+        //dd($patientDetails);
         return view('portal.hospital-patient-prescription-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
 
     }
@@ -6337,12 +6338,13 @@ class DoctorController extends Controller
         $labReceipts = null;
         //$labTestType = $labDetailsRequest->get('testType');
         //dd($patientId);
+       // $patient_id=null;
 
         try
         {
             $labReceipts = $this->hospitalService->getLabReceiptsByPatient($patientId, $hospitalId);
             //dd($labReceipts);
-            return view('portal.hospital-patient-receipts', compact('labReceipts'));
+            return view('portal.hospital-patient-receipts', compact('labReceipts','patientId'));
 
         }
         catch(HospitalException $hospitalExc)
