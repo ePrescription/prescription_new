@@ -240,7 +240,7 @@ class HospitalImpl implements HospitalInterface
 
         try {
 
-            $query= DB::table('doctor_appointment')->where('hospital_id','=',$hospitalId)->where('patient_id', DB::raw("(select max(`patient_id`) from doctor_appointment)"));
+            $query = DB::table('doctor_appointment')->where('hospital_id','=',$hospitalId)->where('patient_id', DB::raw("(select max(`patient_id`) from doctor_appointment)"));
            // $query = DB::table('doctor_appointment as dp')
                 //$query->ma
            // dd($query->toSql());

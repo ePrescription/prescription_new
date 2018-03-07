@@ -2406,7 +2406,7 @@ class DoctorController extends Controller
             $patients = HospitalServiceFacade::getPatientsByHospital($hospitalId, $keyword = null);
             $doctors = HospitalServiceFacade::getDoctorsByHospitalId($hospitalId);
             $specialties = HospitalServiceFacade::getAllSpecialties();
-            $patientCount=HospitalServiceFacade::getPatientsCount($hospitalId);
+            $patientCount = HospitalServiceFacade::getPatientsCount($hospitalId);
 
         }
         catch(HospitalException $hospitalExc)
