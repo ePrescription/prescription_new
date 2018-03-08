@@ -751,7 +751,10 @@ $time_array=array(
             $('input#hospitalLocation').val(locationName);
 
         }
-
+        window.onload = function() {
+            var dateValue=$("#appointmentDate").val();
+           appointmentTypePatient(dateValue);
+        };
 
         function appointmentTypePatient(dateValue)
         {
@@ -855,7 +858,7 @@ $time_array=array(
             var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
            // calculate age
             //alert(age);
-            $("#age").val(age);
+            $("#age").val(age).prop('disabled',true);
         }
         function disableAmount(){
             $("#fee").val(0).prop('disabled',true);
