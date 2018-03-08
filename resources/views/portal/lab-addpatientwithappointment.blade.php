@@ -765,7 +765,10 @@ $time_array=array(
             $('input#hospitalLocation').val(locationName);
 
         }
-
+        window.onload = function() {
+            var dateValue=$("#appointmentDate").val();
+            appointmentTypePatient(dateValue);
+        };
 
         function appointmentTypePatient(dateValue)
         {
@@ -868,7 +871,7 @@ $time_array=array(
             var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
             // calculate age
             //alert(age);
-            $("#age").val(age);
+            $("#age").val(age).prop('disabled',true);
         }
         function disableAmount(){
             $("#fee").val(0).prop('disabled',true);
@@ -974,18 +977,18 @@ $time_array=array(
                         required: true,
                         lettersonly: true
                     },
-                    email: {
-                        required: true,
+                  //  email: {
+                  //      required: true,
                         // Specify that email should be validated
                         // by the built-in "email" rule
-                        email: true
-                    },
-                    telephone: {
-                        required: true,
-                        number: true,
-                        minlength: 10,
-                        maxlength: 10
-                    },
+                    //    email: true
+                    //},
+                   // telephone: {
+                        //required: true,
+                      //  number: true,
+                      //  minlength: 10,
+                      //  maxlength: 10
+                    //},
                     age: {
                         required: true,
                         number: true,
@@ -1006,12 +1009,12 @@ $time_array=array(
                         required: "Please enter your name",
                         lettersonly: "Your name must be characters"
                     },
-                    email: "Please enter a valid email address",
-                    telephone: {
-                        required: "Please provide a valid mobile number",
-                        minlength: "Your mobile number must be 10 characters long",
-                        maxlength: "Your mobile number must be 10 characters long"
-                    },
+                   // email: "Please enter a valid email address",
+                  //  telephone: {
+                   //     required: "Please provide a valid mobile number",
+                   //     minlength: "Your mobile number must be 10 characters long",
+                   //     maxlength: "Your mobile number must be 10 characters long"
+                  //  },
                     age: "Please provide a valid age",
                     appointmentDate: "Please provide a valid Date",
                     fee: "Please provide a valid Amount"

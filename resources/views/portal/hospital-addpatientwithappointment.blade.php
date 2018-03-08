@@ -282,7 +282,7 @@ $time_array=array(
 
 
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Marital Status<span class="red">*</span> </label>
+                                                    <label class="col-sm-3 control-label">Marital Status <span class="red">*</span></label>
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" id="married1" name="maritalStatus" value="1" required="required" />&nbsp;&nbsp;Married
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
@@ -751,7 +751,10 @@ $time_array=array(
             $('input#hospitalLocation').val(locationName);
 
         }
-
+        window.onload = function() {
+            var dateValue=$("#appointmentDate").val();
+           appointmentTypePatient(dateValue);
+        };
 
         function appointmentTypePatient(dateValue)
         {
@@ -851,11 +854,11 @@ $time_array=array(
 
         function calculateAge(dob) {
             var dateofbirth=$("#dob").val();
-            var dateOfBirth = new Date(dateofbirth+" 00:00:00");
+           var dateOfBirth = new Date(dateofbirth+" 00:00:00");
             var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
            // calculate age
             //alert(age);
-            $("#age").val(age);
+            $("#age").val(age).prop('disabled',true);
         }
         function disableAmount(){
             $("#fee").val(0).prop('disabled',true);
