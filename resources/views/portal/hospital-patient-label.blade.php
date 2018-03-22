@@ -25,6 +25,18 @@ $profile_menu="0";
         font-size:10px;
         font-weight: normal;
     }
+    table.one {border-collapse:collapse;}
+    table.two {border-collapse:separate;}
+    td.a {
+        border-style:dotted;
+        border-width:3px;
+        border-color:#000000;
+        padding: 10px;
+    }
+    tr.b {
+        border-bottom: dotted 1px #000;
+
+    }
 </style>
    <!-- /.wrapper-page -->
 
@@ -43,12 +55,12 @@ $profile_menu="0";
         <center>
             <br>
 
-            <table style='width:400px;height:180px;border-color:black;' >
-                <tr bgcolor='#063751' style='color:white;font-size:10px'>
+            <table class="table-bodered" border="1px" style='width:400px;height:180px;border-color:black; color: black;'>
+                <tr bgcolor='#063751' style='color:white;font-size:10px; border-bottom: dotted 1px #000;'>
                     <th colspan='7'><center>Patient Lable<span></span></center> </th>
                 </tr>
 
-                <tr style='font-size:10px; '>
+                <tr class="b" style='font-size:10px;'>
                     <td colspan='1'>Patient ID:</td>
                     <td colspan='2'><span><b>{{$doctorappointments->pid}}</b></span></td>
                     <td colspan='1'>DATE:</td>
@@ -100,10 +112,10 @@ $profile_menu="0";
             </table>
             <br>
            <div id="Hide">
-            <table style='width:400px;height:180px;border-color:black;' >
+            <table class="table-bodered" border="1px"    style='width:400px;height:180px;border-color:black;border-collapse:separate;' >
                 <tr bgcolor='#063751' style='color:white;font-size:10px'>
                     <th colspan='7' >
-                       Attendant Lable<span></span>
+                        <center>Attendant Lable<span></span></center>
                     </th>
                 </tr>
                 <tr style='font-size:10px; border-bottom: dotted 1px #000'>
