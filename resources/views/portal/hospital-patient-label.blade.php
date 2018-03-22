@@ -55,12 +55,12 @@ $profile_menu="0";
         <center>
             <br>
 
-            <table class="table-bodered" border="1px" style='width:400px;height:180px;border-color:black; color: black;'>
+            <table   style='border-collapse: collapse;width:400px;height:180px;border-color:black;' >
                 <tr bgcolor='#063751' style='color:white;font-size:10px; border-bottom: dotted 1px #000;'>
                     <th colspan='7'><center>Patient Lable<span></span></center> </th>
                 </tr>
 
-                <tr class="b" style='font-size:10px;'>
+                <tr class="b" style='font-size:10px;  border-bottom: dotted 1px #000''>
                     <td colspan='1'>Patient ID:</td>
                     <td colspan='2'><span><b>{{$doctorappointments->pid}}</b></span></td>
                     <td colspan='1'>DATE:</td>
@@ -112,7 +112,7 @@ $profile_menu="0";
             </table>
             <br>
            <div id="Hide">
-            <table class="table-bodered" border="1px"    style='width:400px;height:180px;border-color:black;border-collapse:separate;' >
+            <table   style='border-collapse: collapse;width:400px;height:180px;border-color:black;' >
                 <tr bgcolor='#063751' style='color:white;font-size:10px'>
                     <th colspan='7' >
                         <center>Attendant Lable<span></span></center>
@@ -166,9 +166,9 @@ $profile_menu="0";
                     <td colspan='5'> <span><b>{{$doctorappointments->telephone}}</b></span></td>
                 </tr>
 
-                <tr style='font-size:10px;'>
+               <!-- <tr style='font-size:10px;'>
                     <td colspan='5'></td>
-                </tr>
+                </tr>-->
                 <tr style='font-size:10px'>
                     <td colspan='5'> </td><td>Authorized Signatory </td>
                 </tr>
