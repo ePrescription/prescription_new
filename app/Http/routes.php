@@ -126,6 +126,18 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     */
     //NEW BY  Ramana 12-01-2018
 
+    Route::get('rest/api/{Id}/deleteDoctorLeaves', array('as' => 'hospital.deleteDoctorLeaves', 'uses' => 'DoctorController@deleteDoctorLeaves'));
+
+    Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/date/{date}/time/{time}/availabilityCheck', array('as' => 'hospital.doctorAvailabilityCheck', 'uses' => 'DoctorController@DoctorAvailabilityCheck'));
+
+    Route::get('rest/api/{Id}/UpdateDoctorLeaves', array('as' => 'hospital.UpdateDoctorLeaves', 'uses' => 'DoctorController@UpdateDoctorLeaves'));
+    Route::post('rest/api/saveDoctorLeaves', array('as' => 'hospital.saveDoctorLeaves', 'uses' => 'DoctorController@saveDoctorLeaves'));
+    Route::get('rest/api/updateavailability', array('as' => 'hospital.UpdatedoctorAvailability', 'uses' => 'DoctorController@UpdateDoctorAvailability'));
+
+    Route::get('rest/api/{hospitalId}/doctorAvailabilitySetting', array('as' => 'hospital.doctorAvailabilitySetting', 'uses' => 'DoctorController@DoctorAvailabilitySetting'));
+    Route::post('rest/api/savedoctoravailability', array('as' => 'hospital.SavedoctorAvailability', 'uses' => 'DoctorController@SaveDoctorAvailability'));
+    Route::get('rest/api/{hospitalId}/doctorId/{doctorId}/availability', array('as' => 'hospital.doctorAvailability', 'uses' => 'DoctorController@DoctorAvailability'));
+
     Route::get('rest/api/{hospitalId}/patient/{patientId}/lab-details-results', array('as' => 'hospital.patientlabReportsresults', 'uses' => 'DoctorController@PatientLabDetailsResultsByHospitalForFront'));
     Route::get('rest/api/hospital/{hospitalId}/patient/{patientId}/{date}/lab-reports', array('as' => 'hospital.patientlabreports', 'uses' => 'DoctorController@PatientLabReportsByHospitalForDoctor'));
 //ramana end 12-01-2018

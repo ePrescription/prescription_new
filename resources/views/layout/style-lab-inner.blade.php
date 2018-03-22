@@ -14,7 +14,8 @@
     .dropbtn {
         background-color: #3498DB;
         color: White;
-        padding: 10px;
+        padding: 5px;
+        width: 100px;
         font-size: 16px;
         /*border: none;*/
 
@@ -41,7 +42,7 @@
 
     .dropdown-content a {
         color: black;
-        padding: 12px 16px;
+        padding: 10px 16px;
         text-decoration: none;
         display: block;
 

@@ -6,6 +6,7 @@
  * Time: 5:07 PM
  */
 
+use App\Http\ViewModels\DoctorAvailabilityViewModel;
 use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
@@ -219,6 +220,12 @@ interface HospitalInterface {
     public function getPatientAppointmentLabel($patientId,$Id);
     //ADDITION END BY PRASANTH 24-01-2018//
     public function getPatientsCount($hospitalId);
+    public function getDoctorsInfo($hospitalId);
+    public function getDoctorsAvalabilityForHospital($hospitalId,$doctorId);
+    public function SaveDoctorAvailability(DoctorAvailabilityViewModel $doctorAvailabilityVM);
+    public function saveDoctorLeaves($LeaveRequestVM);
+    public function UpdateDoctorLeaves($LeaveRequestVM,$id);
+    public function deleteDoctorLeaves($id);
 
 
 }

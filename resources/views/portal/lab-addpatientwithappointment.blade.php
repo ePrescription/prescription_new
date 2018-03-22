@@ -107,16 +107,18 @@ $time_array=array(
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
                                         <h4 class="m-t-0 m-b-30">New Patient Appointment</h4>
-
-                                        @if (session()->has('tokenId'))
-                                            <div style="float:right;">
+                                      <!--
+                                        <div class="dropdown" style="float: left;">
+                                            @if (session()->has('tokenId'))
+                                                <div style="float:right;">
                                          <span style="color:red;">
                                              <h3>TokenID:{{session('tokenId')}}</h3>
                                            <h3>PID:{{session('pid')}}</h3>
+                                         </span>
+                                         </div>
+                                                    @endif
 
-                                     </span>
-                                            </div>
-                                        @endif
+                                     -->
 
 
                                         <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
@@ -384,8 +386,24 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Appointment Date <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="appointmentDate" id="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); " />
+                                                        <input type="text" class="form-control" name="appointmentDate" id="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); " /><!-- onchange="javascript:appointmentTypePatient(this.value); " -->
                                                         @if ($errors->has('appointmentDate'))<p class="error" style="">{!!$errors->first('appointmentDate')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
+                                                    <div class="col-sm-9">
+
+                                                        <!--Modified By prasanth Start 24-01-2018 -->
+                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="javascript:getTokenId({{Session::get('LoginUserHospital')}},this.value);">
+                                                            <!--Modified By prasanth Start 24-01-2018 -->
+                                                            <option value="">--CHOOSE--</option>
+                                                            @foreach($doctors as $doctor)
+                                                                <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -401,21 +419,6 @@ $time_array=array(
 
                                                         </select>
                                                         @if ($errors->has('appointmentTime'))<p class="error" style="">{!!$errors->first('appointmentTime')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
-                                                    <div class="col-sm-9">
-
-                                                        <!--Modified By prasanth Start 24-01-2018 -->
-                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="javascript:getTokenId({{Session::get('LoginUserHospital')}},this.value);">
-                                                            <!--Modified By prasanth Start 24-01-2018 -->
-                                                            <option value="">--CHOOSE--</option>
-                                                            @foreach($doctors as $doctor)
-                                                                <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12" id="token" style="display: none;">
@@ -767,69 +770,74 @@ $time_array=array(
         }
         window.onload = function() {
             var dateValue=$("#appointmentDate").val();
-            appointmentTypePatient(dateValue);
+            //appointmentTypePatient(dateValue);
         };
 
         function appointmentTypePatient(dateValue)
         {
-            var new_appointment_date = dateValue;
-            var prev_appointment_date = $("input#prev_appointment_date").val();
-
-            var date1 = new Date(new_appointment_date);
-            var date2 = new Date(prev_appointment_date);
-            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-            //alert(diffDays);
 
 
-            if(diffDays<=15)
-            {
-                $("#paymentTypeInfo").hide();
+            var hid= '{{Session::get('LoginUserHospital') }}';
+            var did=$("#doctorId").val();
+            if(did!="") {
+                var new_appointment_date = dateValue;
+                var prev_appointment_date = $("input#prev_appointment_date").val();
 
-                $('input#payment1').attr('required', false);
-                $('input#payment2').attr('required', false);
-                $('input#fee').attr('required', false);
+                var date1 = new Date(new_appointment_date);
+                var date2 = new Date(prev_appointment_date);
+                var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-            }
-            else
-            {
-                $("#paymentTypeInfo").show();
-
-                $('input#payment1').attr('required', true);
-                $('input#payment2').attr('required', true);
-                $('input#fee').attr('required', true);
-
-            }
+                //alert(diffDays);
 
 
-            var BASEURL = "{{ URL::to('/') }}/";
-            var status = 1;
-            var callurl = BASEURL + 'fronthospital/rest/api/appointmenttimes';
+                if (diffDays <= 15) {
+                    $("#paymentTypeInfo").hide();
 
-
-            var d = new Date();
-            var h = (d.getHours()<10?'0':'') + d.getHours();
-            var m = (d.getMinutes()<10?'0':'') + d.getMinutes();
-            var s = (d.getSeconds()<10?'0':'') + d.getSeconds();
-            var t = h+":"+m+":"+s;
-            var timeValue = h+":"+m;
-
-            $.ajax({
-                url: callurl,
-                type: "get",
-                data: {"date": dateValue, "time": timeValue, "status": status},
-                success: function (data) {
-                    console.log(data);
-                    var terms = '<option value="">--Choose Time--</option>';
-                    $.each(data.result, function (index, value) {
-                        terms += '<option value="'+index+'">'+value+'</option>';
-                    });
-                    $("#appointmentTime").html(terms);
+                    $('input#payment1').attr('required', false);
+                    $('input#payment2').attr('required', false);
+                    $('input#fee').attr('required', false);
 
                 }
-            });
+                else {
+                    $("#paymentTypeInfo").show();
 
+                    $('input#payment1').attr('required', true);
+                    $('input#payment2').attr('required', true);
+                    $('input#fee').attr('required', true);
+
+                }
+
+
+                var BASEURL = "{{ URL::to('/') }}/";
+                var status = 1;
+                var callurl = BASEURL + 'fronthospital/rest/api/appointmenttimes';
+
+
+                var d = new Date();
+                var h = (d.getHours() < 10 ? '0' : '') + d.getHours();
+                var m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+                var s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
+                var t = h + ":" + m + ":" + s;
+                var timeValue = h + ":" + m;
+
+                $.ajax({
+                    url: callurl,
+                    type: "get",
+                    data: {"date": dateValue, "time": timeValue, "status": status, "doctorId": did, "hospitalId": hid},
+                    success: function (data) {
+                        console.log(data);
+                        var terms = '<option value="">--Choose Time--</option>';
+                        $.each(data.result, function (index, value) {
+                            terms += '<option value="' + index + '">' + value + '</option>';
+                        });
+                        $("#appointmentTime").html(terms);
+
+                    }
+                });
+            }else{
+                alert("Please Select Doctor");
+            }
 
         }
 
@@ -855,7 +863,7 @@ $time_array=array(
                 }
             });
 
-
+            appointmentTypePatient(date);
         }
         //New By prasanth for Age Calculation
         function getAge(date) {
@@ -871,13 +879,13 @@ $time_array=array(
             var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
             // calculate age
             //alert(age);
-            $("#age").val(age).prop('disabled',true);
+            $("#age").val(age).prop('readOnly',true);
         }
         function disableAmount(){
-            $("#fee").val(0).prop('disabled',true);
+            $("#fee").val(0).prop('readOnly',true);
         }
         function enableAmount(){
-            $("#fee").val(200).prop('disabled',false);
+            $("#fee").val(200).prop('readOnly',false);
         }
 
 

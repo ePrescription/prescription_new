@@ -3533,4 +3533,163 @@ class HospitalService {
         return $doctorappointments;
     }
 
+    public function getDoctorsInfo($hospitalId){
+        $doctorsInfo = null;
+
+        try
+        {
+            $doctorsInfo = $this->hospitalRepo->getDoctorsInfo($hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $doctorsInfo;
+    }
+
+
+
+
+    public function getDoctorsAvalabilityForHospital($hospitalId,$doctorId){
+        $doctorsInfo = null;
+
+        try
+        {
+            $doctorsInfo = $this->hospitalRepo->getDoctorsAvalabilityForHospital($hospitalId,$doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $doctorsInfo;
+    }
+
+    public function SaveDoctorAvailability($doctorAvailabilityVM){
+        $status = null;
+        try
+        {
+            $status = $this->hospitalRepo->SaveDoctorAvailability($doctorAvailabilityVM);
+
+        }
+
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+
+
+
+    public function UpdateDoctorAvailability($doctorAvailabilityVM){
+        $status = null;
+        try
+        {
+            $status = $this->hospitalRepo->UpdateDoctorAvailability($doctorAvailabilityVM);
+
+            if($status){
+
+                $status=" Doctor Timings Updated Successfully";
+            }else{
+                $status="Error While Updated Details";
+            }
+        }
+
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+
+    public function saveDoctorLeaves($LeaveRequestVM){
+        $status = null;
+        try
+        {
+            //dd($LeaveRequestVM);
+            $status = $this->hospitalRepo->saveDoctorLeaves($LeaveRequestVM);
+            if($status){
+
+                $status="Saved Leaves Data Successfully";
+            }else{
+                $status="Details Already Exist With These dates";
+            }
+        }
+
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+    public function UpdateDoctorLeaves($LeaveRequestVM1,$id){
+        $status = null;
+       //dd($LeaveRequestVM1);
+        try
+        {
+            $status = $this->hospitalRepo->UpdateDoctorLeaves($LeaveRequestVM1,$id);
+
+            if($status){
+
+                $status=" Doctor Dates Updated Successfully";
+            }else{
+                $status="Error While Updating Details";
+            }
+        }
+
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+
+    public function deleteDoctorLeaves($id){
+        $status = null;
+        //dd($LeaveRequestVM1);
+        try
+        {
+            $status = $this->hospitalRepo->deleteDoctorLeaves($id);
+            if($status){
+                $status="Doctor Dates Deleted Successfully";
+            }else{
+                $status="Error While Deleting Details";
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+
+
 }

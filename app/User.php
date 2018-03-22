@@ -191,6 +191,10 @@ class User extends Model implements AuthenticatableContract,
     }
 
 
+    public function doctorAvailability()
+    {
+        return $this->hasOne('App\prescription\model\entities\DoctorAvailability', 'doctor_id');
+    }
 
     /*public function patientsymptoms()
     {
