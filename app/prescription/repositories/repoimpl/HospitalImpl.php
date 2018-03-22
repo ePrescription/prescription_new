@@ -10849,7 +10849,7 @@ class HospitalImpl implements HospitalInterface
             $query->where('dp.patient_id', '=', $patientId);
             $query->where('dp.id', '=', $Id);
             $query->select('d.name', 'd.specialty', 'dp.appointment_date', 'dp.appointment_time as time', 'dp.token_id',
-                'dp.brief_history', 'h.hospital_name', 'h.email', 'h.address as hsaddress', 'h.telephone', 'p.name as patient_name', 'p.patient_id as patient_id', 'p.telephone as telephone', 'p.gender', 'p.address','p.age','p.relationship')->get();
+                'dp.brief_history', 'h.hospital_name', 'h.email', 'h.address as hsaddress', 'h.telephone', 'p.name as patient_name', 'p.patient_id as patient_id', 'p.telephone as telephone', 'p.gender', 'p.address','p.age','p.relationship','p.pid')->get();
 
             $doctorappointments = $query->first();
 
