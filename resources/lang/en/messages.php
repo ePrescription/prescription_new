@@ -82,6 +82,10 @@
         "223" => "No doctor details available",
         "224" => "Successfully retrieved doctor names",
 
+        "225" => "Unable to get doctor appointments for the next two days",
+        "226" => "Successfully retrieved doctor appointments for the next two days",
+        "227" => "No doctor appointments found for the next two days",
+
         "304" => "Unable to retrieve patient appointments",
         "305" => "Unable to retrieve dashboard details",
         "306" => "Successfully retrieved dashboard details",

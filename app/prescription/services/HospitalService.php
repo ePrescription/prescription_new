@@ -3691,5 +3691,32 @@ class HospitalService {
         return $status;
     }
 
+    /**
+     * Get the doctor appointments for the next two days from current date. This is for doctors in case of offline
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Baskar
+     */
+
+    public function getApiTwoDaysDoctorAppointments($hospitalId, $doctorId)
+    {
+        $twoDaysAppointments = null;
+
+        try
+        {
+            $twoDaysAppointments = $this->hospitalRepo->getApiTwoDaysDoctorAppointments($hospitalId, $doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_TWO_DAY_APPOINTMENTS_ERROR, $exc);
+        }
+
+        return $twoDaysAppointments;
+    }
 
 }

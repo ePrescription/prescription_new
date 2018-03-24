@@ -108,6 +108,10 @@ class ErrorEnum extends Enum{
     const NO_DOCTOR_DETAILS_FOUND = 223;
     const DOCTOR_NAME_SUCCESS = 224;
 
+    const DOCTOR_TWO_DAY_APPOINTMENTS_ERROR = 225;
+    const DOCTOR_TWO_DAY_APPOINTMENTS_SUCCESS = 226;
+    const DOCTOR_NO_TWO_DAY_APPOINTMENTS_FOUND = 227;
+
 
     //Hospital Profile constants 300 to 399
 

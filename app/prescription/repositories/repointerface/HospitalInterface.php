@@ -227,5 +227,12 @@ interface HospitalInterface {
     public function UpdateDoctorLeaves($LeaveRequestVM,$id);
     public function deleteDoctorLeaves($id);
 
+    //Added by Baskar 24-03-2018 - Begin
+    /* Function to get the doctor appointments for the next two days from current date. This is for doctors in case of offline*/
+
+    public function getApiTwoDaysDoctorAppointments($hospitalId, $doctorId);
+
+    //Added by Baskar - End
+
 
 }

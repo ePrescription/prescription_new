@@ -11082,13 +11082,13 @@ class HospitalImpl implements HospitalInterface
         } catch(QueryException $queryEx)
         {
             $status=false;
-            dd($queryEx);
+            //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $queryEx);
         }
         catch(Exception $exc)
         {
             $status=false;
-            dd($exc);
+            //dd($exc);
             throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
         }
         //dd($doctorInfo);
@@ -11158,7 +11158,7 @@ class HospitalImpl implements HospitalInterface
 
     public function deleteDoctorLeaves($id)
     {
-        $status=true;
+        $status = true;
         // dd($LeaveRequestVM);
         try {
             DB::table('doctor_leaves_schedule')->where('id','=',$id)->delete();
@@ -11167,16 +11167,64 @@ class HospitalImpl implements HospitalInterface
         } catch(QueryException $queryEx)
         {
             $status=false;
-            dd($queryEx);
+            //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $queryEx);
         }
         catch(Exception $exc)
         {
             $status=false;
-            dd($exc);
+            //dd($exc);
             throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
         }
         //dd($doctorInfo);
         return $status;
+    }
+
+    /**
+     * Get the doctor appointments for the next two days from current date. This is for doctors in case of offline
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Baskar
+     */
+
+    public function getApiTwoDaysDoctorAppointments($hospitalId, $doctorId)
+    {
+        $twoDaysAppointments = null;
+
+        try
+        {
+            $currentDate = Carbon::now()->format('Y-m-d');
+            //$time = time();
+            //dd($currentDate);
+            $twoDaysDate = date('Y-m-d', strtotime($currentDate. ' + 2 days'));
+            //dd($twoDaysDate);
+            //$nextTwoDays = date("Y-m-d", mktime(0,0,0,date("n", $time),date("j",$time) +2 ,date("Y", $time)));
+            //dd($nextTwoDays);
+
+            $query = DB::table('doctor_appointment as da')->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
+            $query->where('da.doctor_id', '=', $doctorId);
+            $query->where('da.hospital_id', '=', $hospitalId);
+            $query->where('da.appointment_date', '>', $currentDate);
+            $query->where('da.appointment_date', '<=', $twoDaysDate);
+            $query->select('da.id', 'da.hospital_id', 'da.hospital_id', 'da.patient_id', 'p.name', 'p.pid', 'p.gender',
+                'da.brief_history', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time',
+                'da.token_id');
+
+            //dd($query->toSql());
+
+            $twoDaysAppointments = $query->get();
+
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_TWO_DAY_APPOINTMENTS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_TWO_DAY_APPOINTMENTS_ERROR, $exc);
+        }
+
+        return $twoDaysAppointments;
     }
 }

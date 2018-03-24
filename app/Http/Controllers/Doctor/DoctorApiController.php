@@ -3222,4 +3222,50 @@ class DoctorApiController extends Controller
 
         return $randomString;
     }
+
+    /**
+     * Get the doctor appointments for the next two days from current date. This is for doctors in case of offline
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Baskar
+     */
+
+    public function getApiTwoDaysDoctorAppointments($doctorId, $hospitalId)
+    {
+        $twoDaysAppointments = null;
+        //dd('Inside next two days appointments');
+
+        try
+        {
+            $twoDaysAppointments = $this->hospitalService->getApiTwoDaysDoctorAppointments($hospitalId, $doctorId);
+            //dd($generalExamination);
+
+            if(!is_null($twoDaysAppointments) && !empty($twoDaysAppointments))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::DOCTOR_TWO_DAY_APPOINTMENTS_SUCCESS));
+                $responseJson->setCount(sizeof($twoDaysAppointments));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::DOCTOR_NO_TWO_DAY_APPOINTMENTS_FOUND));
+            }
+
+            $responseJson->setObj($twoDaysAppointments);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::DOCTOR_TWO_DAY_APPOINTMENTS_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
 }
