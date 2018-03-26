@@ -573,10 +573,10 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/dentaltests', array('as' => 'doctor.alldentaltests', 'uses' => 'DoctorApiController@getAllDentalItems'));
         Route::get('rest/api/xraytests', array('as' => 'doctor.allxraytests', 'uses' => 'DoctorApiController@getAllXRayItems'));
 
-        //Added by Baskar 24-03-2018 - Begin
+        // Added by Baskar 24-03-2018 - Begin
         /* Function to get the doctor appointments for the next two days from current date. This is for doctors in case of offline*/
         Route::get('rest/api/{doctorId}/hospital/{hospitalId}/twodaysappointments', array('as' => 'doctor.twodaysappointments', 'uses' => 'DoctorApiController@getApiTwoDaysDoctorAppointments'));
-        //Added by Baskar - End
+        // Added by Baskar - End
 
 
         //WEBSITE
