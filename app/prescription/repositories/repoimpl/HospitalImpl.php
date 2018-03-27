@@ -11290,7 +11290,7 @@ class HospitalImpl implements HospitalInterface
             $query = DB::table('doctor_appointment as da')->join('patient as p', 'p.patient_id', '=', 'da.patient_id');
             $query->where('da.doctor_id', '=', $doctorId);
             $query->where('da.hospital_id', '=', $hospitalId);
-            $query->where('da.appointment_date', '>', $currentDate);
+            $query->where('da.appointment_date', '>=', $currentDate);
             $query->where('da.appointment_date', '<=', $twoDaysDate);
             $query->select('da.id', 'da.hospital_id', 'da.hospital_id', 'da.patient_id', 'p.name', 'p.pid', 'p.gender',
                 'da.brief_history', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time',
