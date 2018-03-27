@@ -8779,7 +8779,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientMotionTests = DB::select('select * from motion_examination where status = ?', [1]);
+            //$patientMotionTests = DB::select('select * from motion_examination where status = ?', [1]);
+            $patientMotionTests = $this->hospitalService->getAllMotionTests();
 
         }
         catch(HospitalException $hospitalExc)
@@ -8845,7 +8846,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientUltraSoundTests = DB::select('select * from ultra_sound where status = ?', [1]);
+            //$patientUltraSoundTests = DB::select('select * from ultra_sound where status = ?', [1]);
+            $patientUltraSoundTests = $this->hospitalService->getAllUltrasoundTests();
 
         }
         catch(HospitalException $hospitalExc)
@@ -8877,7 +8879,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientScans = DB::select('select * from scans where status = ?', [1]);
+            //$patientScans = DB::select('select * from scans where status = ?', [1]);
+            $patientScans = $this->hospitalService->getAllScans();
             //dd($blood_examination);
 
         }

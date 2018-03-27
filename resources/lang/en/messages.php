@@ -284,6 +284,14 @@
         "814" => "Successfully retrieved urine tests",
         "815" => "No urine tests available",
 
+        "816" => "Unable to retrieve motion tests",
+        "817" => "Successfully retrieved motion tests",
+        "818" => "No motion tests available",
+
+        "819" => "Unable to retrieve ultrasound tests",
+        "820" => "Successfully retrieved ultrasound tests",
+        "821" => "No ultrasound tests available",
+
         "851" => "Unable to retrieve specialties list",
         "852" => "Successfully retrieved specialties list",
         "853" => "No specialties list available",

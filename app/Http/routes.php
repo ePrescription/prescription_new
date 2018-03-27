@@ -286,6 +286,12 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::post('rest/api/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@savePatientDentalTests'));
     Route::post('rest/api/xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorController@savePatientXrayTests'));
 
+    Route::get('rest/api/bloodtests', array('as' => 'fronthospital.allbloodtests', 'uses' => 'DoctorApiController@getAllBloodTests'));
+    Route::get('rest/api/motiontests', array('as' => 'fronthospital.allmotiontests', 'uses' => 'DoctorApiController@getAllMotionTests'));
+    Route::get('rest/api/urinetests', array('as' => 'fronthospital.allurinetests', 'uses' => 'DoctorApiController@getAllUrineTests'));
+    Route::get('rest/api/ultrasoundtests', array('as' => 'fronthospital.allultrasoundtests', 'uses' => 'DoctorApiController@getAllUltrasoundTests'));
+    Route::get('rest/api/scantests', array('as' => 'fronthospital.allscantests', 'uses' => 'DoctorApiController@getAllScanTests'));
+
     Route::get('rest/api/{patientId}/ultrasoundtests', array('as' => 'doctor.ultrasoundtests', 'uses' => 'DoctorController@getPatientUltraSoundTests'));
     Route::get('rest/api/{patientId}/urinetests', array('as' => 'doctor.urinetests', 'uses' => 'DoctorController@getPatientUrineTests'));
     Route::get('rest/api/{patientId}/motiontests', array('as' => 'doctor.motiontests', 'uses' => 'DoctorController@getPatientMotionTests'));
@@ -301,7 +307,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     //RAMANA NEW  start  19-01-2018
 
-   Route::post('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
+    Route::post('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
    // Route::get('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
 
 //RAMANA NEW  End  19-01-2018

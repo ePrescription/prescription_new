@@ -161,7 +161,10 @@ interface HospitalInterface {
     public function savePatientXRayTests(PatientXRayViewModel $patientXRayVM);
 
     public function getAllBloodTests();
+    public function getAllMotionTests();
     public function getAllUrineTests();
+    public function getAllUltrasoundTests();
+
     public function getAllFamilyIllness();
     public function getAllPastIllness();
     public function getAllGeneralExaminations();

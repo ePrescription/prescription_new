@@ -4502,7 +4502,8 @@ class HospitalImpl implements HospitalInterface
     public function getPatientScanDetails($patientId, $scanDate)
     {
         $scanTests = null;
-        $scanDetails = array();
+        //$scanDetails = array();
+        $scanDetails = null;
         //dd($patientId);
 
         try {
@@ -4546,6 +4547,11 @@ class HospitalImpl implements HospitalInterface
             $timeQuery->groupBy('ps.examination_time');
 
             $examinationTime = $timeQuery->get();
+
+            if(!is_null($examinationTime))
+            {
+                $scanDetails = array();
+            }
 
             foreach ($examinationTime as $time) {
                 //dd($time->examination_time);
@@ -4595,6 +4601,7 @@ class HospitalImpl implements HospitalInterface
         }
 
         return $scanDetails;
+        //return $scanTests;
     }
 
     /**
@@ -5307,7 +5314,8 @@ class HospitalImpl implements HospitalInterface
     public function getPatientUltraSoundTests($patientId, $ultraSoundDate)
     {
         $ultraSound = null;
-        $ultraSoundDetails = array();
+        //$ultraSoundDetails = array();
+        $ultraSoundDetails = null;
 
         try {
             $patientUser = User::find($patientId);
@@ -5352,6 +5360,13 @@ class HospitalImpl implements HospitalInterface
 
             $examinationTime = $timeQuery->get();
 
+            if(!is_null($examinationTime))
+            {
+                $ultraSoundDetails = array();
+            }
+
+            //dd($examinationTime);
+
             foreach ($examinationTime as $time) {
                 //dd($time->examination_time);
                 /*$ultraSoundTestRecord = array_filter($ultraSound, function($e) use ($ultraSound, $time){
@@ -5377,6 +5392,8 @@ class HospitalImpl implements HospitalInterface
                     'us.examination_name as examinationName', 'pus.examination_date as examinationDate',
                     'pusi.id as patientExaminationItemId', 'pusi.is_value_set as isValueSet',
                     'pus.examination_time');
+
+                //dd($ultraSoundQuery->toSql());
 
                 $ultraSound = $ultraSoundQuery->get();
 
@@ -5689,6 +5706,40 @@ class HospitalImpl implements HospitalInterface
     }
 
     /**
+     * Get all motion tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllMotionTests()
+    {
+        $motionTests = null;
+
+        try
+        {
+            $query = DB::table('motion_examination as me')->where('me.status', '=', 1);
+            $query->select('me.id', 'me.examination_name');
+            $query->orderBy('me.sequence_by', 'asc');
+
+            $motionTests = $query->get();
+        }
+        catch (QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::MOTIONTEST_LIST_ERROR, $queryEx);
+        }
+        catch (Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::MOTIONTEST_LIST_ERROR, $exc);
+        }
+
+        return $motionTests;
+    }
+
+    /**
      * Get all urine tests
      * @param none
      * @throws $hospitalException
@@ -5716,6 +5767,40 @@ class HospitalImpl implements HospitalInterface
         }
 
         return $urineTests;
+    }
+
+    /**
+     * Get all Ultrasound tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllUltrasoundTests()
+    {
+        $ultrasoundTests = null;
+
+        try
+        {
+            $query = DB::table('ultra_sound as us')->where('us.status', '=', 1);
+            $query->select('us.id', 'us.examination_name');
+            //$query->orderBy('us.sequence_by', 'asc');
+
+            $ultrasoundTests = $query->get();
+        }
+        catch (QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::ULTRASOUND_LIST_ERROR, $queryEx);
+        }
+        catch (Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::ULTRASOUND_LIST_ERROR, $exc);
+        }
+
+        return $ultrasoundTests;
     }
 
 
