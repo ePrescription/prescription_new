@@ -6817,7 +6817,7 @@ class HospitalImpl implements HospitalInterface
 
     /**
      * Get patient examination dates
-     * @param $patientId
+     * @param $patientId, $hospitalId
      * @throws $hospitalException
      * @return array | null
      * @author Baskar
@@ -7353,6 +7353,176 @@ class HospitalImpl implements HospitalInterface
             $examinationDates['diagnosticExaminations'] = $diagnosticExaminations;
             $examinationDates['latestPrescription'] = $latestPrescription;
 
+            $examinationDates["generalExaminationDates"] = $generalExaminationDates;
+            $examinationDates["pastIllnessDates"] = $pastIllnessDates;
+            $examinationDates["familyIllnessDates"] = $familyIllnessDates;
+            $examinationDates["personalHistoryDates"] = $personalHistoryDates;
+            $examinationDates["drugTestDates"] = $drugTestDates;
+            $examinationDates["surgeryTestDates"] = $surgeryTestDates;
+            $examinationDates["pregnancyDates"] = $pregnancyDates;
+            $examinationDates["scanDates"] = $scanDates;
+            $examinationDates["symptomDates"] = $symptomDates;
+            $examinationDates["complaintDates"] = $complaintDates;
+            $examinationDates["diagnosisDates"] = $diagnosisDates;
+            $examinationDates["ultraSoundDates"] = $ultraSoundDates;
+            $examinationDates["bloodTestDates"] = $bloodTestDates;
+            $examinationDates["urineTestDates"] = $urineTestDates;
+            $examinationDates["motionTestDates"] = $motionTestDates;
+            $examinationDates["dentalTestDates"] = $dentalTestDates;
+            $examinationDates["xrayTestDates"] = $xrayTestDates;
+
+            //dd($examinationDates);
+
+        } catch (QueryException $queryEx) {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $queryEx);
+        } catch (UserNotFoundException $userExc) {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        } catch (Exception $exc) {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
+        }
+
+        //dd($patientLabTests);
+        return $examinationDates;
+    }
+
+    /**
+     * Get patient examination dates
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getApiExaminationDates($patientId)
+    {
+        $examinationDates = null;
+        $generalExaminationDates = null;
+        $pastIllnessDates = null;
+        //$drugDates = null;
+
+        $familyIllnessDates = null;
+        $personalHistoryDates = null;
+        $pregnancyDates = null;
+        $scanDates = null;
+        $symptomDates = null;
+        $complaintDates = null;
+        $ultraSoundDates = null;
+        $bloodTestDates = null;
+        $urineTestDates = null;
+        $motionTestDates = null;
+        $drugTestDates = null;
+        $dentalTestDates = null;
+        $diagnosisDates = null;
+
+        $patientLabTests = null;
+
+        try {
+            $patientUser = User::find($patientId);
+
+            if (is_null($patientUser)) {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            //dd('Inside examination dates');
+
+            $examinationQuery = DB::table('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
+            $examinationQuery->select('pge.general_examination_date')->orderBy('pge.general_examination_date', 'DESC');
+            $generalExaminationDates = $examinationQuery->distinct()->get();
+
+            $pastIllnessQuery = DB::table('patient_past_illness as ppi')->where('ppi.patient_id', '=', $patientId);
+            $pastIllnessQuery->select('ppi.past_illness_date')->orderBy('ppi.past_illness_date', 'DESC');
+            $pastIllnessDates = $pastIllnessQuery->distinct()->get();
+            //$pastIllnessDates = $pastIllnessQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $familyIllnessQuery = DB::table('patient_family_illness as pfi')->where('pfi.patient_id', '=', $patientId);
+            $familyIllnessQuery->select('pfi.family_illness_date')->orderBy('pfi.family_illness_date', 'DESC');
+            $familyIllnessDates = $familyIllnessQuery->distinct()->get();
+            //$familyIllnessDates = $familyIllnessQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $personalHistoryQuery = DB::table('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
+            $personalHistoryQuery->select('pph.personal_history_date')->orderBy('pph.personal_history_date', 'DESC');
+            $personalHistoryDates = $personalHistoryQuery->distinct()->get();
+            //$personalHistoryDates = $personalHistoryQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $pregnancyDetailsQuery = DB::table('patient_pregnancy as pp')->where('pp.patient_id', '=', $patientId);
+            $pregnancyDetailsQuery->select('pp.pregnancy_date')->orderBy('pp.pregnancy_date', 'DESC');
+            $pregnancyDates = $pregnancyDetailsQuery->distinct()->get();
+            //$pregnancyDates = $pregnancyDetailsQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $scanDetailsQuery = DB::table('patient_scan as ps')->where('ps.patient_id', '=', $patientId);
+            $scanDetailsQuery->select('ps.scan_date')->orderBy('ps.scan_date', 'DESC');
+            $scanDates = $scanDetailsQuery->distinct()->get();
+            //$scanDates = $scanDetailsQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $symptomDatesQuery = DB::table('patient_symptoms as ps')->where('ps.patient_id', '=', $patientId);
+            $symptomDatesQuery->select('ps.patient_symptom_date')->orderBy('ps.patient_symptom_date', 'DESC');
+            $symptomDates = $symptomDatesQuery->distinct()->get();
+
+            $complaintDatesQuery = DB::table('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
+            $complaintDatesQuery->select('pc.complaint_date')->orderBy('pc.complaint_date', 'DESC');
+            $complaintDates = $complaintDatesQuery->distinct()->get();
+
+            $diagnosisDatesQuery = DB::table('patient_investigations_diagnosis as pid')->where('pid.patient_id', '=', $patientId);
+            $diagnosisDatesQuery->select('pid.diagnosis_date')->orderBy('pid.diagnosis_date', 'DESC');
+            $diagnosisDates = $diagnosisDatesQuery->distinct()->get();
+
+            //$symptomDates = $symptomDatesQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $ultraSoundDatesQuery = DB::table('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
+            $ultraSoundDatesQuery->select('pus.examination_date')->orderBy('pus.examination_date', 'DESC');
+            $ultraSoundDates = $ultraSoundDatesQuery->distinct()->get();
+            //$ultraSoundDates = $ultraSoundDatesQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $bloodDatesQuery = DB::table('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+            $bloodDatesQuery->select('pbe.examination_date')->orderBy('pbe.examination_date', 'DESC');
+            $bloodTestDates = $bloodDatesQuery->distinct()->get();
+            //$bloodTestDates = $bloodDatesQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            //dd($bloodDatesQuery->toSql());
+
+            $urineDatesQuery = DB::table('patient_urine_examination as pue')->where('pue.patient_id', '=', $patientId);
+            $urineDatesQuery->select('pue.examination_date')->orderBy('pue.examination_date', 'DESC');
+            $urineTestDates = $urineDatesQuery->distinct()->get();
+            //$urineTestDates = $urineDatesQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $motionDatesQuery = DB::table('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
+            $motionDatesQuery->select('pme.examination_date')->orderBy('pme.examination_date', 'DESC');
+            $motionTestDates = $motionDatesQuery->distinct()->get();
+
+            $dentalDatesQuery = DB::table('patient_dental_examination as pde')->where('pde.patient_id', '=', $patientId);
+            $dentalDatesQuery->select('pde.examination_date')->orderBy('pde.examination_date', 'DESC');
+            $dentalTestDates = $dentalDatesQuery->distinct()->get();
+
+            $xrayDatesQuery = DB::table('patient_xray_examination as pxe')->where('pxe.patient_id', '=', $patientId);
+            $xrayDatesQuery->select('pxe.examination_date')->orderBy('pxe.examination_date', 'DESC');
+            $xrayTestDates = $xrayDatesQuery->distinct()->get();
+            //$motionTestDates = $motionDatesQuery->distinct()->take(2147483647)->skip(1)->get();
+
+            $drugDatesQuery = DB::table('patient_drug_history as pdh')->where('pdh.patient_id', '=', $patientId);
+            $drugDatesQuery->select('pdh.drug_history_date')->orderBy('pdh.drug_history_date', 'DESC');
+            $drugTestDates = $drugDatesQuery->distinct()->get();
+
+            $surgeryDatesQuery = DB::table('patient_surgeries as ps')->where('ps.patient_id', '=', $patientId);
+            $surgeryDatesQuery->select('ps.operation_date')->orderBy('ps.surgery_input_date', 'DESC');
+            $surgeryTestDates = $surgeryDatesQuery->distinct()->get();
+
+            $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
+                'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
+            $patientQuery->where('p.patient_id', '=', $patientId);
+            $patientDetails = $patientQuery->first();
+
+            /*$hospitalQuery = DB::table('hospital as h')->select('h.id', 'h.hospital_id', 'h.hospital_name', 'h.address', 'c.city_name',
+                'co.name');
+            $hospitalQuery->join('cities as c', 'c.id', '=', 'h.city');
+            $hospitalQuery->join('countries as co', 'co.id', '=', 'h.country');
+            $hospitalQuery->where('h.hospital_id', '=', $hospitalId);
+            $hospitalDetails = $hospitalQuery->first();*/
+
+            $examinationDates['patientDetails'] = $patientDetails;
+            //$examinationDates['hospitalDetails'] = $hospitalDetails;
             $examinationDates["generalExaminationDates"] = $generalExaminationDates;
             $examinationDates["pastIllnessDates"] = $pastIllnessDates;
             $examinationDates["familyIllnessDates"] = $familyIllnessDates;

@@ -225,6 +225,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
 
     Route::get('rest/api/{patientId}/examinationdates', array('as' => 'doctor.examinationdates', 'uses' => 'DoctorController@getExaminationDates'));
+    Route::get('rest/api/patient/{patientId}/examinationdates', array('as' => 'patient.examinationdates', 'uses' => 'DoctorApiController@getApiExaminationDates'));
     //Route::get('rest/api/{patientId}/examinations', array('as' => 'doctor.allexaminationdates', 'uses' => 'DoctorController@getExaminationDates'));
 
     Route::get('rest/api/{patientId}/generalexamination', array('as' => 'doctor.generalexamination', 'uses' => 'DoctorController@getPatientGeneralExamination'));

@@ -122,6 +122,7 @@ interface HospitalInterface {
     public function savePatientFamilyIllness(PatientFamilyIllnessViewModel $patientFamilyIllnessVM);
 
     public function getExaminationDates($patientId, $hospitalId);
+    public function getApiExaminationDates($patientId);
     public function getLatestAppointmentDateForPatient($patientId, $hospitalId);
     //;
 

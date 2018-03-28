@@ -2784,7 +2784,7 @@ class HospitalService {
 
     /**
      * Get patient examination dates
-     * @param $patientId
+     * @param $patientId, $hospitalId
      * @throws $hospitalException
      * @return array | null
      * @author Baskar
@@ -2797,6 +2797,34 @@ class HospitalService {
         try
         {
             $examinationDates = $this->hospitalRepo->getExaminationDates($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
+        }
+
+        return $examinationDates;
+    }
+
+    /**
+     * Get patient examination dates
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getApiExaminationDates($patientId)
+    {
+        $examinationDates = null;
+
+        try
+        {
+            $examinationDates = $this->hospitalRepo->getApiExaminationDates($patientId);
         }
         catch(HospitalException $hospitalExc)
         {
