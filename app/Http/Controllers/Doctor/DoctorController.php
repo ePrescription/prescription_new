@@ -4983,7 +4983,7 @@ class DoctorController extends Controller
      * @param $patientId
      * @throws $hospitalException
      * @return array | null
-     * @author Baskar
+     * @author Baskaran
      */
 
     public function getExaminationDates($patientId)
