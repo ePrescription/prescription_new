@@ -170,6 +170,8 @@ interface HospitalInterface {
     public function getAllPastIllness();
     public function getAllGeneralExaminations();
     public function getAllPersonalHistory();
+    public function getAllApiPersonalHistory();
+
     public function getAllPregnancy();
     public function getAllScans();
     public function getAllDentalItems();

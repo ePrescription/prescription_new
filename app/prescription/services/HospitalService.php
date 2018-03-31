@@ -2378,6 +2378,34 @@ class HospitalService {
     }
 
     /**
+     * Get all personal history
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllApiPersonalHistory()
+    {
+        $personalHistory = null;
+
+        try
+        {
+            $personalHistory = $this->hospitalRepo->getAllApiPersonalHistory();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $exc);
+        }
+
+        return $personalHistory;
+    }
+
+    /**
      * Get all pregnancy
      * @param none
      * @throws $hospitalException

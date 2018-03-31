@@ -5917,6 +5917,87 @@ class HospitalImpl implements HospitalInterface
     }
 
     /**
+     * Get all personal history
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllApiPersonalHistory()
+    {
+        $personalHistory = null;
+        $personalHistoryItems = array();
+        $historyItemsArray = array();
+        $personalHistoryArray = array();
+
+        try
+        {
+            $personalHistory = $this->getAllPersonalHistory();
+
+            if(!is_null($personalHistory) && !empty($personalHistory))
+            {
+                foreach($personalHistory as $history)
+                {
+                    $personalHistoryArray["personalHistory".$history->id]["id"] = $history->id;
+                    $personalHistoryArray["personalHistory".$history->id]["personalHistory"] = $history->personal_history_name;
+
+                    //dd($history);
+                    //$personalHistoryItems[$history->id] = $history;
+                    //$itemName = $history->personal_history_name;
+
+                    $historyItems = $this->getAllApiPersonalHistoryItems($history->id);
+                    $personalHistoryArray["personalHistory".$history->id]["items"] = $historyItems;
+                    //array_push($historyItemsArray, $historyItems);
+                    //$personalHistoryItems[$itemName] = $historyItemsArray;
+
+                    //$historyItems = $this->getAllApiPersonalHistoryItems($history->id);
+                    //$personalHistoryItems[$itemName] = $historyItems;
+                }
+            }
+            //dd($personalHistoryItems);
+        }
+        catch (QueryException $queryEx)
+        {
+            dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $queryEx);
+        }
+        catch (Exception $exc)
+        {
+            dd($exc);
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $exc);
+        }
+
+        return $personalHistoryArray;
+        //return $personalHistoryItems;
+        //return $historyItemsArray;
+    }
+
+    private function getAllApiPersonalHistoryItems($historyId)
+    {
+        $personalHistoryItems = null;
+
+        $query = DB::table('personal_history_item as phi')
+            ->join('personal_history as ph', 'ph.id', '=', 'phi.personal_history_id');
+        $query->where('phi.status', '=', 1);
+        $query->where('ph.id', '=', $historyId);
+
+        $query->select('phi.id', 'phi.personal_history_item_name');
+
+        $personalHistoryItems = $query->get();
+
+        return $personalHistoryItems;
+    }
+
+    /**
+     * Get personal history items for selected personal history
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    /**
      * Get all pregnancy
      * @param none
      * @throws $hospitalException
