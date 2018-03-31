@@ -5959,12 +5959,12 @@ class HospitalImpl implements HospitalInterface
         }
         catch (QueryException $queryEx)
         {
-            dd($queryEx);
+            //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $queryEx);
         }
         catch (Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $exc);
         }
 
