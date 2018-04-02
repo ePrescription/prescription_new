@@ -3608,4 +3608,54 @@ class DoctorApiController extends Controller
 
         return $responseJson;
     }
+
+    /**
+     * Get prescription details for the patient by prescription Id
+     * @param $prescriptionId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPrescriptionDetails($prescriptionId)
+    {
+        $prescriptionDetails = null;
+        $responseJson = null;
+        //$jsonResponse = null;
+
+        try
+        {
+            //$prescriptionDetails = HospitalServiceFacade::getPrescriptionDetails($prescriptionId);
+            $prescriptionDetails = $this->hospitalService->getPrescriptionDetails($prescriptionId);
+
+            if(!empty($prescriptionDetails))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($prescriptionDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::NO_PRESCRIPTION_DETAILS_FOUND));
+            }
+
+            $responseJson->setObj($prescriptionDetails);
+            $responseJson->sendSuccessResponse();
+
+            /*$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SUCCESS));
+            $jsonResponse->setObj($prescriptionDetails);*/
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        //return $jsonResponse;
+        return $responseJson;
+    }
 }
