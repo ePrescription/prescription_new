@@ -308,7 +308,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
     //RAMANA NEW  start  19-01-2018
 
-   Route::post('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
+    Route::post('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
    // Route::get('rest/api/hospital/{hid}/doctor/{did}/patient/{pid}/receipt/{rid}/updatepatientpaymentstatus',array('as' => 'doctor.patient-fee-update', 'uses' => 'DoctorController@updatePatientFeeStatus'));
 
 //RAMANA NEW  End  19-01-2018
