@@ -2182,6 +2182,34 @@ class HospitalService {
     }
 
     /**
+     * Get all motion tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllMotionTests()
+    {
+        $motionTests = null;
+
+        try
+        {
+            $motionTests = $this->hospitalRepo->getAllMotionTests();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::MOTIONTEST_LIST_ERROR, $exc);
+        }
+
+        return $motionTests;
+    }
+
+    /**
      * Get all urine tests
      * @param none
      * @throws $hospitalException
@@ -2207,6 +2235,34 @@ class HospitalService {
         }
 
         return $urineTests;
+    }
+
+    /**
+     * Get all ultrasound tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllUltrasoundTests()
+    {
+        $ultrasoundTests = null;
+
+        try
+        {
+            $ultrasoundTests = $this->hospitalRepo->getAllUltrasoundTests();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::ULTRASOUND_LIST_ERROR, $exc);
+        }
+
+        return $ultrasoundTests;
     }
 
     /**
@@ -2308,6 +2364,34 @@ class HospitalService {
         try
         {
             $personalHistory = $this->hospitalRepo->getAllPersonalHistory();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $exc);
+        }
+
+        return $personalHistory;
+    }
+
+    /**
+     * Get all personal history
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllApiPersonalHistory()
+    {
+        $personalHistory = null;
+
+        try
+        {
+            $personalHistory = $this->hospitalRepo->getAllApiPersonalHistory();
         }
         catch(HospitalException $hospitalExc)
         {
@@ -2728,7 +2812,7 @@ class HospitalService {
 
     /**
      * Get patient examination dates
-     * @param $patientId
+     * @param $patientId, $hospitalId
      * @throws $hospitalException
      * @return array | null
      * @author Baskar
@@ -2741,6 +2825,34 @@ class HospitalService {
         try
         {
             $examinationDates = $this->hospitalRepo->getExaminationDates($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
+        }
+
+        return $examinationDates;
+    }
+
+    /**
+     * Get patient examination dates
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getApiExaminationDates($patientId)
+    {
+        $examinationDates = null;
+
+        try
+        {
+            $examinationDates = $this->hospitalRepo->getApiExaminationDates($patientId);
         }
         catch(HospitalException $hospitalExc)
         {

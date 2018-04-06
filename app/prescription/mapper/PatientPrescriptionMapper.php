@@ -57,4 +57,32 @@ class PatientPrescriptionMapper {
 
         return $labTestVM;
     }
+
+    public  static function setPrescriptionDetailsByDoctor(Request $prescriptionRequests){
+
+        $prescriptionVM = new PatientPrescriptionViewModel();
+        $prescription = (object) $prescriptionRequests->all();
+       // dd($prescription);
+
+        $prescriptionVM->setDoctorId($prescription->doctorId);
+        $prescriptionVM->setPatientId($prescription->patientId);
+        $prescriptionVM->setHospitalId($prescription->hospitalId);
+        $prescriptionVM->setBriefDescription($prescription->notes);
+        //$prescriptionVM->setIntakeForm($prescription->intakeForm);
+        $prescriptionVM->setDrugHistory(property_exists($prescription, 'drugHistory') ? $prescription->drugHistory : null);
+        $prescriptionVM->setDrugDetails($prescription->prescription);
+        $prescriptionVM->setPrescriptionDate(date("Y-m-d H:i:s"));
+        $prescriptionVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $prescriptionVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        //$prescriptionVM->setDrugDetails($prescriptionRequests->json()->all());
+
+        /*$prescriptionVM->setDoctorId($prescriptionRequests->get('doctorId'));
+        $prescriptionVM->setPatientId($prescriptionRequests->get('patientId'));
+        $prescriptionVM->setHospitalId($prescriptionRequests->get('hospitalId'));
+        $prescriptionVM->setDrugDetails($prescriptionRequests->get('drugs'));*/
+
+        return $prescriptionVM;
+
+          }
 }

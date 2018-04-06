@@ -2346,6 +2346,109 @@ class DoctorController extends Controller
         return view('portal.hospital-addpatient');
     }
 
+    /*Doctor Add Appoinment */
+
+    /**
+     * To add patientAppointment from Doctor login
+     * @param
+     * @throws $hospitalException
+     * @return doctorlist| patientList
+     * @author Prasanth
+     */
+
+
+    public function addPatientWithAppointmentByHospitalForDoctor($doctorId,$hospitalId)
+    {
+        //dd('HI');
+        $patients = null;
+        try
+        {
+            $patients = HospitalServiceFacade::getPatientsByHospital($hospitalId, $keyword = null);
+          //  $doctors = HospitalServiceFacade::getDoctorsByHospitalId($hospitalId);
+            $doctorId=$doctorId;
+            $specialties = HospitalServiceFacade::getAllSpecialties();
+            $patientCount = HospitalServiceFacade::getPatientsCount($hospitalId);
+
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+        return view('portal.doctor-addpatientwithappointment',compact('patients','doctorId','specialties','patientCount'));
+    }
+
+    /**
+     * To Save patientAppointment from Doctor login
+     * @param
+     * @throws $hospitalException
+     * @return true| false
+     * @author Prasanth
+     */
+
+
+
+
+    public function savePatientWithAppointmentByHospitalForDoctor(Request $patientProfileRequest,$doctorId,$hospitlaId)
+    {
+        //dd('HI');
+        //return "HI";
+        $patientProfileVM = null;
+        $status = true;
+        $jsonResponse = null;
+        //return $patientProfileRequest->all();
+      // dd($patientProfileRequest->all());
+        try
+        {
+            $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
+
+            $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
+
+            if($status)
+            {
+                //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
+
+                $msg = "Patient Profile Added Successfully.";
+                return redirect('doctor/'.$doctorId.'/hospital/'.$doctorId.'/addpatientwithappointment')->with('success',$msg);
+            }
+            else
+            {
+                $msg = "Patient Details Invalid / Incorrect! Try Again.";
+                return redirect('doctor/'.$doctorId.'/hospital/'.$doctorId.'/addpatientwithappointment')->with('message',$msg);
+            }
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return $jsonResponse;
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        $msg = "Patient Details Invalid / Incorrect! Try Again.";
+        return redirect('doctor/'.$doctorId.'/hospital/'.$doctorId.'/addpatientwithappointment')->with('message',$msg);
+        //return $jsonResponse;
+
+    }
+
 
     public function savePatientsByHospitalForFront(Request $patientProfileRequest)
     {
@@ -3292,6 +3395,23 @@ class DoctorController extends Controller
                     for ($i = 0; $i <= $mdiff; $i++) {
 
                         $time_array[date('H:i:s', $mftime + (300 * $i))] = date('h:i a', $mftime + (300 * $i));
+                    }
+
+                    if ($dateValue == $currentDateValue) {
+                        $NewTimeValue = $timeValue . ":00";
+
+                        $currentTimeEpoch = strtotime($NewTimeValue);
+
+                        foreach ($time_array as $key => $value) {
+                            $timeSlotEpoch = strtotime($key);
+
+                            if ($currentTimeEpoch > $timeSlotEpoch) {
+                                unset($time_array[$key]);
+
+                            }
+
+                        }
+
                     }
 
 
@@ -4983,7 +5103,7 @@ class DoctorController extends Controller
      * @param $patientId
      * @throws $hospitalException
      * @return array | null
-     * @author Baskar
+     * @author Baskaran
      */
 
     public function getExaminationDates($patientId)
@@ -8779,7 +8899,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientMotionTests = DB::select('select * from motion_examination where status = ?', [1]);
+            //$patientMotionTests = DB::select('select * from motion_examination where status = ?', [1]);
+            $patientMotionTests = $this->hospitalService->getAllMotionTests();
 
         }
         catch(HospitalException $hospitalExc)
@@ -8845,7 +8966,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientUltraSoundTests = DB::select('select * from ultra_sound where status = ?', [1]);
+            //$patientUltraSoundTests = DB::select('select * from ultra_sound where status = ?', [1]);
+            $patientUltraSoundTests = $this->hospitalService->getAllUltrasoundTests();
 
         }
         catch(HospitalException $hospitalExc)
@@ -8877,7 +8999,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientScans = DB::select('select * from scans where status = ?', [1]);
+            //$patientScans = DB::select('select * from scans where status = ?', [1]);
+            $patientScans = $this->hospitalService->getAllScans();
             //dd($blood_examination);
 
         }
@@ -10018,5 +10141,151 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
         return $status;
 
     }
+
+    /**
+     * Save Prescription for the patient
+     * @param $patientPrescriptionRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author prasanth
+     */
+
+    public function savePatientPrescriptionByDoctor(Request $patientPrescriptionRequest)
+    {
+        $patientPrescriptionVM = null;
+        $status = true;
+        $responseJson = null;
+        $Msg = "Saved Prescription Details Successfully";
+        $patientId=$patientPrescriptionRequest->patientId;
+        $hospitalId=$patientPrescriptionRequest->hospitalId;
+        $doctorId=$patientPrescriptionRequest->doctorId;
+
+        try
+        {
+            $patientPrescriptionVM = PatientPrescriptionMapper::setPrescriptionDetails($patientPrescriptionRequest);
+            //$status = HospitalServiceFacade::savePatientPrescription($patientPrescriptionVM);
+            $status = $this->hospitalService->savePatientPrescription($patientPrescriptionVM);
+
+            if($status)
+            {
+                $Msg = "Saved Prescription Details Successfully";
+                //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $Msg = "Error While Saving Prescription Details";
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+            }
+
+            //return $patientPrescriptionVM
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+            //return $jsonResponse;
+            $Msg = "Error While Saving Prescription Details";
+
+        }
+        catch(Exception $exc)
+        {
+            $Msg = "Error While Saving Prescription Details";
+
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+      //  return $responseJson;
+       // Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/prescription-details', array('as' => 'hospital.patientdetails', 'uses' => 'DoctorController@PatientPrescriptionDetailsByHospitalForDoctor'));
+
+        return redirect('doctor/'.$doctorId.'/hospital/'.$hospitalId.'/patient/'.$patientId.'/prescription-details')->with('success',$Msg);
+
+    }
+
+    /**
+     * To get  Patient Fee  reciepts for the doctor
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return Array(feereciepts details)
+     * @author prasanth
+     */
+
+
+
+
+    public function getFeeReceiptsForDoctor($hospitalId, $doctorId)
+    {
+        $feeReceipts = null;
+        $responseJson = null;
+        //dd($doctorId);
+
+        try
+        {
+            $feeReceipts = $this->hospitalService->getFeeReceipts($hospitalId, $doctorId);
+            // dd($feeReceipts);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-fees',compact('feeReceipts'));
+        //return $responseJson;
+    }
+
+    /**
+     * To get  Patient Individual dee Summary  for the doctor
+     * @param $receiptId
+     * @throws $hospitalException
+     * @return Array
+     * @author prasanth
+     */
+
+    public function getReceiptDetailsForDoctor($receiptId)
+    {
+        $feeReceiptDetails = null;
+        $responseJson = null;
+        // dd($receiptId);
+
+        try
+        {
+            $feeReceiptDetails = $this->hospitalService->getReceiptDetails($receiptId);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-fee-details',compact('feeReceiptDetails','receiptId'));
+        //return $responseJson;
+    }
+
 
 }

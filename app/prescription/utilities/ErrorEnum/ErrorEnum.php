@@ -324,6 +324,14 @@ class ErrorEnum extends Enum{
     const URINETEST_LIST_SUCCESS = 814;
     const NO_URINETEST_LIST_FOUND = 815;
 
+    const MOTIONTEST_LIST_ERROR = 816;
+    const MOTIONTEST_LIST_SUCCESS = 817;
+    const NO_MOTIONTEST_LIST_FOUND = 818;
+
+    const ULTRASOUND_LIST_ERROR = 819;
+    const ULTRASOUND_LIST_SUCCESS = 820;
+    const NO_ULTRASOUND_LIST_FOUND = 821;
+
     //Specialties Codes 850 - 875
     const SPECIALTIES_LIST_ERROR = 851;
     const SPECIALTIES_LIST_SUCCESS = 852;
