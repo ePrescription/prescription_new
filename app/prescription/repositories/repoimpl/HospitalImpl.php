@@ -1172,7 +1172,7 @@ class HospitalImpl implements HospitalInterface
         //dd($keyword);
 
         try {
-            $query = DB::table('drugs as d')->select('d.id as formulationId',
+            /*$query = DB::table('drugs as d')->select('d.id as formulationId',
                 DB::raw('TRIM(UPPER(d.drug_name)) as formulationName')
                 , 'b.id as tradeId',
                 //DB::raw('CONCAT_WS(" ",TRIM(UPPER(b.brand_name)), NULLIF(b.dosage_amount, ""), NULLIF(b.dosage, "") as tradeName'));
@@ -1183,19 +1183,20 @@ class HospitalImpl implements HospitalInterface
             //DB::raw('TRIM(UPPER(b.brand_name)) as tradeName'));
             $query->join('brands as b', 'b.drug_id', '=', 'd.id');
             $query->where('d.drug_name', 'LIKE', $keyword . '%');
-            $query->where('d.drug_status', '=', 1);
+            $query->where('d.drug_status', '=', 1);*/
             //dd($query->toSql());
-            $formulations = $query->get();
+            //$formulations = $query->get();
 
             /*DB::raw('CONCAT(TRIM(UPPER(b.brand_name)),
                     COALESCE(b.dosage_amount," "), IF(LENGTH(b.dosage_amount), "", " ")) as tradeName'));*/
-            /*$query = DB::table('brands as b')->select('b.id as tradeId',
+            $query = DB::table('brands as b')->select('b.id as tradeId',
                 DB::raw('CONCAT(TRIM(UPPER(b.brand_name)), " ", b.dosage_amount, " ", b.dosage) as tradeName'), 'd.id as formulationId',
                 //'b.brand_name as tradeName', 'd.id as formulationId',
                 DB::raw('TRIM(UPPER(d.drug_name)) as formulationName'));
             $query->join('drugs as d', 'd.id', '=', 'b.drug_id');
             $query->where('b.brand_name', 'LIKE', '%'.$keyword.'%');
-            $query->where('b.brand_status', '=', 1);*/
+            $query->where('b.brand_status', '=', 1);
+            $formulations = $query->get();
 
         } catch (QueryException $queryEx) {
             //dd($queryEx);
