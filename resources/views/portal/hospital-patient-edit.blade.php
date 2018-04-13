@@ -39,7 +39,7 @@ $profile_menu="0";
                             <div class="panel-body">
 
                                 <div class="dropdown">
-                                    <button class="dropbtn"><img src="{{URL::to('/')}}/images/menu.png" width="20"/>Menu</button>
+                                    <button class="dropbtn"><img src="{{URL::to('/')}}/images/menu.png" width="15" />Menu</button>
                                     <div class="dropdown-content">
                                         <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i>View Profile </a>
                                         &nbsp;&nbsp;
@@ -154,14 +154,14 @@ $profile_menu="0";
                                             <div class="form-group col-md-12">
                                                 <label class="col-sm-3 control-label">Relation Name</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="spouseName" value="{{$patientDetails[0]->spouseName}}" required="required" />
+                                                    <input type="text" class="form-control" name="spouseName" value="{{$patientDetails[0]->spouseName}}"  />
                                                 </div>
                                             </div>
 
                                             <div class="form-group col-md-12">
                                                 <label class="col-sm-3 control-label">Address</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="address" value="{{$patientDetails[0]->address}}" required="required" />
+                                                    <input type="text" class="form-control" name="address" value="{{$patientDetails[0]->address}}"  />
                                                 </div>
                                             </div>
                                         </div>

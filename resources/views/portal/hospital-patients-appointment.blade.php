@@ -47,7 +47,7 @@ $profile_menu="0";
 
                                 <!-- Modal content -->
                                 <div class="modal-content">
-                                    <span class="close">&times;</span>
+                                    <span class="close" onclick="Modalclose()">&times;</span>
                                     <!-- form start -->
                                     <form action="{{URL::to('/')}}/fronthospital/rest/api/transferappointment" role="form" id="appointmentDoctor" method="GET">
                                         <div class="col-md-12">
@@ -56,7 +56,7 @@ $profile_menu="0";
                                             <div class="form-group col-md-12">
                                                 <label class="col-sm-3 control-label">Doctor</label>
                                                 <div class="col-sm-9">
-                                                    <select name="doctorId" id="doctorId" class="form-control" required="required" >
+                                                    <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="DoctorAvailabilityCheck()">
                                                         <option value="">--CHOOSE--</option>
                                                         @foreach($doctors as $doctor)
                                                             <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
@@ -69,6 +69,10 @@ $profile_menu="0";
                                         <div class="col-md-1"></div>
                                         <div class="box-footer">
                                             <input type="hidden" name="appointmentId" id="appointmentId" value="0" />
+                                            <input type="hidden" name="hospitalId" id="hospitalId" value="0" />
+                                            <input type="hidden" name="appoinmentDate" id="appoinmentDate" value="0" />
+                                            <input type="hidden" name="appoinmentTime" id="appoinmentTime" value="0" />
+
                                             <button type="submit" class="btn btn-success" style="float:right;">Transfer Appointment</button>
                                         </div>
 
@@ -115,6 +119,8 @@ $profile_menu="0";
                                             <th>Name in Full</th>
                                             <th>Mobile No</th>
                                             <th>Appointment</th>
+                                            <th>Appointment To</th>
+                                            <th>Appointment Status</th>
                                             <th>Category</th>
                                             <th>Action</th>
                                         </tr>
@@ -129,12 +135,14 @@ $profile_menu="0";
                                                 <td>{{$patient->name}}</td>
                                                 <td>{{$patient->telephone}}</td>
                                                 <td>{{$patient->appointment_date}} - {{$patient->appointment_time}}</td>
+                                                 <td>{{$patient->dname}}</td>
+                                                 <td>{{$patient->appointment_name}}</td>
                                                 <td>{{$patient->appointment_category}}</td>
                                                 <td>
 
                                                     <a href="{{URL::to('/')}}/fronthospital/patients/appointments/{{$patient->appointment_id}}/details" title="View Appointment"><i class="fa fa-eye"></i> </a>
                                                     &nbsp;&nbsp;
-                                                    <a href="#" data-data="{{URL::to('/')}}/fronthospital/patients/appointments/{{$patient->appointment_id}}/transferappointment?appointmentId={{$patient->appointment_id}}" title="Transfer Appointment" onclick="OpenBox('{{$patient->patient_id}}','{{$patient->appointment_id}}')"> <i class="fa fa-exchange"></i> </a>
+                                                    <a href="#" data-data="{{URL::to('/')}}/fronthospital/patients/appointments/{{$patient->appointment_id}}/transferappointment?appointmentId={{$patient->appointment_id}}" title="Transfer Appointment" onclick="OpenBox('{{$patient->patient_id}}','{{$patient->appointment_id}}','{{$patient->doctor_id}}','{{Auth::user()->id}}','{{$patient->appointment_date}}','{{$patient->appointment_time}}')"> <i class="fa fa-exchange"></i> </a>
                                                     &nbsp;&nbsp;
                                                     <a href="{{URL::to('/')}}/fronthospital/patients/appointments/{{$patient->appointment_id}}/cancelappointment?appointmentId={{$patient->appointment_id}}" title="Cancel Appointment" onclick="return confirm('Are you sure ?')"><i class="fa fa-times"></i> </a>
                                                     &nbsp;
@@ -281,7 +289,7 @@ console.log(span);
         }
 
         // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
+         function Modalclose() {
             modal.style.display = "none";
         }
 
@@ -298,10 +306,41 @@ console.log(span);
             alert(pid+'::'+aid);
         }
 
-        function OpenBox(pid,aid)
+        function OpenBox(pid,aid,did,hid,date,time)
         {
+
             document.getElementById("appointmentId").value=aid;
+            document.getElementById("hospitalId").value=hid;
+            document.getElementById("appoinmentDate").value=date;
+            document.getElementById("appoinmentTime").value=time;
+
             modal.style.display = "block";
+
+        }
+        function DoctorAvailabilityCheck(){
+            var hid=document.getElementById("hospitalId").value;
+            var date=document.getElementById("appoinmentDate").value;
+            var time=document.getElementById("appoinmentTime").value;
+
+            var BASEURL = "{{ URL::to('/') }}/";
+            var did=$("#doctorId").val();
+            var callurl = BASEURL + 'fronthospital/rest/api/hospital/'+hid+'/doctor/' + did + '/date/'+date+'/time/'+time+'/availabilityCheck';
+            //alert(callurl);
+            $.ajax({
+                url: callurl,
+                type: "get",
+                data: {"status":1},
+                success: function (data) {
+
+                     if(data==0){
+                         alert("Doctor Is Not Available .Please Choose Another Doctor");
+                         var did=$("#doctorId").val("");
+                     }else if(data==2){
+                         alert("Appointment Time Over,Can't Transfer!!");
+                         var did=$("#doctorId").val("");
+                     }
+                }
+            });
         }
     </script>
 

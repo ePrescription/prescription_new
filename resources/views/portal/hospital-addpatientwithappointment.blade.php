@@ -124,6 +124,15 @@ $time_array=array(
                                 </span>
                                         </div>
                                     @endif
+                                    <div class="dropdown" style="float: left;">
+                                        @if (session()->has('tokenId'))
+                                            <div style="float:right;">
+                                         <span style="color:red;">
+                                             <h3>TokenID:{{session('tokenId')}}</h3>
+                                           <h3>PID:{{session('pid')}}</h3>
+                                         </span>
+                                                @endif
+                                            </div>
 
 
 
@@ -373,8 +382,24 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Appointment Date <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="appointmentDate" id="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); " />
+                                                        <input type="text" class="form-control" name="appointmentDate" id="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); "  /><!--onchange="javascript:appointmentTypePatient(this.value); " -->
                                                         @if ($errors->has('appointmentDate'))<p class="error" style="">{!!$errors->first('appointmentDate')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
+                                                    <div class="col-sm-9">
+
+                                                        <!--Modified By prasanth Start 24-01-2018 -->
+                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="javascript:getTokenId({{Auth::user()->id}},this.value);">
+                                                            <!--Modified By prasanth Start 24-01-2018 -->
+                                                            <option value="">--CHOOSE--</option>
+                                                            @foreach($doctors as $doctor)
+                                                                <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -390,21 +415,6 @@ $time_array=array(
 
                                                         </select>
                                                         @if ($errors->has('appointmentTime'))<p class="error" style="">{!!$errors->first('appointmentTime')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
-                                                    <div class="col-sm-9">
-
-                                                        <!--Modified By prasanth Start 24-01-2018 -->
-                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="javascript:getTokenId({{Auth::user()->id}},this.value);">
-                                                            <!--Modified By prasanth Start 24-01-2018 -->
-                                                            <option value="">--CHOOSE--</option>
-                                                            @foreach($doctors as $doctor)
-                                                                <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12" id="token" style="display: none;">
@@ -753,11 +763,15 @@ $time_array=array(
         }
         window.onload = function() {
             var dateValue=$("#appointmentDate").val();
-           appointmentTypePatient(dateValue);
+           //appointmentTypePatient(dateValue);
         };
 
         function appointmentTypePatient(dateValue)
         {
+
+            var hid= '{{ Auth::user()->id }}';
+            var did=$("#doctorId").val();
+            if(did!="") {
             var new_appointment_date = dateValue;
             var prev_appointment_date = $("input#prev_appointment_date").val();
 
@@ -769,8 +783,7 @@ $time_array=array(
             //alert(diffDays);
 
 
-            if(diffDays<=15)
-            {
+                if (diffDays <= 15) {
                 $("#paymentTypeInfo").hide();
 
                 $('input#payment1').attr('required', false);
@@ -778,8 +791,7 @@ $time_array=array(
                 $('input#fee').attr('required', false);
 
             }
-            else
-            {
+                else {
                 $("#paymentTypeInfo").show();
 
                 $('input#payment1').attr('required', true);
@@ -801,20 +813,32 @@ $time_array=array(
             var t = h+":"+m+":"+s;
             var timeValue = h+":"+m;
 
+
             $.ajax({
                 url: callurl,
                 type: "get",
-                data: {"date": dateValue, "time": timeValue, "status": status},
+                    data: {"date": dateValue, "time": timeValue, "status": status, "doctorId": did, "hospitalId": hid},
                 success: function (data) {
                     console.log(data);
+
+                        if(data.result['result']=="Doctor Is Not Available"){
+                            alert(data.result['result']);
+                            var terms = '<option value="">--Choose Time--</option>';
+                            $("#appointmentTime").html(terms);
+                        }else {
+
                     var terms = '<option value="">--Choose Time--</option>';
                     $.each(data.result, function (index, value) {
                         terms += '<option value="'+index+'">'+value+'</option>';
                     });
                     $("#appointmentTime").html(terms);
+                        }
 
                 }
             });
+            }else{
+                alert("Please Select Doctor");
+            }
 
 
         }
@@ -841,6 +865,7 @@ $time_array=array(
 
                 }
             });
+            appointmentTypePatient(date);
 
 
         }
@@ -858,13 +883,13 @@ $time_array=array(
             var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
            // calculate age
             //alert(age);
-            $("#age").val(age).prop('disabled',true);
+            $("#age").val(age).prop('readOnly',true);
         }
         function disableAmount(){
-            $("#fee").val(0).prop('disabled',true);
+            $("#fee").val(0).prop('readOnly',true);
         }
         function enableAmount(){
-            $("#fee").val(200).prop('disabled',false);
+            $("#fee").val(200).prop('readOnly',false);
         }
 
 

@@ -126,6 +126,18 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     */
     //NEW BY  Ramana 12-01-2018
 
+    Route::get('rest/api/{Id}/deleteDoctorLeaves', array('as' => 'hospital.deleteDoctorLeaves', 'uses' => 'DoctorController@deleteDoctorLeaves'));
+
+    Route::get('rest/api/hospital/{hospitalId}/doctor/{doctorId}/date/{date}/time/{time}/availabilityCheck', array('as' => 'hospital.doctorAvailabilityCheck', 'uses' => 'DoctorController@DoctorAvailabilityCheck'));
+
+    Route::get('rest/api/{Id}/UpdateDoctorLeaves', array('as' => 'hospital.UpdateDoctorLeaves', 'uses' => 'DoctorController@UpdateDoctorLeaves'));
+    Route::post('rest/api/saveDoctorLeaves', array('as' => 'hospital.saveDoctorLeaves', 'uses' => 'DoctorController@saveDoctorLeaves'));
+    Route::get('rest/api/updateavailability', array('as' => 'hospital.UpdatedoctorAvailability', 'uses' => 'DoctorController@UpdateDoctorAvailability'));
+
+    Route::get('rest/api/{hospitalId}/doctorAvailabilitySetting', array('as' => 'hospital.doctorAvailabilitySetting', 'uses' => 'DoctorController@DoctorAvailabilitySetting'));
+    Route::post('rest/api/savedoctoravailability', array('as' => 'hospital.SavedoctorAvailability', 'uses' => 'DoctorController@SaveDoctorAvailability'));
+    Route::get('rest/api/{hospitalId}/doctorId/{doctorId}/availability', array('as' => 'hospital.doctorAvailability', 'uses' => 'DoctorController@DoctorAvailability'));
+
     Route::get('rest/api/{hospitalId}/patient/{patientId}/lab-details-results', array('as' => 'hospital.patientlabReportsresults', 'uses' => 'DoctorController@PatientLabDetailsResultsByHospitalForFront'));
     Route::get('rest/api/hospital/{hospitalId}/patient/{patientId}/{date}/lab-reports', array('as' => 'hospital.patientlabreports', 'uses' => 'DoctorController@PatientLabReportsByHospitalForDoctor'));
 //ramana end 12-01-2018
@@ -213,6 +225,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
 
     Route::get('rest/api/{patientId}/examinationdates', array('as' => 'doctor.examinationdates', 'uses' => 'DoctorController@getExaminationDates'));
+    Route::get('rest/api/patient/{patientId}/examinationdates', array('as' => 'patient.examinationdates', 'uses' => 'DoctorApiController@getApiExaminationDates'));
     //Route::get('rest/api/{patientId}/examinations', array('as' => 'doctor.allexaminationdates', 'uses' => 'DoctorController@getExaminationDates'));
 
     Route::get('rest/api/{patientId}/generalexamination', array('as' => 'doctor.generalexamination', 'uses' => 'DoctorController@getPatientGeneralExamination'));
@@ -273,6 +286,12 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::post('rest/api/scandetails', array('as' => 'doctor.savescandetails', 'uses' => 'DoctorController@savePatientScanDetails'));
     Route::post('rest/api/dentaltests', array('as' => 'doctor.dentaltests', 'uses' => 'DoctorController@savePatientDentalTests'));
     Route::post('rest/api/xraytests', array('as' => 'doctor.xraytests', 'uses' => 'DoctorController@savePatientXrayTests'));
+
+    Route::get('rest/api/bloodtests', array('as' => 'fronthospital.allbloodtests', 'uses' => 'DoctorApiController@getAllBloodTests'));
+    Route::get('rest/api/motiontests', array('as' => 'fronthospital.allmotiontests', 'uses' => 'DoctorApiController@getAllMotionTests'));
+    Route::get('rest/api/urinetests', array('as' => 'fronthospital.allurinetests', 'uses' => 'DoctorApiController@getAllUrineTests'));
+    Route::get('rest/api/ultrasoundtests', array('as' => 'fronthospital.allultrasoundtests', 'uses' => 'DoctorApiController@getAllUltrasoundTests'));
+    Route::get('rest/api/scantests', array('as' => 'fronthospital.allscantests', 'uses' => 'DoctorApiController@getAllScanTests'));
 
     Route::get('rest/api/{patientId}/ultrasoundtests', array('as' => 'doctor.ultrasoundtests', 'uses' => 'DoctorController@getPatientUltraSoundTests'));
     Route::get('rest/api/{patientId}/urinetests', array('as' => 'doctor.urinetests', 'uses' => 'DoctorController@getPatientUrineTests'));
@@ -372,6 +391,9 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
    Route::get('rest/api/{patientId}/prescriptions', array('as' => 'patient.prescriptions', 'uses' => 'DoctorController@getPrescriptionByPatient'));
    Route::get('rest/api/prescriptions', array('as' => 'patient.allprescriptions', 'uses' => 'DoctorController@getAllPrescriptions'));
    Route::get('rest/api/prescription/{prescriptionId}', array('as' => 'patient.prescriptiondetails', 'uses' => 'DoctorController@getPrescriptionDetails'));
+
+    Route::get('rest/api/prescription/{prescriptionId}/details', array('as' => 'patient.getprescriptiondetails', 'uses' => 'DoctorApiController@getPrescriptionDetails'));
+
    Route::get('rest/api/patients', array('as' => 'patient.names', 'uses' => 'DoctorController@searchPatientByName'));
    Route::get('rest/api/patient', array('as' => 'patient.patient', 'uses' => 'DoctorController@searchPatientByPid'));
    Route::get('rest/api/labtests', array('as' => 'lab.labtests', 'uses' => 'DoctorController@getLabTests'));
@@ -381,6 +403,7 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
    Route::get('rest/api/brands', array('as' => 'drug.brands', 'uses' => 'DoctorController@getTradeNames'));
    Route::get('rest/api/formulations', array('as' => 'formulation.names', 'uses' => 'DoctorController@getFormulationNames'));
    //Route::post('rest/api/brands', array('as' => 'drug.brands', 'uses' => 'DoctorController@getBrandNames'));
+
    Route::post('rest/api/patient/prescription', array('as' => 'patient.saveprescription', 'uses' => 'DoctorController@savePatientPrescription'));
    Route::post('rest/api/patient/labtests', array('as' => 'patient.savelabtests', 'uses' => 'DoctorController@savePatientLabTests'));
 
@@ -556,10 +579,17 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/pastillness', array('as' => 'doctor.allpastillness', 'uses' => 'DoctorApiController@getAllPastIllness'));
         Route::get('rest/api/generalexaminations', array('as' => 'doctor.allgeneralexaminations', 'uses' => 'DoctorApiController@getAllGeneralExaminations'));
         Route::get('rest/api/personalhistory', array('as' => 'doctor.allpersonalhistory', 'uses' => 'DoctorApiController@getAllPersonalHistory'));
+        Route::get('rest/api/personalhistoryitems', array('as' => 'doctor.allpersonalhistoryitems', 'uses' => 'DoctorApiController@getAllApiPersonalHistory'));
+
         Route::get('rest/api/pregnancy', array('as' => 'doctor.allpregnancydetails', 'uses' => 'DoctorApiController@getAllPregnancy'));
         Route::get('rest/api/scans', array('as' => 'doctor.allscandetails', 'uses' => 'DoctorApiController@getAllScans'));
         Route::get('rest/api/dentaltests', array('as' => 'doctor.alldentaltests', 'uses' => 'DoctorApiController@getAllDentalItems'));
         Route::get('rest/api/xraytests', array('as' => 'doctor.allxraytests', 'uses' => 'DoctorApiController@getAllXRayItems'));
+
+        // Added by Baskar 24-03-2018 - Begin
+        /* Function to get the doctor appointments for the next two days from current date. This is for doctors in case of offline*/
+        Route::get('rest/api/{doctorId}/hospital/{hospitalId}/twodaysappointments', array('as' => 'doctor.twodaysappointments', 'uses' => 'DoctorApiController@getApiTwoDaysDoctorAppointments'));
+        // Added by Baskar - End
 
 
         //WEBSITE
@@ -581,7 +611,7 @@ Route::group(['prefix' => 'doctor'], function()
 
         //Appointment
         Route::get('{doctorId}/hospital/{hospitalId}/addpatientwithappointment', array('as' => 'hospital.addpatientwithappointment', 'uses' => 'DoctorController@addPatientWithAppointmentByHospitalForDoctor'));
-        //Route::post('{doctorId}/hospital/{hospitalId}/savepatientwithappointment', array('as' => 'hospital.savepatientwithappointment', 'uses' => 'DoctorController@savePatientWithAppointmentByHospitalForDoctor'));
+        Route::post('{doctorId}/hospital/{hospitalId}/savepatientwithappointment', array('as' => 'hospital.savepatientwithappointment', 'uses' => 'DoctorController@savePatientWithAppointmentByHospitalForDoctor'));
 
         Route::post('{doctorId}/photo', array('as' => 'hospital.savepatientphoto', 'uses' => 'DoctorApiController@savePatientPhoto'));
 //Check
@@ -687,6 +717,14 @@ Route::group(['prefix' => 'doctor'], function()
 
         Route::get('{doctorId}/patient/{patientId}/reports', array('as' => 'doctor.patientreports', 'uses' => 'DoctorApiController@getPatientReports'));
         Route::get('{doctorId}/patient/reports/{reportId}/download', array('as' => 'doctor.downloadreports', 'uses' => 'DoctorApiController@downloadPatientReports'));
+
+        /*New By Prasanth*/
+
+        Route::get('rest/api/patient/prescription', array('as' => 'patient.saveprescription', 'uses' => 'DoctorController@savePatientPrescriptionByDoctor'));
+        Route::get('rest/api/{hospitalId}/doctor/{doctorId}/feereceipts', array('as' => 'hospital.feereceipts', 'uses' => 'DoctorController@getFeeReceiptsForDoctor'));
+        Route::get('rest/api/receipt/{receiptId}/details', array('as' => 'hospital.feereceiptdetails', 'uses' => 'DoctorController@getReceiptDetailsForDoctor'));
+
+
 
 
     });

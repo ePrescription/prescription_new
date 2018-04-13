@@ -6,6 +6,7 @@
  * Time: 5:07 PM
  */
 
+use App\Http\ViewModels\DoctorAvailabilityViewModel;
 use App\Http\ViewModels\DoctorReferralsViewModel;
 use App\Http\ViewModels\FeeReceiptViewModel;
 use App\Http\ViewModels\NewAppointmentViewModel;
@@ -121,6 +122,7 @@ interface HospitalInterface {
     public function savePatientFamilyIllness(PatientFamilyIllnessViewModel $patientFamilyIllnessVM);
 
     public function getExaminationDates($patientId, $hospitalId);
+    public function getApiExaminationDates($patientId);
     public function getLatestAppointmentDateForPatient($patientId, $hospitalId);
     //;
 
@@ -160,11 +162,16 @@ interface HospitalInterface {
     public function savePatientXRayTests(PatientXRayViewModel $patientXRayVM);
 
     public function getAllBloodTests();
+    public function getAllMotionTests();
     public function getAllUrineTests();
+    public function getAllUltrasoundTests();
+
     public function getAllFamilyIllness();
     public function getAllPastIllness();
     public function getAllGeneralExaminations();
     public function getAllPersonalHistory();
+    public function getAllApiPersonalHistory();
+
     public function getAllPregnancy();
     public function getAllScans();
     public function getAllDentalItems();
@@ -219,6 +226,19 @@ interface HospitalInterface {
     public function getPatientAppointmentLabel($patientId,$Id);
     //ADDITION END BY PRASANTH 24-01-2018//
     public function getPatientsCount($hospitalId);
+    public function getDoctorsInfo($hospitalId);
+    public function getDoctorsAvalabilityForHospital($hospitalId,$doctorId);
+    public function SaveDoctorAvailability(DoctorAvailabilityViewModel $doctorAvailabilityVM);
+    public function saveDoctorLeaves($LeaveRequestVM);
+    public function UpdateDoctorLeaves($LeaveRequestVM,$id);
+    public function deleteDoctorLeaves($id);
+
+    //Added by Baskar 24-03-2018 - Begin
+    /* Function to get the doctor appointments for the next two days from current date. This is for doctors in case of offline*/
+
+    public function getApiTwoDaysDoctorAppointments($hospitalId, $doctorId);
+
+    //Added by Baskar - End
 
 
 }

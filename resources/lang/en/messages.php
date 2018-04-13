@@ -82,6 +82,10 @@
         "223" => "No doctor details available",
         "224" => "Successfully retrieved doctor names",
 
+        "225" => "Unable to get doctor appointments for the next two days",
+        "226" => "Successfully retrieved doctor appointments for the next two days",
+        "227" => "No doctor appointments found for the next two days",
+
         "304" => "Unable to retrieve patient appointments",
         "305" => "Unable to retrieve dashboard details",
         "306" => "Successfully retrieved dashboard details",
@@ -279,6 +283,14 @@
         "813" => "Unable to retrieve urine tests",
         "814" => "Successfully retrieved urine tests",
         "815" => "No urine tests available",
+
+        "816" => "Unable to retrieve motion tests",
+        "817" => "Successfully retrieved motion tests",
+        "818" => "No motion tests available",
+
+        "819" => "Unable to retrieve ultrasound tests",
+        "820" => "Successfully retrieved ultrasound tests",
+        "821" => "No ultrasound tests available",
 
         "851" => "Unable to retrieve specialties list",
         "852" => "Successfully retrieved specialties list",

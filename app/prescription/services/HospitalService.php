@@ -2182,6 +2182,34 @@ class HospitalService {
     }
 
     /**
+     * Get all motion tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllMotionTests()
+    {
+        $motionTests = null;
+
+        try
+        {
+            $motionTests = $this->hospitalRepo->getAllMotionTests();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::MOTIONTEST_LIST_ERROR, $exc);
+        }
+
+        return $motionTests;
+    }
+
+    /**
      * Get all urine tests
      * @param none
      * @throws $hospitalException
@@ -2207,6 +2235,34 @@ class HospitalService {
         }
 
         return $urineTests;
+    }
+
+    /**
+     * Get all ultrasound tests
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllUltrasoundTests()
+    {
+        $ultrasoundTests = null;
+
+        try
+        {
+            $ultrasoundTests = $this->hospitalRepo->getAllUltrasoundTests();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::ULTRASOUND_LIST_ERROR, $exc);
+        }
+
+        return $ultrasoundTests;
     }
 
     /**
@@ -2308,6 +2364,34 @@ class HospitalService {
         try
         {
             $personalHistory = $this->hospitalRepo->getAllPersonalHistory();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PERSONAL_HISTORY_LIST_ERROR, $exc);
+        }
+
+        return $personalHistory;
+    }
+
+    /**
+     * Get all personal history
+     * @param none
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getAllApiPersonalHistory()
+    {
+        $personalHistory = null;
+
+        try
+        {
+            $personalHistory = $this->hospitalRepo->getAllApiPersonalHistory();
         }
         catch(HospitalException $hospitalExc)
         {
@@ -2728,7 +2812,7 @@ class HospitalService {
 
     /**
      * Get patient examination dates
-     * @param $patientId
+     * @param $patientId, $hospitalId
      * @throws $hospitalException
      * @return array | null
      * @author Baskar
@@ -2741,6 +2825,34 @@ class HospitalService {
         try
         {
             $examinationDates = $this->hospitalRepo->getExaminationDates($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
+        }
+
+        return $examinationDates;
+    }
+
+    /**
+     * Get patient examination dates
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getApiExaminationDates($patientId)
+    {
+        $examinationDates = null;
+
+        try
+        {
+            $examinationDates = $this->hospitalRepo->getApiExaminationDates($patientId);
         }
         catch(HospitalException $hospitalExc)
         {
@@ -3531,6 +3643,192 @@ class HospitalService {
             throw new HospitalException(null, ErrorEnum::PATIENT_APPOINT_DETAILS_ERROR, $exc);
         }
         return $doctorappointments;
+    }
+
+    public function getDoctorsInfo($hospitalId){
+        $doctorsInfo = null;
+
+        try
+        {
+            $doctorsInfo = $this->hospitalRepo->getDoctorsInfo($hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $doctorsInfo;
+    }
+
+
+
+
+    public function getDoctorsAvalabilityForHospital($hospitalId,$doctorId){
+        $doctorsInfo = null;
+
+        try
+        {
+            $doctorsInfo = $this->hospitalRepo->getDoctorsAvalabilityForHospital($hospitalId,$doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $doctorsInfo;
+    }
+
+    public function SaveDoctorAvailability($doctorAvailabilityVM){
+        $status = null;
+        try
+        {
+            $status = $this->hospitalRepo->SaveDoctorAvailability($doctorAvailabilityVM);
+
+        }
+
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+
+
+
+    public function UpdateDoctorAvailability($doctorAvailabilityVM){
+        $status = null;
+        try
+        {
+            $status = $this->hospitalRepo->UpdateDoctorAvailability($doctorAvailabilityVM);
+
+            if($status){
+
+                $status=" Doctor Timings Updated Successfully";
+            }else{
+                $status="Error While Updated Details";
+            }
+        }
+
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+
+    public function saveDoctorLeaves($LeaveRequestVM){
+        $status = null;
+        try
+        {
+            //dd($LeaveRequestVM);
+            $status = $this->hospitalRepo->saveDoctorLeaves($LeaveRequestVM);
+            if($status){
+
+                $status="Saved Leaves Data Successfully";
+            }else{
+                $status="Details Already Exist With These dates";
+            }
+        }
+
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+    public function UpdateDoctorLeaves($LeaveRequestVM1,$id){
+        $status = null;
+       //dd($LeaveRequestVM1);
+        try
+        {
+            $status = $this->hospitalRepo->UpdateDoctorLeaves($LeaveRequestVM1,$id);
+
+            if($status){
+
+                $status=" Doctor Dates Updated Successfully";
+            }else{
+                $status="Error While Updating Details";
+            }
+        }
+
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+
+    public function deleteDoctorLeaves($id){
+        $status = null;
+        //dd($LeaveRequestVM1);
+        try
+        {
+            $status = $this->hospitalRepo->deleteDoctorLeaves($id);
+            if($status){
+                $status="Doctor Dates Deleted Successfully";
+            }else{
+                $status="Error While Deleting Details";
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+        return $status;
+    }
+
+    /**
+     * Get the doctor appointments for the next two days from current date. This is for doctors in case of offline
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Baskar
+     */
+
+    public function getApiTwoDaysDoctorAppointments($hospitalId, $doctorId)
+    {
+        $twoDaysAppointments = null;
+
+        try
+        {
+            $twoDaysAppointments = $this->hospitalRepo->getApiTwoDaysDoctorAppointments($hospitalId, $doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_TWO_DAY_APPOINTMENTS_ERROR, $exc);
+        }
+
+        return $twoDaysAppointments;
     }
 
 }

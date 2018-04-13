@@ -108,6 +108,10 @@ class ErrorEnum extends Enum{
     const NO_DOCTOR_DETAILS_FOUND = 223;
     const DOCTOR_NAME_SUCCESS = 224;
 
+    const DOCTOR_TWO_DAY_APPOINTMENTS_ERROR = 225;
+    const DOCTOR_TWO_DAY_APPOINTMENTS_SUCCESS = 226;
+    const DOCTOR_NO_TWO_DAY_APPOINTMENTS_FOUND = 227;
+
 
     //Hospital Profile constants 300 to 399
 
@@ -319,6 +323,14 @@ class ErrorEnum extends Enum{
     const URINETEST_LIST_ERROR = 813;
     const URINETEST_LIST_SUCCESS = 814;
     const NO_URINETEST_LIST_FOUND = 815;
+
+    const MOTIONTEST_LIST_ERROR = 816;
+    const MOTIONTEST_LIST_SUCCESS = 817;
+    const NO_MOTIONTEST_LIST_FOUND = 818;
+
+    const ULTRASOUND_LIST_ERROR = 819;
+    const ULTRASOUND_LIST_SUCCESS = 820;
+    const NO_ULTRASOUND_LIST_FOUND = 821;
 
     //Specialties Codes 850 - 875
     const SPECIALTIES_LIST_ERROR = 851;

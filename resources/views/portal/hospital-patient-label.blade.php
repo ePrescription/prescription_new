@@ -16,8 +16,29 @@ $profile_menu="0";
 
         <!-- sidebar: style can be found in sidebar.less -->
     @include('portal.hospital-sidebar')
+<style>
+    .dot{
+        border-bottom: 1px dotted black;
+        width: 40px;
+    }
+    span{
+        font-size:10px;
+        font-weight: normal;
+    }
+    table.one {border-collapse:collapse;}
+    table.two {border-collapse:separate;}
+    td.a {
+        border-style:dotted;
+        border-width:3px;
+        border-color:#000000;
+        padding: 10px;
+    }
+    tr.b {
+        border-bottom: dotted 1px #000;
 
-    </div><!-- /.wrapper-page -->
+    }
+</style>
+   <!-- /.wrapper-page -->
 
         <div class="content-page">
             <!-- Start content -->
@@ -27,7 +48,6 @@ $profile_menu="0";
                 <input type='button'  class="btn btn-info" value='Back' onclick="window.history.back();"/>
 
 
-   <div class="bg">
 
 
 
@@ -35,57 +55,133 @@ $profile_menu="0";
         <center>
             <br>
 
+            <table   style='border-collapse: collapse;width:400px;height:180px;border-color:black;' >
+                <tr bgcolor='#063751' style='color:white;font-size:10px; border-bottom: dotted 1px #000;'>
+                    <th colspan='7'><center>Patient Lable<span></span></center> </th>
+                </tr>
 
+                <tr class="b" style='font-size:10px;  border-bottom: dotted 1px #000''>
+                    <td colspan='1'>Patient ID:</td>
+                    <td colspan='2'><span><b>{{$doctorappointments->pid}}</b></span></td>
+                    <td colspan='1'>DATE:</td>
+                    <td colspan='2'><span ><b>{{ date('d-m-Y',strtotime($doctorappointments->appointment_date))}} {{ $doctorappointments->time}}</b></span></td>
+                   <!-- <td> </td><td><span ></span></td>-->
+                </tr>
 
-            <table style='width:100%;height:180px;border-color:black;border-width:1px;' >
-                <tr bgcolor='#063751' style='color:white;font-size:10px'> <th colspan='6' ><center>{{ $doctorappointments->hospital_name}}<span></span></center> </th></tr>
-                <tr style='font-size:10px'> <td > Token ID</td><td> :</td><td style='width:25%;'><span >{{$doctorappointments->token_id}}</span></td><td style='width:10%;'> </td><td> </td><td><span ></span></td></tr>
-                <tr style='font-size:10px'> <td > Patient ID</td><td> :</td><td style='width:25%;'><span >{{$doctorappointments->patient_id}}</span></td><td style='width:10%;'> Date</td><td> :</td><td><span >{{ date('d-m-Y',strtotime($doctorappointments->appointment_date))}} {{ $doctorappointments->time}}</span></td></tr>
-                <tr style='font-size:10px'><td>Name </td><td>:</td><td colspan='3'> <span > {{$doctorappointments->patient_name}}</span></td></tr>
-                <tr style='font-size:10px'><td>Address </td><td>:</td><td> <span> {{$doctorappointments->address}} </span></td><td>Gender </td><td>:</td><td>
-                        @if($doctorappointments->gender==1)
-                        <span>
-                           <b>Male</b>
-                        </span>@else
-                            <span>
-                           <b>Female</b>
-                        </span>
-                        @endif
+                <tr style='font-size:10px; border-bottom: dotted 1px #000'>
+                    <td colspan='1'  >NAME:</td>
+                    <td colspan='5'><span><b>{{$doctorappointments->patient_name}}</b></span></td>
+                  </tr>
+                <tr style='font-size:10px; border-bottom: dotted 1px #000'>
+                    <td colspan='1' >W/O:</td>
+                    <td colspan='5'><span><b>{{$doctorappointments->relationship}}</b></span></td>
+                </tr>
 
-                    </td></tr>
-                <tr style='font-size:10px'><td>Mobile / Phone No </td><td>:</td><td colspan='3'> <span>{{$doctorappointments->telephone}}</span></td></tr>
-                <tr style='font-size:10px'><td>Referred By </td><td>:</td><td colspan='5'> <span>{{ $doctorappointments->name }}({{ $doctorappointments->specialty}})</span></td></tr>
-                <tr style='font-size:9px'><td colspan='5'> </td><td>Authorized Signatory </td></tr>
-                <tr style='font-size:8px'><td colspan='5'> </td></tr>
-                <tr > <th colspan='6' bgcolor='#063751' style='color:white;font-size:10px'><center>{{$doctorappointments->hsaddress}}<span> </span> </center> </th></tr>
+                <tr style='font-size:10px; border-bottom: dotted 1px #000'>
+                    <td colspan='1'>AGE:</td>
+                    <td colspan='2'><span><b>{{$doctorappointments->age}}</b></span></td>
+                    <td colspan='1'>SEX:</td>
+                    <td colspan='2'>@if($doctorappointments->gender==1)<span><b>Male</b></span>
+                            @else
+                                <span><b>Female</b> @endif</span></td>
+                    <!-- <td> </td><td><span ></span></td>-->
+                </tr>
+                <tr style='font-size:10px; border-bottom: dotted 1px #000'>
+                    <td colspan='1'>ADDRESS:</td>
+                    <td colspan='5'><span ><b>{{$doctorappointments->address}}</b></span></td>
 
+                </tr>
+                <tr style='font-size:10px; border-bottom: dotted 1px #000'>
+
+                    <td colspan='1'>Phone No:</td>
+                    <td colspan='5'><span ><b>{{$doctorappointments->telephone}}</b></span></td>
+                </tr>
+
+                <tr style='font-size:10px; border-bottom: dotted 1px #000'>
+                    <td colspan='1'>Ref Dr:</td>
+                    <td colspan='5'><span ><b>{{$doctorappointments->name }}</b></span></td>
+                </tr>
+                <tr style='font-size:10px'>
+                    <td colspan='5'> </td><td colspan="1">Authorized Signatory </td>
+                </tr>
+                <tr >
+                    <th colspan='6' bgcolor='#063751' style='color:white;font-size:10px'>
+                        <center>{{ $doctorappointments->hospital_name}}&nbsp;&nbsp;{{$doctorappointments->hsaddress}}<span> </span>
+                        </center> </th>
+                </tr>
             </table>
             <br>
+           <div id="Hide">
+            <table   style='border-collapse: collapse;width:400px;height:180px;border-color:black;' >
+                <tr bgcolor='#063751' style='color:white;font-size:10px'>
+                    <th colspan='7' >
+                        <center>Attendant Lable<span></span></center>
+                    </th>
+                </tr>
+                <tr style='font-size:10px; border-bottom: dotted 1px #000'>
+                  <td colspan='1'>Patient ID:</td>
+                  <td colspan='2'><span ><b>{{$doctorappointments->pid}}</b></span></td>
+                  <td colspan='1'>Date:</td>
+                  <td colspan='2'><span ><b>{{ date('d-m-Y',strtotime($doctorappointments->appointment_date))}} {{ $doctorappointments->time}}</b></span></td>
+                </tr>
+                <tr style='font-size:10px;border-bottom: dotted 1px #000'>
+                    <td colspan='1'>Name:</td>
+                    <td colspan='5'>
+                        <span ><b>{{$doctorappointments->patient_name}}</b></span>
+                    </td>
+                </tr>
+                <tr style='font-size:10px;border-bottom: dotted 1px #000'>
+                    <td colspan='1'> Bed No:</td>
+                    <td colspan='2'>
+                        <span ><b></b></span>
+                    </td>
+                    <td colspan='1'> Ward Type:</td>
+                    <td colspan='2'>
+                        <span ><b></b></span>
+                    </td>
+                </tr>
+                <tr style='font-size:10px;border-bottom: dotted 1px #000'>
+                    <td colspan='1'>Attendant Name:</td>
+                    <td colspan='5'>
+                        <span><b></b></span>
+                    </td>
+                </tr>
 
-            <table style='width:100%;height:180px;border-color:black;border-width:1px;' >
-                <tr bgcolor='#063751' style='color:white;font-size:10px'> <th colspan='6' ><center>{{ $doctorappointments->hospital_name}}<span></span></center> </th></tr>
-                <tr style='font-size:10px'> <td> Patient ID</td><td> :</td><td style='width:25%;'><span ></span></td><td style='width:10%;'> Date</td><td> :</td><td><span >{{ date('d-m-Y',strtotime($doctorappointments->appointment_date))}} {{ $doctorappointments->time}}</span></td></tr>
-                <tr style='font-size:10px'><td>Name </td><td>:</td><td colspan='3'> <span > {{session('userID')}}</span></td></tr>
-                <tr style='font-size:10px'> <td > Bed Name</td><td> :</td><td style='width:25%;'><span >{{session('patient_id')}}</span></td><td style='width:10%;'> Bed Name</td><td> :</td><td><span ></span></td></tr>
-                <tr style='font-size:10px'><td>Attendant Name </td><td>:</td><td> <span></span></td></tr>
+                <tr style='font-size:10px; border-bottom: dotted 1px #000'>
+                    <td colspan='1'>AGE:</td>
+                    <td colspan='2'><span><b>{{$doctorappointments->age}}</b></span></td>
+                    <td colspan='1'>SEX:</td>
+                    <td colspan='2'>@if($doctorappointments->gender==1)<span><b>Male</b></span>
+                        @else
+                            <span><b>Female</b> @endif</span></td>
+                    <!-- <td> </td><td><span ></span></td>-->
+                </tr>
+                <tr style='font-size:10px;border-bottom: dotted 1px #000'>
+                    <td colspan='1'>Address:</td>
+                    <td colspan='5'> <span><b>{{$doctorappointments->address}}</b></span></td>
+                </tr>
 
-                <tr style='font-size:10px'><td>Age </td><td>:</td><td> <span> </span></td><td>Sex </td><td>:</td><td> <span> </span></td></tr>
-                <tr style='font-size:10px'><td>Address </td><td>:</td><td> <span></span></td></tr>
+                <tr style='font-size:10px;border-bottom: dotted 1px #000'>
+                    <td colspan='1'>Phone No:</td>
+                    <td colspan='5'> <span><b>{{$doctorappointments->telephone}}</b></span></td>
+                </tr>
 
-                <tr style='font-size:10px'><td>Mobile / Phone No </td><td>:</td><td> <span></span></td></tr>
-
-                <tr style='font-size:8px'><td colspan='5'> </td></tr>
-                <tr style='font-size:9px'><td colspan='5'> </td><td>Authorized Signatory </td></tr>
-                <tr > <th colspan='6' bgcolor='#063751' style='color:white;font-size:10px'><center>{{$doctorappointments->hsaddress}}<span> </span> </center> </th></tr>
+               <!-- <tr style='font-size:10px;'>
+                    <td colspan='5'></td>
+                </tr>-->
+                <tr style='font-size:10px'>
+                    <td colspan='5'> </td><td>Authorized Signatory </td>
+                </tr>
+                <tr >
+                    <th colspan='6' bgcolor='#063751' style='color:white;font-size:10px'><center>{{ $doctorappointments->hospital_name}}&nbsp;&nbsp;{{$doctorappointments->hsaddress}}<span> </span> </center> </th>
+                </tr>
 
             </table>
-
-        </center>
     </div>
-
-
-   </div>
+        </center>
             </div>
+
+
         </div>
 
   @include('portal.hospital-footer')

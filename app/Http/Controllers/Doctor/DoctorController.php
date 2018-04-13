@@ -7,6 +7,7 @@ use App\prescription\common\ResponsePrescription;
 use App\prescription\common\UserSession;
 use App\prescription\facades\HospitalServiceFacade;
 use App\prescription\mapper\PatientProfileMapper;
+use App\prescription\model\entities\DoctorAvailability;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
 use App\prescription\utilities\Exception\UserNotFoundException;
 use Illuminate\Http\Request;
@@ -2345,6 +2346,109 @@ class DoctorController extends Controller
         return view('portal.hospital-addpatient');
     }
 
+    /*Doctor Add Appoinment */
+
+    /**
+     * To add patientAppointment from Doctor login
+     * @param
+     * @throws $hospitalException
+     * @return doctorlist| patientList
+     * @author Prasanth
+     */
+
+
+    public function addPatientWithAppointmentByHospitalForDoctor($doctorId,$hospitalId)
+    {
+        //dd('HI');
+        $patients = null;
+        try
+        {
+            $patients = HospitalServiceFacade::getPatientsByHospital($hospitalId, $keyword = null);
+          //  $doctors = HospitalServiceFacade::getDoctorsByHospitalId($hospitalId);
+            $doctorId=$doctorId;
+            $specialties = HospitalServiceFacade::getAllSpecialties();
+            $patientCount = HospitalServiceFacade::getPatientsCount($hospitalId);
+
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+        return view('portal.doctor-addpatientwithappointment',compact('patients','doctorId','specialties','patientCount'));
+    }
+
+    /**
+     * To Save patientAppointment from Doctor login
+     * @param
+     * @throws $hospitalException
+     * @return true| false
+     * @author Prasanth
+     */
+
+
+
+
+    public function savePatientWithAppointmentByHospitalForDoctor(Request $patientProfileRequest,$doctorId,$hospitlaId)
+    {
+        //dd('HI');
+        //return "HI";
+        $patientProfileVM = null;
+        $status = true;
+        $jsonResponse = null;
+        //return $patientProfileRequest->all();
+      // dd($patientProfileRequest->all());
+        try
+        {
+            $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
+
+            $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
+
+            if($status)
+            {
+                //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
+
+                $msg = "Patient Profile Added Successfully.";
+                return redirect('doctor/'.$doctorId.'/hospital/'.$doctorId.'/addpatientwithappointment')->with('success',$msg);
+            }
+            else
+            {
+                $msg = "Patient Details Invalid / Incorrect! Try Again.";
+                return redirect('doctor/'.$doctorId.'/hospital/'.$doctorId.'/addpatientwithappointment')->with('message',$msg);
+            }
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+            //return $jsonResponse;
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        $msg = "Patient Details Invalid / Incorrect! Try Again.";
+        return redirect('doctor/'.$doctorId.'/hospital/'.$doctorId.'/addpatientwithappointment')->with('message',$msg);
+        //return $jsonResponse;
+
+    }
+
 
     public function savePatientsByHospitalForFront(Request $patientProfileRequest)
     {
@@ -3149,12 +3253,66 @@ class DoctorController extends Controller
 
         $dateValue=$request->date;
         $timeValue=$request->time;
+
         $currentDateValue=date("Y-m-d");
         $currentTimeValue=date("h:i:s");
+        $hospitalId=$request->hospitalId;
+        $doctorId=$request->doctorId;
+        $day=date("D",strtotime($dateValue));
 
-
+       // dd($day);
+        $time_array = array();
         try
         {
+            $checkArray=DB::table('doctor_leaves_schedule as dls')
+                ->where('dls.doctor_id',$doctorId)->where('hospital_id',$hospitalId)
+                ->where('leave_start_date','<=',$dateValue)
+                ->where('leave_end_date','>=',$dateValue)->get();
+           // dd(count($checkArray));
+            if(count($checkArray)==0) {
+
+                $TimeSchedule = DoctorAvailability::where('doctor_id', '=', $doctorId)
+                    ->where('hospital_id', '=', $hospitalId)
+                    ->where('week_day', '=', strtoupper($day))->get();
+                //dd($TimeSchedule);
+                //dd($TimeSchedule);
+
+                if (count($TimeSchedule) > 0) {
+
+                    $mftime = strtotime($dateValue . " " . $TimeSchedule[0]->morning_start_time);
+                    $mttime = strtotime($dateValue . " " . $TimeSchedule[0]->morning_end_time);
+                    $mdiff = ($mttime - $mftime) / 300; //300 sec means 5 for each patiant tim
+
+
+                    for ($i = 0; $i <= $mdiff; $i++) {
+
+                        $time_array[date('H:i:s', $mftime + (300 * $i))] = date('h:i a', $mftime + (300 * $i));
+                    }
+
+
+                    $eftime = strtotime($dateValue . " " . $TimeSchedule[0]->afternoon_start_time);
+                    $ettime = strtotime($dateValue . " " . $TimeSchedule[0]->afternoon_end_time);
+                    $ediff = ($ettime - $eftime) / 300; //300 sec means 5 for each patiant tim
+
+                    for ($i = 0; $i < $ediff; $i++) {
+
+                        $time_array[date('H:i:s', $eftime + (300 * $i))] = date('h:i a', $eftime + (300 * $i));
+
+                        //dd($time_array);
+                    }
+
+                    $Evftime = strtotime($dateValue . " " . $TimeSchedule[0]->evening_start_time);
+                    $Evttime = strtotime($dateValue . " " . $TimeSchedule[0]->evening_end_time);
+                    $eVdiff = ($Evttime - $Evftime) / 300; //300 sec means 5 for each patiant tim
+
+                    for ($i = 0; $i < $eVdiff; $i++) {
+
+                        $time_array[date('H:i:s', $Evftime + (300 * $i))] = date('h:i a', $Evttime + (300 * $i));
+
+                        //dd($time_array);
+                    }
+
+                }else {
 
             $time_array=array(
                 '00:00:00'=>'12:00 AM','00:05:00'=>'12:05 AM','00:10:00'=>'12:10 AM','00:15:00'=>'12:15 AM','00:20:00'=>'12:20 AM','00:25:00'=>'12:25 AM','00:30:00'=>'12:30 AM','00:35:00'=>'12:35 AM','00:40:00'=>'12:40 AM','00:45:00'=>'12:45 AM','00:50:00'=>'12:50 AM','00:55:00'=>'12:55 AM',
@@ -3182,21 +3340,86 @@ class DoctorController extends Controller
                 '22:00:00'=>'10:00 PM','22:05:00'=>'10:05 PM','22:10:00'=>'10:10 PM','22:15:00'=>'10:15 PM','22:20:00'=>'10:20 PM','22:25:00'=>'10:25 PM','22:30:00'=>'10:30 PM','22:35:00'=>'10:35 PM','22:40:00'=>'10:40 PM','22:45:00'=>'10:45 PM','22:50:00'=>'10:50 PM','22:55:00'=>'10:55 PM',
                 '23:00:00'=>'11:00 PM','23:05:00'=>'11:05 PM','23:10:00'=>'11:10 PM','23:15:00'=>'11:15 PM','23:20:00'=>'11:20 PM','23:25:00'=>'11:25 PM','23:30:00'=>'11:30 PM','23:35:00'=>'11:35 PM','23:40:00'=>'11:40 PM','23:45:00'=>'11:45 PM','23:50:00'=>'11:50 PM','23:55:00'=>'11:55 PM',
             );
+            }
 
 
+                //dd($time_array);
+                /*if($dateValue==$currentDateValue)
+                {
 
-
-            if($dateValue==$currentDateValue)
-            {
                 $lastValue =  substr($timeValue, -1);
                 $NolastValue =  substr($timeValue, 0, -1);
                 $NewTimeValue = $NolastValue."0:00";
                 $startIndex = $NewTimeValue;
+
                 $positionIndex = array_search($startIndex, array_keys($time_array));
 
                 $AllArray=array($dateValue,$timeValue,$currentDateValue,$currentTimeValue,$lastValue,$NolastValue,$NewTimeValue,$startIndex,$positionIndex);
                 //dd($AllArray);
                 $time_array = array_slice($time_array, $positionIndex+2, NULL, TRUE);
+
+                }*/
+
+
+                if ($dateValue == $currentDateValue) {
+                    $NewTimeValue = $timeValue . ":00";
+
+                    $currentTimeEpoch = strtotime($NewTimeValue);
+
+                    foreach ($time_array as $key => $value) {
+                        $timeSlotEpoch = strtotime($key);
+                        if ($currentTimeEpoch > $timeSlotEpoch) {
+                            unset($time_array[$key]);
+                        }
+
+                    }
+
+                }
+            }else{
+
+                $status=0;
+                $mftime='';
+                $mttime='';
+                foreach ($checkArray as $item){
+                    $status=$item->status;
+                    $mftime=$item->available_from;
+                    $mttime=$item->available_to;
+                }
+
+                if($status==1){
+                    $mftime = strtotime($dateValue . " " . $mftime);
+                    $mttime = strtotime($dateValue . " " . $mttime);
+                    $mdiff = ($mttime - $mftime) / 300; //300 sec means 5 for each patiant tim
+
+
+                    for ($i = 0; $i <= $mdiff; $i++) {
+
+                        $time_array[date('H:i:s', $mftime + (300 * $i))] = date('h:i a', $mftime + (300 * $i));
+                    }
+
+                    if ($dateValue == $currentDateValue) {
+                        $NewTimeValue = $timeValue . ":00";
+
+                        $currentTimeEpoch = strtotime($NewTimeValue);
+
+                        foreach ($time_array as $key => $value) {
+                            $timeSlotEpoch = strtotime($key);
+
+                            if ($currentTimeEpoch > $timeSlotEpoch) {
+                                unset($time_array[$key]);
+
+                            }
+
+                        }
+
+                    }
+
+
+                }else {
+                    $time_array ['result']='Doctor Is Not Available';
+
+                }
+               // dd($time_array);
 
             }
 
@@ -3206,6 +3429,7 @@ class DoctorController extends Controller
 
             if(!is_null($time_array) && !empty($time_array))
             {
+
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::REFERRAL_DOCTOR_LIST_SUCCESS));
                 $responseJson->setCount(sizeof($time_array));
             }
@@ -4879,7 +5103,7 @@ class DoctorController extends Controller
      * @param $patientId
      * @throws $hospitalException
      * @return array | null
-     * @author Baskar
+     * @author Baskaran
      */
 
     public function getExaminationDates($patientId)
@@ -7502,6 +7726,9 @@ class DoctorController extends Controller
         {
             $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId,$categoryType,null,$fromDate,$toDate,$status);
             $doctors = $this->hospitalService->getDoctorsByHospitalId($hospitalId);
+
+            //dd($patients);
+
             /*
             if(!is_null($patients) && !empty($patients))
             {
@@ -7528,7 +7755,6 @@ class DoctorController extends Controller
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
             $responseJson->sendErrorResponse($exc);
         }
-
 
         return view('portal.hospital-patients-appointment',compact('patients','doctors'));
         //return $responseJson;
@@ -8673,7 +8899,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientMotionTests = DB::select('select * from motion_examination where status = ?', [1]);
+            //$patientMotionTests = DB::select('select * from motion_examination where status = ?', [1]);
+            $patientMotionTests = $this->hospitalService->getAllMotionTests();
 
         }
         catch(HospitalException $hospitalExc)
@@ -8739,7 +8966,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientUltraSoundTests = DB::select('select * from ultra_sound where status = ?', [1]);
+            //$patientUltraSoundTests = DB::select('select * from ultra_sound where status = ?', [1]);
+            $patientUltraSoundTests = $this->hospitalService->getAllUltrasoundTests();
 
         }
         catch(HospitalException $hospitalExc)
@@ -8771,7 +8999,8 @@ class DoctorController extends Controller
         {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
-            $patientScans = DB::select('select * from scans where status = ?', [1]);
+            //$patientScans = DB::select('select * from scans where status = ?', [1]);
+            $patientScans = $this->hospitalService->getAllScans();
             //dd($blood_examination);
 
         }
@@ -9599,6 +9828,463 @@ class DoctorController extends Controller
         //dd($doctorappointments);
         return view('portal.hospital-patient-label', compact('doctorappointments'));
 
+    }
+
+    public function DoctorAvailabilitySetting($hospitalId){
+
+        $doctorsList = null;
+        //$jsonResponse = null;
+        $responseJson = null;
+        $status = null;
+        try
+        {
+            $doctorsList = $this->hospitalService->getDoctorsInfo($hospitalId);
+
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+       // dd($doctorsList);
+        return view('portal.hospital-doctor-setting', compact('doctorsList','status'));
+
+
+    }
+
+    public function SaveDoctorAvailability(Request $doctorAvailability){
+
+        $doctorsList = null;
+        //$jsonResponse = null;
+        $responseJson = null;
+        $doctorsList = null;
+        $hospitalId=$doctorAvailability->hospitalId;
+        try
+        {
+          //  dd($hospitalId);
+            $doctorAvailabilityVM = HospitalMapper::setDoctorAvailability($doctorAvailability);
+
+            //dd($doctorAvailabilityVM);
+            $status = $this->hospitalService->SaveDoctorAvailability($doctorAvailabilityVM);
+
+            $doctorsList = $this->hospitalService->getDoctorsInfo($hospitalId);
+
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+       // dd($doctorsList.'===='.$hospitalId);
+        return view('portal.hospital-doctor-setting', compact('doctorsList','status'));
+
+
+    }
+
+    public function UpdateDoctorAvailability(Request $doctorAvailability){
+
+        $doctorsList = null;
+        //$jsonResponse = null;
+        $responseJson = null;
+        $doctorsList = null;
+        $hospitalId=$doctorAvailability->hospitalId;
+        $doctorId=$doctorAvailability->doctorId;
+        try
+        {
+             //dd($doctorAvailability);
+            $doctorAvailabilityVM = HospitalMapper::setDoctorAvailability($doctorAvailability);
+            $status = $this->hospitalService->UpdateDoctorAvailability($doctorAvailabilityVM);
+
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+        //dd($status);
+
+        return redirect('fronthospital/rest/api/'.$hospitalId.'/doctorId/'.$doctorId.'/availability');
+
+        //return $status;
+
+    }
+
+
+    public function DoctorAvailability($hospitalId,$doctorId){
+
+        $doctorsAvailability = null;
+        $doctorLeaves=null;
+        //$jsonResponse = null;
+        $responseJson = null;
+        $doctorId=$doctorId;
+        try
+        {
+            $doctorsAvailability1 = $this->hospitalService->getDoctorsAvalabilityForHospital($hospitalId,$doctorId);
+
+            $doctorsAvailability=$doctorsAvailability1['doctorAvailability'];
+            $doctorLeaves=$doctorsAvailability1['doctorLeaves'];
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+        // dd($doctorLeaves);
+        return view('portal.hospital-doctor-availability', compact('doctorsAvailability','doctorId','doctorLeaves'));
+
+    }
+ public function saveDoctorLeaves(Request $LeaveRequest){
+    $doctorsList = null;
+    //$jsonResponse = null;
+    $responseJson = null;
+    $doctorsList = null;
+     $status=null;
+try
+{
+    //dd($LeaveRequest);
+    $LeaveRequestVM = HospitalMapper::setDoctorLeaves($LeaveRequest);
+   // dd($LeaveRequestVM);
+    $status =$this->hospitalService->saveDoctorLeaves($LeaveRequestVM);
+
+} catch (HospitalException $hospitalExc) {
+    $errorMsg = $hospitalExc->getMessageForCode();
+    $msg = AppendMessage::appendMessage($hospitalExc);
+    Log::error($msg);
+} catch (Exception $exc) {
+    $msg = AppendMessage::appendGeneralException($exc);
+    Log::error($msg);
+}
+
+return $status;
+
+ }
+
+public function UpdateDoctorLeaves(Request $updateRequest,$id){
+        $doctorsList = null;
+        $responseJson = null;
+        $status = null;
+        $hospitalId=$updateRequest->hospitalId;
+        $doctorId=$updateRequest->doctorId;
+        try
+        {
+            $LeaveRequestVM = HospitalMapper::setDoctorLeaves($updateRequest);
+            $status = $this->hospitalService->UpdateDoctorLeaves($LeaveRequestVM,$id);
+        } catch (HospitalException $hospitalExc) {
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+        //dd($status);
+
+        return redirect('fronthospital/rest/api/'.$hospitalId.'/doctorId/'.$doctorId.'/availability');
+
+        //return $status;
+
+    }
+
+
+    public function DoctorAvailabilityCheck($hospitalId,$doctorId,$date,$time){
+
+        $doctorsList = null;
+        //dd($updateRequest);
+        //$jsonResponse = null;
+        $responseJson = null;
+        $status = null;
+
+        try {
+
+            $appointmentDate = strtotime($date . " " . $time);
+            if($appointmentDate > time()){
+            $checkArray = DB::table('doctor_leaves_schedule as dls')
+                ->where('dls.doctor_id', '=', $doctorId)->where('hospital_id', '=', $hospitalId)
+                ->where('dls.leave_start_date', '<=', $date)
+                ->where('dls.leave_end_date', '>=', $date)->get();
+
+            if (count($checkArray) > 0) {
+
+                if ($checkArray[0]->status == 1) {
+                    //$appointmentDate = strtotime($date . " " . $time);
+
+                    $availFromTime = strtotime($date . " " . $checkArray[0]->available_from);
+                    $availToTime = strtotime($date . " " . $checkArray[0]->available_to);
+                    //  dd($appointmentDate .$availFromTime.$availToTime );
+                    //dd($date . " " . $checkArray[0]->available_from ."  ".$date . " " . $checkArray[0]->available_to." ".$date . " " . $time);
+                    if (($appointmentDate>=$availFromTime    &&  $appointmentDate <= $availToTime ) ) {
+                        $responseJson = "1";
+
+                    } else {
+
+                        $responseJson = "0";
+                    }
+
+                    //$date,$time
+                } else {
+                    $responseJson = "0";
+                }
+
+            } else {
+
+                $day = date('D', strtotime($date));
+
+                $TimeSchedule = DoctorAvailability::where('doctor_id', '=', $doctorId)
+                    ->where('hospital_id', '=', $hospitalId)
+                    ->where('week_day', '=', strtoupper($day))->get();
+                if (count($TimeSchedule) > 0) {
+
+                   // $appointmentDate = strtotime($date . " " . $time);
+                    $time1 = strtotime($date . " " . $TimeSchedule[0]->morning_start_time);
+                    $time2 = strtotime($date . " " . $TimeSchedule[0]->morning_end_time);
+                    $time3 = strtotime($date . " " . $TimeSchedule[0]->afternoon_start_time);
+                    $time4 = strtotime($date . " " . $TimeSchedule[0]->afternoon_end_time);
+                    $time5 = strtotime($date . " " . $TimeSchedule[0]->evening_start_time);
+                    $time6 = strtotime($date . " " . $TimeSchedule[0]->evening_end_time);
+
+                    if ((($appointmentDate >= $time1 && $appointmentDate <= $time2) || ($appointmentDate >= $time3 && $appointmentDate <= $time4) || ($appointmentDate >=$time5 && $appointmentDate <= $time6))) {
+
+
+                        $responseJson = "1";
+                    } else {
+
+                        $responseJson = "0";
+                    }
+                } else {
+                    //$appointmentDate = strtotime($date . " " . $time);
+
+                    $responseJson = "1";//by default doctor availeble
+
+
+                }
+
+            }
+        }else{
+                $responseJson = "2";
+            }
+            //dd($LeaveRequestVM);
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+        //dd($status);
+
+
+        return $responseJson;
+
+    }
+
+    public function deleteDoctorLeaves(Request $deleteRequest,$id){
+
+        $doctorsList = null;
+        //dd($updateRequest);
+        //$jsonResponse = null;
+        $responseJson = null;
+        $status = null;
+        $hospitalId=$deleteRequest->hospitalId;
+        $doctorId=$deleteRequest->doctorId;
+        try
+        {
+
+            //$LeaveRequestVM = HospitalMapper::setDoctorLeaves($updateRequest);
+            $status = $this->hospitalService->deleteDoctorLeaves($id);
+
+            //dd($LeaveRequestVM);
+        } catch (HospitalException $hospitalExc) {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        } catch (Exception $exc) {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+        //dd($status);
+        return $status;
+
+    }
+
+    /**
+     * Save Prescription for the patient
+     * @param $patientPrescriptionRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author prasanth
+     */
+
+    public function savePatientPrescriptionByDoctor(Request $patientPrescriptionRequest)
+    {
+        $patientPrescriptionVM = null;
+        $status = true;
+        $responseJson = null;
+        $Msg = "Saved Prescription Details Successfully";
+        $patientId=$patientPrescriptionRequest->patientId;
+        $hospitalId=$patientPrescriptionRequest->hospitalId;
+        $doctorId=$patientPrescriptionRequest->doctorId;
+
+        try
+        {
+            $patientPrescriptionVM = PatientPrescriptionMapper::setPrescriptionDetails($patientPrescriptionRequest);
+            //$status = HospitalServiceFacade::savePatientPrescription($patientPrescriptionVM);
+            $status = $this->hospitalService->savePatientPrescription($patientPrescriptionVM);
+
+            if($status)
+            {
+                $Msg = "Saved Prescription Details Successfully";
+                //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_SUCCESS));
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $Msg = "Error While Saving Prescription Details";
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+                $responseJson->sendSuccessResponse();
+            }
+
+            //return $patientPrescriptionVM
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+            //return $jsonResponse;
+            $Msg = "Error While Saving Prescription Details";
+
+        }
+        catch(Exception $exc)
+        {
+            $Msg = "Error While Saving Prescription Details";
+
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+      //  return $responseJson;
+       // Route::get('{doctorId}/hospital/{hospitalId}/patient/{patientId}/prescription-details', array('as' => 'hospital.patientdetails', 'uses' => 'DoctorController@PatientPrescriptionDetailsByHospitalForDoctor'));
+
+        return redirect('doctor/'.$doctorId.'/hospital/'.$hospitalId.'/patient/'.$patientId.'/prescription-details')->with('success',$Msg);
+
+    }
+
+    /**
+     * To get  Patient Fee  reciepts for the doctor
+     * @param $hospitalId, $doctorId
+     * @throws $hospitalException
+     * @return Array(feereciepts details)
+     * @author prasanth
+     */
+
+
+
+
+    public function getFeeReceiptsForDoctor($hospitalId, $doctorId)
+    {
+        $feeReceipts = null;
+        $responseJson = null;
+        //dd($doctorId);
+
+        try
+        {
+            $feeReceipts = $this->hospitalService->getFeeReceipts($hospitalId, $doctorId);
+            // dd($feeReceipts);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-fees',compact('feeReceipts'));
+        //return $responseJson;
+    }
+
+    /**
+     * To get  Patient Individual dee Summary  for the doctor
+     * @param $receiptId
+     * @throws $hospitalException
+     * @return Array
+     * @author prasanth
+     */
+
+    public function getReceiptDetailsForDoctor($receiptId)
+    {
+        $feeReceiptDetails = null;
+        $responseJson = null;
+        // dd($receiptId);
+
+        try
+        {
+            $feeReceiptDetails = $this->hospitalService->getReceiptDetails($receiptId);
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return view('portal.doctor-fee-details',compact('feeReceiptDetails','receiptId'));
+        //return $responseJson;
     }
 
 

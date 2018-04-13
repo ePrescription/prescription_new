@@ -3,10 +3,19 @@
 @section('title', 'ePrescription and Lab Tests Application')
 
 @section('styles')
+    <!-- DataTables -->
+    {!!  Html::style(asset('theme/assets/plugins/datatables/jquery.dataTables.min.css')) !!}
+    {!!  Html::style(asset('theme/assets/plugins/datatables/buttons.bootstrap.min.css')) !!}
+    {!!  Html::style(asset('theme/assets/plugins/datatables/fixedHeader.bootstrap.min.css')) !!}
+    {!!  Html::style(asset('theme/assets/plugins/datatables/responsive.bootstrap.min.css')) !!}
+    {!!  Html::style(asset('theme/assets/plugins/datatables/dataTables.bootstrap.min.css')) !!}
+    {!!  Html::style(asset('theme/assets/plugins/datatables/scroller.bootstrap.min.css')) !!}
 @stop
 <?php
 $dashboard_menu="0";
 $patient_menu="1";
+$prescription_menu="0";
+$lab_menu="0";
 $profile_menu="0";
 ?>
 <?php
@@ -73,10 +82,10 @@ $time_array=array(
 </style>
 @section('content')
 <div class="wrapper">
-    @include('portal.hospital-header')
+    @include('portal.doctor-header')
     <!-- Left side column. contains the logo and sidebar -->
     <!-- sidebar: style can be found in sidebar.less -->
-    @include('portal.hospital-sidebar')
+    @include('portal.doctor-sidebar')
     <!-- /.sidebar -->
 
 
@@ -101,8 +110,12 @@ $time_array=array(
                             <div class="panel panel-primary">
                                 <div class="panel-body">
                                     <h4 class="m-t-0 m-b-30">New Patient Appointment</h4>
+
+
+
                                     <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
 
+                                    <!--  <div style="float:left;"><h3>Patient ID: <b class="error">{{$patientCount}}</b></h3></div>-->
 
 
                                     @if (session()->has('message'))
@@ -120,6 +133,15 @@ $time_array=array(
                                 </span>
                                         </div>
                                     @endif
+                                        <div class="dropdown" style="float: left;">
+                                            @if (session()->has('tokenId'))
+                                                <div style="float:right;">
+                                         <span style="color:red;">
+                                             <h3>TokenID:{{session('tokenId')}}</h3>
+                                           <h3>PID:{{session('pid')}}</h3>
+                                         </span>
+                                                    @endif
+                                                </div>
 
 
 
@@ -181,8 +203,8 @@ $time_array=array(
                                         </div>
 
                                             <!-- form start -->
-                                        <form action="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/savepatientwithappointment" id="appointment" role="form" method="POST">
-                                            <input type="hidden" name="hospitalId" value="{{Auth::user()->id}}" required="required" />
+                                                <form action="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/savepatientwithappointment" id="appointment" role="form" method="POST" enctype="multipart/form-data">
+                                                    <input type="hidden" name="hospitalId" value="{{Session::get('LoginUserHospital')}}" required="required" />
                                             <input type="hidden" name="patientId" id="patientId" value="0" required="required" />
                                             <div class="col-md-12">
                                                 <style>.control-label{line-height:32px;}</style>
@@ -190,9 +212,11 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Patient Visiting <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="radio" class="form-controlx" name="visiting" value="1" required="required" checked onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;First time
+                                                                <input type="radio" class="form-controlx" name="visiting" value="1" required="required" checked onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;Appointment
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <input type="radio" class="form-controlx" name="visiting" value="2" required="required" onclick="javascript:visitPatient(2);" />&nbsp;&nbsp;Followup
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                               <!-- <input type="radio" class="form-controlx" name="visiting" value="1" required="required" onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;Appointment-->
                                                     </div>
                                                 </div>
 
@@ -201,17 +225,18 @@ $time_array=array(
                                                     <div class="col-sm-9">
                                                         <!--
                                                         <input type="text" class="form-control" name="searchPatient" value="" id="autocomplete-ajax" />
-                                                        -->
 
-                                                        <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">title="Select for a state" search><option></option></select>
-                                                        <!--
+
+
+                                                                <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);"  title="Select for a state"  search><option></option></select>
+                                                        -->
                                                         <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">
                                                             <option value="">--CHOOSE PATIENT--</option>
                                                             @foreach($patients as $patient)
                                                                 <option value="{{$patient->patient_id}}" >{{$patient->pid}} - {{$patient->name}}</option>
                                                             @endforeach
                                                         </select>
-                                                        -->
+
                                                     </div>
                                                 </div>
 
@@ -225,17 +250,10 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Email <span class="red">*</span></label>
+                                                            <label class="col-sm-3 control-label">DOB</label>
                                                     <div class="col-sm-9">
-                                                        <input type="email" class="form-control" id="email" name="email" value="" required="required" />
-                                                        @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Mobile <span class="red">*</span></label>
-                                                    <div class="col-sm-9">
-                                                        <input type="number" min="0" class="form-control" id="telephone" name="telephone" value="" required="required" maxlength="10"/>
-                                                        @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
+                                                                <input type="date" class="form-control" name="dob" id="dob" value="" onblur="calculateAge(this.value)" />
+                                                                @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -251,10 +269,72 @@ $time_array=array(
                                                     <div class="col-sm-9">
                                                         <input type="radio" class="form-controlx" id="gender1" name="gender" value="1" required="required" />&nbsp;&nbsp;Male
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" id="gender2" name="gender" value="2" required="required" />&nbsp;&nbsp;Female
+                                                                <input type="radio" class="form-controlx" id="gender2" name="gender" value="0" required="required" />&nbsp;&nbsp;Female
                                                         @if ($errors->has('gender'))<p class="error" style="">{!!$errors->first('gender')!!}</p>@endif
                                                     </div>
                                                 </div>
+
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Address</label>
+                                                            <div class="col-sm-9">
+                                                                <textarea class="form-control" id="address" name="address"></textarea>
+                                                                @if ($errors->has('address'))<p class="error" style="">{!!$errors->first('address')!!}</p>@endif
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Email </label>
+                                                            <div class="col-sm-9">
+                                                                <input type="email" class="form-control" id="email" name="email" value="" />
+                                                                @if ($errors->has('email'))<p class="error" style="">{!!$errors->first('email')!!}</p>@endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Mobile </label>
+                                                            <div class="col-sm-9">
+                                                                <input type="number" min="0" class="form-control" id="telephone" name="telephone" value=""  maxlength="10"/>
+                                                                @if ($errors->has('telephone'))<p class="error" style="">{!!$errors->first('telephone')!!}</p>@endif
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Marital Status <span class="red">*</span></label>
+                                                            <div class="col-sm-9">
+                                                                <input type="radio" class="form-controlx" id="married1" name="maritalStatus" value="1" required="required" />&nbsp;&nbsp;Married
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <input type="radio" class="form-controlx" id="married2" name="maritalStatus" value="2" required="required" />&nbsp;&nbsp;Unmarried
+                                                                @if ($errors->has('maritalStatus'))<p class="error" style="">{!!$errors->first('maritalStatus')!!}</p>@endif
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Occupation</label>
+                                                            <div class="col-sm-9">
+                                                                <select class="form-control" name="occupation" id="occupation">
+                                                                    <option value="" selected></option>
+                                                                    <option value="Daily Labour">Daily Labour</option>
+                                                                    <option value="Farmer">Farmer</option>
+                                                                    <option value="Gov.Employee">Gov.Employee</option>
+                                                                    <option value="House Wife">House Wife</option>
+                                                                    <option value="Private Employee">Private Employee</option>
+                                                                    <option value="Self Employee">Self Employee</option>
+                                                                    <option value="Student">Student</option>
+
+                                                                </select>
+                                                                @if ($errors->has('occupation'))<p class="error" style="">{!!$errors->first('occupation')!!}</p>@endif
+                                                            </div>
+                                                        </div>
+
+                                                    <!-- <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">C/o</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="careof" id="careof" value="" />
+                                                        @if ($errors->has('careof'))<p class="error" style="">{!!$errors->first('careof')!!}</p>@endif
+                                                            </div>
+                                                        </div> -->
+
 
 
 
@@ -283,16 +363,18 @@ $time_array=array(
                                                     </div>
                                                 </div>
 
+
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Address</label>
+                                                            <label class="col-sm-3 control-label">Photo</label>
                                                     <div class="col-sm-9">
-                                                        <textarea class="form-control" id="address" name="address"></textarea>
-                                                        @if ($errors->has('address'))<p class="error" style="">{!!$errors->first('address')!!}</p>@endif
+                                                                <input type="file" class="form-control" name="patient_photo" id="patient_photo" value="" />
+                                                                @if ($errors->has('patient_photo'))<p class="error" style="">{!!$errors->first('patient_photo')!!}</p>@endif
                                                     </div>
                                                 </div>
 
-
                                                 <h4 class="m-t-0 m-b-30">Appointment Info</h4>
+
+
 
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Appointment Type <span class="red">*</span></label>
@@ -307,29 +389,31 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
-                                                    <div class="col-sm-9">
-
-                                                        <select name="doctorId" id="doctorId" class="form-control" required="required" >
-                                                            <option value="">--CHOOSE--</option>
-                                                            @foreach($doctors as $doctor)
-                                                                <option value="{{$doctor->doctorId}}">{{$doctor->doctorName.' '.$doctor->doctorUniqueId}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @if ($errors->has('doctorId'))<p class="error" style="">{!!$errors->first('doctorId')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Appointment Date <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="appointmentDate" id="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); " />
+                                                                <input type="text" class="form-control" name="appointmentDate" id="appointmentDate" value="" required="required" onchange="javascript:appointmentTypePatient(this.value); "  /><!--onchange="javascript:appointmentTypePatient(this.value); " -->
                                                         @if ($errors->has('appointmentDate'))<p class="error" style="">{!!$errors->first('appointmentDate')!!}</p>@endif
                                                     </div>
                                                 </div>
+
+                                                        <input type="hidden" name="doctorId" id="doctorId" class="form-control" value="{{$doctorId}}" required="required" onchange="javascript:getTokenId({{Auth::user()->id}},this.value);">
+
+
+                                                        <!--   <div class="form-group col-md-12">
+                                                            <label class="col-sm-3 control-label">Doctor Name <span class="red">*</span></label>
+                                                            <div class="col-sm-9">
+
+                                                                <!--Modified By prasanth Start 24-01-2018 -->
+                                                    <!--   <select name="doctorId" id="doctorId" class="form-control" required="required" onchange="javascript:getTokenId({{Auth::user()->id}},this.value);">
+                                                                    <!--Modified By prasanth Start 24-01-2018 -->
+                                                    <!--   <option value="">--CHOOSE--</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>-->
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Appointment Time <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" name="appointmentTime" id="appointmentTime" required="required">
+                                                                <select class="form-control" name="appointmentTime" id="appointmentTime" onchange="javascript:getTokenId({{Session::get('LoginUserHospital')}},{{Auth::user()->id}},this.value);" required="required">
 
                                                             <option value=""> --:-- -- </option>
                                                             @foreach($time_array as $time_value)
@@ -341,10 +425,17 @@ $time_array=array(
                                                         @if ($errors->has('appointmentTime'))<p class="error" style="">{!!$errors->first('appointmentTime')!!}</p>@endif
                                                     </div>
                                                 </div>
+                                                        <div class="form-group col-md-12" id="token" style="display: none;">
+                                                            <label class="col-sm-3 control-label">Token ID<span class="red">*</span></label>
+                                                            <div class="col-sm-9">
+                                                                <b>Your Token ID:</b><p  name="tokenId" id="tokenId"  required="required" readonly style="font-size: 20px;color: blue;"></p>
+                                                            </div>
+                                                        </div>
+
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">Brief History <span class="red">*</span></label>
+                                                            <label class="col-sm-3 control-label">Brief History<!-- <span class="red">*</span>--></label>
                                                     <div class="col-sm-9">
-                                                        <textarea class="form-control" name="briefHistory" required="required"></textarea>
+                                                                <textarea class="form-control" name="briefHistory" ></textarea>
                                                         @if ($errors->has('briefHistory'))<p class="error" style="">{!!$errors->first('briefHistory')!!}</p>@endif
                                                     </div>
                                                 </div>
@@ -413,9 +504,12 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Payment Type <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" required="required" />&nbsp;&nbsp;Cash
+                                                                    <input type="radio" class="form-controlx" id="payment1" name="paymentType" value="Cash" onclick="enableAmount()" required="required" />&nbsp;&nbsp;Cash
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" id="payment2" name="paymentType" value="Card" required="required" />&nbsp;&nbsp;Card
+                                                                    <input type="radio" class="form-controlx" id="payment2" name="paymentType" value="Card" onclick="enableAmount()" required="required" />&nbsp;&nbsp;Card
+
+                                                                    &nbsp; <input type="radio" class="form-controlx" id="payment3" name="paymentType" value="Cashless" onclick="disableAmount()" required="required" />&nbsp;&nbsp;Cashless
+
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -424,6 +518,16 @@ $time_array=array(
                                                         <input type="number" min="0" class="form-control" id="fee" name="fee" value="" required="required" />
                                                     </div>
                                                 </div>
+
+                                                            <div class="form-group col-md-12">
+                                                                <label class="col-sm-3 control-label">Payment Status <span class="red">*</span></label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="radio" class="form-controlx" id="paymentstatus1" name="paymentStatus" value="1" required="required" />&nbsp;&nbsp;Paid
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    <input type="radio" class="form-controlx" id="paymentstatus2" name="paymentStatus" value="0" required="required" />&nbsp;&nbsp;Unpaid
+                                                                    @if ($errors->has('paymentStatus'))<p class="error" style="">{!!$errors->first('paymentStatus')!!}</p>@endif
+                                                                </div>
+                                                            </div>
                                                 </div>
 
 
@@ -449,7 +553,7 @@ $time_array=array(
 
         </div> <!-- content -->
 
-        @include('portal.hospital-footer')
+                @include('portal.doctor-footer')
 
     </div>
     <!-- End Right content here -->
@@ -483,11 +587,13 @@ $time_array=array(
                 var terms = {};
                 console.log(data.result);
                 $.each(data.result, function (i, val) {
-                    terms[val.patientId] = val.name;
+                            terms[val.patientId] = val.pid+'--'+val.name;
                 });
 
                 return terms;
             });
+
+
         });
     </script>
 
@@ -519,6 +625,11 @@ $time_array=array(
                 $('input#age').attr('readonly', false);
                 $('input#gender1').attr('disabled', false);
                 $('input#gender2').attr('disabled', false);
+                        $('input#married1').attr('disabled', false);
+                        $('input#married2').attr('disabled', false);
+                        $('select#occupation').attr('disabled', false);
+                        $('input#careof').attr('readonly', false);
+                        $('input#dob').attr('readonly', false);
                 $('select#relationship').attr('disabled', false);
                 $('input#spouseName').attr('disabled', false);
                 $('textarea#address').attr('disabled', false);
@@ -527,13 +638,17 @@ $time_array=array(
             else
             {
                 $("#searchPatientBox").show();
-
                 $('input#name').attr('readonly', true);
                 $('input#email').attr('readonly', true);
                 $('input#telephone').attr('readonly', true);
                 $('input#age').attr('readonly', true);
                 $('input#gender1').attr('disabled', true);
                 $('input#gender2').attr('disabled', true);
+                        $('input#married1').attr('disabled', true);
+                        $('input#married2').attr('disabled', true);
+                        $('select#occupation').attr('disabled', true);
+                        $('input#careof').attr('readonly', true);
+                        $('input#dob').attr('readonly', true);
                 $('select#relationship').attr('disabled', true);
                 $('input#spouseName').attr('disabled', true);
                 $('textarea#address').attr('disabled', true);
@@ -542,6 +657,7 @@ $time_array=array(
 
         function getPatient(pid) {
 
+                  //  alert(pid);
             $("input#patientId").val(pid);
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;
@@ -556,6 +672,7 @@ $time_array=array(
                     //alert(data.result[0].id);
                     console.log(data);
                     //$("#patienturinediv").html(data);
+
                     $("input#name").val(data.result[0].name);
                     $("input#email").val(data.result[0].email);
                     $("input#telephone").val(data.result[0].telephone);
@@ -565,11 +682,23 @@ $time_array=array(
                     {
                         $("input#gender1").attr('checked', 'checked');
                     }
-                    if(data.result[0].gender==2)
+                            if(data.result[0].gender==0)
                     {
                         $("input#gender2").attr('checked', 'checked');
                     }
 
+                            if(data.result[0].married==1)
+                            {
+                                $("input#married1").attr('checked', 'checked');
+                            }
+                            if(data.result[0].married==2)
+                            {
+                                $("input#married2").attr('checked', 'checked');
+                            }
+
+                            $("select#occupation").val(data.result[0].occupation);
+                            $("input#careof").val(data.result[0].careof);
+                            $("input#dob").val(data.result[0].dob);
                     $("select#relationship").val(data.result[0].relationship);
                     $("input#spouseName").val(data.result[0].spouseName);
                     $("textarea#address").val(data.result[0].address);
@@ -641,10 +770,17 @@ $time_array=array(
             $('input#hospitalLocation').val(locationName);
 
         }
-
+                window.onload = function() {
+                    var dateValue=$("#appointmentDate").val();
+                    appointmentTypePatient(dateValue);
+                };
 
         function appointmentTypePatient(dateValue)
         {
+
+                    var hid= '{{ Auth::user()->id }}';
+                    var did=$("#doctorId").val();
+                    if(did!="") {
             var new_appointment_date = dateValue;
             var prev_appointment_date = $("input#prev_appointment_date").val();
 
@@ -656,8 +792,7 @@ $time_array=array(
             //alert(diffDays);
 
 
-            if(diffDays<=15)
-            {
+                        if (diffDays <= 15) {
                 $("#paymentTypeInfo").hide();
 
                 $('input#payment1').attr('required', false);
@@ -665,8 +800,7 @@ $time_array=array(
                 $('input#fee').attr('required', false);
 
             }
-            else
-            {
+                        else {
                 $("#paymentTypeInfo").show();
 
                 $('input#payment1').attr('required', true);
@@ -688,23 +822,89 @@ $time_array=array(
             var t = h+":"+m+":"+s;
             var timeValue = h+":"+m;
 
+
             $.ajax({
                 url: callurl,
                 type: "get",
-                data: {"date": dateValue, "time": timeValue, "status": status},
+                            data: {"date": dateValue, "time": timeValue, "status": status, "doctorId": did, "hospitalId": hid},
                 success: function (data) {
                     console.log(data);
+
+                                if(data.result['result']=="Doctor Is Not Available"){
+                                    alert(data.result['result']);
+                                    var terms = '<option value="">--Choose Time--</option>';
+                                    $("#appointmentTime").html(terms);
+                                }else {
+
                     var terms = '<option value="">--Choose Time--</option>';
                     $.each(data.result, function (index, value) {
                         terms += '<option value="'+index+'">'+value+'</option>';
                     });
                     $("#appointmentTime").html(terms);
+                                }
+
+                            }
+                        });
+                    }else{
+                        alert("Please Select Doctor");
+                    }
+
+                    //getTokenId('{{Session::get('LoginUserHospital')}}','{{ Auth::user()->id }}');
+
+                }
+
+
+                //New BY PRASANTH 24-01-2018
+
+                function getTokenId(hid,did) {
+
+                    var BASEURL = "{{ URL::to('/') }}/";
+                    var date=$("#appointmentDate").val();
+                    var type=$("#appointmentCategory").val();
+
+                    var status = 1;
+                    var callurl = BASEURL + 'fronthospital/rest/api/hospital/'+hid+'/doctor/' + did + '/date/'+date+'/tokenId';
+                    //alert(callurl);
+                    $.ajax({
+                        url: callurl,
+                        type: "get",
+                        data: {"id": hid, "status": status,"appointmentCategory":type},
+                        success: function (data) {
+                            document.getElementById('token').style.display='block';
+                            $("#tokenId").html(data);
 
                 }
             });
+                   // alert();
+                    //appointmentTypePatient(date);
 
 
+                }
+                //New By prasanth for Age Calculation
+                function getAge(date) {
+                    var now = new Date();
+                    var diff_ms = Date.now() - date.getTime();
+                    var age_dt = new Date(diff_ms);
+                    return Math.abs(age_dt.getUTCFullYear() - 1970);
+                };
+
+                function calculateAge(dob) {
+                    var dateofbirth=$("#dob").val();
+                    var dateOfBirth = new Date(dateofbirth+" 00:00:00");
+                    var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
+                    // calculate age
+                    //alert(age);
+                    $("#age").val(age).prop('readOnly',true);
+                }
+                function disableAmount(){
+                    $("#fee").val(0).prop('readOnly',true);
         }
+                function enableAmount(){
+                    $("#fee").val(200).prop('readOnly',false);
+                }
+
+
+
     </script>
 
 
@@ -801,18 +1001,18 @@ $time_array=array(
                         required: true,
                         lettersonly: true
                     },
-                    email: {
-                        required: true,
+                            //  email: {
+                            //  required: true,
                         // Specify that email should be validated
                         // by the built-in "email" rule
-                        email: true
-                    },
-                    telephone: {
-                        required: true,
-                        number: true,
-                        minlength: 10,
-                        maxlength: 11
-                    },
+                            //   email: true
+                            //  },
+                            //telephone: {
+                            //   required: true,
+                            //     number: true,
+                            //     minlength: 10,
+                            //     maxlength: 10
+                            // },
                     age: {
                         required: true,
                         number: true,
@@ -833,15 +1033,15 @@ $time_array=array(
                         required: "Please enter your name",
                         lettersonly: "Your name must be characters"
                     },
-                    email: "Please enter a valid email address",
-                    telephone: {
-                        required: "Please provide a valid mobile number",
-                        minlength: "Your mobile number must be 10 characters long",
-                        maxlength: "Your mobile number must be 11 characters long"
-                    },
+                            //   email: "Please enter a valid email address",
+                            //  telephone: {
+                            //    required: "Please provide a valid mobile number",
+                            //     minlength: "Your mobile number must be 10 characters long",
+                            //   maxlength: "Your mobile number must be 10 characters long"
+                            //},
                     age: "Please provide a valid age",
                     appointmentDate: "Please provide a valid Date",
-                    fee: "Please provide a valid Amounr"
+                            fee: "Please provide a valid Amount"
                 },
                 // Make sure the form is submitted to the destination defined
                 // in the "action" attribute of the form when valid
@@ -872,7 +1072,7 @@ $time_array=array(
 
     <script>
         $( function() {
-            $( "#appointmentDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+                    $( "#appointmentDate" ).datepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() }).datepicker("setDate", new Date());
         } );
     </script>
 

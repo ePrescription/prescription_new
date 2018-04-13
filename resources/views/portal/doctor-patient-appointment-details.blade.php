@@ -70,9 +70,12 @@ $profile_menu="0";
                                     </div>
                                     <div style="float:right;">
 
-                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details#appointment">
+                                       <!-- <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details#appointment">
                                             <button class="btn btn-info waves-effect waves-light">Back to Profile</button>
-                                        </a>
+                                        </a>-->
+                                           <button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back to Profile</button>
+
+
                                     </div>
 
                                     <div style="float:right;">

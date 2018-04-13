@@ -115,7 +115,7 @@ $profile_menu="0";
 
                                             @endif
                                         </div>
-                                        <div class="col-lg-10">
+                                        <div class="col-lg-12">
 
 
                                             <div class="form-group col-md-4">

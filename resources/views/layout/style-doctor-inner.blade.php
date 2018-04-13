@@ -12,9 +12,11 @@
 <style>
     .dropbtn {
         background-color: #3498DB;
+
         color: White;
-        padding: 10px;
-        font-size: 16px;
+        padding: 8px;
+        width: 100px;
+        font-size: 12px;
         /*border: none;*/
 
 

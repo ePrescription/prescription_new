@@ -59,7 +59,11 @@
                             <i class="fa fa-cc-visa"></i> <span>Online Payment</span>
                         </a>
                     </li>
-
+                    <li class="@if($doctor_menu==1) active @endif treeview">
+                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/doctorAvailabilitySetting">
+                            <i class="fa fa-cogs"></i> <span>Doctors Settings</span>
+                        </a>
+                    </li>
 
                     <li class="@if($profile_menu==1) active @endif has_sub treeview hidden">
                         <a href="javascript:void(0);">
