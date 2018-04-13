@@ -624,7 +624,7 @@ class DoctorController extends Controller
     {
         //dd('Test');
         $loginInfo = $loginRequest->all();
-        dd('Inside doctor login');
+      //  dd('Inside doctor login');
         //dd($loginInfo);
         //dd($loginInfo);
         //$userSession = null;
