@@ -10743,8 +10743,10 @@ class HospitalImpl implements HospitalInterface
     public function getExaminationDatesByDate($patientId, $hospitalId,$date)
     {
         $doctorinfo=[];
+        $LabDetails=null;
         try {
             $patientUser = User::find($patientId);
+          //  dd($patientId."".$date);
 
             if (is_null($patientUser)) {
                 throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
@@ -10833,6 +10835,7 @@ class HospitalImpl implements HospitalInterface
                           //  dd($doctorinfo);
                         }
             $receiptStatus="notpaid";
+                     //   dd($receiptID);
             if($receiptID!=null){
                 $LabDetails=LabFeeReceipt::find($receiptID);
 
@@ -10856,13 +10859,13 @@ class HospitalImpl implements HospitalInterface
             //dd($examinationDates);
 
         } catch (QueryException $queryEx) {
-            //dd($queryEx);
+            dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $queryEx);
         } catch (UserNotFoundException $userExc) {
-            //dd($userExc);
+            dd($userExc);
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         } catch (Exception $exc) {
-            //dd($exc);
+            dd($exc);
             throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_DATES_ERROR, $exc);
         }
 

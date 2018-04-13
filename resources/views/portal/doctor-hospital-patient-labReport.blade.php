@@ -14,7 +14,7 @@
             <div class="form-group col-md-12">
                 <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Age</label>
                 <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['patientDetails']->age}}
+                    {{count($patientExaminations['patientDetails']->age)>0 ? $patientExaminations['patientDetails']->age: "-" }}
                 </div>
             </div>
             <div class="form-group col-md-12">
@@ -78,7 +78,7 @@
             <div class="form-group col-md-12">
                 <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Test Date</label>
                 <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['recentBloodTests'][0]->examination_date}}
+
                 </div>
             </div>
 
@@ -461,8 +461,12 @@ separate
             <div class="col-sm-4" style="width:100%;float:left;">
                 <table style="width:100%;">
                     <tr><th style="padding-right: 80px;">Test Name</th><th style="padding-right: 80px;" >Test Report</th><th style="padding-right: 50px;"  >Normal Value</th></tr>
-                    <tr><th colspan="3"><hr/></th></tr>
+                    <tr><th colspan="3"> <div class="form-group" style="color: black;">
+                                <hr/> <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Blood Test
+                                    - {{$patientExaminations['recentBloodTests'][0]->examination_date}}</label>
+                            </div></th></tr>
                     <div class="form-group" style="background-color: #ffff99; color: black;">
+
                         <?php $parentCheck = "";?>
                         @foreach($patientExaminations['recentBloodTests'] as $recentTest)
                             @if($recentTest->is_parent==0 && ($parentCheck=="" || $parentCheck!=$recentTest->parent_examination_name))
@@ -472,7 +476,11 @@ separate
                                 </tr>
 
                             @endif
+
+
                             <tr style="font-size: 14px;font-weight: normal; align-content: center">
+
+
                                 <td >
                                     @if($recentTest->is_parent==0)
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

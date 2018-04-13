@@ -9681,12 +9681,12 @@ class DoctorController extends Controller
         $labTests = null;
         $patientAppointment = null;
         //$jsonResponse = null;
-        //dd('Inside patient details');
+       // dd('Inside patient details');
         try {
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             // $patientExaminations = HospitalServiceFacade::getExaminationDates($patientId, $hid);
             $patientExaminations = HospitalServiceFacade::getExaminationDatesByDate($patientId, $hid, $date);
-            //dd($patientExaminations);
+           // dd($patientExaminations);
         } catch (HospitalException $hospitalExc) {
             //dd($hospitalExc);
             //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_DETAILS_ERROR));
@@ -9699,7 +9699,6 @@ class DoctorController extends Controller
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
         }
-
         return view('portal.doctor-hospital-patient-labReport', compact('patientExaminations', 'patientDetails'));
 
     }
