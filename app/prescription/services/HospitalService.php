@@ -2867,6 +2867,34 @@ class HospitalService {
     }
 
     /**
+     * Get patient medical profile
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientMedicalProfileForPrint($patientId, $hospitalId)
+    {
+        $patientMedicalProfile = null;
+
+        try
+        {
+            $patientMedicalProfile = $this->hospitalRepo->getPatientMedicalProfileForPrint($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR, $exc);
+        }
+
+        return $patientMedicalProfile;
+    }
+
+    /**
      * Get patient latest appointment dates
      * @param $patientId, $hospitalId
      * @throws $hospitalException

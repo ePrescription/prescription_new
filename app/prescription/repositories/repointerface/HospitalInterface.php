@@ -205,6 +205,8 @@ interface HospitalInterface {
     public function getPatientReports($doctorId, $patientId);
     public function downloadPatientReports($documentId);
 
+    public function getPatientMedicalProfileForPrint($patientId, $hospitalId);
+
 
     /*NEW ADDITION RAMANA*/
      //ramana start 12-01-2018

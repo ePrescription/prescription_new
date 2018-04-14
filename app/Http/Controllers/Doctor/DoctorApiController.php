@@ -2117,6 +2117,110 @@ class DoctorApiController extends Controller
     }
 
     /**
+     * Get patient medical profile
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientMedicalProfileForPrint($hospitalId, $patientId)
+    {
+        $patientMedicalProfile = null;
+        $responseJson = null;
+
+        try
+        {
+            $patientMedicalProfile = $this->hospitalService->getExaminationDates($patientId, $hospitalId);
+            //dd($examinationDates);
+
+            if(!is_null($patientMedicalProfile) && !empty($patientMedicalProfile))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_HISTORY_SUCCESS));
+                $responseJson->setCount(sizeof($patientMedicalProfile));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_EXAMINATION_HISTORY_FOUND));
+            }
+
+            $responseJson->setObj($patientMedicalProfile);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Get lab receipts for the patient
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getLabReceiptsByPatient($hospitalId, $patientId)
+    {
+        $labReceipts = null;
+        $responseJson = null;
+
+        try
+        {
+            $labReceipts = $this->hospitalService->getLabReceiptsByPatient($patientId, $hospitalId);
+            //dd($examinationDates);
+
+            if(!is_null($labReceipts) && !empty($labReceipts))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_LAB_RECEIPTS_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($labReceipts));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_LAB_RECEIPTS_FOUND));
+            }
+
+            $responseJson->setObj($labReceipts);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LAB_RECEIPTS_LIST_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
      * Get patient latest appointment dates
      * @param $patientId, $hospitalId
      * @throws $hospitalException

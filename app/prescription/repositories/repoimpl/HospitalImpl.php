@@ -70,6 +70,7 @@ use App\prescription\utilities\ErrorEnum\ErrorEnum;
 use App\prescription\utilities\Exception\HospitalException;
 use App\prescription\utilities\Exception\UserNotFoundException;
 use App\prescription\utilities\Helper;
+use App\prescription\utilities\TreatmentType;
 use App\prescription\utilities\UserType;
 use App\Role;
 use App\User;
@@ -951,6 +952,7 @@ class HospitalImpl implements HospitalInterface
         //dd($appointmentVM);
         $status = true;
         $patientPrescription = null;
+        $treatmentType = TreatmentType::TREATMENT_PLAN_OUTPATIENT;
 
         try {
             $doctorId = $appointmentVM->getDoctorId();
@@ -988,6 +990,7 @@ class HospitalImpl implements HospitalInterface
                 $appointment->brief_history = $appointmentVM->getBriefHistory();
                 $appointment->appointment_date = $appointmentVM->getAppointmentDate();
                 $appointment->appointment_time = $appointmentVM->getAppointmentTime();
+                $appointment->appointment_type = $treatmentType;
                 $appointment->created_by = $appointmentVM->getCreatedBy();
                 $appointment->modified_by = $appointmentVM->getUpdatedBy();
                 $appointment->created_at = $appointmentVM->getCreatedAt();
@@ -7641,6 +7644,426 @@ class HospitalImpl implements HospitalInterface
     }
 
     /**
+     * Get patient medical profile
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientMedicalProfileForPrint($patientId, $hospitalId)
+    {
+        $patientLabTests = null;
+        $latestPrescription = null;
+
+        try
+        {
+            $patientUser = User::find($patientId);
+
+            if (is_null($patientUser)) {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            //dd('Inside examination dates');
+            //DB::connection()->enableQueryLog();
+
+            $latestBloodExamQuery = DB::table('patient_blood_examination as pbe');
+            $latestBloodExamQuery->join('patient_blood_examination_item as pbei', 'pbei.patient_blood_examination_id', '=', 'pbe.id');
+            $latestBloodExamQuery->join('blood_examination as be', 'be.id', '=', 'pbei.blood_examination_id');
+            $latestBloodExamQuery->where('pbe.examination_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pbe.examination_date)'));
+                $query->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+            });
+            $latestBloodExamQuery->where('pbe.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pbe.examination_time)'));
+                $query->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+                $query->where('pbe.examination_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pbe.examination_date)'));
+                    $query1->from('patient_blood_examination as pbe')->where('pbe.patient_id', '=', $patientId);
+                });
+            });
+            $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
+            $latestBloodExamQuery->where('pbei.is_value_set', '=', 1);
+            $latestBloodExamQuery->select('pbe.id as examinationId', 'pbei.id as examinationItemId', 'pbe.patient_id',
+                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date');
+            $bloodExaminations = $latestBloodExamQuery->get();
+
+            //$query = DB::getQueryLog();
+            //dd($query);
+
+            //dd($bloodExaminations);
+
+
+            //DB::connection()->enableQueryLog();
+
+            $latestGeneralExamQuery = DB::table('patient_general_examination as pge');
+            $latestGeneralExamQuery->join('general_examination as ge', 'ge.id', '=', 'pge.general_examination_id');
+            $latestGeneralExamQuery->where('pge.general_examination_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pge.general_examination_date)'));
+                $query->from('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
+            });
+            $latestGeneralExamQuery->where('pge.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pge.examination_time)'));
+                $query->from('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
+                $query->where('pge.general_examination_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pge.general_examination_date)'));
+                    $query1->from('patient_general_examination as pge')->where('pge.patient_id', '=', $patientId);
+                });
+            });
+            $latestGeneralExamQuery->where('pge.patient_id', '=', $patientId);
+            $latestGeneralExamQuery->where('pge.is_value_set', '=', 1);
+            $latestGeneralExamQuery->select('pge.id', 'pge.patient_id', 'ge.general_examination_name', 'pge.general_examination_value',
+                'pge.general_examination_date');
+            $generalExaminations = $latestGeneralExamQuery->get();
+            //dd($generalExaminations);
+            //$query = DB::getQueryLog();
+            //dd($latestGeneralExamQuery->toSql());
+
+            $latestPastIllnessQuery = DB::table('patient_past_illness as ppi');
+            $latestPastIllnessQuery->join('past_illness as pii', 'pii.id', '=', 'ppi.past_illness_id');
+            $latestPastIllnessQuery->where('ppi.past_illness_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(ppi.past_illness_date)'));
+                $query->from('patient_past_illness as ppi')->where('ppi.patient_id', '=', $patientId);
+            });
+            $latestPastIllnessQuery->where('ppi.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(ppi.examination_time)'));
+                $query->from('patient_past_illness as ppi')->where('ppi.patient_id', '=', $patientId);
+                $query->where('ppi.past_illness_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(ppi.past_illness_date)'));
+                    $query1->from('patient_past_illness as ppi')->where('ppi.patient_id', '=', $patientId);
+                });
+            });
+            $latestPastIllnessQuery->where('ppi.patient_id', '=', $patientId);
+            $latestPastIllnessQuery->where('ppi.is_value_set', '=', 1);
+            $latestPastIllnessQuery->select('ppi.id', 'ppi.patient_id', 'pii.illness_name', 'ppi.past_illness_name', 'ppi.past_illness_date');
+            $latestPastIllness = $latestPastIllnessQuery->get();
+
+            //dd($latestPastIllnessQuery->toSql());
+
+            $latestFamilyIllnessQuery = DB::table('patient_family_illness as pfi');
+            $latestFamilyIllnessQuery->join('family_illness as fi', 'fi.id', '=', 'pfi.family_illness_id');
+            $latestFamilyIllnessQuery->where('pfi.family_illness_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pfi.family_illness_date)'));
+                $query->from('patient_family_illness as pfi')->where('pfi.patient_id', '=', $patientId);
+            });
+            $latestFamilyIllnessQuery->where('pfi.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pfi.examination_time)'));
+                $query->from('patient_family_illness as pfi')->where('pfi.patient_id', '=', $patientId);
+                $query->where('pfi.family_illness_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pfi.family_illness_date)'));
+                    $query1->from('patient_family_illness as pfi')->where('pfi.patient_id', '=', $patientId);
+                });
+            });
+            $latestFamilyIllnessQuery->where('pfi.patient_id', '=', $patientId);
+            $latestFamilyIllnessQuery->where('pfi.is_value_set', '=', 1);
+            $latestFamilyIllnessQuery->select('pfi.id', 'pfi.patient_id', 'fi.illness_name', 'pfi.family_illness_name',
+                'pfi.relation', 'pfi.family_illness_date');
+            $latestFamilyIllness = $latestFamilyIllnessQuery->get();
+
+            //dd($latestFamilyIllnessQuery->toSql());
+
+            $latestPersonalHistoryQuery = DB::table('patient_personal_history as pph');
+            $latestPersonalHistoryQuery->join('personal_history as ph', 'ph.id', '=', 'pph.personal_history_id');
+            $latestPersonalHistoryQuery->join('personal_history_item as phi', 'phi.id', '=', 'pph.personal_history_item_id');
+            $latestPersonalHistoryQuery->where('pph.personal_history_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pph.personal_history_date)'));
+                $query->from('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
+            });
+            $latestPersonalHistoryQuery->where('pph.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pph.examination_time)'));
+                $query->from('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
+                $query->where('pph.personal_history_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pph.personal_history_date)'));
+                    $query1->from('patient_personal_history as pph')->where('pph.patient_id', '=', $patientId);
+                });
+            });
+            $latestPersonalHistoryQuery->where('pph.patient_id', '=', $patientId);
+            $latestPersonalHistoryQuery->where('pph.is_value_set', '=', 1);
+            $latestPersonalHistoryQuery->select('pph.id', 'pph.patient_id', 'ph.personal_history_name',
+                'phi.personal_history_item_name', 'pph.personal_history_date', 'pph.personal_history_value');
+            $latestPersonalHistory = $latestPersonalHistoryQuery->get();
+
+            $latestPregnancyQuery = DB::table('patient_pregnancy as pp');
+            $latestPregnancyQuery->join('pregnancy as p', 'p.id', '=', 'pp.pregnancy_id');
+            $latestPregnancyQuery->where('pp.pregnancy_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pp.pregnancy_date)'));
+                $query->from('patient_pregnancy as pp')->where('pp.patient_id', '=', $patientId);
+            });
+            $latestPregnancyQuery->where('pp.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pp.examination_time)'));
+                $query->from('patient_pregnancy as pp')->where('pp.patient_id', '=', $patientId);
+                $query->where('pp.pregnancy_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pp.pregnancy_date)'));
+                    $query1->from('patient_pregnancy as pp')->where('pp.patient_id', '=', $patientId);
+                });
+            });
+            $latestPregnancyQuery->where('pp.patient_id', '=', $patientId);
+            $latestPregnancyQuery->where('pp.is_value_set', '=', 1);
+            $latestPregnancyQuery->select('pp.id', 'pp.patient_id', 'p.pregnancy_details', 'pp.pregnancy_value', 'pp.pregnancy_date');
+            $latestPregnancy = $latestPregnancyQuery->get();
+
+            $latestScanQuery = DB::table('patient_scan as ps');
+            $latestScanQuery->join('patient_scan_item as psi', 'psi.patient_scan_id', '=', 'ps.id');
+            $latestScanQuery->join('scans as s', 's.id', '=', 'psi.scan_id');
+            $latestScanQuery->where('ps.scan_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(ps.scan_date)'));
+                $query->from('patient_scan as ps')->where('ps.patient_id', '=', $patientId);
+            });
+            $latestScanQuery->where('ps.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(ps.examination_time)'));
+                $query->from('patient_scan as ps')->where('ps.patient_id', '=', $patientId);
+                $query->where('ps.scan_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(ps.scan_date)'));
+                    $query1->from('patient_scan as ps')->where('ps.patient_id', '=', $patientId);
+                });
+            });
+            $latestScanQuery->where('ps.patient_id', '=', $patientId);
+            $latestScanQuery->where('psi.is_value_set', '=', 1);
+            $latestScanQuery->select('ps.id as examinationId', 'psi.id as examinationItemId',
+                'ps.patient_id', 's.scan_name', 'ps.scan_date');
+            //dd($latestScanQuery->toSql());
+            $latestScans = $latestScanQuery->get();
+
+            $latestSymptomsQuery = DB::table('patient_symptoms as ps');
+            $latestSymptomsQuery->join('main_symptoms as ms', 'ms.id', '=', 'ps.main_symptom_id');
+            $latestSymptomsQuery->join('sub_symptoms as ss', 'ss.id', '=', 'ps.sub_symptom_id');
+            $latestSymptomsQuery->join('symptoms as s', 's.id', '=', 'ps.symptom_id');
+            $latestSymptomsQuery->where('ps.patient_symptom_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(ps.patient_symptom_date)'));
+                $query->from('patient_symptoms as ps')->where('ps.patient_id', '=', $patientId);
+            });
+            $latestSymptomsQuery->where('ps.patient_id', '=', $patientId);
+            $latestSymptomsQuery->where('ps.is_value_set', '=', 1);
+            $latestSymptomsQuery->select('ps.id', 'ps.patient_id', 'ms.id as main_symptom_id', 'ms.main_symptom_name',
+                'ss.id as sub_symptom_id', 'ss.sub_symptom_name', 's.id as symptom_id', 's.symptom_name', 'ps.patient_symptom_date');
+            $latestSymptoms = $latestSymptomsQuery->get();
+
+            $latestComplaintsQuery = DB::table('patient_complaint_details as pcd');
+            $latestComplaintsQuery->join('patient_complaints as pc', 'pc.id', '=', 'pcd.patient_complaint_id');
+            $latestComplaintsQuery->join('complaints as c', 'c.id', '=', 'pcd.complaint_id');
+            $latestComplaintsQuery->join('complaint_type as ct', 'ct.id', '=', 'c.complaint_type_id');
+            $latestComplaintsQuery->where('pc.complaint_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pc.complaint_date)'));
+                $query->from('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
+            });
+            $latestComplaintsQuery->where('pc.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pc.examination_time)'));
+                $query->from('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
+                $query->where('pc.complaint_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pc.complaint_date)'));
+                    $query1->from('patient_complaints as pc')->where('pc.patient_id', '=', $patientId);
+                });
+            });
+            $latestComplaintsQuery->where('pc.patient_id', '=', $patientId);
+            $latestComplaintsQuery->where('pcd.is_value_set', '=', 1);
+            $latestComplaintsQuery->select('pc.id', 'pc.patient_id', 'pc.complaint_text', 'pc.complaint_date',
+                'c.id as complaintId', 'c.complaint_name', 'ct.complaint_name as complaintType');
+            $latestComplaints = $latestComplaintsQuery->get();
+            //dd($latestComplaintsQuery->toSql());
+
+            //dd($latestComplaints);
+
+            $latestUltrasoundQuery = DB::table('patient_ultra_sound as pus');
+            $latestUltrasoundQuery->join('patient_ultra_sound_item as pusi', 'pusi.patient_ultra_sound_id', '=', 'pus.id');
+            $latestUltrasoundQuery->join('ultra_sound as us', 'us.id', '=', 'pusi.ultra_sound_id');
+            $latestUltrasoundQuery->where('pus.examination_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pus.examination_date)'));
+                $query->from('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
+            });
+            $latestUltrasoundQuery->where('pus.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pus.examination_time)'));
+                $query->from('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
+                $query->where('pus.examination_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pus.examination_date)'));
+                    $query1->from('patient_ultra_sound as pus')->where('pus.patient_id', '=', $patientId);
+                });
+            });
+            $latestUltrasoundQuery->where('pus.patient_id', '=', $patientId);
+            $latestUltrasoundQuery->where('pusi.is_value_set', '=', 1);
+            $latestUltrasoundQuery->select('pus.id as examinationId', 'pusi.id as examinationItemId',
+                'pus.patient_id', 'us.examination_name', 'pus.examination_date');
+            $latestUltrasound = $latestUltrasoundQuery->get();
+
+            $latestUrineExamQuery = DB::table('patient_urine_examination as pue');
+            $latestUrineExamQuery->join('patient_urine_examination_item as puei', 'puei.patient_urine_examination_id', '=', 'pue.id');
+            $latestUrineExamQuery->join('urine_examination as ue', 'ue.id', '=', 'puei.urine_examination_id');
+            $latestUrineExamQuery->where('pue.examination_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pue.examination_date)'));
+                $query->from('patient_urine_examination as pue')->where('pue.patient_id', '=', $patientId);
+            });
+            $latestUrineExamQuery->where('pue.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pue.examination_time)'));
+                $query->from('patient_urine_examination as pue')->where('pue.patient_id', '=', $patientId);
+                $query->where('pue.examination_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pue.examination_date)'));
+                    $query1->from('patient_urine_examination as pue')->where('pue.patient_id', '=', $patientId);
+                });
+            });
+            $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
+            $latestUrineExamQuery->where('puei.is_value_set', '=', 1);
+            $latestUrineExamQuery->select('pue.id as examinationId', 'puei.id as examinationItemId',
+                'pue.patient_id', 'ue.examination_name', 'pue.examination_date');
+            $latestUrineExaminations = $latestUrineExamQuery->get();
+
+            $latestMotionExamQuery = DB::table('patient_motion_examination as pme');
+            $latestMotionExamQuery->join('patient_motion_examination_item as pmei', 'pmei.patient_motion_examination_id', '=', 'pme.id');
+            $latestMotionExamQuery->join('motion_examination as me', 'me.id', '=', 'pmei.motion_examination_id');
+            $latestMotionExamQuery->where('pme.examination_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pme.examination_date)'));
+                $query->from('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
+            });
+            $latestMotionExamQuery->where('pme.examination_time', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pme.examination_time)'));
+                $query->from('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
+                $query->where('pme.examination_date', function ($query1) use ($patientId) {
+                    $query1->select(DB::raw('MAX(pme.examination_date)'));
+                    $query1->from('patient_motion_examination as pme')->where('pme.patient_id', '=', $patientId);
+                });
+            });
+            $latestMotionExamQuery->where('pme.patient_id', '=', $patientId);
+            $latestMotionExamQuery->where('pmei.is_value_set', '=', 1);
+            $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.id as examinationItemId',
+                'pme.patient_id', 'me.examination_name', 'pme.examination_date');
+            $latestMotionExaminations = $latestMotionExamQuery->get();
+
+            $latestDrugHistoryQuery = DB::table('patient_drug_history as pdh');
+            $latestDrugHistoryQuery->where('pdh.drug_history_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pdh.drug_history_date)'));
+                $query->from('patient_drug_history as pdh')->where('pdh.patient_id', '=', $patientId);
+            });
+            $latestDrugHistoryQuery->where('pdh.patient_id', '=', $patientId);
+            $latestDrugHistoryQuery->select('pdh.id', 'pdh.patient_id',
+                'pdh.drug_name', 'pdh.dosage', 'pdh.timings', 'pdh.drug_history_date');
+            $latestDrugHistory = $latestDrugHistoryQuery->get();
+
+            $latestSurgeryHistoryQuery = DB::table('patient_surgeries as ps');
+            $latestSurgeryHistoryQuery->where('ps.surgery_input_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(ps.surgery_input_date)'));
+                $query->from('patient_surgeries as ps')->where('ps.patient_id', '=', $patientId);
+            });
+            $latestSurgeryHistoryQuery->where('ps.patient_id', '=', $patientId);
+            $latestSurgeryHistoryQuery->select('ps.id', 'ps.patient_id',
+                'ps.patient_surgeries', 'ps.surgery_input_date', 'ps.operation_date');
+            $latestSurgeryHistory = $latestSurgeryHistoryQuery->get();
+
+            $latestDentalExamQuery = DB::table('patient_dental_examination_item as pdei');
+            $latestDentalExamQuery->join('patient_dental_examination as pde', 'pde.id', '=', 'pdei.patient_dental_examination_id');
+            $latestDentalExamQuery->join('dental_examination_items as dei', 'dei.id', '=', 'pdei.dental_examination_item_id');
+            $latestDentalExamQuery->join('dental_category as dc', 'dc.id', '=', 'dei.dental_category_id');
+            $latestDentalExamQuery->where('pde.examination_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pde.examination_date)'));
+                $query->from('patient_dental_examination as pde')->where('pde.patient_id', '=', $patientId);
+            });
+            $latestDentalExamQuery->where('pde.patient_id', '=', $patientId);
+            //$latestDentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
+            $latestDentalExamQuery->select('pdei.id', 'pde.patient_id',
+                'pde.hospital_id', 'dc.id as category_id', 'dc.category_name',
+                'dei.id as examination_id', 'dei.examination_name', 'pde.examination_date');
+            //dd($latestDentalExamQuery->toSql());
+            $dentalExaminations = $latestDentalExamQuery->get();
+
+            $latestXrayExamQuery = DB::table('patient_xray_examination_item as pxei');
+            $latestXrayExamQuery->join('patient_xray_examination as pxe', 'pxe.id', '=', 'pxei.patient_xray_examination_id');
+            $latestXrayExamQuery->join('xray_examination as xe', 'xe.id', '=', 'pxei.xray_examination_item_id');
+            $latestXrayExamQuery->where('pxe.examination_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pxe.examination_date)'));
+                $query->from('patient_xray_examination as pxe')->where('pxe.patient_id', '=', $patientId);
+            });
+            $latestXrayExamQuery->where('pxe.patient_id', '=', $patientId);
+            //$latestDentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
+            $latestXrayExamQuery->select('pxei.id', 'pxe.patient_id',
+                'pxe.hospital_id', 'xe.id as examination_id', 'xe.examination_name', 'xe.category',
+                'pxe.examination_date');
+            //dd($latestDentalExamQuery->toSql());
+            $xrayExaminations = $latestXrayExamQuery->get();
+
+            $latestDiagnosisQuery = DB::table('patient_investigations_diagnosis as pid');
+            $latestDiagnosisQuery->join('treatment_type as tt', 'tt.id', '=', 'pid.treatment_plan_id');
+            $latestDiagnosisQuery->where('pid.diagnosis_date', function ($query) use ($patientId) {
+                $query->select(DB::raw('MAX(pid.diagnosis_date)'));
+                $query->from('patient_investigations_diagnosis as pid')->where('pid.patient_id', '=', $patientId);
+            });
+            $latestDiagnosisQuery->where('pid.patient_id', '=', $patientId);
+            //$latestDentalExamQuery->where('pde.hospital_id', '=', $hospitalId);
+            //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
+            $latestDiagnosisQuery->select('pid.id', 'pid.patient_id',
+                'pid.hospital_id', 'pid.doctor_id', 'pid.investigations', 'pid.examination_findings', 'pid.provisional_diagnosis',
+                'pid.final_diagnosis', 'pid.diagnosis_date', 'pid.treatment_plan_id', 'tt.treatment_type', 'tt.treatment_code');
+            //dd($latestDentalExamQuery->toSql());
+            $diagnosticExaminations = $latestDiagnosisQuery->get();
+
+            $latestPresQuery = DB::table('prescription_details as pd')->select('b.id as trade_id',
+                DB::raw('TRIM(UPPER(b.brand_name)) as trade_name'),
+                //'d.id as formulation_id',
+                //DB::raw('TRIM(UPPER(d.drug_name)) as formulation_name'),
+                'b.id as formulation_id',
+                DB::raw('TRIM(UPPER(b.brand_name)) as formulation_name'),
+                'pd.dosage', 'pd.no_of_days', 'pd.intake_form',
+                'pd.morning', 'pd.afternoon', 'pd.night', 'pd.drug_status');
+            $latestPresQuery->join('patient_prescription as pp', 'pp.id', '=', 'pd.patient_prescription_id');
+            $latestPresQuery->join('brands as b', 'b.id', '=', 'pd.brand_id');
+            $latestPresQuery->join('drugs as d', 'd.id', '=', 'pd.drug_id');
+            $latestPresQuery->where('pp.prescription_date', function ($latestPresQuery) use ($patientId) {
+                $latestPresQuery->select(DB::raw('MAX(pp.prescription_date)'));
+                $latestPresQuery->from('patient_prescription as pp')->where('pp.patient_id', '=', $patientId);
+            });
+            $latestPresQuery->where('pp.patient_id', '=', $patientId);
+
+            $latestPrescription = $latestPresQuery->get();
+
+            $patientQuery = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name', 'p.email', 'p.pid',
+                'p.telephone', 'p.relationship', 'p.patient_spouse_name as spouseName', 'p.address');
+            $patientQuery->where('p.patient_id', '=', $patientId);
+            $patientDetails = $patientQuery->first();
+
+            $hospitalQuery = DB::table('hospital as h')->select('h.id', 'h.hospital_id', 'h.hospital_name', 'h.address', 'c.city_name',
+                'co.name');
+            $hospitalQuery->join('cities as c', 'c.id', '=', 'h.city');
+            $hospitalQuery->join('countries as co', 'co.id', '=', 'h.country');
+            $hospitalQuery->where('h.hospital_id', '=', $hospitalId);
+            $hospitalDetails = $hospitalQuery->first();
+
+            $patientMedicalProfile['patientDetails'] = $patientDetails;
+            $patientMedicalProfile['hospitalDetails'] = $hospitalDetails;
+            $patientMedicalProfile['recentBloodTests'] = $bloodExaminations;
+            $patientMedicalProfile['recentGeneralTests'] = $generalExaminations;
+            $patientMedicalProfile['recentPastIllness'] = $latestPastIllness;
+            $patientMedicalProfile['recentFamilyIllness'] = $latestFamilyIllness;
+            $patientMedicalProfile['recentPersonalHistory'] = $latestPersonalHistory;
+            $patientMedicalProfile['recentPregnancy'] = $latestPregnancy;
+            $patientMedicalProfile['recentScans'] = $latestScans;
+            $patientMedicalProfile['recentSymptoms'] = $latestSymptoms;
+            $patientMedicalProfile['recentComplaints'] = $latestComplaints;
+            $patientMedicalProfile['recentUltrasound'] = $latestUltrasound;
+            $patientMedicalProfile['recentUrineExaminations'] = $latestUrineExaminations;
+            $patientMedicalProfile['recentMotionExaminations'] = $latestMotionExaminations;
+            $patientMedicalProfile['recentDrugHistory'] = $latestDrugHistory;
+            $patientMedicalProfile['recentSurgeryHistory'] = $latestSurgeryHistory;
+            $patientMedicalProfile['dentalExaminations'] = $dentalExaminations;
+            $patientMedicalProfile['xrayExaminations'] = $xrayExaminations;
+            $patientMedicalProfile['diagnosticExaminations'] = $diagnosticExaminations;
+            $patientMedicalProfile['latestPrescription'] = $latestPrescription;
+
+            //dd($examinationDates);
+
+        } catch (QueryException $queryEx) {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR, $queryEx);
+        } catch (UserNotFoundException $userExc) {
+            //dd($userExc);
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        } catch (Exception $exc) {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR, $exc);
+        }
+
+        //dd($patientLabTests);
+        return $patientMedicalProfile;
+    }
+
+    /**
      * Get patient latest appointment dates
      * @param $patientId , $hospitalId
      * @throws $hospitalException
@@ -10842,7 +11265,7 @@ class HospitalImpl implements HospitalInterface
             }
 
             // dd($doctorinfo);
-            $examinationDates['recieptDetails'] = $LabDetails;
+            //$examinationDates['recieptDetails'] = $LabDetails;
             $examinationDates['recieptId'] = $receiptID;
             $examinationDates['recieptStatus'] = $receiptStatus;
             $examinationDates['patientDetails'] = $patientDetails;
