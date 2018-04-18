@@ -2131,7 +2131,7 @@ class DoctorApiController extends Controller
 
         try
         {
-            $patientMedicalProfile = $this->hospitalService->getExaminationDates($patientId, $hospitalId);
+            $patientMedicalProfile = $this->hospitalService->getPatientMedicalProfileForPrint($patientId, $hospitalId);
             //dd($examinationDates);
 
             if(!is_null($patientMedicalProfile) && !empty($patientMedicalProfile))
@@ -2162,6 +2162,164 @@ class DoctorApiController extends Controller
         {
             //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Get patient lab profile
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientLabProfileForPrint($hospitalId, $patientId)
+    {
+        $patientLabProfile = null;
+        $responseJson = null;
+
+        try
+        {
+            $patientLabProfile = $this->hospitalService->getPatientLabProfileForPrint($patientId, $hospitalId);
+            //dd($examinationDates);
+
+            if(!is_null($patientLabProfile) && !empty($patientLabProfile))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_HISTORY_SUCCESS));
+                $responseJson->setCount(sizeof($patientLabProfile));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_EXAMINATION_HISTORY_FOUND));
+            }
+
+            $responseJson->setObj($patientLabProfile);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Get patient medical history for print
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientMedicalHistoryForPrint($hospitalId, $patientId)
+    {
+        $patientMedicalHistory = null;
+        $responseJson = null;
+
+        try
+        {
+            $patientMedicalHistory = $this->hospitalService->getPatientMedicalHistoryForPrint($patientId, $hospitalId);
+            //dd($examinationDates);
+
+            if(!is_null($patientMedicalHistory) && !empty($patientMedicalHistory))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_HISTORY_SUCCESS));
+                $responseJson->setCount(sizeof($patientMedicalHistory));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_EXAMINATION_HISTORY_FOUND));
+            }
+
+            $responseJson->setObj($patientMedicalHistory);
+            $responseJson->sendSuccessResponse();
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            //dd($hospitalExc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+            /*catch(HospitalException $hospitalExc)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PAST_ILLNESS_DETAILS_ERROR));
+                $responseJson->sendErrorResponse($hospitalExc);
+            }*/
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
+
+    /**
+     * Get lab receipt details for the patient
+     * @param $patientId, $hospitalId, $receiptRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getApiPatientReceiptDetails($hospitalId, $patientId, Request $receiptRequest)
+    {
+        $labReceiptDetails = null;
+        $feeReceiptId = null;
+        $responseJson = null;
+        //dd($hospitalId);
+
+        try
+        {
+            if($receiptRequest->has('feereceipt'))
+            {
+                $feeReceiptId = $receiptRequest->get('feereceipt');
+            }
+
+            $labReceiptDetails = $this->hospitalService->getPatientReceiptDetails($hospitalId, $patientId, $feeReceiptId);
+            $paymentHistory = $this->hospitalService->getPaymentHistory($hospitalId, $patientId, $feeReceiptId);
+            $labReceiptDetails['paymentHistory'] = $paymentHistory;
+
+            if(!is_null($labReceiptDetails) && !empty($labReceiptDetails))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_SUCCESS));
+                $responseJson->setCount(sizeof($labReceiptDetails));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::NO_PATIENT_LAB_RECEIPTS_FOUND));
+            }
+
+            $responseJson->setObj($labReceiptDetails);
+            $responseJson->sendSuccessResponse();
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_LAB_RECEIPT_DETAILS_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 

@@ -292,6 +292,10 @@
         "820" => "Successfully retrieved ultrasound tests",
         "821" => "No ultrasound tests available",
 
+        "822" => "Unable to retrieve patient examination history",
+        "823" => "Successfully retrieved patient examination history",
+        "824" => "No patient examination history available",
+
         "851" => "Unable to retrieve specialties list",
         "852" => "Successfully retrieved specialties list",
         "853" => "No specialties list available",
@@ -366,9 +370,10 @@
         "902" => "Successfully retrieved patient reports",
         "903" => "No reports available for the patient",
 
-        "904" =>"Unable to get hospital patient token id",
-        "905" =>"unable to update patient fee status",
+        "904" => "Unable to get hospital patient token id",
+        "905" => "Unable to update patient fee status",
 
-        "906" =>"unable to get patient total count"
+        "906" => "Unable to get patient total count",
+        "908" => "No patient lab receipts available"
 
     ];

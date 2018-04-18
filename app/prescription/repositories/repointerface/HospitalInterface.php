@@ -206,6 +206,8 @@ interface HospitalInterface {
     public function downloadPatientReports($documentId);
 
     public function getPatientMedicalProfileForPrint($patientId, $hospitalId);
+    public function getPatientLabProfileForPrint($patientId, $hospitalId);
+    public function getPatientMedicalHistoryForPrint($patientId, $hospitalId);
 
 
     /*NEW ADDITION RAMANA*/

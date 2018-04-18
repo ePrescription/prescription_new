@@ -313,8 +313,7 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
 
 //RAMANA NEW  End  19-01-2018
    // rest/api/hospital/1/doctor/3/patient/PIDiACFkjJyD/reciept/360/updatepatientpaymentstatus
-    //RECEIPT
-
+    //RECEIPTgetPatientMedicalHistoryForPrint
     Route::get('rest/api/{hospitalId}/patient/{patientId}/labtestreceipts', array('as' => 'patient.labtestreceipts', 'uses' => 'DoctorController@getLabTestDetailsForReceipt'));
     Route::get('rest/api/{hospitalId}/patient/{patientId}/receiptdetails', array('as' => 'patient.receiptdetails', 'uses' => 'DoctorController@getPatientReceiptDetails'));
 
@@ -392,7 +391,7 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
    Route::get('rest/api/prescriptions', array('as' => 'patient.allprescriptions', 'uses' => 'DoctorController@getAllPrescriptions'));
    Route::get('rest/api/prescription/{prescriptionId}', array('as' => 'patient.prescriptiondetails', 'uses' => 'DoctorController@getPrescriptionDetails'));
 
-    Route::get('rest/api/prescription/{prescriptionId}/details', array('as' => 'patient.getprescriptiondetails', 'uses' => 'DoctorApiController@getPrescriptionDetails'));
+   Route::get('rest/api/prescription/{prescriptionId}/details', array('as' => 'patient.getprescriptiondetails', 'uses' => 'DoctorApiController@getPrescriptionDetails'));
 
    Route::get('rest/api/patients', array('as' => 'patient.names', 'uses' => 'DoctorController@searchPatientByName'));
    Route::get('rest/api/patient', array('as' => 'patient.patient', 'uses' => 'DoctorController@searchPatientByPid'));
@@ -432,7 +431,11 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
    Route::get('rest/api/doctor/hospitals', array('as' => 'doctor.hospitals', 'uses' => 'DoctorController@getHospitalsForDoctor'));
    Route::get('rest/api/{doctorId}/hospitals', array('as' => 'doctor.associatedhospitals', 'uses' => 'DoctorController@getHospitalsByDoctorId'));
    Route::get('rest/api/{hospitalId}/patient/{patientId}/medicalprofile', array('as' => 'hospital.patientprintprofile', 'uses' => 'DoctorApiController@getPatientMedicalProfileForPrint'));
+   Route::get('rest/api/{hospitalId}/patient/{patientId}/labprofile', array('as' => 'hospital.patientprintlabprofile', 'uses' => 'DoctorApiController@getPatientLabProfileForPrint'));
+   Route::get('rest/api/{hospitalId}/patient/{patientId}/medicalhistory', array('as' => 'hospital.patientprintmedicalhistory', 'uses' => 'DoctorApiController@getPatientMedicalHistoryForPrint'));
    Route::get('rest/api/{hospitalId}/patient/{patientId}/labreceipts', array('as' => 'patient.labreceipts', 'uses' => 'DoctorApiController@getLabReceiptsByPatient'));
+   Route::get('rest/api/{hospitalId}/patient/{patientId}/labresults', array('as' => 'hospital.patientprintlabresults', 'uses' => 'DoctorApiController@getPatientLabProfileForPrint'));
+   Route::get('rest/api/{hospitalId}/patient/{patientId}/labreceiptdetails', array('as' => 'hospital.patientlabreceipt', 'uses' => 'DoctorApiController@getApiPatientReceiptDetails'));
 
 });
 

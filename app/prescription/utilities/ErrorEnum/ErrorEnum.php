@@ -419,8 +419,10 @@ class ErrorEnum extends Enum{
 
     const PATIENT_LAB_RECEIPTS_LIST_SUCCESS = 907;
     const NO_PATIENT_LAB_RECEIPTS_FOUND = 908;
+
     /**/
 
     //const PATIENT_LAB_
+
 
 }

@@ -2895,6 +2895,62 @@ class HospitalService {
     }
 
     /**
+     * Get patient lab profile
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientLabProfileForPrint($patientId, $hospitalId)
+    {
+        $patientLabProfile = null;
+
+        try
+        {
+            $patientLabProfile = $this->hospitalRepo->getPatientLabProfileForPrint($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR, $exc);
+        }
+
+        return $patientLabProfile;
+    }
+
+    /**
+     * Get patient medical history for print
+     * @param $patientId, $hospitalId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getPatientMedicalHistoryForPrint($patientId, $hospitalId)
+    {
+        $patientMedicalHistory = null;
+
+        try
+        {
+            $patientMedicalHistory = $this->hospitalRepo->getPatientMedicalHistoryForPrint($patientId, $hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_EXAMINATION_HISTORY_ERROR, $exc);
+        }
+
+        return $patientMedicalHistory;
+    }
+
+    /**
      * Get patient latest appointment dates
      * @param $patientId, $hospitalId
      * @throws $hospitalException
