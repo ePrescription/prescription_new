@@ -58,11 +58,11 @@
                             <i class="fa fa-flask"></i> <span>Lab Tests</span>
                         </a>
                     </li>
-                    <li  class="@if($patient_menu==1) active @endif treeview">
+                   <!-- <li  class="@if($patient_menu==1) active @endif treeview">
                         <a href="{{URL::to('/')}}/doctor/rest/api/{{Session::get('LoginUserHospital')}}/doctor/{{Auth::user()->id}}/feereceipts">
                             <i class="fa fa-users"></i> <span>Doctor Fee</span>
                         </a>
-                    </li>
+                    </li>-->
                 </ul>
             </div>
 

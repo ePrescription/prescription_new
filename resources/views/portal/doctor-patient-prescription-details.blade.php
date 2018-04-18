@@ -156,13 +156,13 @@ $profile_menu="0";
                                         <div class="col-lg-12">
                                             <ul class="nav nav-tabs navtab-bg">
 
-                                                <li  class="">
+                                                <li  class="active">
                                                     <a href="#messages" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">View Prescription</span>
                                                     </a>
                                                 </li>
-                                                <li  class="active">
+                                              <!--  <li  class="active">
                                                     <a href="#prescription" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">Add Prescription</span>
@@ -173,7 +173,7 @@ $profile_menu="0";
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">Add Attachment</span>
                                                     </a>
-                                                </li>
+                                                </li>-->
                                                 <?php /* ?>
                                                 <li class="">
                                                     <a href="#home" data-toggle="tab" aria-expanded="true">
@@ -209,7 +209,7 @@ $profile_menu="0";
                                                 </div>
 
 
-                                                <div class="tab-pane" id="messages">
+                                                <div class="tab-pane active" id="messages">
                                                     <p>
                                                     <div>
                                                         PRID ( Prescription Identification) - PID ( Patient Identification)
@@ -248,7 +248,7 @@ $profile_menu="0";
                                                     .addButton, .removeButton { float:right; }
                                                 </style>
 
-                                                <div class="tab-pane active" id="prescription">
+                                                <div class="tab-pane" id="prescription">
                                                     <div class="panel-body" style="padding: 0px;">
                                                         <div class="table-responsive">
                                                             <div id="POItablediv" >

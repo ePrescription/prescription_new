@@ -46,7 +46,7 @@ $profile_menu="0";
                         <div class="col-md-12">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/addpatientwithappointment" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Appointment</b></button></a>
+                                  <!--  <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/addpatientwithappointment" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Appointment</b></button></a>-->
 
                                     <h4 class="m-b-30 m-t-0">Doctor Patients Details List</h4>
 
