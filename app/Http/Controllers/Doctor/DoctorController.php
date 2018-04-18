@@ -622,9 +622,9 @@ class DoctorController extends Controller
 
     public function doctorlogin(DoctorLoginRequest $loginRequest)
     {
-        //dd('Test');
+       // dd('Test');
         $loginInfo = $loginRequest->all();
-      //  dd('Inside doctor login');
+      // dd('Inside doctor login');
         //dd($loginInfo);
         //dd($loginInfo);
         //$userSession = null;
