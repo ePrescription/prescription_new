@@ -162,6 +162,7 @@ return [
 
         App\prescription\serviceprovider\reposerviceprovider\HospitalRepoServiceProvider::class,
         App\prescription\serviceprovider\servicesserviceprovider\HospitalServiceProvider::class,
+        App\prescription\serviceprovider\servicesserviceprovider\HelperServiceProvider::class,
 
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Softon\Indipay\IndipayServiceProvider::class
@@ -219,6 +220,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
 
         'HospitalServiceFacade'      => App\prescription\facades\HospitalServiceFacade::class,
+        'HelperFacade'      => App\prescription\facades\HelperFacade::class,
 
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,

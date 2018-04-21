@@ -12,4 +12,5 @@ namespace App\prescription\repositories\repointerface;
 interface HelperInterface
 {
     public function getCities();
+    public function generatedId($hospitalId, $idType);
 }
