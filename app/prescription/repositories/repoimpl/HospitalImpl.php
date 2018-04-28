@@ -2224,6 +2224,7 @@ class HospitalImpl implements HospitalInterface
             $query->where('usr.delete_status', '=', 1);
             $query->where('da.doctor_id', '=', $doctorId);
             $query->where('da.appointment_date', '=', $appointmentDate);
+            $query->whereIn('da.appointment_status_id', [1, 2, 3]);
             $query->select('p.patient_id', 'p.name as name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
                 'da.id', 'da.id as appointment_id', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time');
 
