@@ -3173,7 +3173,7 @@ class HospitalImpl implements HospitalInterface
                 //$query->where('fr.doctor_id', '=', 'd.doctor_id');
                 $query->where('p.patient_id', '=', $patientId);
                 $query->orderBy('fr.created_at', 'DESC');
-                $query->select('fr.id as receiptId', 'p.id as patientId', 'p.name as patientName', 'p.pid as PID',
+                $query->select('fr.id as receiptId', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as PID',
                     'p.relationship', 'p.patient_spouse_name as spouseName',
                     'p.telephone as contactNumber', 'd.name as doctorName', 'fr.fee');
 
@@ -3229,6 +3229,8 @@ class HospitalImpl implements HospitalInterface
 
             $feeDetailsQuery->select('dp.id as receiptId', 'dp.patient_id as patientId', 'dp.doctor_id as doctorId',
                 'dp.hospital_id as hospitalId', 'dp.fee', 'p.payment_status');
+
+            //dd($feeDetailsQuery->toSql());
 
 
             /* $feeDetailsQuery = DB::table('fee_receipt as fr')->where('fr.id', '=', $receiptId);
@@ -7964,7 +7966,7 @@ class HospitalImpl implements HospitalInterface
             $latestBloodExamQuery->where('pbe.patient_id', '=', $patientId);
             $latestBloodExamQuery->where('pbei.is_value_set', '=', 1);
             $latestBloodExamQuery->select('pbe.id as examinationId', 'pbei.id as examinationItemId', 'pbe.patient_id',
-                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date');
+                'pbe.hospital_id', 'be.examination_name', 'pbe.examination_date', 'be.default_normal_values', 'pbei.test_readings');
             $bloodExaminations = $latestBloodExamQuery->get();
 
             $latestMotionExamQuery = DB::table('patient_motion_examination as pme');
@@ -7985,7 +7987,7 @@ class HospitalImpl implements HospitalInterface
             $latestMotionExamQuery->where('pme.patient_id', '=', $patientId);
             $latestMotionExamQuery->where('pmei.is_value_set', '=', 1);
             $latestMotionExamQuery->select('pme.id as examinationId', 'pmei.id as examinationItemId',
-                'pme.patient_id', 'me.examination_name', 'pme.examination_date');
+                'pme.patient_id', 'me.examination_name', 'pme.examination_date', 'pmei.test_readings');
             $latestMotionExaminations = $latestMotionExamQuery->get();
 
             $latestUrineExamQuery = DB::table('patient_urine_examination as pue');
@@ -8006,7 +8008,7 @@ class HospitalImpl implements HospitalInterface
             $latestUrineExamQuery->where('pue.patient_id', '=', $patientId);
             $latestUrineExamQuery->where('puei.is_value_set', '=', 1);
             $latestUrineExamQuery->select('pue.id as examinationId', 'puei.id as examinationItemId',
-                'pue.patient_id', 'ue.examination_name', 'pue.examination_date');
+                'pue.patient_id', 'ue.examination_name', 'pue.examination_date', 'puei.test_readings');
             $latestUrineExaminations = $latestUrineExamQuery->get();
 
             $latestUltrasoundQuery = DB::table('patient_ultra_sound as pus');
@@ -8027,7 +8029,7 @@ class HospitalImpl implements HospitalInterface
             $latestUltrasoundQuery->where('pus.patient_id', '=', $patientId);
             $latestUltrasoundQuery->where('pusi.is_value_set', '=', 1);
             $latestUltrasoundQuery->select('pus.id as examinationId', 'pusi.id as examinationItemId',
-                'pus.patient_id', 'us.examination_name', 'pus.examination_date');
+                'pus.patient_id', 'us.examination_name', 'pus.examination_date', 'pusi.test_readings');
             $latestUltrasound = $latestUltrasoundQuery->get();
 
             $latestScanQuery = DB::table('patient_scan as ps');
@@ -8048,7 +8050,7 @@ class HospitalImpl implements HospitalInterface
             $latestScanQuery->where('ps.patient_id', '=', $patientId);
             $latestScanQuery->where('psi.is_value_set', '=', 1);
             $latestScanQuery->select('ps.id as examinationId', 'psi.id as examinationItemId',
-                'ps.patient_id', 's.scan_name', 'ps.scan_date');
+                'ps.patient_id', 's.scan_name', 'ps.scan_date', 'psi.test_readings');
             //dd($latestScanQuery->toSql());
             $latestScans = $latestScanQuery->get();
 
