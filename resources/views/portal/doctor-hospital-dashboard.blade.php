@@ -796,7 +796,9 @@ $profile_menu="0";
     <script>
         $( function() {
 
-            $( "#appointmentDate" ).daterangepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+          //  $( "#appointmentDate" ).daterangepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+
+            $( "#appointmentDate" ).daterangepicker({ dateFormat: 'yy-mm-dd'});
             $('#appointmentDate').on('apply.daterangepicker', function(ev, picker) {
                 console.log(picker.startDate.format('YYYY-MM-DD'));
                 console.log(picker.endDate.format('YYYY-MM-DD'));

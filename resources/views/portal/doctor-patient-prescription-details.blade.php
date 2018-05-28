@@ -156,13 +156,13 @@ $profile_menu="0";
                                         <div class="col-lg-12">
                                             <ul class="nav nav-tabs navtab-bg">
 
-                                                <li  class="active">
+                                                <li  class="">
                                                     <a href="#messages" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">View Prescription</span>
                                                     </a>
                                                 </li>
-                                              <!--  <li  class="active">
+                                                <li  class="active">
                                                     <a href="#prescription" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">Add Prescription</span>
@@ -173,7 +173,7 @@ $profile_menu="0";
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">Add Attachment</span>
                                                     </a>
-                                                </li>-->
+                                                </li>
                                                 <?php /* ?>
                                                 <li class="">
                                                     <a href="#home" data-toggle="tab" aria-expanded="true">
@@ -209,7 +209,7 @@ $profile_menu="0";
                                                 </div>
 
 
-                                                <div class="tab-pane active" id="messages">
+                                                <div class="tab-pane" id="messages">
                                                     <p>
                                                     <div>
                                                         PRID ( Prescription Identification) - PID ( Patient Identification)
@@ -248,7 +248,7 @@ $profile_menu="0";
                                                     .addButton, .removeButton { float:right; }
                                                 </style>
 
-                                                <div class="tab-pane" id="prescription">
+                                                <div class="tab-pane active" id="prescription">
                                                     <div class="panel-body" style="padding: 0px;">
                                                         <div class="table-responsive">
                                                             <div id="POItablediv" >
@@ -262,7 +262,7 @@ $profile_menu="0";
                                                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                                     <input type="radio" class="form-controlx" onclick="change(2)"   id="byformulationName" name="status"/><b>BY Formulation Name</b>
 
-<br><br><br><br>
+                                                                          <br><br><br><br>
 
 
 
@@ -464,16 +464,14 @@ $profile_menu="0";
                        return false;
                    }
                }
-               var dataList = document.getElementById('result');
-
-
-
-
+                  var dataList = document.getElementById('result');
                var traStatus = $("#bytradeName").is(':checked');
                var forStatus = $("#byformulationName").is(':checked');
+               //dataList.remove();
 
                //if By Trade Name
                if (traStatus) {
+
                    $.ajax({
                        type: 'GET',
                        //url: '/vistara/ajax-chosen-master/data.json',
@@ -485,21 +483,24 @@ $profile_menu="0";
                        success: function (data) {
                            $.each(data, function (i, val) {
                                var terms = {};
-                              // dataList.innerText="";
+                             // dataList.innerText="";
+
                                if (i == "result") {
 
                                    val.forEach(function (element) {
                                          var option = document.createElement('option');
                                        // Set the value using the item in the JSON array.
                                      //  option.value = element['tradeName'];
+                                       //alert(element['drug_id']);
                                        option.text = element['tradeName'];
                                        option.brandId = element['tradeId'];
-                                       option.drugId = element['drug_id'];
+                                       option.drugId = element['formulationId'];
                                        option.dispensing_form = element['dispensing_form'];
                                        option.dosage_amount = element['dosage_amount'] + " " + element['quantity'];
                                        option.formulationName = element['formulationName'];
                                        dataList.append(option);
                                    });
+                                  // dataList.remove();
                                    // key.placeholder =dataList;
                                }
                                //return terms;
@@ -530,7 +531,7 @@ $profile_menu="0";
                                        //option.value = element['tradeId'];
                                        option.text = element['tradeName'];
                                        option.brandId = element['tradeId'];
-                                       option.drugId = element['drug_id'];
+                                       option.drugId = element['formulationId'];
                                        option.dispensing_form = element['dispensing_form'];
                                        option.dosage_amount = element['dosage_amount'] + " " + element['quantity'];
                                        option.formulationName = element['formulationName'];
@@ -707,7 +708,7 @@ $profile_menu="0";
            function validateForm(formId) {
 
                //$("#POITable").val();
-
+               //var drug = $("#drug" + prescriptionIndex).val();
                var trade = $("#trade" + prescriptionIndex).val();
                var formulation = $("#formulation" + prescriptionIndex).val();
                var days = $("#days" + prescriptionIndex).val();
@@ -715,7 +716,7 @@ $profile_menu="0";
                var afternoon = $("#afternoonId" + prescriptionIndex).is(':checked');
                var night = $("#nightId" + prescriptionIndex).is(':checked');
 
-             //  alert(trade + "--" + formulation + "--" + days + "--" + morning + "--" + afternoon + "--" + night);
+              // alert(drug + "--" + formulation + "--" + days + "--" + morning + "--" + afternoon + "--" + night);
 
                if (trade != "" && formulation != "" && days != "" && (morning || afternoon || night)) {
                return true;

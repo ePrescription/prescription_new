@@ -78,7 +78,7 @@ $profile_menu="0";
                                         </a>
                                     </div>
 
-                                    <div style="float:right;">
+                                    <div style="float:right; display: none;">
                                     <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
                                     </div>
 
@@ -393,37 +393,37 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Blood</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadmotiondetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#motion" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-user"></i></span>
                                                         <span class="hidden-xs">Motion</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadurinedetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#urine" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">Urine</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadultradetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#ultra" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Ultra Sound</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadscanetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#scan" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Scan</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloaddentaldetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#dental" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Dental</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadxraydetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#xray" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">X-Ray</span>
@@ -607,8 +607,10 @@ $profile_menu="0";
                 scrollbar: true
             });
         });
+        ajaxloadblooddetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');
 
         function ajaxloadblooddetails(pid,date) {
+
 
             $("#patientblooddiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
@@ -632,9 +634,12 @@ $profile_menu="0";
             }
 
         }
+      //  ajaxloadmotiondetails({{$patientDetails[0]->patient_id}},'2018-04-27');
+       // ajaxloadurinedetails({{$patientDetails[0]->patient_id}},'2018-04-27');
 
         function ajaxloadmotiondetails(pid,date) {
 
+            //alert(date);
             $("#patientmotiondiv").html("LOADING...");
             var BASEURL = "{{ URL::to('/') }}/";
             var status = 1;

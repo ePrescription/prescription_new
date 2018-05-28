@@ -183,7 +183,8 @@ Copyright (c) 2011 by Harvest
 
     AbstractChosen.prototype.results_toggle = function() {
       if (this.results_showing) {
-        return this.results_hide();
+          return this.results_show();
+
       } else {
         return this.results_show();
       }
@@ -389,7 +390,7 @@ Copyright (c) 2011 by Harvest
       this.is_disabled = this.form_field.disabled;
       if (this.is_disabled) {
         this.container.addClassName('chzn-disabled');
-        this.search_field.disabled = true;
+        this.search_field.disabled = false;
         if (!this.is_multiple) {
           this.selected_item.stopObserving("focus", this.activate_action);
         }

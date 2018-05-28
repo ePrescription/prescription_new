@@ -793,8 +793,9 @@ $profile_menu="0";
 <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 <script>
     $( function() {
+        //  $( "#appointmentDate" ).daterangepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
 
-        $( "#appointmentDate" ).daterangepicker({ dateFormat: 'yy-mm-dd',minDate: new Date() });
+        $( "#appointmentDate" ).daterangepicker({ dateFormat: 'yy-mm-dd'});
         $('#appointmentDate').on('apply.daterangepicker', function(ev, picker) {
             console.log(picker.startDate.format('YYYY-MM-DD'));
             console.log(picker.endDate.format('YYYY-MM-DD'));

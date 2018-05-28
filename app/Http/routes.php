@@ -591,6 +591,13 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/{doctorId}/hospital/{hospitalId}/twodaysappointments', array('as' => 'doctor.twodaysappointments', 'uses' => 'DoctorApiController@getApiTwoDaysDoctorAppointments'));
         // Added by Baskar - End
 
+        /*Ask A Questions*/
+        Route::get('rest/api/{hospitalId}/doctor/{doctorId}/patientquestions', array('as' => 'doctor.patientquestions', 'uses' => 'DoctorController@getPatientQuestions'));
+        Route::post('rest/api/{hospitalId}/{doctorId}/saveanswers', array('as' => 'doctor.answers', 'uses' => 'DoctorController@SaveDoctorAnswers'));
+
+
+
+
 
         //WEBSITE
 

@@ -239,6 +239,9 @@ interface HospitalInterface {
     public function getApiTwoDaysDoctorAppointments($hospitalId, $doctorId);
 
     //Added by Baskar - End
+    /*Function to get Patients Questions from PSSP*/
+    public function getPatientQuestions($hospitalId, $doctorId);
+    public function SaveDoctorAnswers($hospitalId,$doctorId,$request);
 
 
 }

@@ -27,16 +27,20 @@
 @if(count($patientBloodTests)>0)
 
 <form action="{{URL::to('/')}}/doctor/bloodtests" role="form" method="POST" class="form-horizontal ">
+
 <div class="form-group">
-<label class="col-sm-4 control-label">Test Date</label>
-<div class="col-sm-4">
+<label class="col-sm-2 control-label">Test Date</label>
+<div class="col-sm-3">
 <input type="text" class="form-control" name="examinationDate" id="TestDate" value="{{date('Y-m-d')}}" required="required" onchange="javascript:UpdateTestDates(this.value);" />
 @if ($errors->has('examinationDate'))<p class="error" style="">{!!$errors->first('examinationDate')!!}</p>@endif
 </div>
-<div class="col-sm-4">
+<div class="col-sm-3">
 <input type="text" class="form-control" name="examinationTime" id="TestTIme" value="{{date('h:i:s')}}" required="required" onchange="javascript:UpdateTestTimes(this.value);" />
 @if ($errors->has('examinationTime'))<p class="error" style="">{!!$errors->first('examinationTime')!!}</p>@endif
 </div>
+    <div class="col-sm-4">
+        <input type="submit" name="addblood" value="Save BloodTest" class="btn btn-success"/>
+    </div>
 </div>
 <?php $i=0; ?>
 @foreach($patientBloodTests as $patientBloodTestValue)

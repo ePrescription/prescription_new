@@ -2324,6 +2324,7 @@ class HospitalImpl implements HospitalInterface
             $patientQuery->where('da.id', '=', $appointmentId);
             $patientDetails = $patientQuery->get();
 
+
             $doctorQuery = DB::table('doctor as d')->select('d.id', 'd.doctor_id', 'd.name', 'd.did', 'd.telephone', 'd.email');
             $doctorQuery->join('doctor_appointment as da', 'da.doctor_id', '=', 'd.doctor_id');
             $doctorQuery->where('da.id', '=', $appointmentId);
@@ -5210,7 +5211,9 @@ class HospitalImpl implements HospitalInterface
                 $bloodTestQuery->groupBy('be.parent_id');
                 $bloodTestQuery->select('be.parent_id', 'be1.examination_name AS parent_examination_name');
 
+               // dd($bloodTestQuery->get());
                 $bloodTests = $bloodTestQuery->get();
+
 
                 foreach ($bloodTests as $bloodTest) {
                     $finalBloodTestQuery = DB::table('patient_blood_examination_item as pbei');
@@ -5221,6 +5224,8 @@ class HospitalImpl implements HospitalInterface
                     $finalBloodTestQuery->where('pbe.examination_time', '=', $time->examination_time);
                     $finalBloodTestQuery->where('pbei.is_value_set', '=', 1);
                     $finalBloodTestQuery->where('be.parent_id', '=', $bloodTest->parent_id);
+                    //$finalBloodTestQuery->where('be.sequence_by','asc');
+
                     //$finalBloodTestQuery->select('be.parent_id');
                     $finalBloodTestQuery->select('pbe.id as patientExaminationId', 'pbe.patient_id', 'pbe.hospital_id',
                         'be.id as examinationId', 'be.examination_name as examinationName',
@@ -5230,6 +5235,7 @@ class HospitalImpl implements HospitalInterface
                         'pbei.id as patientExaminationItemId', 'pbei.test_readings as readings', 'pbei.test_reading_status as readingStatus',
                         'pbei.is_value_set as isValueSet');
 
+                  //  dd($finalBloodTestQuery->get());
                     $finalBloodTests[$bloodTest->parent_examination_name] = $finalBloodTestQuery->get();
 
 
@@ -5294,7 +5300,7 @@ class HospitalImpl implements HospitalInterface
             throw new HospitalException(null, ErrorEnum::PATIENT_BLOOD_DETAILS_ERROR, $exc);
         }
 
-        //dd($patientBloodTests);
+       //dd($patientBloodTests);
         return $patientBloodTests;
         //return $bloodTestRecord;
     }
@@ -11567,4 +11573,78 @@ class HospitalImpl implements HospitalInterface
 
         return $twoDaysAppointments;
     }
+/*To Get Patient Questions From PSSP*/
+
+
+    public function getPatientQuestions($hospitalId, $doctorId){
+
+        $patientQuestions = null;
+
+        try
+        {
+            $query = DB::table('askquestion as aq');
+            $query ->join('patient as p', 'p.patient_id','=','aq.patient_id');
+            $query->where('aq.doctor_id', '=', $doctorId);
+            $query->where('aq.doctor_id', '=', $doctorId);
+            $query->where('aq.hospital_id', '=', $hospitalId);
+            $query->where('aq.answerStatus', '=', 0);
+            $query->select('aq.id','aq.doctor_id','aq.hospital_id','aq.patient_id','aq.message','aq.filepath','aq.priority','p.name','p.age','p.gender','p.married');
+
+            //dd($query->toSql());
+
+            $patientQuestions = $query->get();
+
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+//dd($patientQuestions);
+        return $patientQuestions;
+    }
+
+    public function SaveDoctorAnswers($hospitalId,$doctorId,$request){
+
+        $patientQuestions = null;
+        $status=true;
+        try
+        {
+            $updateValues = array('aq.answer' => $request->answer,
+                'aq.answerStatus' => 1,
+                'aq.response_date' =>date("Y-m-d"),
+                'aq.updated_at' => date("Y-m-d H:i:s"));
+            $query = DB::table('askquestion as aq')
+                ->where('aq.hospital_id', '=', $hospitalId)
+                ->where('aq.doctor_id', '=', $doctorId)
+                ->where('aq.id', '=', $request->Id);
+            $query->update($updateValues);
+            $status=true;
+
+        }
+        catch(QueryException $queryEx)
+        {
+            $status=false;
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            $status=false;
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+//dd($patientQuestions);
+        return $status;
+
+    }
+
+
+
+
+
+
+
+
 }

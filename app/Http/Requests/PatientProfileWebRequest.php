@@ -39,7 +39,7 @@ class PatientProfileWebRequest extends Request
                 $currentTime = date('H:i', strtotime($currentDateTime));
                 $appointmentTime = date('H:i', strtotime($appTime));
 
-                //dd($appDate."  ".$currentDate);
+               // dd($appDate."  ".$currentDate);
                 if($appDate < $currentDate)
                 {
                     //dd('Inside less');

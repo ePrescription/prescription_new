@@ -1,102 +1,3 @@
-
-
-<div id="PatientInfoPrint" class="" style="height:100px; border: 1px solid #000000; padding: 5px; line-height: 18px;">
-    <div class="row" style="text-transform: uppercase" >
-
-        <div class="col-lg-6" style="width:50%;float:left; ">
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Name</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['patientDetails']->name}}
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Age</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{count($patientExaminations['patientDetails']->age)>0 ? $patientExaminations['patientDetails']->age: "-" }}
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Sex</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{ $patientExaminations['patientDetails']->gender==0 ? "Male" :"Female"}}
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left;font-size: 12px; font-weight: bold; ">City/Town</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['patientDetails']->address==""? "----":$patientExaminations['patientDetails']->address }}
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Ref.DR</label>
-                <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: regular; ">
-                    {{count($patientExaminations['doctorDetails'])>0?$patientExaminations['doctorDetails']->name:"---"}}
-                </div>
-            </div>
-
-
-
-
-
-
-        </div>
-
-        <div class="col-lg-6" style="width:50%; float: left;">
-
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">PID</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['patientDetails']->pid}}
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Receipt ID</label>
-                <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: regular; ">
-                    {{count($patientExaminations['recieptId'])>0?$patientExaminations['recieptId']:"---"}}
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Sample No</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{"----"}}
-
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Specimen</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{"----"}}
-                </div>
-            </div>
-
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Test Date</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Reciept Date&Time</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{count($patientExaminations['recieptDetails'])>0?$patientExaminations['recieptDetails']->created_at:"---"}}
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-<br><br>
-
 <?php
 
 $defaultvalues = array(
@@ -451,6 +352,96 @@ function searchForId($id, $array,$value) {
 
 ?>
 
+<div id="PatientInfoPrint" class="" style="height:100px; border: 1px solid #000000; padding: 5px; line-height: 18px;">
+    <div class="row" style="text-transform: uppercase;" >
+
+        <div class="col-lg-5" style="width:50%;float:left; line-height: 18px;">
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Name</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{$patientExaminations['patientDetails']->name}}
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Age</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{count($patientExaminations['patientDetails']->age)>0 ? $patientExaminations['patientDetails']->age: "-" }}
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Sex</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{ $patientExaminations['patientDetails']->gender==0 ? "Male" :"Female"}}
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left;font-size: 10px; font-weight: bold; ">City/Town</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{$patientExaminations['patientDetails']->address==""? "----":$patientExaminations['patientDetails']->address }}
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Ref.DR</label>
+                <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: regular; ">
+                    {{count($patientExaminations['doctorDetails'])>0?$patientExaminations['doctorDetails']->name:"---"}}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-7" style="width:50%; float: left; line-height: 15px;">
+
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">PID</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{$patientExaminations['patientDetails']->pid}}
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Receipt ID</label>
+                <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: regular; ">
+                    {{count($patientExaminations['recieptId'])>0?$patientExaminations['recieptId']:"---"}}
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Sample No</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{"----"}}
+
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Specimen</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{"Blood"}}
+                </div>
+            </div>
+
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Test Date</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                     {{"----"}}
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:20%;float:left; font-size: 10px; font-weight: bold;">Reciept Date&Time</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{count($patientExaminations['recieptDetails'])>0?$patientExaminations['recieptDetails']->created_at:"---"}}
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 separate
 <div id="ExaminationInfoPrint1"  class="form-group">

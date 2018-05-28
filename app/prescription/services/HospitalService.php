@@ -3831,4 +3831,44 @@ class HospitalService {
         return $twoDaysAppointments;
     }
 
+/*To GET Patients Questions To Doctor*/
+    public function getPatientQuestions($hospitalId, $doctorId)
+    {
+        $patientQuestions = null;
+
+        try
+        {
+            $patientQuestions = $this->hospitalRepo->getPatientQuestions($hospitalId, $doctorId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+
+        return $patientQuestions;
+    }
+
+    public function SaveDoctorAnswers($hospitalId,$doctorId,$request)
+    {
+        $patientQuestions = null;
+
+        try
+        {
+            $patientQuestions = $this->hospitalRepo->SaveDoctorAnswers($hospitalId,$doctorId,$request);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::DOCTOR_DETAILS_ERROR, $exc);
+        }
+
+        return $patientQuestions;
+    }
 }

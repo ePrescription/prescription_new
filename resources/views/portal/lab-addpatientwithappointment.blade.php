@@ -224,7 +224,7 @@ $time_array=array(
                                                         <input type="text" class="form-control" name="searchPatient" value="" id="autocomplete-ajax" />
                                                         -->
 
-                                                        <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">title="Select for a state" search><option></option></select>
+                                                        <select name="searchPatient" id="searchPatient" class="chosen-select" onchange="javascript:getPatient(this.value);">title="Select for a state" search><option></option></select>
                                                     <!--
                                                         <select name="searchPatient" id="searchPatient" class="form-control patientUpdate" onchange="javascript:getPatient(this.value);">
                                                             <option value="">--CHOOSE PATIENT--</option>
@@ -245,20 +245,26 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">DOB</label>
-                                                    <div class="col-sm-9">
-                                                        <input type="date" class="form-control" name="dob" id="dob" value="" onblur="calculateAge(this.value)" />
-                                                        @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Age <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="number" min="0" class="form-control" id="age" name="age" value="" required="required" />
-                                                        @if ($errors->has('age'))<p class="error" style="">{!!$errors->first('age')!!}</p>@endif
+                                                        <input type="text"  class="form-control"
+                                                               id="age" name="age" value="" style='text-transform:uppercase';  onpaste="return false"
+                                                               required="required"/>
+                                                        @if ($errors->has('age'))<p class="error"
+                                                                                    style="">{!!$errors->first('age')!!}</p>@endif
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">DOB</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="date" class="form-control" name="dob"
+                                                               id="dob"
+                                                               onblur="calculateAge(this.value)"/>
+                                                        @if ($errors->has('dob'))<p class="error"
+                                                                                    style="">{!!$errors->first('dob')!!}</p>@endif
+                                                    </div>
+                                                </div>
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Gender <span class="red">*</span></label>
                                                     <div class="col-sm-9">
@@ -585,6 +591,7 @@ $time_array=array(
                 url: '{{ URL::to('/') }}/fronthospital/rest/api/{{Session::get('LoginUserHospital')}}/patientnames',
                 dataType: 'json'
             }, function (data) {
+                $('.chosen-select').trigger('liszt:updated');
                 var terms = {};
                 console.log(data.result);
                 $.each(data.result, function (i, val) {
@@ -592,6 +599,88 @@ $time_array=array(
                 });
 
                 return terms;
+            });
+        });
+
+        $(function(){
+            $('#age').change(function(e){
+
+                var x= $('#age').val().toUpperCase();
+                // allowed char: 1 , 2 , 3, 4, 5,6,7,8,9, D, M,Y
+                var allow_char = [8,48,49,50,51,52,53,54,55,56,57,100,109,121,32];
+
+                if(x.length<5){
+                    if(x.indexOf('D') > -1){
+                        // alert();
+                        var te=x.split("D");
+                        var r=te[0];
+                        var t=r.trim();
+                        var shortenedString = t;
+                        var numOfYears =shortenedString;
+                        var expireDate = new Date();
+                        expireDate.setDate(expireDate.getDate() - parseInt(numOfYears));
+                        var day = ("0" + expireDate.getDate()).slice(-2);
+                        var month = ("0" + (expireDate.getMonth() + 1)).slice(-2);
+                        var today = expireDate.getFullYear()+"-"+(month)+"-"+(day) ;
+                        $("#dob").val(today);
+                        var age = getAge(new Date(expireDate.getFullYear(), expireDate.getMonth(), expireDate.getDay()));
+                        $("#age").val(age);
+                        if (age < 18) {
+
+                            document.getElementById("married2").checked = true;
+                        } else {
+                            document.getElementById("married2").value = "";
+                        }
+                    }else if(x.indexOf('M') > -1){
+                        var te=x.split("M");
+                        var r=te[0];
+                        var t=r.trim();
+                        var shortenedString = t;
+                        var numOfYears =shortenedString;
+                        var expireDate = new Date();
+                        expireDate.setMonth(expireDate.getMonth() - parseInt(numOfYears));
+                        var day = ("0" + expireDate.getDate()).slice(-2);
+                        var month = ("0" + (expireDate.getMonth() + 1)).slice(-2);
+                        var today = expireDate.getFullYear()+"-"+(month)+"-"+(day) ;
+                        $("#dob").val(today);
+                        var age = getAge(new Date(expireDate.getFullYear(), expireDate.getMonth(), expireDate.getDay()));
+                        $("#age").val(age);
+                        if (age < 18) {
+
+                            document.getElementById("married2").checked = true;
+                        } else {
+                            document.getElementById("married2").value = "";
+                        }
+                    }else if(x.indexOf('Y')>-1){
+                        var te=x.split("Y");
+                        var r=te[0];
+                        var t=r.trim();
+                        var shortenedString = t;
+                        var numOfYears =shortenedString;
+                        var expireDate = new Date();
+                        expireDate.setFullYear(expireDate.getFullYear() - numOfYears);
+                        // expireDate.setDate(expireDate.getDate() -1);
+                        var day = ("0" + expireDate.getDate()).slice(-2);
+                        var month = ("0" + (expireDate.getMonth() + 1)).slice(-2);
+                        var today = expireDate.getFullYear()+"-"+(month)+"-"+(day) ;
+                        $("#dob").val(today);
+                        var age = getAge(new Date(expireDate.getFullYear(), expireDate.getMonth(), expireDate.getDay()));
+                        $("#age").val(age);
+                        if (age < 18) {
+
+                            document.getElementById("married2").checked = true;
+                        } else {
+                            document.getElementById("married2").value = "";
+                        }
+                    }else{
+                        alert("Please Use Letters D or M or Y followed by Age");
+                    }
+
+                }
+
+                var patt1 ="[0-9](D|M|Y)";
+
+
             });
         });
     </script>
@@ -874,24 +963,58 @@ $time_array=array(
         };
 
         function calculateAge(dob) {
-            var dateofbirth=$("#dob").val();
-            var dateOfBirth = new Date(dateofbirth+" 00:00:00");
-            var age=  getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
+            var dateofbirth = $("#dob").val();
+            document.getElementById("married1").checked = false;
+            document.getElementById("married2").checked = false;
+            var dateOfBirth = new Date(dateofbirth + " 00:00:00");
+            var age = getAge(new Date(dateOfBirth.getFullYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()));
             // calculate age
             //alert(age);
-            $("#age").val(age).prop('readOnly',true);
-        }
-        function disableAmount(){
-            $("#fee").val(0).prop('readOnly',true);
-        }
-        function enableAmount(){
-            $("#fee").val(200).prop('readOnly',false);
+            var now = new Date();
+            var start = new Date(dateofbirth),
+                end = new Date(now);
+            var x = Date.getFormattedDateDiff(start, end);
+            /*  document.getElementById('out1').innerHTML
+                  = 'Time elapsed between "' + start.toISOString().split('T')[0]
+                  + '" and "' + end.toISOString().split('T')[0] + '":<br/>'
+                  + Date.getFormattedDateDiff(start, end);*/
+            if (age < 18) {
+
+                document.getElementById("married2").checked = true;
+            } else {
+                document.getElementById("married2").value = "";
+            }
+            $("#age").val(age).prop('readOnly', false);
+            // $("input#married1").attr('checked', 'checked');
+
         }
 
+        Date.getFormattedDateDiff = function (date1, date2) {
+            var b = moment(date1),
+                a = moment(date2),
+                intervals = ['years', 'months', 'weeks', 'days'],
+                out = [];
+
+            for (var i = 0; i < intervals.length; i++) {
+                var diff = a.diff(b, intervals[i]);
+                b.add(diff, intervals[i]);
+                out.push(diff + ' ' + intervals[i]);
+            }
+            return out.join(', ');
+        };
+
+        function disableAmount() {
+            $("#fee").val(0).prop('readOnly', true);
+        }
+
+        function enableAmount() {
+            $("#fee").val(0).prop('readOnly', false);
+        }
 
     </script>
 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
     <style>
         /* The Modal (background) */
@@ -998,10 +1121,10 @@ $time_array=array(
                       //  maxlength: 10
                     //},
                     age: {
-                        required: true,
-                        number: true,
-                        minlength: 1,
-                        maxlength: 3
+                        required: true
+                      //  number: true,
+                       // minlength: 1,
+                       // maxlength: 3
                     },
                     appointmentDate: {
                         required: true

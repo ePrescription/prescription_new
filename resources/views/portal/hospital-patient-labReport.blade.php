@@ -449,7 +449,7 @@ $profile_menu="0";
                     }
 
                     $("#patientblooddiv1").html(result[1]);
-                    $("#DivIdToPrint").html("<br><br><br><br>"+result[0]+result[1]);
+                    $("#DivIdToPrint").html("<br><br><br><br><br><br>"+result[0]+result[1]);
 
 
 
