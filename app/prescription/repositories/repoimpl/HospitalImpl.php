@@ -2457,6 +2457,7 @@ class HospitalImpl implements HospitalInterface
         $patientUserId = null;
         $appointmentDate = null;
         $patientTokenId = null;
+        $patientInfo = null;
 
         try {
             $patientId = $patientProfileVM->getPatientId();
@@ -2466,10 +2467,11 @@ class HospitalImpl implements HospitalInterface
             //dd($patientProfileVM);
 
             $hospitalUser = User::find($hospitalId);
-            $status['status'] = true;
+            //$status['status'] = true;
 
             if (is_null($hospitalUser)) {
-                $status['status'] = false;
+                //$status['status'] = false;
+                $patientInfo['status'] = false;
                 throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND);
             }
 
@@ -2507,8 +2509,9 @@ class HospitalImpl implements HospitalInterface
                 $patient = new Patient();
 
                 $pid = $this->generateRandomString();
-                $status['pid'] = 'PID' . $pid;
-                $status['tokenId'] = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(), $patientProfileVM->getAppointmentCategory());
+                //$status['pid'] = 'PID' . $pid;
+                //$status['tokenId'] = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(), $patientProfileVM->getAppointmentCategory());
+
 
                 //  dd($status['tokenId']);
                 $patient->pid = 'PID' . $pid;
@@ -2544,6 +2547,11 @@ class HospitalImpl implements HospitalInterface
                 $user->patienthospitals()->attach($hospitalId, array('created_by' => $patientProfileVM->getCreatedBy(),
                     'updated_by' => $patientProfileVM->getUpdatedBy()));
 
+                $patientInfo['status'] = true;
+                $patientInfo['pid'] = 'PID' . $pid;
+                $patientInfo['patientId'] = $patientUserId;
+                //$patientInfo['tokenId'] = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(), $patientProfileVM->getAppointmentCategory());
+
                 /*if($patientId == 0)
                 {
                     $user->patienthospitals()->attach($hospitalId, array('created_by' => $patientProfileVM->getCreatedBy(),
@@ -2554,7 +2562,8 @@ class HospitalImpl implements HospitalInterface
                 $patientUserId = $patient->patient_id;
 
                 if (is_null($patient)) {
-                    $status['status'] = false;
+                    //$status['status'] = false;
+                    $patientInfo['status'] = false;
                     throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND);
                 }
                 //dd($patient);
@@ -2581,21 +2590,24 @@ class HospitalImpl implements HospitalInterface
 
         } catch (QueryException $queryEx) {
             //dd($queryEx);
-            $status['status'] = false;
+            //$status['status'] = false;
+            $patientInfo['status'] = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $queryEx);
         } catch (UserNotFoundException $userExc) {
             //dd($userExc);
-            $status['status'] = false;
+            //$status['status'] = false;
+            $patientInfo['status'] = false;
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         } catch (Exception $exc) {
             //dd($exc);
-            $status['status'] = false;
+            //$status['status'] = false;
+            $patientInfo['status'] = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $exc);
         }
 
-        return $status;
-        // dd($status);
-        //return $patient;
+        //return $status;
+        return $patientInfo;
+
     }
 
     /**
@@ -11616,7 +11628,8 @@ class HospitalImpl implements HospitalInterface
 
     private function generateRandomString($length = 9)
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        //$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
