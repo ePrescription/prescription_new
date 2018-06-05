@@ -3135,7 +3135,7 @@ class HospitalImpl implements HospitalInterface
                 $query->select('dp.id as receiptId', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as PID',
                     'p.relationship', 'p.patient_spouse_name as spouseName',
                     'p.telephone as contactNumber', 'd.name as doctorName', 'dp.fee', 'dp.payment_type', 'p.payment_status', 'dp.doctor_id', 'dp.created_at', 'dp.updated_at');
-                // dd($query->toSql());
+                //dd($query->toSql());
                 $feeReceipts = $query->get();
                 // dd($feeReceipts);
 
@@ -3180,14 +3180,23 @@ class HospitalImpl implements HospitalInterface
             }
 
             if (!is_null($patient)) {
-                $query = DB::table('fee_receipt as fr')->join('patient as p', 'p.patient_id', '=', 'fr.patient_id');
+                /*$query = DB::table('fee_receipt as fr')->join('patient as p', 'p.patient_id', '=', 'fr.patient_id');
                 $query->join('doctor as d', 'd.doctor_id', '=', 'fr.doctor_id');
                 //$query->where('fr.doctor_id', '=', 'd.doctor_id');
                 $query->where('p.patient_id', '=', $patientId);
-                $query->orderBy('fr.created_at', 'DESC');
-                $query->select('fr.id as receiptId', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as PID',
+                $query->orderBy('fr.created_at', 'DESC');*/
+
+                $query = DB::table('doctor_appointment as dp')->join('patient as p', 'p.patient_id', '=', 'dp.patient_id');
+                $query->join('doctor as d', 'd.doctor_id', '=', 'dp.doctor_id');
+                $query->where('dp.patient_id', '=', $patientId);
+                $query->orderBy('dp.created_at', 'DESC');
+                $query->select('dp.id as receiptId', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as PID',
                     'p.relationship', 'p.patient_spouse_name as spouseName',
-                    'p.telephone as contactNumber', 'd.name as doctorName', 'fr.fee');
+                    'p.telephone as contactNumber', 'd.name as doctorName', 'dp.fee');
+
+                /*$query->select('fr.id as receiptId', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as PID',
+                    'p.relationship', 'p.patient_spouse_name as spouseName',
+                    'p.telephone as contactNumber', 'd.name as doctorName', 'fr.fee');*/
 
                 //dd($query->toSql());
                 $feeReceipts = $query->get();
