@@ -6088,6 +6088,7 @@ class HospitalImpl implements HospitalInterface
             $query = DB::table('dental_examination_items as dei')->where('dei.examination_status', '=', 1);
             $query->join('dental_category as dc', 'dc.id', '=', 'dei.dental_category_id');
             $query->select('dei.id', 'dei.examination_name', 'dc.id as category_id', 'dc.category_name');
+            $query->orderBy('dei.id', 'ASC');
 
             //dd($query->toSql());
             $dentalExaminations = $query->get();
