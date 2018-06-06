@@ -3345,6 +3345,7 @@ class HospitalImpl implements HospitalInterface
         $status = true;
 
         try {
+            $receiptId = $feeReceiptVM->getReceiptId();
             $doctorId = $feeReceiptVM->getDoctorId();
             $patientId = $feeReceiptVM->getPatientId();
             $hospitalId = $feeReceiptVM->getHospitalId();
@@ -3375,20 +3376,32 @@ class HospitalImpl implements HospitalInterface
 
 
             if (!is_null($doctorUser) && !is_null($hospitalUser) && !is_null($patientUser)) {
-                $feeReceipt = new FeeReceipt();
+
+                $doctorAppointment = DoctorAppointments::find($receiptId);
+
+                if(!is_null($doctorAppointment))
+                {
+                    $doctorAppointment->fee = $feeReceiptVM->getFees();
+                    $doctorAppointment->modified_by = $patientUser->name;
+                    $doctorAppointment->updated_at = $feeReceiptVM->getUpdatedAt();
+
+                    $doctorAppointment->save();
+                }
+
+                /*$feeReceipt = new FeeReceipt();
                 $feeReceipt->hospital_id = $hospitalId;
                 $feeReceipt->patient_id = $patientId;
                 $feeReceipt->doctor_id = $doctorId;
                 //$patientLabTests->unique_id = "LTID".time();
 
                 $feeReceipt->fee = $feeReceiptVM->getFees();
-                $feeReceipt->created_by = 'Admin';
-                $feeReceipt->modified_by = 'Admin';
-                //$feeReceipt->created_by = $feeReceiptVM->getCreatedBy();
-                //$feeReceipt->modified_by = $feeReceiptVM->getUpdatedBy();
+                //$feeReceipt->created_by = 'Admin';
+                //$feeReceipt->modified_by = 'Admin';
+                $feeReceipt->created_by = $feeReceiptVM->getCreatedBy();
+                $feeReceipt->modified_by = $feeReceiptVM->getUpdatedBy();
                 $feeReceipt->created_at = $feeReceiptVM->getCreatedAt();
                 $feeReceipt->updated_at = $feeReceiptVM->getUpdatedAt();
-                $feeReceipt->save();
+                $feeReceipt->save();*/
 
 
                 //$doctor->feereceipts()->save($feeReceipt);$doctorUser
