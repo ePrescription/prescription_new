@@ -3790,7 +3790,7 @@ class DoctorApiController extends Controller
             {
                 $filePath = $path.$document->document_path;
                 //$file = Storage::disk($diskStorage)->get($document->document_path);
-                $contents = Storage::disk($diskStorage)->get($document->document_path);
+                $contents = Crypt::decrypt(Storage::disk($diskStorage)->get($document->document_path));
 
                 //$file = Storage::disk('s3')->get($entry->document_upload_path);
                 //$contents = Crypt::decrypt($file);

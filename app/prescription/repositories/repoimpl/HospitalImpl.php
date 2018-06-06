@@ -11470,6 +11470,7 @@ class HospitalImpl implements HospitalInterface
             $patientId = $labDocumentsVM->getPatientId();
             $labId = $labDocumentsVM->getLabId();
             $labDocuments = $labDocumentsVM->getPatientLabDocuments();
+            $diskStorage = env('DISK_STORAGE');
 
             if (!is_null($labDocuments)) {
                 $labDocument = new PatientDocuments();
@@ -11492,7 +11493,7 @@ class HospitalImpl implements HospitalInterface
                     $randomName = $this->generateUniqueFileName();
 
                     $documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . 'patient_document_' . $patientId . '_' . $randomName . '.' . $extension;
-                    Storage::disk('local')->put($documentPath, Crypt::encrypt(file_get_contents($documentContents)));
+                    Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($documentContents)));
 
                     $labDocumentItems = new PatientDocumentItems();
 
