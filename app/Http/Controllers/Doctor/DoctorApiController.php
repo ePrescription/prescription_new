@@ -3782,12 +3782,13 @@ class DoctorApiController extends Controller
         try
         {
             $document = $this->hospitalService->downloadPatientReports($documentId);
-            $filePath = $path.$document->document_path;
+
             //dd($document->document_path);
             //dd($filePath);
 
             if(!is_null($document))
             {
+                $filePath = $path.$document->document_path;
                 //$file = Storage::disk($diskStorage)->get($document->document_path);
                 $contents = Storage::disk($diskStorage)->get($document->document_path);
 
@@ -3809,7 +3810,7 @@ class DoctorApiController extends Controller
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_REPORTS_DOWNLOAD_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
