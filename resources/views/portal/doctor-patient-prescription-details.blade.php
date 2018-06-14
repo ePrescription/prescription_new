@@ -494,7 +494,7 @@ $profile_menu="0";
                                    val.forEach(function (element) {
                                          var option = document.createElement('option');
                                        // Set the value using the item in the JSON array.
-                                    option.value = element['tradeId'];
+                                        option.value = element['tradeId'];
                                      //  alert(element['tradeName']);
                                        option.text = element['tradeName'];
                                        option.brandId = element['tradeId'];

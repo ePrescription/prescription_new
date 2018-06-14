@@ -3,7 +3,6 @@
 @section('title', 'ePrescription and Lab Tests Application')
 
 @section('styles')
-    <style>.tab-pane { min-height: 300px; }</style>
 @stop
 <?php
 $dashboard_menu="0";
@@ -38,51 +37,42 @@ $profile_menu="0";
                 <div class="container">
 
                     <div class="row">
-                        <div class="col-sm-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-body">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div style="float:right; margin:10px;">
+                                    <button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back to Profile</button>
+                                </div>
 
-
+                                <div style="float:right; margin:10px;">
+                                    <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
+                                </div>
+                                 <div class="panel-body">
                                     <div class="dropdown">
-                                        <button class="dropbtn"><img src="{{URL::to('/')}}/images/menu.png" width="20"/>Menu</button>
-                                        <div class="dropdown-content">
-                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i> </a>
-                                            &nbsp;&nbsp;
-                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/medical-details" title="Medical Profile"><i class="fa fa-medkit"></i></a>
-                                            &nbsp;&nbsp;
-                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/prescription-details" title="Medical Prescription"><i class="fa fa-file-text-o"></i> </a>
-                                            &nbsp;&nbsp;
+                                        <button class="dropbtn">
+                                            <img src="{{URL::to('/')}}/images/menu.png" width="20"/>Menu</button>
+                                            <div class="dropdown-content">
+                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/details" title="View Profile"><i class="fa fa-user-circle"></i>View Profile </a>
+                                                <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/medical-details" title="Medical Profile"><i class="fa fa-medkit"></i>Medical Profile</a>
+                                                &nbsp;&nbsp;
+                                                <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/prescription-details" title="Medical Prescription"><i class="fa fa-file-text-o"></i>Medical Prescription </a>
+                                                &nbsp;&nbsp;
 
-                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i> </a>
-                                            &nbsp;
+                                                <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/lab-details" title="Lab Profile"><i class="fa fa-flask"></i> Lab Profile</a>
+                                                &nbsp;
 
-                                            <!--ADDED BY RAMANA --->
-                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/lab-details-results" title="Print Patient lab Tests"><i class="fa fa-folder-o"></i> </a>
-                                            &nbsp;&nbsp;
+                                                <!--ADDED BY RAMANA --->
+                                                <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/lab-details-results" title="Print Patient lab Tests"><i class="fa fa-folder-o"></i>Print Patient lab Tests </a>
+                                                &nbsp;&nbsp;
 
-                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/lab-report-download" title="Lab Report Download"><i class="fa fa-download"></i> </a>
-                                            &nbsp;&nbsp;
-                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/labreceipts" title="Lab Receipts"><i class="fa fa-money"></i> </a>
-                                            &nbsp;&nbsp;
-                                            <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/print" title="Print Medical Profile"><i class="fa fa-print"></i> </a>
+                                                <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/lab-report-download" title="Lab Report Download"><i class="fa fa-download"></i>Lab Report Download </a>
+                                                &nbsp;&nbsp;
+                                                <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/labreceipts" title="Lab Receipts"><i class="fa fa-money"></i>Lab Receipts </a>
+                                                &nbsp;&nbsp;
+                                                <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/print" title="Print Medical Profile"><i class="fa fa-print"></i> Print Medical Profile</a>
 
-                                        </div>
-                                    </div>
-                                    <div style="float:right;">
-
-                                       <!-- <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details#appointment">
-                                            <button class="btn btn-info waves-effect waves-light">Back to Profile</button>
-                                        </a>-->
-                                           <button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back to Profile</button>
-
-
+                                            </div>
                                     </div>
 
-                                    <div style="float:right;">
-                                        <button style="margin: 0px 10px;" type="button" id="btn" value="Print" class="btn btn-success waves-effect waves-light" onclick="javascript:printDiv();" ><i class="icon-print"></i> Print</button>
-                                    </div>
-
-                                    <h4 class="m-t-0 m-b-30">Patient Appointment Details</h4>
 
 
                                     <div id='DivIdToPrint' style="display:block;">

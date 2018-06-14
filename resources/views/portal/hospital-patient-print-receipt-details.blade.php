@@ -42,6 +42,7 @@ $profile_menu = "0";
 
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
+                                        <div style="float:right;"><button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back</button></div>
 
                                         <div class="dropdown">
                                             <button class="dropbtn"><img src="{{URL::to('/')}}/images/menu.png" width="20"/>Menu</button>

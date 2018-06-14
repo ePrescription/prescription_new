@@ -56,7 +56,7 @@
                             <table cellspacing="2" border="none" class="tabel">
                                 <thead>
                                 <tr>
-                                    <th>Weak Day</th>
+                                    <th>Week Day</th>
                                     <th>Morning Start Time</th>
                                     <th>Morning End Time</th>
                                     <th>Afternoon Start Time</th>

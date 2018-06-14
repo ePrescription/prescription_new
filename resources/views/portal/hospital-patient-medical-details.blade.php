@@ -478,12 +478,15 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Past Drug</span>
                                                     </a>
                                                 </li>
-                                                <li class="" onclick="ajaxloadpregnancydetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
-                                                    <a href="#pregnancy" data-toggle="tab" aria-expanded="false">
-                                                        <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                        <span class="hidden-xs">Pregnancy</span>
-                                                    </a>
-                                                </li>
+                                                @if($patientDetails[0]->gender!=1)
+                                                    <li class="" onclick="ajaxloadpregnancydetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
+                                                        <a href="#pregnancy" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                            <span class="hidden-xs">Pregnancy</span>
+                                                        </a>
+                                                    </li>
+                                                   @endif
+
                                                 <li class="" onclick="ajaxloadsymptomdetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#symptom" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>

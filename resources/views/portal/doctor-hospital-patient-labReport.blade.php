@@ -453,8 +453,9 @@ separate
                 <table style="width:100%;">
                     <tr><th style="padding-right: 80px;">Test Name</th><th style="padding-right: 80px;" >Test Report</th><th style="padding-right: 50px;"  >Normal Value</th></tr>
                     <tr><th colspan="3"> <div class="form-group" style="color: black;">
-                                <hr/> <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Blood Test
-                                    - {{$patientExaminations['recentBloodTests'][0]->examination_date}}</label>
+                                <hr/>
+                                <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Blood Test
+                                    {{$patientExaminations['recentBloodTests'][0]->examination_date}}</label>
                             </div></th></tr>
                     <div class="form-group" style="background-color: #ffff99; color: black;">
 
@@ -479,9 +480,9 @@ separate
                                     {{$recentTest->examination_name}}
                                 </td>
 
-                                <td style="padding-left: 50px; font-weight: <?php echo searchForId($recentTest->id, $defaultvalues,$recentTest->test_readings)?>">
+                                <td style="padding-left: 0px; <?php echo searchForId($recentTest->id, $defaultvalues,$recentTest->test_readings)?>">
                                     {{$recentTest->test_readings}}{{$recentTest->units}}</td>
-                                <td style="padding-left: 30px;">{{$recentTest->default_normal_values}}</td>
+                                <td style="padding-left: 0px;">{{$recentTest->default_normal_values}}</td>
 
                             </tr>
                     @endforeach

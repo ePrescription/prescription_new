@@ -2550,6 +2550,9 @@ class HospitalImpl implements HospitalInterface
                 $patient = Patient::where('patient_id', '=', $patientId)->first();
                 $patientUserId = $patient->patient_id;
 
+                $status['pid']= $patient->pid;;
+                $status['tokenId']=$this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(),$patientProfileVM->getAppointmentCategory());
+
                 if (is_null($patient)) {
                     $status['status'] = false;
                     throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND);
@@ -2591,7 +2594,7 @@ class HospitalImpl implements HospitalInterface
         }
 
         return $status;
-       // dd($status);
+        //dd($status);
         //return $patient;
     }
 
@@ -2605,7 +2608,7 @@ class HospitalImpl implements HospitalInterface
 
     public function editPatientProfile(PatientProfileViewModel $patientProfileVM)
     {
-        //dd('Inside save profile');
+       //dd('Inside save profile');
         $status = true;
         $user = null;
         $patientId = null;
@@ -2671,8 +2674,8 @@ class HospitalImpl implements HospitalInterface
             throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $exc);
         }
 
+       // return $status;
         return $status;
-        //return $patient;
     }
 
     private function savePatientAppointment(PatientProfileViewModel $patientProfileVM, User $doctorUser, $patientUserId)

@@ -952,10 +952,10 @@ $time_array=array(
                         $('input#email').val('');
                         $('input#telephone').val('');
                         $('input#age').val('');
-                        document.getElementById("gender1").checked = false;
-                        document.getElementById("gender2").checked = false;
-                        document.getElementById("married1").checked = false;
-                        document.getElementById("married2").checked = false;
+                       document.getElementById("gender1").checked = false;
+                       document.getElementById("gender2").checked = false;
+                       document.getElementById("married1").checked = false;
+                       document.getElementById("married2").checked = false;
                         $('select#occupation').val('');
                         $('input#careof').val('');
                         $('input#dob').val('');
@@ -978,7 +978,7 @@ $time_array=array(
                         type: "get",
                         data: {"id": pid, "status": status},
                         success: function (data) {
-                            //alert(data.result[0].id);
+                            alert(data.result[0].married);
                             console.log(data);
                             //$("#patienturinediv").html(data);
 
@@ -988,19 +988,24 @@ $time_array=array(
                             $("input#age").val(data.result[0].age);
 
                             if (data.result[0].gender == 1) {
-                                $("input#gender1").attr('checked', 'checked');
+                                document.getElementById("gender1").checked = true;
                             }
                             if (data.result[0].gender == 0) {
-                                $("input#gender2").attr('checked', 'checked');
+                                document.getElementById("gender2").checked = true;
                             }if (data.result[0].gender == 2) {
-                                $("input#gender2").attr('checked', 'checked');
+                                document.getElementById("gender2").checked = true;
                             }
 
                             if (data.result[0].married == 1) {
-                                $("input#married1").attr('checked', 'checked');
+                                document.getElementById("married1").checked = true;
                             }
                             if (data.result[0].married == 2) {
-                                $("input#married2").attr('checked', 'checked');
+                                document.getElementById("married2").checked = true;
+                            }  if (data.result[0].married == null) {
+                                document.getElementById("married2").checked = true;
+                            }
+                            if (data.result[0].married == 0) {
+                                document.getElementById("married2").checked = true;
                             }
 
                             $("select#occupation").val(data.result[0].occupation);

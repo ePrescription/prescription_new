@@ -2569,7 +2569,7 @@ class DoctorController extends Controller
            // dd($patientProfileVM);
             $status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 
-            //dd($status);
+           //dd($status);
 
             if($status['status'])
             {
