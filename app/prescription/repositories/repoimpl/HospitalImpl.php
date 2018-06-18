@@ -2552,6 +2552,9 @@ class HospitalImpl implements HospitalInterface
                 $patient = Patient::where('patient_id', '=', $patientId)->first();
                 $patientUserId = $patient->patient_id;
 
+                $status['pid']= $patient->pid;;
+                $status['tokenId']=$this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(),$patientProfileVM->getAppointmentCategory());
+
                 if (is_null($patient)) {
                     $status['status'] = false;
                     throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND);
@@ -7284,7 +7287,7 @@ class HospitalImpl implements HospitalInterface
             //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
             $latestDiagnosisQuery->select('pid.id', 'pid.patient_id',
                 'pid.hospital_id', 'pid.doctor_id', 'pid.investigations', 'pid.examination_findings', 'pid.provisional_diagnosis',
-                'pid.final_diagnosis', 'pid.diagnosis_date', 'pid.treatment_plan_id', 'tt.treatment_type', 'tt.treatment_code');
+                'pid.final_diagnosis', 'pid.diagnosis_date', 'pid.treatment_plan_id', 'tt.treatment_type', 'tt.treatment_code','pid.treatment_plan_notes');
             //dd($latestDentalExamQuery->toSql());
             $diagnosticExaminations = $latestDiagnosisQuery->get();
 

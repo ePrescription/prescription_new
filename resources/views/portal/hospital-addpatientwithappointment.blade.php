@@ -203,11 +203,11 @@ $time_array=array(
                                                 <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Patient Visiting <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="radio" class="form-controlx" name="visiting" value="1" required="required" checked onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;First time
+                                                        <input type="radio" class="form-controlx" name="visiting" value="1" required="required" checked onclick="javascript:visitPatient(1);" />Appointment
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <input type="radio" class="form-controlx" name="visiting" value="2" required="required" onclick="javascript:visitPatient(2);" />&nbsp;&nbsp;Followup
                                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <input type="radio" class="form-controlx" name="visiting" value="1" required="required" onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;Appointment
+                                                        {{--<input type="radio" class="form-controlx" name="visiting" value="1" required="required" onclick="javascript:visitPatient(1);" />&nbsp;&nbsp;Appointment--}}
                                                     </div>
                                                 </div>
 
@@ -605,10 +605,10 @@ $time_array=array(
     </script>
 <?php */ ?>
     <script>
-        function visitPatient(id)
-        {
-            if(id==1)
-            {
+                function visitPatient(id) {
+                    if (id == 1) {
+
+                        $(".error").empty();
                 $("#searchPatientBox").hide();
 
                 $('input#name').attr('readonly', false);
@@ -626,9 +626,33 @@ $time_array=array(
                 $('input#spouseName').attr('disabled', false);
                 $('textarea#address').attr('disabled', false);
 
+                        var terms = "<option value='{{date('H:i:s')}}'>{{strtoupper(date('H:i:a'))}}</option>";
+                        $("#appointmentTime").html(terms);
+                        $("#appointmentDate").datepicker({
+                            dateFormat: 'yy-mm-dd',
+                            minDate: new Date()
+                        }).datepicker("setDate", new Date());
+                        $('input#name').val('');
+                        $('input#email').val('');
+                        $('input#telephone').val('');
+                        $('input#age').val('');
+                        document.getElementById("gender1").checked = false;
+                        document.getElementById("gender2").checked = false;
+                        document.getElementById("married1").checked = false;
+                        document.getElementById("married2").checked = false;
+                        $('select#occupation').val('');
+                        $('input#careof').val('');
+                        $('input#dob').val('');
+                        $('select#relationship').val('');
+                        $('input#spouseName').val('');
+                        $('textarea#address').val('');
+                        var terms = "<option value='{{date('H:i:s')}}'>{{strtoupper(date('H:i:a'))}}</option>";
+                        $("#appointmentTime").html(terms);
+
+                        $("#appointmentTime").html(terms);
             }
-            else
-            {
+                    else if (id == 2) {
+                        $(".error").empty();
                 $("#searchPatientBox").show();
                 $('input#name').attr('readonly', true);
                 $('input#email').attr('readonly', true);
@@ -644,7 +668,29 @@ $time_array=array(
                 $('select#relationship').attr('disabled', true);
                 $('input#spouseName').attr('disabled', true);
                 $('textarea#address').attr('disabled', true);
-            }
+
+                        var terms = "<option value='{{date('H:i:s')}}'>{{strtoupper(date('H:i:a'))}}</option>";
+                        $("#appointmentTime").html(terms);
+                        $("#appointmentDate").datepicker({
+                            dateFormat: 'yy-mm-dd',
+                            minDate: new Date()
+                        }).datepicker("setDate", new Date());
+
+                        $('input#name').val('');
+                        $('input#email').val('');
+                        $('input#telephone').val('');
+                        $('input#age').val('');
+                        document.getElementById("gender1").checked = false;
+                        document.getElementById("gender2").checked = false;
+                        document.getElementById("married1").checked = false;
+                        document.getElementById("married2").checked = false;
+                        $('select#occupation').val('');
+                        $('input#careof').val('');
+                        $('input#dob').val('');
+                        $('select#relationship').val('');
+                        $('input#spouseName').val('');
+                        $('textarea#address').val('');
+                    }
         }
 
         function getPatient(pid) {
@@ -660,7 +706,7 @@ $time_array=array(
                 type: "get",
                 data: {"id": pid, "status": status},
                 success: function (data) {
-                    //alert(data.result[0].id);
+                            alert(data.result[0].married);
                     console.log(data);
                     //$("#patienturinediv").html(data);
 
@@ -669,22 +715,25 @@ $time_array=array(
                     $("input#telephone").val(data.result[0].telephone);
                     $("input#age").val(data.result[0].age);
 
-                    if(data.result[0].gender==1)
-                    {
-                        $("input#gender1").attr('checked', 'checked');
+                            if (data.result[0].gender == 1) {
+                                document.getElementById("gender1").checked = true;
                     }
-                    if(data.result[0].gender==0)
-                    {
-                        $("input#gender2").attr('checked', 'checked');
+                            if (data.result[0].gender == 0) {
+                                document.getElementById("gender2").checked = true;
+                            }if (data.result[0].gender == 2) {
+                                document.getElementById("gender2").checked = true;
                     }
 
-                    if(data.result[0].married==1)
-                    {
-                        $("input#married1").attr('checked', 'checked');
+                            if (data.result[0].married == 1) {
+                                document.getElementById("married1").checked = true;
                     }
-                    if(data.result[0].married==2)
-                    {
-                        $("input#married2").attr('checked', 'checked');
+                            if (data.result[0].married == 2) {
+                                document.getElementById("married2").checked = true;
+                            }  if (data.result[0].married == null) {
+                                document.getElementById("married2").checked = true;
+                            }
+                            if (data.result[0].married == 0) {
+                                document.getElementById("married2").checked = true;
                     }
 
                     $("select#occupation").val(data.result[0].occupation);

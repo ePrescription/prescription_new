@@ -31,7 +31,7 @@
         display: none;
         position: absolute;
         background-color:white;
-        min-width: 400px;
+        min-width: 20px;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         z-index: 1;
         border: 1px solid black;
@@ -42,7 +42,7 @@
 
     .dropdown-content a {
         color: black;
-        padding: 12px 16px;
+        padding: 8px 8px;
         text-decoration: none;
         display: block;
 

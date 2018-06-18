@@ -330,7 +330,7 @@ $profile_menu="0";
                                                         Provisional Diagnosis - {{$recentTest->provisional_diagnosis}} <br/>
                                                         Final Diagnosis - {{$recentTest->final_diagnosis}} <br/>
                                                         Treatment Type - {{$recentTest->treatment_type}} <br/>
-                                                        Treatment Notes - {{$recentTest->treatment_code}} <br/>
+                                                        Treatment Notes - {{$recentTest->treatment_plan_notes}} <br/>
 
 
                                                     </div>
@@ -478,12 +478,15 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Past Drug</span>
                                                     </a>
                                                 </li>
+                                                @if($patientDetails[0]->gender!=1)
+
                                                 <li class="">
                                                     <a href="#pregnancy" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Pregnancy</span>
                                                     </a>
                                                 </li>
+                                                @endif
                                                 <li class="">
                                                     <a href="#symptom" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>

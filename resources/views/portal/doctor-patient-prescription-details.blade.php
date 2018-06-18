@@ -173,7 +173,7 @@ $profile_menu="0";
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">Add Attachment</span>
                                                     </a>
-                                                </li>
+                                               </li>
                                                 <?php /* ?>
                                                 <li class="">
                                                     <a href="#home" data-toggle="tab" aria-expanded="true">
@@ -294,7 +294,7 @@ $profile_menu="0";
                                                                                 <option value="">--CHOOSE PATIENT--</option>
                                                                             </select>-->
                                                                         </td>
-                                                                        <td style="width:20%;"> <input type="text" class="form-control formulation" name="drugs[0][fomulationId]" list="result" id="formulation0" onselect="changeValues(this,0)" onchange="changeValues(this,0)"   onkeyup="load(this)" required="required" readonly="readonly" style="width:100%; text-transform: uppercase;" /></td>
+                                                                        <td style="width:20%;"> <input type="text" class="form-control formulation" name="drugs[0][fomulationId]" list="result" id="formulation0" onselect="changeValues1(this,0)" onchange="changeValues1(this,0)"   onkeyup="load(this)" required="required" readonly="readonly" style="width:100%; text-transform: uppercase;" /></td>
                                                                         <datalist style="display: none" id="result" data-size="1" ></datalist>
 
                                                                         <td style="width:10%;"><input type="text"  value="WEB" name="drugs[0][intakeForm]" id="type0"  readonly style="width:100%;" ></td>
@@ -342,7 +342,7 @@ $profile_menu="0";
                                                                             <td style="width:20%;" ><input type="text" onselect="changeValues(this,0)" onchange="changeValues(this,0)" class="form-control tradeName" name="trade" style="width:100%;" list="result" required="required"  id="trade"  onkeyup="load(this)" />
 
                                                                             </td>
-                                                                            <td style="width:20%;"><input type="text" class="form-control formulation" name="formulation" onselect="changeValues(this,0)" onchange="changeValues(this,0)"  list="result"  style="width:100%;" id="formulation" onkeyup="load(this)"   required="required"/></td>
+                                                                            <td style="width:20%;"><input type="text" class="form-control formulation" name="formulation" onselect="changeValues1(this,0)" onchange="changeValues1(this,0)"  list="result"  style="width:100%;" id="formulation" onkeyup="load(this)"   required="required"/></td>
                                                                             <td style="width:10%;"><input type="text"  value="" name="type" id="type" style="width:100%;" readonly ></td>
                                                                             <td style="width:10%;"><input type="text"  name="dosage" id="dosage" style="width:100%;" ></td>
                                                                             <td style="width:10%;"><input type="number" id="days"  name="days" style="width:100%;"  min="0" required></td>
@@ -465,15 +465,13 @@ $profile_menu="0";
                    }
                }
                var dataList = document.getElementById('result');
-
-
-
-
                var traStatus = $("#bytradeName").is(':checked');
                var forStatus = $("#byformulationName").is(':checked');
+               //dataList.remove();
 
                //if By Trade Name
                if (traStatus) {
+
                    $.ajax({
                        type: 'GET',
                        //url: '/vistara/ajax-chosen-master/data.json',
@@ -483,32 +481,41 @@ $profile_menu="0";
                        data: {brands: key.value},
 
                        success: function (data) {
+                           //dataList.empty();
                            $.each(data, function (i, val) {
                                var terms = {};
-                              // dataList.innerText="";
+                             ///dataList.innerText="";
+                               var result="result";
+                               clearChildren(result);
+
                                if (i == "result") {
+                                 //  alert(val);
 
                                    val.forEach(function (element) {
                                          var option = document.createElement('option');
                                        // Set the value using the item in the JSON array.
-                                     //  option.value = element['tradeName'];
+                                    option.value = element['tradeId'];
+                                     //  alert(element['tradeName']);
                                        option.text = element['tradeName'];
                                        option.brandId = element['tradeId'];
-                                       option.drugId = element['drug_id'];
+                                       option.drugId = element['formulationId'];
                                        option.dispensing_form = element['dispensing_form'];
                                        option.dosage_amount = element['dosage_amount'] + " " + element['quantity'];
                                        option.formulationName = element['formulationName'];
                                        dataList.append(option);
+
+                                      // element.empty();
                                    });
+                                  // dataList.remove();
                                    // key.placeholder =dataList;
                                }
                                //return terms;
                            });
                        }
                    });
-               }
-               else {
-                   //alert()
+
+               } else {
+                   //alert('formulations');
                    $.ajax({
                        type: 'GET',
                        //url: '/vistara/ajax-chosen-master/data.json',
@@ -520,22 +527,22 @@ $profile_menu="0";
                        success: function (data) {
                            $.each(data, function (i, val) {
                                var terms = {};
-                            //   dataList.innerText="";
+                              // dataList.clearChildren();
+                               var result="result";
+                               clearChildren(result);
                                if (i == "result") {
 
                                    val.forEach(function (element) {
                                        //alert(element['tradeName']);
                                           var option = document.createElement('option');
                                        // Set the value using the item in the JSON array.
-                                       //option.value = element['tradeId'];
-                                       option.text = element['tradeName'];
+                                       option.value = element['tradeId'];
+                                       option.text = element['formulationName'];
                                        option.brandId = element['tradeId'];
-                                       option.drugId = element['drug_id'];
+                                       option.drugId = element['formulationId'];
                                        option.dispensing_form = element['dispensing_form'];
                                        option.dosage_amount = element['dosage_amount'] + " " + element['quantity'];
                                        option.formulationName = element['formulationName'];
-
-
                                        dataList.append(option);
                                    });
                                    // key.placeholder =dataList;
@@ -546,22 +553,53 @@ $profile_menu="0";
                        }
                    });
                }
+               function clearChildren(parent_id) {
+                   var childArray = document.getElementById( parent_id ).children;
+                   if ( childArray.length > 0 ) {
+                       document.getElementById( parent_id ).removeChild( childArray[ 0 ] );
+                       clearChildren( parent_id );
+                   }
+           }
            }
 
-
-
-
-
-
-
-
            function changeValues(key,indx){
+              // var datalist = document.getElementById ("result");
+              // alert(indx);
+               var input = document.getElementById ("trade"+indx);
 
                var options = $('datalist')[0].options;
+
                for (var i=0;i<options.length;i++){
-                   if (options[i].value == key.value)
+
+                  // alert(options[i].value+"=="+key.value);
+                   if (options[i].brandId == input.value)
                    {
-                       // alert($(key).val()+"  "+options[i].formulationName);
+
+                       $("#trade"+indx).val(options[i].text);
+                       $("#drug"+indx).val(options[i].drugId);
+                       $("#formulation"+indx).val(options[i].formulationName);
+                       $("#type"+indx).val(options[i].dispensing_form);
+                       $("#dosage"+indx).val(options[i].dosage_amount);
+                       $("#brand"+indx).val(options[i].brandId);
+
+                       break;
+                       //key.value=0;
+                   }
+               }
+           }
+           function changeValues1(key,indx){
+
+               //var datalist = document.getElementById ("result");
+               var input = document.getElementById ("formulation"+indx);
+              // alert(key.value+"==="+input.value);
+               var options = $('datalist')[0].options;
+
+               for (var i=0;i<options.length;i++){
+
+                  // alert(options[i].brandId+"=="+input.value);
+                   if (options[i].brandId == input.value)
+                   {
+
                        $("#trade"+indx).val(options[i].text);
                        $("#drug"+indx).val(options[i].drugId);
                        $("#formulation"+indx).val(options[i].formulationName);
@@ -574,6 +612,7 @@ $profile_menu="0";
                    }
                }
            }
+
           /* $(function () {
                $(document).on('click', '#browser', function () {
                    var options = $('datalist')[0].options;
@@ -643,6 +682,9 @@ $profile_menu="0";
                                .find('[id="morningId"]').attr('id', 'morningId' + prescriptionIndex).end()
                                .find('[id="afternoonId"]').attr('id', 'afternoonId' + prescriptionIndex).end()
                                .find('[id="nightId"]').attr('id', 'nightId' + prescriptionIndex).end()
+                               .find('[onselect="changeValues1(this,0)"]').attr('onselect', 'changeValues1(this,' + prescriptionIndex + ')').end()
+
+                               .find('[onchange="changeValues1(this,0)"]').attr('onchange', 'changeValues1(this,' + prescriptionIndex + ')').end()
 
 
                                .find('[onselect="changeValues(this,0)"]').attr('onselect', 'changeValues(this,' + prescriptionIndex + ')').end()
@@ -707,7 +749,7 @@ $profile_menu="0";
            function validateForm(formId) {
 
                //$("#POITable").val();
-
+               //var drug = $("#drug" + prescriptionIndex).val();
                var trade = $("#trade" + prescriptionIndex).val();
                var formulation = $("#formulation" + prescriptionIndex).val();
                var days = $("#days" + prescriptionIndex).val();
@@ -715,7 +757,7 @@ $profile_menu="0";
                var afternoon = $("#afternoonId" + prescriptionIndex).is(':checked');
                var night = $("#nightId" + prescriptionIndex).is(':checked');
 
-             //  alert(trade + "--" + formulation + "--" + days + "--" + morning + "--" + afternoon + "--" + night);
+              // alert(drug + "--" + formulation + "--" + days + "--" + morning + "--" + afternoon + "--" + night);
 
                if (trade != "" && formulation != "" && days != "" && (morning || afternoon || night)) {
                return true;

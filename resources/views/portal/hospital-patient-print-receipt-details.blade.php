@@ -212,17 +212,17 @@ $profile_menu = "0";
                                                                                         @if($patientBloodTestValue->examination_name==$patientBloodTestValue->parent_examination_name)
                                                                                             <?php $parentname=$patientBloodTestValue->parent_examination_name; ?>
 
-                                                                                            <td>{{$patientBloodTestValue->parent_examination_name}}</td>
-                                                                                            <td>{{$patientBloodTestValue->examination_date}} </td>
-                                                                                            <td>{{$patientBloodTestValue->fees}}</td>
+                                                                                            <td  style="padding-left: 0px;">{{$patientBloodTestValue->parent_examination_name}}</td>
+                                                                                            <td style="padding-left: 0px;">{{$patientBloodTestValue->examination_date}} </td>
+                                                                                            <td style="padding-left: 0px;">{{$patientBloodTestValue->fees}}</td>
 
 
                                                                                         @else
                                                                                             @if($parentname=="" || $parentname!=$patientBloodTestValue->parent_examination_name)
                                                                                                 <?php $parentname=$patientBloodTestValue->parent_examination_name; ?>
-                                                                                                <td>{{$patientBloodTestValue->parent_examination_name}}</td>
-                                                                                                <td>{{$patientBloodTestValue->examination_date}} </td>
-                                                                                                <td>{{$patientBloodTestValue->fees}}</td>
+                                                                                                <td style="padding-left: 0px;">{{$patientBloodTestValue->parent_examination_name}}</td>
+                                                                                                <td style="padding-left: 0px;">{{$patientBloodTestValue->examination_date}} </td>
+                                                                                                <td style="padding-left: 0px;">{{$patientBloodTestValue->fees}}</td>
 
 
                                                                                             @endif
@@ -261,17 +261,17 @@ $profile_menu = "0";
                                                                                         @if($patientUrineTestValue->examination_name==$patientUrineTestValue->parent_examination_name)
                                                                                             <?php $parentname=$patientUrineTestValue->parent_examination_name; ?>
 
-                                                                                            <td>{{$patientUrineTestValue->parent_examination_name}}</td>
-                                                                                            <td>{{$patientUrineTestValue->examination_date}} </td>
-                                                                                            <td>{{$patientUrineTestValue->fees}}</td>
+                                                                                            <td style="padding-left: 0px;">{{$patientUrineTestValue->parent_examination_name}}</td>
+                                                                                            <td style="padding-left: 0px;">{{$patientUrineTestValue->examination_date}} </td>
+                                                                                            <td style="padding-left: 0px;">{{$patientUrineTestValue->fees}}</td>
 
 
                                                                                         @else
                                                                                             @if($parentname=="" || $parentname!=$patientUrineTestValue->parent_examination_name)
                                                                                                 <?php $parentname=$patientUrineTestValue->parent_examination_name; ?>
-                                                                                                <td>{{$patientUrineTestValue->parent_examination_name}}</td>
-                                                                                                <td>{{$patientUrineTestValue->examination_date}} </td>
-                                                                                                <td>{{$patientUrineTestValue->fees}}</td>
+                                                                                                <td style="padding-left: 0px;">{{$patientUrineTestValue->parent_examination_name}}</td>
+                                                                                                <td style="padding-left: 0px;">{{$patientUrineTestValue->examination_date}} </td>
+                                                                                                <td style="padding-left: 0px;">{{$patientUrineTestValue->fees}}</td>
 
 
                                                                                             @endif
@@ -305,9 +305,9 @@ $profile_menu = "0";
                                                                                 <tbody>
                                                                                 @foreach($patientMotionTests as $patientMotionTestValue)
                                                                                     <tr>
-                                                                                        <td>{{$patientMotionTestValue->examination_name}}</td>
-                                                                                        <td>{{$patientMotionTestValue->examination_date}} </td>
-                                                                                        <td>{{$patientMotionTestValue->fees}}</td>
+                                                                                        <td style="padding-left: 0px;">{{$patientMotionTestValue->examination_name}}</td>
+                                                                                        <td style="padding-left: 0px;">{{$patientMotionTestValue->examination_date}} </td>
+                                                                                        <td style="padding-left: 0px;">{{$patientMotionTestValue->fees}}</td>
                                                                                     </tr>
 
                                                                                     <?php $i++; ?>
@@ -335,9 +335,9 @@ $profile_menu = "0";
                                                                                 <tbody>
                                                                                 @foreach($patientUltraTests as $patientUltraTestValue)
                                                                                     <tr>
-                                                                                        <td>{{$patientUltraTestValue->examination_name}}</td>
-                                                                                        <td>{{$patientUltraTestValue->examination_date}} </td>
-                                                                                        <td>{{$patientUltraTestValue->fees}}</td>
+                                                                                        <td style="padding-left: 0px;">{{$patientUltraTestValue->examination_name}}</td>
+                                                                                        <td  style="padding-left: 0px;">{{$patientUltraTestValue->examination_date}} </td>
+                                                                                        <td  style="padding-left: 0px;">{{$patientUltraTestValue->fees}}</td>
                                                                                     </tr>
 
                                                                                     <?php $i++; ?>
@@ -365,9 +365,9 @@ $profile_menu = "0";
                                                                                 <tbody>
                                                                                 @foreach($patientScanTests as $patientScanTestValue)
                                                                                     <tr>
-                                                                                        <td>{{$patientScanTestValue->scan_name}}</td>
-                                                                                        <td>{{$patientScanTestValue->scan_date}} </td>
-                                                                                        <td>{{$patientScanTestValue->fees}}</td>
+                                                                                        <td  style="padding-left: 0px;">{{$patientScanTestValue->scan_name}}</td>
+                                                                                        <td  style="padding-left: 0px;">{{$patientScanTestValue->scan_date}} </td>
+                                                                                        <td style="padding-left: 0px;">{{$patientScanTestValue->fees}}</td>
                                                                                     </tr>
 
                                                                                     <?php $i++; ?>
@@ -395,9 +395,9 @@ $profile_menu = "0";
                                                                                 <tbody>
                                                                                 @foreach($patientDentalTests as $patientDentalTestValue)
                                                                                     <tr>
-                                                                                        <td>{{$patientDentalTestValue->examination_name}}</td>
-                                                                                        <td>{{$patientDentalTestValue->examination_date}} </td>
-                                                                                        <td>{{$patientDentalTestValue->fees}}</td>
+                                                                                        <td  style="padding-left: 0px;">{{$patientDentalTestValue->examination_name}}</td>
+                                                                                        <td  style="padding-left: 0px;">{{$patientDentalTestValue->examination_date}} </td>
+                                                                                        <td  style="padding-left: 0px;">{{$patientDentalTestValue->fees}}</td>
                                                                                     </tr>
 
                                                                                     <?php $i++; ?>
@@ -425,9 +425,9 @@ $profile_menu = "0";
                                                                                 <tbody>
                                                                                 @foreach($patientXrayTests as $patientXrayTestValue)
                                                                                     <tr>
-                                                                                        <td>{{$patientXrayTestValue->examination_name}}</td>
-                                                                                        <td>{{$patientXrayTestValue->examination_date}} </td>
-                                                                                        <td>{{$patientXrayTestValue->fees}}</td>
+                                                                                        <td  style="padding-left: 0px;">{{$patientXrayTestValue->examination_name}}</td>
+                                                                                        <td style="padding-left: 0px;">{{$patientXrayTestValue->examination_date}} </td>
+                                                                                        <td style="padding-left: 0px;">{{$patientXrayTestValue->fees}}</td>
                                                                                     </tr>
 
                                                                                     <?php $i++; ?>
@@ -476,9 +476,9 @@ $profile_menu = "0";
 
                                                                             <div class="col-sm-4">Paid Amount</div>
                                                                             <div class="col-sm-6">
-{{$labTotalFees[0]->paid_amount}}
+                                                        {{$labTotalFees[0]->paid_amount}}
                                                                             </div>
-@if($labTotalFees[0]->total_fees!=$labTotalFees[0]->paid_amount)
+                                                                 @if($labTotalFees[0]->total_fees!=$labTotalFees[0]->paid_amount)
                                                                         <div class="col-sm-4">Balance Amount</div>
                                                                         <div class="col-sm-6">
 
@@ -507,7 +507,7 @@ $profile_menu = "0";
                                                                     </div>
 
 
-                                                            </div>
+
                                                             </form>
 
 
@@ -538,7 +538,22 @@ $profile_menu = "0";
                                                                 </table>
                                                             </div>
 
+                                                                <div class="form-group">
+                                                                    <div class="col-sm-4"></div>
+                                                                    <div class="col-sm-6">
+                                                                        <input style="float:left;" type="submit" name="addreceipt" value="Print Receipt"
+                                                                               class="btn btn-success" onclick="javascript:printDiv();"/>
 
+
+                                                                        <div style="float:left;margin:0px 20px;">
+                                                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/labreceipts">
+                                                                                <button type="button" class="btn btn-warning waves-effect waves-light">Cancel</button>
+                                                                            </a>
+                                                                        </div>
+                                                                        <input type="button" id="payment" class="btn btn-warning" onclick="view()" value="View Payment History">
+
+                                                                    </div>
+                                                                </div>
                                                         </div> <!-- panel-body -->
                                                     </div> <!-- panel -->
                                                 </div> <!-- col -->
@@ -556,22 +571,7 @@ $profile_menu = "0";
                     </div> <!-- End row -->
 
                 </div><!-- container -->
-                <div class="form-group">
-                    <div class="col-sm-4"></div>
-                    <div class="col-sm-6">
-                        <input style="float:left;" type="submit" name="addreceipt" value="Print Receipt"
-                               class="btn btn-success" onclick="javascript:printDiv();"/>
 
-
-                        <div style="float:left;margin:0px 20px;">
-                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/labreceipts">
-                                <button type="button" class="btn btn-warning waves-effect waves-light">Cancel</button>
-                            </a>
-                        </div>
-                        <input type="button" id="payment" class="btn btn-warning" onclick="view()" value="View Payment History">
-
-                    </div>
-                </div>
             </div>
         </div>
 

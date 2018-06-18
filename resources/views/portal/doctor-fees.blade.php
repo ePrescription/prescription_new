@@ -70,10 +70,10 @@ $profile_menu="0";
                                         <table id="datatable" class="table table-striped table-bordered">
                                             <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th style="display: none;">ID</th>
                                                 <th>Patient ID</th>
-                                                <th>Patient Name in Full</th>
-                                                <th>Doctor Name in Full</th>
+                                                <th>Patient Name</th>
+                                                <th>Doctor Name</th>
                                                 <th>Appointment Date</th>
                                                 <th>Payment Date</th>
                                                 <th>Doctor Fee</th>
@@ -84,7 +84,7 @@ $profile_menu="0";
                                             <tbody>
                                             @foreach($feeReceipts as $fee)
                                                 <tr>
-                                                    <td>{{$fee->receiptId}}</td>
+                                                    <td style="display: none;">{{$fee->receiptId}}</td>
                                                     <td>{{$fee->PID}}</td>
                                                     <td>{{$fee->patientName}}</td>
                                                     <td>{{$fee->doctorName}}</td>

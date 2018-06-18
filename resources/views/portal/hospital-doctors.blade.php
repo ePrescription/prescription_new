@@ -69,7 +69,7 @@ $profile_menu="0";
                                         <thead>
                                         <tr>
                                             <th>Doctor ID</th>
-                                            <th>Doctor Name in Full</th>
+                                            <th>Doctor Name</th>
                                             <th>Doctor Department</th>
                                             <th>Doctor Designation</th>
                                             <th>Tokens Count</th>

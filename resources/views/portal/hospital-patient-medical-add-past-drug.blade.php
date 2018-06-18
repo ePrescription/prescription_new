@@ -132,10 +132,10 @@ $profile_menu="0";
 
                                                         <div class="form-group">
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <input type="text" class="form-control" name="surgeryHistory[0][surgeryName]" placeholder="Surgery Name" required="required" />
+                                                                <input type="text" class="form-control" name="surgeryHistory[0][surgeryName]" placeholder="Surgery Name" />
                                                             </div>
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <input type="text" class="form-control datepicker" name="surgeryHistory[0][operationDate]" placeholder="Operation Date (YYYY-MM-DD)" required="required" style="width:80%;float: left;" />
+                                                                <input type="text" class="form-control datepicker" name="surgeryHistory[0][operationDate]" placeholder="Operation Date (YYYY-MM-DD)"  style="width:80%;float: left;" />
                                                                 <input type="hidden" class="form-control" name="surgeryHistory[0][surgeryInputDate]" value="{{date('Y-m-d')}}" required="required" />
                                                                 <div class="btn btn-primary addButton">+</div>
                                                             </div>

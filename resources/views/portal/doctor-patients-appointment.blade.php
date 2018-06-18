@@ -74,11 +74,11 @@ $profile_menu="0";
                                     <table id="datatable" class="table table-striped table-bordered">
                                         <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th style="display: none;">ID</th>
                                             <th>Patient ID</th>
-                                            <th>Name in Full</th>
+                                            <th>Patient Name</th>
                                             <th>Mobile No</th>
-                                            <th>Appointment</th>
+                                            <th>Appointment Date</th>
                                             <th>Category</th>
                                             <th>Action</th>
                                         </tr>
@@ -86,7 +86,7 @@ $profile_menu="0";
                                         <tbody>
                                         @foreach($patients as $patient)
                                             <tr>
-                                                <td>{{$patient->id}}</td>
+                                                <td style="display: none;">{{$patient->id}}</td>
                                                 <td>
                                                     <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->pid}} </a>
                                                 </td>

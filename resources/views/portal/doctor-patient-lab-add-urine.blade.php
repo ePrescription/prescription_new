@@ -26,7 +26,7 @@
 
 @if(count($patientUrineTests)>0)
 
-<form action="{{URL::to('/')}}/doctor/urinetests" role="form" method="POST" class="form-horizontal ">
+<form action="{{URL::to('/')}}/doctor/urinetests" role="form" method="POST" onsubmit="return submitForm(this);" class="form-horizontal ">
 <div class="form-group">
 <label class="col-sm-4 control-label">Test Date</label>
 <div class="col-sm-4">
@@ -78,3 +78,10 @@
 </div> <!-- End row -->
 
 </div><!-- container -->
+<script>
+    function submitForm() {
+        return confirm('Do you really want to Submit the Tests?');
+
+    }
+
+</script>
