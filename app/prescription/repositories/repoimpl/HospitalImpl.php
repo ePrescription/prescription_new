@@ -2501,20 +2501,22 @@ class HospitalImpl implements HospitalInterface
             if (is_null($doctorUser)) {
                 throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
             }
-            //dd($patientId);
+         //dd($patientId);
 
             if ($patientId == 0) {
                 $user = $this->registerNewPatient($patientProfileVM);
                 $this->attachPatientRole($user);
                 $patient = new Patient();
 
-                $pid = $this->generateRandomString();
-                //$status['pid'] = 'PID' . $pid;
-                //$status['tokenId'] = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(), $patientProfileVM->getAppointmentCategory());
+                $pid = 'PID'.$this->generateRandomString();
+               // dd();
+                $patientInfo['status'] = true;
+                $status['pid'] = $pid;
+                $status['tokenId'] = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(), $patientProfileVM->getAppointmentCategory());
 
 
                 //  dd($status['tokenId']);
-                $patient->pid = 'PID' . $pid;
+                $patient->pid = $pid;
                 //$patient->pid = 'PID'.crc32(uniqid(rand()));
                 $patient->email = $patientProfileVM->getEmail();
 
@@ -2547,10 +2549,10 @@ class HospitalImpl implements HospitalInterface
                 $user->patienthospitals()->attach($hospitalId, array('created_by' => $patientProfileVM->getCreatedBy(),
                     'updated_by' => $patientProfileVM->getUpdatedBy()));
 
-                $patientInfo['status'] = true;
-                $patientInfo['pid'] = 'PID' . $pid;
+                $status['status'] = true;
+                $status['pid'] =$pid;
                 $patientInfo['patientId'] = $patientUserId;
-                //$patientInfo['tokenId'] = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(), $patientProfileVM->getAppointmentCategory());
+                $status['tokenId'] = $this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(), $patientProfileVM->getAppointmentCategory());
 
                 /*if($patientId == 0)
                 {
@@ -2562,11 +2564,12 @@ class HospitalImpl implements HospitalInterface
                 $patientUserId = $patient->patient_id;
 
                 $status['pid']= $patient->pid;;
+                $status['status'] = true;
                 $status['tokenId']=$this->generateTokenId($patientProfileVM->getHospitalId(), $doctorId, $patientProfileVM->getAppointmentDate(),$patientProfileVM->getAppointmentCategory());
 
                 if (is_null($patient)) {
                     //$status['status'] = false;
-                    $patientInfo['status'] = false;
+                    $status['status'] = false;
                     throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND);
                 }
                 //dd($patient);
@@ -2594,22 +2597,22 @@ class HospitalImpl implements HospitalInterface
         } catch (QueryException $queryEx) {
             //dd($queryEx);
             //$status['status'] = false;
-            $patientInfo['status'] = false;
+            $status['status'] = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $queryEx);
         } catch (UserNotFoundException $userExc) {
             //dd($userExc);
             //$status['status'] = false;
-            $patientInfo['status'] = false;
+            $status['status'] = false;
             throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
         } catch (Exception $exc) {
             //dd($exc);
             //$status['status'] = false;
-            $patientInfo['status'] = false;
+            $status['status'] = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $exc);
         }
 
-        //return $status;
-        return $patientInfo;
+       return $status;
+       // return $patientInfo;
 
     }
 
@@ -11655,8 +11658,7 @@ class HospitalImpl implements HospitalInterface
 
     private function generateRandomString($length = 9)
     {
-        //$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $characters = '0123456789';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {

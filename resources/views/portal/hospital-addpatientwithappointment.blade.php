@@ -234,7 +234,7 @@ $time_array=array(
                                                                 <input type="radio" class="form-controlx"
                                                                        name="visiting" id="visiting" value="1"
                                                                        required="required" checked
-                                                                       onclick="javascript:visitPatient(1);"/>&nbsp;&nbsp;First
+                                                                       onclick="javascript:visitPatient(1);"/>&nbsp;&nbsp;Appointment
                                                                 time
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                                                 <input type="radio" class="form-controlx"
@@ -242,10 +242,10 @@ $time_array=array(
                                                                        required="required"
                                                                        onclick="javascript:visitPatient(2);"/>&nbsp;&nbsp;Followup
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                                                <input type="radio" class="form-controlx"
-                                                                       name="visiting" id="visiting" value="3"
-                                                                       required="required"
-                                                                       onclick="javascript:visitPatient(3);"/>&nbsp;&nbsp;Appointment
+                                                                {{--<input type="radio" class="form-controlx"--}}
+                                                                       {{--name="visiting" id="visiting" value="3"--}}
+                                                                       {{--required="required"--}}
+                                                                       {{--onclick="javascript:visitPatient(3);"/>&nbsp;&nbsp;Appointment--}}
                                                             </div>
                                                         </div>
 
