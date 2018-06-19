@@ -502,9 +502,8 @@ class PatientProfileMapper
         $patientUrineVM->setExaminationTime(property_exists($examinationObj, 'examinationTime') ? $examinationObj->examinationTime : null);
         $examinationDetails = $examinationObj->urineExaminations;
 
-        $filteredItems = array_filter($examinationDetails, function($elem)  use($patientUrineVM) {
+        /*$filteredItems = array_filter($examinationDetails, function($elem)  use($patientUrineVM) {
 
-            //dd($elem['isValueSet']);
             if($elem['isValueSet'] != 1)
             {
                 return false;
@@ -513,19 +512,13 @@ class PatientProfileMapper
             $patientUrineVM->setExaminations($elem);
             return true;
 
-            /*if(!in_array($elem->accommodation_id, $accommodations))
-            {
-                array_push($accommodations, $elem->accommodation_id);
-            }*/
-
-
-        });
+        });*/
         //dd($candidateEmployments);
 
-        /*foreach($examinationDetails as $examination)
+        foreach($examinationDetails as $examination)
         {
             $patientUrineVM->setExaminations($examination);
-        }*/
+        }
 
         //$userName = Session::get('DisplayName');
         $userName = 'Admin';
@@ -586,7 +579,7 @@ class PatientProfileMapper
         $examinationDetails = $examinationObj->bloodExaminations;
         //dd($examinationDetails);
 
-        $filteredItems = array_filter($examinationDetails, function($elem)  use($patientBloodVM) {
+        /*$filteredItems = array_filter($examinationDetails, function($elem)  use($patientBloodVM) {
 
             //dd($elem['isValueSet']);
             if($elem['isValueSet'] != 1)
@@ -597,20 +590,14 @@ class PatientProfileMapper
             $patientBloodVM->setExaminations($elem);
             return true;
 
-            /*if(!in_array($elem->accommodation_id, $accommodations))
-            {
-                array_push($accommodations, $elem->accommodation_id);
-            }*/
-
-
-        });
+        });*/
 
         //dd($patientBloodVM);
 
-        /*foreach($examinationDetails as $examination)
+        foreach($examinationDetails as $examination)
         {
             $patientBloodVM->setExaminations($examination);
-        }*/
+        }
 
         //$userName = Session::get('DisplayName');
         $userName = 'Admin';
