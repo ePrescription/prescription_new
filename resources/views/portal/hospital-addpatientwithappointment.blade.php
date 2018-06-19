@@ -235,7 +235,7 @@ $time_array=array(
                                                                        name="visiting" id="visiting" value="1"
                                                                        required="required" checked
                                                                        onclick="javascript:visitPatient(1);"/>&nbsp;&nbsp;Appointment
-                                                                time
+
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                                                 <input type="radio" class="form-controlx"
                                                                        name="visiting" id="visiting" value="2"
