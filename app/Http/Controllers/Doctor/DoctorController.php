@@ -30,6 +30,7 @@ use App\Http\Requests\PatientProfileWebRequest;
 use App\Http\Requests\FutureAppointmentRequest;
 use App\Http\Requests\NewAppointmentRequest;
 use App\Http\Requests\FeeReceiptRequest;
+use App\Http\Requests\OnlinePaymentRequest;
 
 use App\prescription\mapper\HospitalMapper;
 
@@ -4141,7 +4142,7 @@ class DoctorController extends Controller
         //return $responseJson;
     }
 
-    public function processPayment(Request $paymentRequest)
+    public function processPayment(OnlinePaymentRequest $paymentRequest)
     {
        // dd($paymentRequest->all());
 
@@ -4173,6 +4174,9 @@ class DoctorController extends Controller
         catch(Exception $exc)
         {
             //dd($exc);
+            //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SAVE_ERROR));
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
         }
 
 
@@ -7144,6 +7148,7 @@ class DoctorController extends Controller
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
+        //dd($urineTests);
         //return $responseJson;
         return view('portal.hospital-patient-lab-urine-tests-detail',compact('urineTests','patientId'));
     }

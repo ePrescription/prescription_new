@@ -609,6 +609,7 @@ $profile_menu="0";
                                                     <div style="width:100%;" id="patientdrugdiv"></div>
                                                     </p>
                                                 </div>
+                                                @if($patientDetails[0]->gender==2)
                                                 <div class="tab-pane" id="pregnancy">
                                                     <p>
                                                     <div class="col-md-12">
@@ -627,6 +628,7 @@ $profile_menu="0";
                                                     <div style="width:100%;" id="patientpregnancydiv"></div>
                                                     </p>
                                                 </div>
+                                                @endif
                                                 <div class="tab-pane" id="symptom">
                                                     <p>
                                                     <div class="col-md-12">

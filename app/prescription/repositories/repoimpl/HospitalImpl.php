@@ -4816,6 +4816,8 @@ class HospitalImpl implements HospitalInterface
             $timeQuery->select('pue.examination_time');
             $timeQuery->groupBy('pue.examination_time');
 
+            //dd($timeQuery->toSql());
+
             $examinationTime = $timeQuery->get();
 
             foreach ($examinationTime as $time) {
@@ -4879,6 +4881,8 @@ class HospitalImpl implements HospitalInterface
                 $urineTestQuery->groupBy('ue.parent_id');
                 $urineTestQuery->select('ue.parent_id', 'ue1.examination_name AS parent_examination_name');
                 $urineTests = $urineTestQuery->get();
+                //dd($urineTests);
+                //dd($urineTestQuery->toSql());
 
                 //$urineTests = $urineTestQuery->get();
 
@@ -4906,7 +4910,12 @@ class HospitalImpl implements HospitalInterface
 
                 //array_push($urineTestDetails, $urineTestRecord);
                 //array_push($urineTestDetails, $urineTests);
-                array_push($urineTestDetails, $testArray);
+
+                if(!empty($urineTests))
+                {
+                    array_push($urineTestDetails, $testArray);
+                }
+
 
             }
 
@@ -5322,7 +5331,11 @@ class HospitalImpl implements HospitalInterface
                 //array_push($patientBloodTests, $latestBloodExamQuery);
                 //array_push($patientBloodTests, $bloodTests);
 
-                array_push($patientBloodTests, $finalBloodTests);
+                if(!empty($bloodTests))
+                {
+                    array_push($patientBloodTests, $finalBloodTests);
+                }
+
 
             }
 
