@@ -1110,17 +1110,31 @@ class DoctorController extends Controller
         $patientProfileVM = null;
         $status = true;
         $responseJson = null;
+        $patientInfo = null;
         //return $patientProfileRequest->all();
 
         try
         {
             $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
-            $status = $this->hospitalService->savePatientProfile($patientProfileVM);
+            //$status = $this->hospitalService->savePatientProfile($patientProfileVM);
+            $patientInfo = $this->hospitalService->savePatientProfile($patientProfileVM);
 
-            //$status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
             //$patient = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 
-            if($status)
+            if(!is_null($patientInfo) && !empty($patientInfo))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
+                $responseJson->setObj($patientInfo);
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_ERROR));
+                $responseJson->setObj($patientInfo);
+                $responseJson->sendSuccessResponse();
+            }
+
+            /*if($status)
             {
                 //$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
                 $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_SUCCESS));
@@ -1130,7 +1144,7 @@ class DoctorController extends Controller
             {
                 $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PROFILE_SAVE_ERROR));
                 $responseJson->sendSuccessResponse();
-            }
+            }*/
 
         }
         catch(HospitalException $hospitalExc)
@@ -1169,6 +1183,7 @@ class DoctorController extends Controller
         $patientProfileVM = null;
         $status = true;
         $responseJson = null;
+        $patientInfo = null;
         //return $patientProfileRequest->all();
 
         try
@@ -1176,7 +1191,6 @@ class DoctorController extends Controller
             $patientProfileVM = PatientProfileMapper::setPatientProfile($patientProfileRequest);
             $status = $this->hospitalService->savePatientProfile($patientProfileVM);
 
-            //$status = HospitalServiceFacade::savePatientProfile($patientProfileVM);
             //$patient = HospitalServiceFacade::savePatientProfile($patientProfileVM);
 
             if($status)

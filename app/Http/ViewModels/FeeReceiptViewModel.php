@@ -11,6 +11,7 @@ namespace App\Http\ViewModels;
 
 class FeeReceiptViewModel
 {
+    private $receiptId;
     private $patientId;
     private $hospitalId;
     private $doctorId;
@@ -20,6 +21,22 @@ class FeeReceiptViewModel
     private $updatedBy;
     private $createdAt;
     private $updatedAt;
+
+    /**
+     * @return mixed
+     */
+    public function getReceiptId()
+    {
+        return $this->receiptId;
+    }
+
+    /**
+     * @param mixed $receiptId
+     */
+    public function setReceiptId($receiptId)
+    {
+        $this->receiptId = $receiptId;
+    }
 
     /**
      * @return mixed

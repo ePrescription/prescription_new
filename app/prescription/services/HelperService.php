@@ -12,6 +12,7 @@ use App\prescription\utilities\Exception\HelperException;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
 use App\prescription\repositories\repointerface\HelperInterface;
 use Exception;
+use Illuminate\Database\QueryException;
 
 class HelperService
 {
@@ -43,6 +44,38 @@ class HelperService
         catch (Exception $ex) {
             throw new HelperException(null, ErrorEnum::CITIES_LIST_ERROR, $ex);
         }
+
         return $cities;
+    }
+
+    /* Generate Id
+     * @params $hospitalId, $idType
+     * @throws HelperException
+     * @return array | null
+     * @author Baskaran Subbaraman
+     */
+
+    public function generatedId($hospitalId, $idType)
+    {
+        $generatedId = null;
+
+        try
+        {
+            $generatedId = $this->helperRepo->generatedId($hospitalId, $idType);
+        }
+        catch(QueryException $queryEx)
+        {
+
+        }
+        catch(HelperException $cityExc)
+        {
+            throw $cityExc;
+        }
+        catch (Exception $ex)
+        {
+            throw new HelperException(null, ErrorEnum::ID_GENERATION_ERROR, $ex);
+        }
+
+        return $generatedId;
     }
 }

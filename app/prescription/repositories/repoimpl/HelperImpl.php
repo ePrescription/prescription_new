@@ -10,6 +10,7 @@ namespace App\prescription\repositories\repoimpl;
 
 
 use App\prescription\repositories\repointerface\HelperInterface;
+use App\prescription\utilities\Helper;
 use App\prescription\utilities\HHSCache\CacheService;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
 use App\prescription\utilities\Exception\HelperException;
@@ -65,5 +66,33 @@ class HelperImpl implements HelperInterface
         }
 
         return $cities;
+    }
+
+    /* Generate Id
+     * @params $hospitalId, $idType
+     * @throws HelperException
+     * @return array | null
+     * @author Baskaran Subbaraman
+     */
+
+    public function generatedId($hospitalId, $idType)
+    {
+        $generatedId = null;
+
+        try
+        {
+            $generatedId = Helper::generatedId($hospitalId, $idType);
+        }
+        catch (QueryException $queryEx)
+        {
+            throw new HelperException(null, ErrorEnum::ID_GENERATION_ERROR, $queryEx);
+        }
+        catch (Exception $ex)
+        {
+            throw new HelperException(null, ErrorEnum::ID_GENERATION_ERROR, $ex);
+        }
+
+        return $generatedId;
+
     }
 }

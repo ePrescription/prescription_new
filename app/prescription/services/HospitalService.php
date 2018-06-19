@@ -238,33 +238,39 @@ class HospitalService {
 
     public function savePatientProfile($patientProfileVM)
     {
-        $status = true;
+        //$status = true;
+        $patientInfo = null;
 
         try
         {
-            DB::transaction(function() use ($patientProfileVM, &$status)
+            DB::transaction(function() use ($patientProfileVM, &$patientInfo)
             {
-                $status = $this->hospitalRepo->savePatientProfile($patientProfileVM);
+                //$status = $this->hospitalRepo->savePatientProfile($patientProfileVM);
+                $patientInfo = $this->hospitalRepo->savePatientProfile($patientProfileVM);
             });
 
         }
         catch(HospitalException $hospitalExc)
         {
-            $status = false;
+            //$status = false;
+            $patientInfo['status'] = false;
             throw $hospitalExc;
         }
         catch(UserNotFoundException $userExc)
         {
-            $status = false;
+            //$status = false;
+            $patientInfo['status'] = false;
             throw $userExc;
         }
         catch (Exception $ex) {
 
-            $status = false;
+            //$status = false;
+            $patientInfo['status'] = false;
             throw new HospitalException(null, ErrorEnum::PATIENT_PROFILE_SAVE_ERROR, $ex);
         }
 
-        return $status;
+        //return $status;
+        return $patientInfo;
     }
 
     /**

@@ -436,6 +436,7 @@ Route::group(array('prefix' => 'hospital', 'namespace' => 'Doctor'), function()
    Route::get('rest/api/{hospitalId}/patient/{patientId}/labreceipts', array('as' => 'patient.labreceipts', 'uses' => 'DoctorApiController@getLabReceiptsByPatient'));
    Route::get('rest/api/{hospitalId}/patient/{patientId}/labresults', array('as' => 'hospital.patientprintlabresults', 'uses' => 'DoctorApiController@getPatientLabProfileForPrint'));
    Route::get('rest/api/{hospitalId}/patient/{patientId}/labreceiptdetails', array('as' => 'hospital.patientlabreceipt', 'uses' => 'DoctorApiController@getApiPatientReceiptDetails'));
+   Route::get('rest/api/{hospitalId}/admissionid', array('as' => 'hospital.admissionid', 'uses' => 'DoctorApiController@generatedId'));
 
 });
 

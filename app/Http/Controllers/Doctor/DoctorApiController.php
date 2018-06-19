@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\prescription\facades\HelperFacade;
 use App\prescription\mapper\PatientProfileMapper;
 use App\prescription\utilities\Exception\UserNotFoundException;
 use Illuminate\Http\Request;
@@ -3781,14 +3782,15 @@ class DoctorApiController extends Controller
         try
         {
             $document = $this->hospitalService->downloadPatientReports($documentId);
-            $filePath = $path.$document->document_path;
+
             //dd($document->document_path);
             //dd($filePath);
 
             if(!is_null($document))
             {
+                $filePath = $path.$document->document_path;
                 //$file = Storage::disk($diskStorage)->get($document->document_path);
-                $contents = Storage::disk($diskStorage)->get($document->document_path);
+                $contents = Crypt::decrypt(Storage::disk($diskStorage)->get($document->document_path));
 
                 //$file = Storage::disk('s3')->get($entry->document_upload_path);
                 //$contents = Crypt::decrypt($file);
@@ -3808,7 +3810,7 @@ class DoctorApiController extends Controller
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_REPORTS_DOWNLOAD_ERROR));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
@@ -3914,6 +3916,64 @@ class DoctorApiController extends Controller
         catch(Exception $exc)
         {
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        //return $jsonResponse;
+        return $responseJson;
+    }
+
+    /* Generate Id
+     * @params $hospitalId, $idRequest
+     * @throws HelperException
+     * @return array | null
+     * @author Baskaran Subbaraman
+     */
+
+    public function generatedId($hospitalId, Request $idRequest)
+    {
+        $generatedId = null;
+        $responseJson = null;
+        $idType = null;
+
+        //dd($hospitalId);
+
+        if($idRequest->has('type'))
+        {
+            $idType = $idRequest->get('type');
+        }
+        //$jsonResponse = null;
+
+        try
+        {
+            //$prescriptionDetails = HospitalServiceFacade::getPrescriptionDetails($prescriptionId);
+            //$generatedId = $this->hospitalService->generatedId($hospitalId, $idType);
+            $generatedId = HelperFacade::generatedId($hospitalId, $idType);
+
+            if(!is_null($generatedId) && !empty($generatedId))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::ID_GENERATION_SUCCESS));
+                $responseJson->setCount(sizeof($generatedId));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::ID_GENERATION_ERROR));
+            }
+
+            $responseJson->setObj($generatedId);
+            $responseJson->sendSuccessResponse();
+
+            /*$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SUCCESS));
+            $jsonResponse->setObj($prescriptionDetails);*/
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::ID_GENERATION_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::ID_GENERATION_ERROR));
             $responseJson->sendErrorResponse($exc);
         }
 
