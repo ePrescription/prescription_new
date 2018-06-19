@@ -472,10 +472,10 @@ separate
                 <table style="width:100%;">
                     <tr><th style="padding-right: 80px;">Test Name</th><th style="padding-right: 80px;" >Test Report</th><th style="padding-right: 50px;"  >Normal Value</th></tr>
                     <tr><th colspan="3"> <div class="form-group" style="color: black;">
-                                <hr/>
-                                <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Blood Test
-                                    {{$patientExaminations['recentBloodTests'][0]->examination_date}}</label>
-                            </div></th></tr>
+                    <hr/>
+                    <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Blood Test
+                        {{$patientExaminations['recentBloodTests'][0]->examination_date}}</label>
+            </div></th></tr>
                     <div class="form-group" style="background-color: #ffff99; color: black;">
 
                         <?php $parentCheck = "";?>

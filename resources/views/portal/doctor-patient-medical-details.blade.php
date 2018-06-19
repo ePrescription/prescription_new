@@ -337,7 +337,7 @@ $profile_menu="0";
                                                         Provisional Diagnosis - {{$recentTest->provisional_diagnosis}} <br/>
                                                         Final Diagnosis - {{$recentTest->final_diagnosis}} <br/>
                                                         Treatment Type - {{$recentTest->treatment_type}} <br/>
-                                                        Treatment Notes - {{$recentTest->treatment_code}} <br/>
+                                                        Treatment Notes - {{$recentTest->treatment_plan_notes}} <br/>
 
 
                                                     </div>
@@ -453,50 +453,52 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Complaint</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadgeneraldetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#general" data-toggle="tab" aria-expanded="true">
                                                         <span class="visible-xs"><i class="fa fa-home"></i></span>
                                                         <span class="hidden-xs">General</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadfamilydetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#family" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-user"></i></span>
                                                         <span class="hidden-xs">Family Illness</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadpastdetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#past" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                         <span class="hidden-xs">Past Illness</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadpersonaldetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#personal" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Personal History</span>
                                                     </a>
                                                 </li>
 
-                                                <li class="">
+                                                <li class="" onclick="ajaxloaddrugdetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#drug" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Past Drug</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                @if($patientDetails[0]->gender!=1)
+                                                <li class="" onclick="ajaxloadpregnancydetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#pregnancy" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Pregnancy</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                @endif
+                                                <li class="" onclick="ajaxloadsymptomdetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#symptom" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Symptom</span>
                                                     </a>
                                                 </li>
-                                                <li class="">
+                                                <li class="" onclick="ajaxloadfindingdetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');">
                                                     <a href="#finding" data-toggle="tab" aria-expanded="false">
                                                         <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                         <span class="hidden-xs">Finding</span>
@@ -699,6 +701,9 @@ $profile_menu="0";
 @section('scripts')
 
     <script>
+
+        ajaxloadcomplaintdetails({{$patientDetails[0]->patient_id}},'<?php echo date('Y-m-d');?>');
+
         function ajaxloadgeneraldetails(pid,date) {
 
             $("#patientgeneraldiv").html("LOADING...");

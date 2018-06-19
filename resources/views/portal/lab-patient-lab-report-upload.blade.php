@@ -224,8 +224,8 @@ $profile_menu="0";
 
                                                         <div class="col-md-2 col-sm-2 col-xs-2">
                                                             <button id="cancel"  onclick="document.getElementById('image').value =''">cancel</button>
-                                                            <div class="btn btn-default removeButton min-button" value="-">-</div>
-                                                        </div>
+                                                                <div class="btn btn-default removeButton min-button" value="-">-</div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
