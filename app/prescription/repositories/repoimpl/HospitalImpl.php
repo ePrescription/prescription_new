@@ -2184,7 +2184,7 @@ class HospitalImpl implements HospitalInterface
             }
             $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.patient_id', 'p.name as name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
-                'da.id', 'da.id as appointment_id', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time','da.doctor_id','d.name as dname','as.appointment_name');
+                'da.id', 'da.id as appointment_id', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time','da.doctor_id','d.name as dname','as.appointment_name','da.token_id');
 
             //dd($query->toSql());
 
@@ -4914,6 +4914,7 @@ class HospitalImpl implements HospitalInterface
                 if(!empty($urineTests))
                 {
                     array_push($urineTestDetails, $testArray);
+                    $testArray="";
                 }
 
 
@@ -5265,6 +5266,7 @@ class HospitalImpl implements HospitalInterface
                 $bloodTestQuery->groupBy('be.parent_id');
                 $bloodTestQuery->select('be.parent_id', 'be1.examination_name AS parent_examination_name');
 
+               // dd($bloodTestQuery->toSql());
                 $bloodTests = $bloodTestQuery->get();
 
                 foreach ($bloodTests as $bloodTest) {
@@ -5284,6 +5286,8 @@ class HospitalImpl implements HospitalInterface
                         'pbe.examination_date as examinationDate', 'pbe.examination_time',
                         'pbei.id as patientExaminationItemId', 'pbei.test_readings as readings', 'pbei.test_reading_status as readingStatus',
                         'pbei.is_value_set as isValueSet');
+
+                    //dd($finalBloodTestQuery->toSql());
 
                     $finalBloodTests[$bloodTest->parent_examination_name] = $finalBloodTestQuery->get();
 
@@ -5334,6 +5338,7 @@ class HospitalImpl implements HospitalInterface
                 if(!empty($bloodTests))
                 {
                     array_push($patientBloodTests, $finalBloodTests);
+                    $finalBloodTests="";
                 }
 
 

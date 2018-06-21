@@ -75,6 +75,7 @@ $profile_menu="0";
                                         <thead>
                                         <tr>
                                             <th style="display: none;">ID</th>
+                                            <th>AppointmentID with Token Number</th>
                                             <th>Patient ID</th>
                                             <th>Patient Name</th>
                                             <th>Mobile No</th>
@@ -88,8 +89,9 @@ $profile_menu="0";
                                             <tr>
                                                 <td style="display: none;">{{$patient->id}}</td>
                                                 <td>
-                                                    <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->pid}} </a>
+                                                    <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->appointment_id}}--{{$patient->token_id}} </a>
                                                 </td>
+                                                <td>{{$patient->pid}}</td>
                                                 <td>{{$patient->name}}</td>
                                                 <td>{{$patient->telephone}}</td>
                                                 <td>{{$patient->appointment_date}} - {{$patient->appointment_time}}</td>

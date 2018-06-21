@@ -3283,14 +3283,14 @@ class DoctorController extends Controller
                 ->where('dls.doctor_id',$doctorId)->where('hospital_id',$hospitalId)
                 ->where('leave_start_date','<=',$dateValue)
                 ->where('leave_end_date','>=',$dateValue)->get();
-           // dd(count($checkArray));
+          // dd(count($checkArray));
             if(count($checkArray)==0) {
 
                 $TimeSchedule = DoctorAvailability::where('doctor_id', '=', $doctorId)
                     ->where('hospital_id', '=', $hospitalId)
                     ->where('week_day', '=', strtoupper($day))->get();
                 //dd($TimeSchedule);
-                //dd($TimeSchedule);
+               //dd($TimeSchedule);
 
                 if (count($TimeSchedule) > 0) {
 
@@ -3322,7 +3322,7 @@ class DoctorController extends Controller
 
                     for ($i = 0; $i < $eVdiff; $i++) {
 
-                        $time_array[date('H:i:s', $Evftime + (300 * $i))] = date('h:i a', $Evttime + (300 * $i));
+                        $time_array[date('H:i:s', $Evttime + (300 * $i))] = date('h:i a', $Evftime + (300 * $i));
 
                         //dd($time_array);
                     }
@@ -4040,8 +4040,8 @@ class DoctorController extends Controller
 
             $doctors = $this->hospitalService->getDoctorsByHospitalId($hospitalId);
             //dd($doctors);
-            //$feeReceiptDetails = $this->hospitalService->getReceiptDetails($receiptId);
-            //dd($feeReceiptDetails);
+           // $feeReceiptDetails = $this->hospitalService->getReceiptDetails($hospitalId);
+           //dd($feeReceiptDetails);
 
         }
         catch(HospitalException $hospitalExc)
@@ -4072,11 +4072,12 @@ class DoctorController extends Controller
         $status = true;
         $responseJson = null;
 
+
         try
         {
             $feeReceiptVM = PatientProfileMapper::setFeeReceipt($feeReceiptRequest);
+            dd($feeReceiptVM);
             $status = $this->hospitalService->saveFeeReceipt($feeReceiptVM);
-            //dd($status);
 
             if($status)
             {
@@ -4086,7 +4087,7 @@ class DoctorController extends Controller
             else
             {
                 $msg=trans('messages.'.ErrorEnum::FEE_RECEIPT_SAVE_ERROR);
-                return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addfeereceipt')->with('message',$msg);
+              //  return redirect('fronthospital/rest/api/'.Auth::user()->id.'/addfeereceipt')->with('message',$msg);
             }
 
 
@@ -7746,7 +7747,7 @@ class DoctorController extends Controller
             $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId,$categoryType,null,$fromDate,$toDate,$status);
             $doctors = $this->hospitalService->getDoctorsByHospitalId($hospitalId);
 
-            //dd($patients);
+           // dd($patients);
 
             /*
             if(!is_null($patients) && !empty($patients))
@@ -8599,7 +8600,6 @@ class DoctorController extends Controller
             $ExamRequest = (object) $drugHistoryRequest->all();
             //dd($ExamRequest);
 
-            //dd($personalHistoryRequest->all());
             $patientDrugsVM = PatientProfileMapper::setPatientDrugHistory($drugHistoryRequest);
             //dd($patientHistoryVM);
             $status = $this->hospitalService->savePatientDrugHistory($patientDrugsVM);

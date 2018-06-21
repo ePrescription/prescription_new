@@ -39,8 +39,8 @@
             </div>
             @foreach($drugSurgeryHistory['surgeryHistory'] as $surgeryHistory)
                 <div class="row">
-                    <div class="col-sm-6">{{$surgeryHistory->patientSurgeries}}</div>
-                    <div class="col-sm-6">{{$surgeryHistory->operationDate}}</div>
+                    <div class="col-sm-6">{{$surgeryHistory->patientSurgeries==" "?" ":$surgeryHistory->patientSurgeries}}</div>
+                    <div class="col-sm-6"> {{$surgeryHistory->operationDate=="0000-00-00" ? " " :$surgeryHistory->operationDate}}</div>
                 </div>
             @endforeach
         </div>

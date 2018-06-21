@@ -134,13 +134,13 @@ $profile_menu="0";
                                                     <div class="form-group col-md-12">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Number</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
-                                                            {{$patientExaminations['patientDetails']->telephone}}
+                                                            {{$patientExaminations['patientDetails']->telephone!=""?$patientExaminations['patientDetails']->telephone:"--"}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">E-Mail</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
-                                                            {{$patientExaminations['patientDetails']->email}}
+                                                            {{$patientExaminations['patientDetails']->email!=""?$patientExaminations['patientDetails']->email:"--"}}
                                                         </div>
                                                     </div>
                                                     <?php /* ?>
@@ -161,15 +161,15 @@ $profile_menu="0";
                                             @if(count($patientExaminations['recentComplaints'])>0)
                                                 <hr style="width: 100%;"/>
                                                 <div class="form-group" style="width: 100%;">
-                                                    <label class="col-sm-12 control-label" style="width: 100%;">Complaints - {{$patientExaminations['recentComplaints'][0]->complaint_date}}</label>
+                                                    <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Complaints - {{$patientExaminations['recentComplaints'][0]->complaint_date}}</label>
                                                 </div>
                                                 <div class="form-group col-sm-12" style="width: 100%;">
                                                     @foreach($patientExaminations['recentComplaints'] as $recentTest)
                                                         <div class="col-sm-6" style="width:50%;float:left;">
 
-                                                            {{$recentTest->complaintType}} :: {{$recentTest->complaint_name}}
+                                                           ComplaintType:: {{$recentTest->complaintType}} &nbsp;&nbsp;&nbsp;&nbsp; ComplaintName:: {{$recentTest->complaint_name}}
                                                             <br/>
-                                                            {{$recentTest->complaint_text}}
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;Notes:: {{$recentTest->complaint_text}}
 
                                                         </div>
                                                     @endforeach
@@ -181,7 +181,7 @@ $profile_menu="0";
                                             @if(count($patientExaminations['recentGeneralTests'])>0)
                                             <hr/>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label">General Test - {{$patientExaminations['recentGeneralTests'][0]->general_examination_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">General Test - {{$patientExaminations['recentGeneralTests'][0]->general_examination_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12">
                                                 @foreach($patientExaminations['recentGeneralTests'] as $recentTest)
@@ -192,13 +192,13 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <br/><br/>
+                                                    <br/><br/><br/><br/><br/><br/>
                                         @endif
 
                                         @if(count($patientExaminations['recentPastIllness'])>0)
                                             <hr/>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label">Past Illeness - {{$patientExaminations['recentPastIllness'][0]->past_illness_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Past Illeness - {{$patientExaminations['recentPastIllness'][0]->past_illness_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12">
                                                 @foreach($patientExaminations['recentPastIllness'] as $recentTest)
@@ -209,14 +209,14 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <br/><br/>
+                                                    <br/><br/>
                                         @endif
 
 
                                         @if(count($patientExaminations['recentFamilyIllness'])>0)
                                             <hr/>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label">Family Illeness - {{$patientExaminations['recentFamilyIllness'][0]->family_illness_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Family Illeness - {{$patientExaminations['recentFamilyIllness'][0]->family_illness_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12">
                                                 @foreach($patientExaminations['recentFamilyIllness'] as $recentTest)
@@ -234,7 +234,7 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentPersonalHistory'])>0)
                                             <hr/>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label">Personal Illeness - {{$patientExaminations['recentPersonalHistory'][0]->personal_history_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Personal Illeness - {{$patientExaminations['recentPersonalHistory'][0]->personal_history_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12">
                                                 @foreach($patientExaminations['recentPersonalHistory'] as $recentTest)
@@ -245,13 +245,13 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <br/><br/>
+                                                    <br/><br/><br/>
                                         @endif
 
                                         @if(count($patientExaminations['recentPregnancy'])>0)
                                             <hr/>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label">Pregnancy - {{$patientExaminations['recentPregnancy'][0]->pregnancy_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Pregnancy - {{$patientExaminations['recentPregnancy'][0]->pregnancy_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12">
                                                 @foreach($patientExaminations['recentPregnancy'] as $recentTest)
@@ -262,25 +262,25 @@ $profile_menu="0";
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <br/><br/>
+                                                    <br/><br/><br/><br/><br/><br/>
                                         @endif
 
 
                                         @if(count($patientExaminations['recentSymptoms'])>0)
                                             <hr/>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label">Symptoms - {{$patientExaminations['recentSymptoms'][0]->patient_symptom_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Symptoms - {{$patientExaminations['recentSymptoms'][0]->patient_symptom_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12">
                                                 @foreach($patientExaminations['recentSymptoms'] as $recentTest)
                                                     <div class="col-sm-12" style="width:100%;float:left;">
 
-                                                        {{$recentTest->main_symptom_name}} - {{$recentTest->sub_symptom_name}} - {{$recentTest->symptom_name}}
+                                                       MainSymptom:: {{$recentTest->main_symptom_name}} &nbsp;&nbsp;&nbsp;&nbsp;Sub-Symptom:: {{$recentTest->sub_symptom_name}} &nbsp;&nbsp;&nbsp;&nbsp;Symptom:: {{$recentTest->symptom_name}}
 
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <br/><br/>
+                                                    <br/><br/><br/><br/><br/><br/>
                                         @endif
 
 
@@ -288,18 +288,18 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentDrugHistory'])>0)
                                             <hr/>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label">Drug History - {{$patientExaminations['recentDrugHistory'][0]->drug_history_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Drug History - {{$patientExaminations['recentDrugHistory'][0]->drug_history_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12">
                                                 @foreach($patientExaminations['recentDrugHistory'] as $recentTest)
                                                     <div class="col-sm-6" style="width:50%;float:left;">
 
-                                                        {{$recentTest->drug_name}} - {{$recentTest->dosage}} - {{$recentTest->timings}}
+                                                        DrugName:: {{$recentTest->drug_name}}  &nbsp;&nbsp;&nbsp;&nbsp;Drug Dosage::  {{$recentTest->dosage}}  &nbsp;&nbsp;&nbsp;&nbsp;Drug Timing:: {{$recentTest->timings}}
 
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <br/><br/>
+                                                    <br/><br/><br/><br/><br/><br/>
                                         @endif
 
 
@@ -307,26 +307,24 @@ $profile_menu="0";
                                         @if(count($patientExaminations['recentSurgeryHistory'])>0)
                                             <hr/>
                                             <div class="form-group" style="width: 100%;">
-                                                <label class="col-sm-12 control-label">Surgery History - {{$patientExaminations['recentSurgeryHistory'][0]->surgery_input_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Surgery History - {{$patientExaminations['recentSurgeryHistory'][0]->surgery_input_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12" style="width: 100%;">
                                                 @foreach($patientExaminations['recentSurgeryHistory'] as $recentTest)
                                                     <div class="col-sm-6" style="width:50%;float:left;">
-
-                                                        {{$recentTest->patient_surgeries}} - {{$recentTest->surgery_input_date}}
-
+                                                       Past Surgery:: {{$recentTest->patient_surgeries==" " ? " ":$recentTest->patient_surgeries}} &nbsp;&nbsp;&nbsp;&nbsp; Surgery Date:: {{$recentTest->surgery_input_date=="0000-00-00"? " " :$recentTest->surgery_input_date }}
                                                     </div>
                                                 @endforeach
                                             </div>
                                             <hr/>
-                                            <br/><br/>
+                                                    <br/><br/><br/><br/><br/><br/>
                                         @endif
 
 
                                         @if(count($patientExaminations['diagnosticExaminations'])>0)
                                             <hr style="width: 100%;"/>
                                             <div class="form-group" style="width: 100%;">
-                                                <label class="col-sm-12 control-label" style="width: 100%;">Diagnostic Examinations - {{$patientExaminations['diagnosticExaminations'][0]->diagnosis_date}}</label>
+                                                <label class="col-sm-12 control-label" style="width: 100%;" style="width: 100%;font-weight: bolder">Diagnostic Examinations - {{$patientExaminations['diagnosticExaminations'][0]->diagnosis_date}}</label>
                                             </div>
                                             <div class="form-group col-sm-12" style="width: 100%;">
                                                 @foreach($patientExaminations['diagnosticExaminations'] as $recentTest)
@@ -627,7 +625,7 @@ $profile_menu="0";
                                                             @endforeach
                                                         </select>
 
-                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-pregnancy" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Pregnancy History </b></button></a>
+                                                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/add-medical-pregnancy" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Add Pregnancy Details </b></button></a>
                                                     </div>
                                                     <br/>
                                                     <div style="width:100%;" id="patientpregnancydiv"></div>
