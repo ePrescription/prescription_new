@@ -21,6 +21,7 @@ use App\Http\ViewModels\PatientLabDocumentsViewModel;
 use App\Http\ViewModels\PatientLabReceiptViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
 use App\Http\ViewModels\PatientPersonalHistoryViewModel;
+use App\Http\ViewModels\PatientPrescriptionAttachmentViewModel;
 use App\Http\ViewModels\PatientProfileViewModel;
 use App\Http\ViewModels\PatientPregnancyViewModel;
 use App\Http\ViewModels\PatientScanViewModel;
@@ -815,6 +816,74 @@ class PatientProfileMapper
         $labReceiptsVM->setUpdatedAt(date("Y-m-d H:i:s"));
 
         return $labReceiptsVM;
+    }
+
+    public static function setPatientPrescriptionApiAttachments(Request $prescriptionRequest)
+    {
+        $prescriptionAttachVM = new PatientPrescriptionAttachmentViewModel();
+
+        //$attachments = $prescriptionRequest['prescription_attachments'];
+
+        //$files = $prescriptionRequest->allFiles();
+        //$attachments = $prescriptionRequest->allFiles();
+
+        //dd($prescriptionRequest->file('prescription_attachments'));
+        $attachments = $prescriptionRequest->file('prescription_attachments');
+        //dd($attachments);
+        //return json_decode($prescriptionRequest);
+        //dd($attachments);
+        //$medicalDocuments = $hospitalRequest['medical_new_document'];
+
+        //dd($medicalDocuments);
+        //$loggedUserId = Session::get('LoginUserId');
+        //$userName = Session::get('DisplayName');
+        $userName = 'Admin';
+
+        /*foreach ($attachments as $key => $value)
+        {
+            dd($value->getClientOriginalName());
+            //dd($value[0]->getClientOriginalName());
+            $filename = $value->prescription_attachments;
+            //dd($filename);
+            if(!is_null($value['document_upload_path']))
+            {
+                $prescriptionAttachVM->setPatientPrescriptionAttachments($value);
+            }
+        }*/
+
+        if(!empty($attachments))
+        {
+            foreach ($attachments as $attachment)
+            {
+                $prescriptionAttachVM->setPatientPrescriptionAttachments($attachment);
+                //dd($attachment);
+
+                //$files = $prescriptionRequest->file('prescription_attachments');
+                //dd($files[0]);
+                //dd($files[0]->getClientOriginalName());
+                //$filename = $value->prescription_attachments;
+                //dd($filename);
+                /*if(!is_null($value['document_upload_path']))
+                {
+                    $prescriptionAttachVM->setPatientPrescriptionAttachments($value);
+                }*/
+            }
+        }
+
+
+        //$prescriptionAttachVM->setDocumentName($prescriptionRequest['document_name']);
+        $prescriptionAttachVM->setPatientId($prescriptionRequest['patientId']);
+        $prescriptionAttachVM->setDoctorId($prescriptionRequest['doctorId']);
+        $prescriptionAttachVM->setHospitalId($prescriptionRequest['hospitalId']);
+        $prescriptionAttachVM->setPrescriptionUploadDate(date("Y-m-d"));
+
+
+        $prescriptionAttachVM->setCreatedBy($userName);
+        $prescriptionAttachVM->setModifiedBy($userName);
+        $prescriptionAttachVM->setCreatedAt(date("Y-m-d H:i:s"));
+        $prescriptionAttachVM->setUpdatedAt(date("Y-m-d H:i:s"));
+
+        return $prescriptionAttachVM;
     }
 
 }

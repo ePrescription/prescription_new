@@ -3980,4 +3980,50 @@ class DoctorApiController extends Controller
         //return $jsonResponse;
         return $responseJson;
     }
+
+    /**
+     * Upload patient prescription attachments
+     * @param $prescriptionRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientPrescriptionApiAttachments(Request $prescriptionRequest)
+    {
+        $status = true;
+        $prescriptionAttachVM = null;
+        //dd('Inside prescription attachments method');
+
+        try {
+            $prescriptionAttachVM = PatientProfileMapper::setPatientPrescriptionApiAttachments($prescriptionRequest);
+            $status = $this->hospitalService->uploadPatientPrescriptionApiAttachments($prescriptionAttachVM);
+            //dd('Attachments saved');
+
+            if($status)
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PRESCRIPTION_UPLOAD_SUCCESS));
+                //$responseJson->setObj($filePath);
+                $responseJson->sendSuccessResponse();
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PRESCRIPTION_UPLOAD_ERROR));
+                $responseJson->sendSuccessResponse();
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PRESCRIPTION_UPLOAD_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
+    }
 }

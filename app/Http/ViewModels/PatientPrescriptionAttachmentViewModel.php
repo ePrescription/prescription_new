@@ -1,0 +1,218 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: admin
+ * Date: 8/31/2016
+ * Time: 5:54 PM
+ */
+
+namespace App\Http\ViewModels;
+
+
+class PatientPrescriptionAttachmentViewModel{
+
+    private $patientId;
+    private $doctorId;
+    private $hospitalId;
+    private $prescriptionUploadDate;
+    private $documentName;
+    private $documentPath;
+    private $patientPrescriptionAttachments;
+
+    private $createdBy;
+    private $modifiedBy;
+    private $createdAt;
+    private $updatedAt;
+
+    public function __construct()
+    {
+        $this->patientPrescriptionAttachments = array();
+        //$this->doctorUploads = array();
+        //$this->testCategoryName = array();
+        //$this->documentName = array();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrescriptionUploadDate()
+    {
+        return $this->prescriptionUploadDate;
+    }
+
+    /**
+     * @param mixed $prescriptionUploadDate
+     */
+    public function setPrescriptionUploadDate($prescriptionUploadDate)
+    {
+        $this->prescriptionUploadDate = $prescriptionUploadDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentName()
+    {
+        return $this->documentName;
+    }
+
+    /**
+     * @param mixed $documentName
+     */
+    public function setDocumentName($documentName)
+    {
+        $this->documentName = $documentName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentPath()
+    {
+        return $this->documentPath;
+    }
+
+    /**
+     * @param mixed $documentPath
+     */
+    public function setDocumentPath($documentPath)
+    {
+        $this->documentPath = $documentPath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPatientPrescriptionAttachments()
+    {
+        return $this->patientPrescriptionAttachments;
+    }
+
+    /**
+     * @param mixed $patientPrescriptionAttachments
+     */
+    public function setPatientPrescriptionAttachments($patientPrescriptionAttachments)
+    {
+        //$this->patientPrescriptionAttachments = $patientPrescriptionAttachments;
+        $this->patientPrescriptionAttachments[] = $patientPrescriptionAttachments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPatientId()
+    {
+        return $this->patientId;
+    }
+
+    /**
+     * @param mixed $patientId
+     */
+    public function setPatientId($patientId)
+    {
+        $this->patientId = $patientId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDoctorId()
+    {
+        return $this->doctorId;
+    }
+
+    /**
+     * @param mixed $doctorId
+     */
+    public function setDoctorId($doctorId)
+    {
+        $this->doctorId = $doctorId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHospitalId()
+    {
+        return $this->hospitalId;
+    }
+
+    /**
+     * @param mixed $hospitalId
+     */
+    public function setHospitalId($hospitalId)
+    {
+        $this->hospitalId = $hospitalId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param mixed $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModifiedBy()
+    {
+        return $this->modifiedBy;
+    }
+
+    /**
+     * @param mixed $modifiedBy
+     */
+    public function setModifiedBy($modifiedBy)
+    {
+        $this->modifiedBy = $modifiedBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param mixed $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param mixed $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+
+    /*public function __toString()
+    {
+        return $this;
+    }*/
+
+}

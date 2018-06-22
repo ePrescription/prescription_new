@@ -377,6 +377,9 @@
         "905" => "Unable to update patient fee status",
 
         "906" => "Unable to get patient total count",
-        "908" => "No patient lab receipts available"
+        "908" => "No patient lab receipts available",
+
+        "909" => "Unable to upload patient prescription attachmentss",
+        "910" => "Successfully uploaded patient prescription attachments",
 
     ];

@@ -10306,5 +10306,51 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
         //return $responseJson;
     }
 
+    /**
+     * Upload patient prescription attachments
+     * @param $prescriptionRequest
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientPrescriptionAttachments(Request $prescriptionRequest)
+    {
+        $status = true;
+        $prescriptionAttachVM = null;
+        //dd('Inside prescription attachments method');
+
+        try
+        {
+            $prescriptionAttachVM = PatientProfileMapper::setPatientPrescriptionAttachments($prescriptionRequest);
+            $status = $this->hospitalService->uploadPatientPrescriptionAttachments($prescriptionAttachVM);
+            dd('Attachments saved');
+
+            /*if($status)
+            {
+                return redirect('lab/'.$uploadRequest->lab_id.'/hospital/'.$uploadRequest->hospital_id.'/patient/'.$uploadRequest->patient_id.'/lab-report-upload')->with('success','Lab Report Upload Successfully');
+            }
+            else
+            {
+                return redirect('lab/'.$uploadRequest->lab_id.'/hospital/'.$uploadRequest->hospital_id.'/patient/'.$uploadRequest->patient_id.'/lab-report-upload')->with('message','Lab Report Upload Issues');
+            }*/
+        }
+        catch(HospitalException $profileExc)
+        {
+            //dd($userExc);
+            $errorMsg = $profileExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($profileExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',$errorMsg." ".trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            dd($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',trans('messages.SupportTeam'));
+        }
+
+    }
 
 }

@@ -24,6 +24,7 @@ use App\Http\ViewModels\PatientLabTestViewModel;
 use App\Http\ViewModels\PatientPastIllnessViewModel;
 use App\Http\ViewModels\PatientPersonalHistoryViewModel;
 use App\Http\ViewModels\PatientPregnancyViewModel;
+use App\Http\ViewModels\PatientPrescriptionAttachmentViewModel;
 use App\Http\ViewModels\PatientPrescriptionViewModel;
 use App\Http\ViewModels\PatientProfileViewModel;
 use App\Http\ViewModels\PatientScanViewModel;
@@ -53,6 +54,8 @@ use App\prescription\model\entities\PatientMotionExamination;
 use App\prescription\model\entities\PatientMotionExaminationItems;
 use App\prescription\model\entities\PatientPaymentHistory;
 use App\prescription\model\entities\PatientPrescription;
+use App\prescription\model\entities\PatientPrescriptionAttachment;
+use App\prescription\model\entities\PatientPrescriptionAttachmentItems;
 use App\prescription\model\entities\PatientScanExamination;
 use App\prescription\model\entities\PatientScanExaminationItems;
 use App\prescription\model\entities\PatientSurgeries;
@@ -75,6 +78,7 @@ use App\prescription\utilities\UserType;
 use App\Role;
 use App\User;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Exception;
@@ -12545,5 +12549,120 @@ class HospitalImpl implements HospitalInterface
         }
 
         return $twoDaysAppointments;
+    }
+
+    /**
+     * Upload patient prescription attachments
+     * @param $prescriptionAttachVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientPrescriptionApiAttachments(PatientPrescriptionAttachmentViewModel $prescriptionAttachVM)
+    {
+        $prescriptionAttachments = null;
+        $status = true;
+        //dd('Inside save attachments impl');
+
+        try {
+            $patientId = $prescriptionAttachVM->getPatientId();
+            $doctorId = $prescriptionAttachVM->getDoctorId();
+            $hospitalId = $prescriptionAttachVM->getHospitalId();
+            $prescriptionAttachments = $prescriptionAttachVM->getPatientPrescriptionAttachments();
+            $diskStorage = env('DISK_STORAGE');
+
+            $patient = Helper::checkPatientExists($patientId);
+            $doctor = Helper::checkDoctorExists($doctorId);
+            $hospital = Helper::checkHospitalExists($hospitalId);
+
+            if(is_null($patient))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::PATIENT_USER_NOT_FOUND, null);
+            }
+
+            if(is_null($doctor))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::USER_NOT_FOUND, null);
+            }
+
+            if(is_null($hospital))
+            {
+                throw new UserNotFoundException(null, ErrorEnum::HOSPITAL_USER_NOT_FOUND, null);
+            }
+
+            if (!is_null($prescriptionAttachments)) {
+                $patientPrescription = new PatientPrescriptionAttachment();
+                $patientPrescription->patient_id = $patientId;
+                $patientPrescription->doctor_id = $doctorId;
+                $patientPrescription->hospital_id = $hospitalId;
+                $patientPrescription->prescription_upload_date = $prescriptionAttachVM->getPrescriptionUploadDate();
+                $patientPrescription->created_by = $prescriptionAttachVM->getCreatedBy();
+                $patientPrescription->modified_by = $prescriptionAttachVM->getModifiedBy();
+                $patientPrescription->created_at = $prescriptionAttachVM->getCreatedAt();
+                $patientPrescription->updated_at = $prescriptionAttachVM->getUpdatedAt();
+                $patientPrescription->save();
+
+                foreach ($prescriptionAttachments as $attachment) {
+                    //dd($attachment);
+                    //$uploadPath = $attachment['document_upload_path'];
+                    //$documentContents = File::get($uploadPath);
+
+                    //$documentContents = $attachment->getFileContents();
+
+                    //$documentContents = File::get($attachment);
+                    //dd('after document contents');
+
+                    /*$filename = $uploadPath->getClientOriginalName();
+                    $extension = $uploadPath->getClientOriginalExtension();*/
+
+                    $filename = $attachment->getClientOriginalName();
+                    $extension = $attachment->getClientOriginalExtension();
+
+                    //dd($filename);
+
+                    $randomName = $this->generateUniqueFileName();
+
+                    $documentPath = 'medical_document/' . 'patient_prescription_' . $patientId . '/' . 'patient_prescription_' . $patientId . '_' . $randomName . '.' . $extension;
+                    Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($attachment)));
+                    //Storage::disk($diskStorage)->put($documentPath, file_get_contents($attachment));
+
+                    $patientPrescriptionItems = new PatientPrescriptionAttachmentItems();
+
+                    $patientPrescriptionItems->document_name = $prescriptionAttachVM->getDocumentName();
+                    $patientPrescriptionItems->document_path = $documentPath;
+                    $patientPrescriptionItems->document_filename = $filename;
+                    $patientPrescriptionItems->document_extension = $extension;
+                    $patientPrescriptionItems->document_upload_status = 1;
+                    $patientPrescriptionItems->created_by = $prescriptionAttachVM->getCreatedBy();
+                    $patientPrescriptionItems->modified_by = $prescriptionAttachVM->getModifiedBy();
+                    $patientPrescriptionItems->created_at = $prescriptionAttachVM->getCreatedAt();
+                    $patientPrescriptionItems->updated_at = $prescriptionAttachVM->getUpdatedAt();
+
+                    $patientPrescription->prescriptionattachmentitems()->save($patientPrescriptionItems);
+
+                }
+            }
+        }
+        catch (QueryException $queryEx)
+        {
+            //dd($queryEx);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_UPLOAD_ERROR, $queryEx);
+        }
+        catch (UserNotFoundException $userExc)
+        {
+            //dd($userExc);
+            $status = false;
+            throw new HospitalException(null, $userExc->getUserErrorCode(), $userExc);
+        }
+        catch (Exception $exc)
+        {
+            //dd($exc);
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_UPLOAD_ERROR, $exc);
+        }
+
+        return $status;
     }
 }

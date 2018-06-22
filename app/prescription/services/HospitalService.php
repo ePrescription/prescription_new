@@ -3921,4 +3921,40 @@ class HospitalService {
         return $twoDaysAppointments;
     }
 
+    /**
+     * Upload patient prescription attachments
+     * @param $prescriptionAttachVM
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function uploadPatientPrescriptionApiAttachments($prescriptionAttachVM)
+    {
+        $status = true;
+
+        try
+        {
+            //dd('Inside edit lab in service');
+            DB::transaction(function() use ($prescriptionAttachVM, &$status)
+            {
+                //$status = $this->hospitalRepo->uploadPatientLabDocuments($labDocumentsVM);
+                $status = $this->hospitalRepo->uploadPatientPrescriptionApiAttachments($prescriptionAttachVM);
+            });
+
+        }
+        catch(HospitalException $profileExc)
+        {
+            $status = false;
+            throw $profileExc;
+        }
+        catch (Exception $ex) {
+
+            $status = false;
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_UPLOAD_ERROR, $ex);
+        }
+
+        //return $filePath;
+        return $status;
+    }
 }

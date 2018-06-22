@@ -75,7 +75,6 @@ class LabMapper
                 $labDocumentsVM->setPatientLabDocuments($value);
             }
 
-
         }
 
         $labDocumentsVM->setDocumentName($uploadRequest['document_name']);

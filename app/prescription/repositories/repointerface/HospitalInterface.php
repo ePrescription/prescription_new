@@ -23,6 +23,7 @@ use App\Http\ViewModels\PatientPastIllnessViewModel;
 use App\Http\ViewModels\PatientPersonalHistoryViewModel;
 use App\Http\ViewModels\PatientPrescriptionViewModel;
 use App\Http\ViewModels\PatientProfileViewModel;
+use App\Http\ViewModels\PatientPrescriptionAttachmentViewModel;
 
 use App\Http\ViewModels\PatientPregnancyViewModel;
 use App\Http\ViewModels\PatientScanViewModel;
@@ -244,5 +245,6 @@ interface HospitalInterface {
 
     //Added by Baskar - End
 
+    public function uploadPatientPrescriptionApiAttachments(PatientPrescriptionAttachmentViewModel $prescriptionAttachVM);
 
 }

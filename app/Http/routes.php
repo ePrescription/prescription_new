@@ -728,7 +728,7 @@ Route::group(['prefix' => 'doctor'], function()
         Route::get('rest/api/{hospitalId}/doctor/{doctorId}/feereceipts', array('as' => 'hospital.feereceipts', 'uses' => 'DoctorController@getFeeReceiptsForDoctor'));
         Route::get('rest/api/receipt/{receiptId}/details', array('as' => 'hospital.feereceiptdetails', 'uses' => 'DoctorController@getReceiptDetailsForDoctor'));
 
-
+        Route::post('rest/api/prescriptionattachments', array('as' => 'patient.saveprescriptionattachments', 'uses' => 'DoctorApiController@uploadPatientPrescriptionApiAttachments'));
 
 
     });
