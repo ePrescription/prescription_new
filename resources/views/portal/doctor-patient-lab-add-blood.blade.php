@@ -22,6 +22,7 @@
 </span>
 </div>
 @endif
+
 <!-- form start -->
 
 @if(count($patientBloodTests)>0)
@@ -42,26 +43,70 @@
         <input type="submit" name="addblood" value="Save BloodTest" class="btn btn-success"/>
     </div>
 </div>
-<?php $i=0; ?>
-@foreach($patientBloodTests as $patientBloodTestValue)
-<div class="col-sm-6 form-group">
-<label class="col-sm-8 control-label">{{$patientBloodTestValue->examination_name}}</label>
-<div class="col-sm-4">
-<input type="hidden" class="form-control" name="bloodExaminations[{{$i}}][examinationId]" value="{{$patientBloodTestValue->id}}" required="required" />
-<input type="hidden" class="form-control" name="bloodExaminations[{{$i}}][examinationDate]" id="TestDates" value="{{date('Y-m-d')}}" required="required" />
-<input type="hidden" class="form-control" name="bloodExaminations[{{$i}}][examinationTime]" id="TestTimes" value="{{date('h:i:s')}}" required="required" />
-<div class="radio radio-info radio-inline">
-<input type="radio" id="bloodExaminations{{$patientBloodTestValue->id}}1" value="1" name="bloodExaminations[{{$i}}][isValueSet]">
-<label for="bloodExaminations{{$patientBloodTestValue->id}}1"> Yes </label>
-</div>
-<div class="radio radio-inline">
-<input type="radio" id="bloodExaminations{{$patientBloodTestValue->id}}2" value="0" name="bloodExaminations[{{$i}}][isValueSet]" checked="checked">
-<label for="bloodExaminations{{$patientBloodTestValue->id}}2"> No </label>
-</div>
-</div>
-</div>
-<?php $i++; ?>
-@endforeach
+    <?php
+    $input = $patientBloodTests;
+    $len = count($input);
+    $firsthalf = array_slice($input, 0, $len / 2);
+    $secondhalf = array_slice($input, $len / 2,$len);
+    // dd($firsthalf);
+
+    ?>
+    <div id="main">
+        <div id="d1" align="right">
+            <?php $i = 0; ?>
+            @foreach($firsthalf as $patientBloodTestValue)
+                <label for="exampleInputEmail12">{{$patientBloodTestValue->examination_name}}</label>
+                <input type="hidden" class="form-control"
+                       name="bloodExaminations[{{$i}}][examinationId]"
+                       value="{{$patientBloodTestValue->id}}" required="required"/>
+                <input type="hidden" class="form-control"
+                       name="bloodExaminations[{{$i}}][examinationDate]" id="TestDates"
+                       value="{{date('Y-m-d')}}" required="required"/>
+                <input type="hidden" class="form-control"
+                       name="bloodExaminations[{{$i}}][examinationTime]" id="TestTimes"
+                       value="{{date('h:i:s')}}" required="required"/>
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="bloodExaminations{{$patientBloodTestValue->id}}1"
+                           value="1" name="bloodExaminations[{{$i}}][isValueSet]">
+                    <label for="bloodExaminations{{$patientBloodTestValue->id}}1"> Yes </label>
+                </div>
+                <div class="radio radio-inline">
+                    <input type="radio" id="bloodExaminations{{$patientBloodTestValue->id}}2"
+                           value="0" name="bloodExaminations[{{$i}}][isValueSet]" checked="checked">
+                    <label for="bloodExaminations{{$patientBloodTestValue->id}}2"> No </label>
+                </div>
+                <br/>
+                <?php $i++; ?>
+            @endforeach
+        </div>
+        <div id="d2" align="right">
+            <?php $j1 = $i; ?>
+            @foreach($secondhalf as $patientBloodTestValue1)
+                <label for="exampleInputEmail13">{{$patientBloodTestValue1->examination_name}}</label>
+                <input type="hidden" class="form-control"
+                       name="bloodExaminations[{{$j1}}][examinationId]"
+                       value="{{$patientBloodTestValue1->id}}" required="required"/>
+                <input type="hidden" class="form-control"
+                       name="bloodExaminations[{{$j1}}][examinationDate]" id="TestDates"
+                       value="{{date('Y-m-d')}}" required="required"/>
+                <input type="hidden" class="form-control"
+                       name="bloodExaminations[{{$j1}}][examinationTime]" id="TestTimes"
+                       value="{{date('h:i:s')}}" required="required"/>
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="bloodExaminations{{$patientBloodTestValue1->id}}1"
+                           value="1" name="bloodExaminations[{{$j1}}][isValueSet]">
+                    <label for="bloodExaminations{{$patientBloodTestValue1->id}}1"> Yes </label>
+                </div>
+                <div class="radio radio-inline">
+                    <input type="radio" id="bloodExaminations{{$patientBloodTestValue1->id}}2"
+                           value="0" name="bloodExaminations[{{$j1}}][isValueSet]" checked="checked">
+                    <label for="bloodExaminations{{$patientBloodTestValue1->id}}2"> No </label>
+                </div>
+                <br/>
+                <?php $j1++; ?>
+            @endforeach
+        </div>
+    </div>
 <div class="col-sm-12 form-group">
 <div class="col-sm-4"></div>
 <div class="col-sm-6">
@@ -82,3 +127,23 @@
 </div> <!-- End row -->
 
 </div><!-- container -->
+
+<style>
+    #main{
+        width:800px;
+        height:auto;
+        /*border:1px solid black;*/
+    }
+
+    #d1{
+        float: left;
+        width: 40%;
+        /*border:1px solid red;*/
+    }
+
+    #d2{
+        float: left;
+        width: 40%;
+        /*border:1px solid blue;*/
+    }
+</style>

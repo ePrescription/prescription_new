@@ -32,7 +32,7 @@ $profile_menu="0";
                     <h4 class="page-title">Patient Lab Details</h4>
                 </div>
             </div>
-<br><br>
+>
             <div class="page-content-wrapper ">
 
                 <div class="container">

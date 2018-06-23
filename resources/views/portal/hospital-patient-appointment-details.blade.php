@@ -68,7 +68,7 @@ $profile_menu="0";
                                     </div>
 
                                     <div style="float:right;">
-                                        <a onclick="history.go(-1); return false;" href="#{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->id}}/details">
+                                        <a onclick="history.go(-1); return false;" href="#{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$appointmentDetails['patientProfile'][0]->patient_id}}/details">
                                             <button class="btn btn-info waves-effect waves-light">Back</button>
                                         </a>
                                     </div>
@@ -237,9 +237,10 @@ $profile_menu="0";
 
                                                     </div>
 
-                                                @if($appointmentDetails['appointmentDetails'][0]->referral_type == "External")
+                                                @if($appointmentDetails['appointmentDetails'][0]->referral_type == "External" || $appointmentDetails['appointmentDetails'][0]->referral_type ==2)
+                                                        <div class="col-lg-12" style="width:100%;float:left;">
                                                     <h4 class="m-t-0 m-b-30">Referral Details</h4>
-
+                                                        </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Referral Type</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">

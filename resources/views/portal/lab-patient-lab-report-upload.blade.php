@@ -178,7 +178,7 @@ $profile_menu="0";
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                            <div class="col-md-3 col-sm-3 col-xs-3">
                                                                 <select id="reporttypebox" class="form-control" name="lab_documents[0][test_category_name]" required="required">
                                                                     <option value="Blood">Blood</option>
                                                                     <option value="Motion">Motion</option>
@@ -190,18 +190,21 @@ $profile_menu="0";
                                                                 </select>
 
                                                             </div>
-                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                            <div class="col-md-3 col-sm-3 col-xs-3">
                                                                 <input type="text" class="form-control" name="lab_documents[0][document_name]" placeholder="Report Name" required="required" />
                                                             </div>
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <input type="file" class="form-control" name="lab_documents[0][document_upload_path]" required="required" style="width:80%;float: left;" />
+                                                                <input type="file" class="form-control" id="image" name="lab_documents[0][document_upload_path]" required="required"  style="width:80%;float: left;" />
+
+                                                            </div><div class="col-md-2 col-sm-2 col-xs-2">
+                                                                <button id="cancel" onclick="document.getElementById('image').value =''">cancel</button>
                                                                 <div class="btn btn-primary addButton">+</div>
                                                             </div>
 
                                                         </div>
 
                                                         <div class="form-group remove-doc-box hide" id="symptomTemplate">
-                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                            <div class="col-md-3 col-sm-3 col-xs-3">
                                                                 <select class="form-control" name="report_type">
                                                                     <option value="Blood">Blood</option>
                                                                     <option value="Motion">Motion</option>
@@ -212,11 +215,15 @@ $profile_menu="0";
                                                                     <option value="X-Ray">X-Ray</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                            <div class="col-md-3 col-sm-3 col-xs-3">
                                                                 <input type="text" class="form-control" name="report_name" placeholder="Report Name" />
                                                             </div>
                                                             <div class="col-md-4 col-sm-4 col-xs-4">
-                                                                <input type="file" class="form-control" name="report_document" placeholder="Symptom" style="width:80%;float: left;" />
+                                                                <input type="file" class="form-control" id="image" name="report_document" placeholder="Symptom" style="width:80%;float: left;" />
+                                                            </div>
+
+                                                        <div class="col-md-2 col-sm-2 col-xs-2">
+                                                            <button id="cancel"  onclick="document.getElementById('image').value =''">cancel</button>
                                                                 <div class="btn btn-default removeButton min-button" value="-">-</div>
                                                             </div>
                                                         </div>
@@ -346,7 +353,9 @@ $profile_menu="0";
                         $clone
                                 .find('[name="report_type"]').attr('name', 'lab_documents[' + symptomIndex + '][test_category_name]').end()
                                 .find('[name="report_name"]').attr('name', 'lab_documents[' + symptomIndex + '][document_name]').end()
-                                .find('[name="report_document"]').attr('name', 'lab_documents[' + symptomIndex + '][document_upload_path]').end();
+                                .find('[name="report_document"]').attr('name', 'lab_documents[' + symptomIndex + '][document_upload_path]').end()
+                                .find('[id="image"]').attr('id', 'image' + symptomIndex + '').end()
+                                .find('[id="cancel"]').attr('onclick', 'document.getElementById("image' + symptomIndex + '").value =""').end();
 
 // Add new fields
 

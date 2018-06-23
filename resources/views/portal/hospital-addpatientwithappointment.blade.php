@@ -978,7 +978,7 @@ $time_array=array(
                         type: "get",
                         data: {"id": pid, "status": status},
                         success: function (data) {
-                            alert(data.result[0].married);
+                          //  alert(data.result[0].married);
                             console.log(data);
                             //$("#patienturinediv").html(data);
 
@@ -1058,7 +1058,7 @@ $time_array=array(
                         success: function (data) {
                             var terms = '<option value="" data-doctor="" data-hospital="" data-location="">--Choose Doctor--</option>';
                             $.each(data.result, function (i, val) {
-                                terms += '<option value="' + val.id + '" data-doctor="' + val.doctor_name + '" data-hospital="' + val.hospital_name + '" data-location="' + val.location + '">' + val.doctor_name + '</option>';
+                                terms += '<option value="' + val.doctor_name + '" data-doctor="' + val.doctor_name + '" data-hospital="' + val.hospital_name + '" data-location="' + val.location + '">' + val.doctor_name + '</option>';
                             });
                             $("#referralDoctor").html(terms);
 
@@ -1072,7 +1072,6 @@ $time_array=array(
                     var doctorName = $("#referralDoctor").find(':selected').attr('data-doctor');
                     var hospitalName = $("#referralDoctor").find(':selected').attr('data-hospital');
                     var locationName = $("#referralDoctor").find(':selected').attr('data-location');
-
 
                     $('input#referralHospital').val(hospitalName);
                     $('input#hospitalLocation').val(locationName);
@@ -1358,12 +1357,12 @@ $time_array=array(
                             // by the built-in "email" rule
                             //   email: true
                             //  },
-                            //telephone: {
+                            telephone: {
                             //   required: true,
-                            //     number: true,
-                            //     minlength: 10,
-                            //     maxlength: 10
-                            // },
+                                 number: true,
+                               minlength: 10,
+                               maxlength: 10
+                             },
                             age: {
                                 required: true,
                                 //number: true,
@@ -1385,11 +1384,11 @@ $time_array=array(
                                 lettersonly: "Your name must be characters"
                             },
                             //   email: "Please enter a valid email address",
-                            //  telephone: {
+                             telephone: {
                             //    required: "Please provide a valid mobile number",
-                            //     minlength: "Your mobile number must be 10 characters long",
-                            //   maxlength: "Your mobile number must be 10 characters long"
-                            //},
+                               minlength: "Your mobile number must be 10 characters long",
+                              maxlength: "Your mobile number must be 10 characters long"
+                           },
                             age: "Please provide a valid age",
                             appointmentDate: "Please provide a valid Date",
                             fee: "Please provide a valid Amount"

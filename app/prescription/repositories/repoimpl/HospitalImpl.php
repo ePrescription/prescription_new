@@ -2181,7 +2181,7 @@ class HospitalImpl implements HospitalInterface
             }
             $query->orderBy('da.appointment_date', '=', 'DESC');
             $query->select('p.patient_id', 'p.name as name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
-                'da.id', 'da.id as appointment_id', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time','da.doctor_id','d.name as dname','as.appointment_name');
+                'da.id', 'da.id as appointment_id', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time','da.doctor_id','d.name as dname','as.appointment_name','da.token_id');
 
             //dd($query->toSql());
 
@@ -4773,6 +4773,8 @@ class HospitalImpl implements HospitalInterface
             //$timeQuery->where('pue.is_value_set', '=', 1);
             $timeQuery->select('pue.examination_time');
             $timeQuery->groupBy('pue.examination_time');
+            $timeQuery->orderBy('pue.examination_time', 'DESC');
+
 
             $examinationTime = $timeQuery->get();
 
@@ -4864,7 +4866,13 @@ class HospitalImpl implements HospitalInterface
 
                 //array_push($urineTestDetails, $urineTestRecord);
                 //array_push($urineTestDetails, $urineTests);
+
+                if(!empty($urineTests))
+                {
                 array_push($urineTestDetails, $testArray);
+                    $testArray="";
+                }
+
 
             }
 
@@ -4935,6 +4943,7 @@ class HospitalImpl implements HospitalInterface
             //$timeQuery->where('pme.is_value_set', '=', 1);
             $timeQuery->select('pme.examination_time');
             $timeQuery->groupBy('pme.examination_time');
+            $timeQuery->orderBy('pme.examination_time', 'DESC');
 
             $examinationTime = $timeQuery->get();
 
@@ -4960,7 +4969,7 @@ class HospitalImpl implements HospitalInterface
                 $motionTestQuery->where('pmei.is_value_set', '=', 1);
                 $motionTestQuery->orderBy('me.sequence_by','asc');
 
-                $motionTestQuery->orderBy('pme.examination_time', 'DESC');
+                $motionTestQuery->orderBy('pme.examination_time', 'asc');
                 $motionTestQuery->select('pme.id as patientExaminationId', 'pme.patient_id', 'pme.hospital_id', 'me.id as examinationId',
                     'me.examination_name as examinationName', 'me.normal_default_values as examinationDefaultValue', 'pme.examination_date as examinationDate',
                     'pmei.id as patientExaminationItemId', 'pmei.is_value_set as isValueSet', 'pmei.test_readings as Reading', 'pmei.test_reading_status as ReadingStatus',
@@ -4969,8 +4978,10 @@ class HospitalImpl implements HospitalInterface
                 $motionTests = $motionTestQuery->get();
 
                 //array_push($motionTestDetails, $motionTestRecord);
-                array_push($motionTestDetails, $motionTests);
-
+                if(!empty($motionTests)) {
+                    array_push($motionTestDetails, $motionTests);
+                    $motionTests="";
+                }
             }
             //dd($pregnancyDetails);
         } catch (QueryException $queryEx) {
@@ -4983,7 +4994,7 @@ class HospitalImpl implements HospitalInterface
             //dd($exc);
             throw new HospitalException(null, ErrorEnum::PATIENT_MOTION_DETAILS_ERROR, $exc);
         }
-
+        //dd($motionTestDetails);
         return $motionTestDetails;
     }
 
@@ -5285,7 +5296,12 @@ class HospitalImpl implements HospitalInterface
                 //array_push($patientBloodTests, $latestBloodExamQuery);
                 //array_push($patientBloodTests, $bloodTests);
 
+                if(!empty($bloodTests))
+                {
                 array_push($patientBloodTests, $finalBloodTests);
+                    $finalBloodTests="";
+                }
+
 
             }
 
@@ -5367,6 +5383,8 @@ class HospitalImpl implements HospitalInterface
             //$timeQuery->where('pus.is_value_set', '=', 1);
             $timeQuery->select('pus.examination_time');
             $timeQuery->groupBy('pus.examination_time');
+            $timeQuery->orderBy('pus.examination_time', 'DESC');
+
 
             $examinationTime = $timeQuery->get();
 
@@ -5487,6 +5505,8 @@ class HospitalImpl implements HospitalInterface
             //$timeQuery->where('pme.is_value_set', '=', 1);
             $timeQuery->select('pde.examination_time');
             $timeQuery->groupBy('pde.examination_time');
+            $timeQuery->orderBy('pde.examination_time', 'DESC');
+
 
             //dd($timeQuery->toSql());
 
@@ -5596,6 +5616,8 @@ class HospitalImpl implements HospitalInterface
             //$timeQuery->where('pme.is_value_set', '=', 1);
             $timeQuery->select('pxe.examination_time');
             $timeQuery->groupBy('pxe.examination_time');
+            $timeQuery->orderBy('pxe.examination_time', 'DESC');
+
 
             $examinationTime = $timeQuery->get();
 
@@ -7290,7 +7312,7 @@ class HospitalImpl implements HospitalInterface
             //$latestDentalExamQuery->where('pbe.is_value_set', '=', 1);
             $latestDiagnosisQuery->select('pid.id', 'pid.patient_id',
                 'pid.hospital_id', 'pid.doctor_id', 'pid.investigations', 'pid.examination_findings', 'pid.provisional_diagnosis',
-                'pid.final_diagnosis', 'pid.diagnosis_date', 'pid.treatment_plan_id', 'tt.treatment_type', 'tt.treatment_code');
+                'pid.final_diagnosis', 'pid.diagnosis_date', 'pid.treatment_plan_id', 'tt.treatment_type', 'tt.treatment_code','pid.treatment_plan_notes');
             //dd($latestDentalExamQuery->toSql());
             $diagnosticExaminations = $latestDiagnosisQuery->get();
 

@@ -442,7 +442,7 @@ function searchForId($id, $array,$value) {
     </div>
 
 </div>
-
+<br/><br/><br/><br/>
 separate
 <div id="ExaminationInfoPrint1"  class="form-group">
     @if(count($patientExaminations['recentBloodTests'])>0)
@@ -451,7 +451,7 @@ separate
         <div class="form-group" style="font-family:traditional">
             <div class="col-sm-4" style="width:100%;float:left;">
                 <table style="width:100%;">
-                    <tr><th style="padding-right: 80px;">Test Name</th><th style="padding-right: 80px;" >Test Report</th><th style="padding-right: 50px;"  >Normal Value</th></tr>
+                    <tr><th style="padding-right: 50px;">Test Name</th><th style="padding-left: 80px;" >Test Report</th><th style="padding-left: 50px;"  >Normal Value</th></tr>
                     <tr><th colspan="3"> <div class="form-group" style="color: black;">
                                 <hr/>
                                 <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Blood Test
@@ -480,9 +480,9 @@ separate
                                     {{$recentTest->examination_name}}
                                 </td>
 
-                                <td style="padding-left: 0px; <?php echo searchForId($recentTest->id, $defaultvalues,$recentTest->test_readings)?>">
+                                <td style="padding-left: 130px; <?php echo searchForId($recentTest->id, $defaultvalues,$recentTest->test_readings)?>">
                                     {{$recentTest->test_readings}}{{$recentTest->units}}</td>
-                                <td style="padding-left: 0px;">{{$recentTest->default_normal_values}}</td>
+                                <td style="padding-left: 30px;">{{$recentTest->default_normal_values}}</td>
 
                             </tr>
                     @endforeach
@@ -503,7 +503,7 @@ separate
                     @foreach($patientExaminations['recentMotionExaminations'] as $recentTest)
                         <tr style="font-size: 14px; align-content: center">
                             <td style="width:33%;float:left;">{{$recentTest->examination_name}}</td>
-                            <td style="width:33%;float:left;">{{$recentTest->test_readings}}</td>
+                            <td style="width:50%;float:left;">{{$recentTest->test_readings}}</td>
                             <td style="width:33%;float:left;"></td>
                         </tr>
 
@@ -543,7 +543,7 @@ separate
                                 {{$recentTest->examination_name}}
                             </td>
 
-                            <td style="width:33%;float:left;"> {{$recentTest->test_readings}}</td>
+                            <td style="width:50%;float:left;"> {{$recentTest->test_readings}}</td>
                             <td style="width:33%;float:left;">{{$recentTest->normal_default_values}}</td>
 
                         </tr>

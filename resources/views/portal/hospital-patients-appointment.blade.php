@@ -111,16 +111,18 @@ $profile_menu="0";
                                     <div>
                                         PID ( Patient Identification)
                                     </div>
-                                    <table id="datatable" class="table table-striped table-bordered">
+                                    <div class="table-responsive">
+                                    <table id="datatable"  class="table table-responsive table-bordered" style="width:60%">
                                         <thead>
                                         <tr>
                                             <th style="display: none;">ID</th>
+                                            <th>AppointmentID with Token Number</th>
                                             <th>Patient ID</th>
                                             <th>Patient Name</th>
                                             <th>Mobile No</th>
-                                            <th>Appointment Date</th>
-                                            <th>Appointment To Doctor</th>
-                                            <th>Appointment Status</th>
+                                            <th>Appointment Date&Time</th>
+                                            <th>To Doctor</th>
+                                            <th>Status</th>
                                             <th>Category</th>
                                             <th>Action</th>
                                         </tr>
@@ -130,8 +132,9 @@ $profile_menu="0";
                                              <tr>
                                                  <td style="display: none;">{{$patient->id}}</td>
                                                 <td>
-                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->pid}} </a>
+                                                    <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->appointment_id}}--{{$patient->token_id}} </a>
                                                 </td>
+                                                 <td>{{$patient->pid}}</td>
                                                 <td>{{$patient->name}}</td>
                                                 <td>{{$patient->telephone}}</td>
                                                 <td>{{$patient->appointment_date}} - {{$patient->appointment_time}}</td>
@@ -189,6 +192,7 @@ $profile_menu="0";
                                         @endforeach
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div><!-- /.panel-body -->
                             </div><!-- /.panel -->
 

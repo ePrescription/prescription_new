@@ -7037,7 +7037,7 @@ class DoctorController extends Controller
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
 
             $patientMotionTests = DB::select('select * from motion_examination where status = ? order by sequence_by asc', [1]);
-
+            //dd($patientMotionTests);
         }
         catch(HospitalException $hospitalExc)
         {
@@ -7234,7 +7234,7 @@ class DoctorController extends Controller
             //$generalExaminationDate = \DateTime::createFromFormat('Y-m-d', $examinationDate);
             $examinationDate = date('Y-m-d', strtotime($examinationDate));
             $motionTests = $this->hospitalService->getPatientMotionTests($patientId, $examinationDate);
-            //dd($familyIllness);
+            //dd($motionTests);
 
             if(!is_null($motionTests) && !empty($motionTests))
             {

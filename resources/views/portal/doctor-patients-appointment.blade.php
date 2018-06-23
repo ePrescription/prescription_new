@@ -71,14 +71,16 @@ $profile_menu="0";
                                     <div>
                                         PID ( Patient Identification)
                                     </div>
-                                    <table id="datatable" class="table table-striped table-bordered">
+                                    <div class="table-responsive">
+                                    <table id="datatable" class="table table-responsive table-bordered">
                                         <thead>
                                         <tr>
                                             <th style="display: none;">ID</th>
+                                            <th>AppointmentID with Token Number</th>
                                             <th>Patient ID</th>
                                             <th>Patient Name</th>
                                             <th>Mobile No</th>
-                                            <th>Appointment</th>
+                                            <th>Appointment Date</th>
                                             <th>Category</th>
                                             <th>Action</th>
                                         </tr>
@@ -88,8 +90,9 @@ $profile_menu="0";
                                             <tr>
                                                 <td style="display: none;">{{$patient->id}}</td>
                                                 <td>
-                                                    <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->pid}} </a>
+                                                    <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patient->patient_id}}/details" title="View Profile"> {{$patient->appointment_id}}--{{$patient->token_id}} </a>
                                                 </td>
+                                                <td>{{$patient->pid}}</td>
                                                 <td>{{$patient->name}}</td>
                                                 <td>{{$patient->telephone}}</td>
                                                 <td>{{$patient->appointment_date}} - {{$patient->appointment_time}}</td>
@@ -116,6 +119,7 @@ $profile_menu="0";
                                         @endforeach
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div><!-- /.panel-body -->
                             </div><!-- /.panel -->
 

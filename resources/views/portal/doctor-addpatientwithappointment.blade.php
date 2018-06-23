@@ -1007,12 +1007,12 @@ $time_array=array(
                         // by the built-in "email" rule
                             //   email: true
                             //  },
-                            //telephone: {
+                            telephone: {
                             //   required: true,
-                            //     number: true,
-                            //     minlength: 10,
-                            //     maxlength: 10
-                            // },
+                                number: true,
+                               minlength: 10,
+                                maxlength: 10
+                            },
                     age: {
                         required: true,
                         number: true,
@@ -1034,11 +1034,11 @@ $time_array=array(
                         lettersonly: "Your name must be characters"
                     },
                             //   email: "Please enter a valid email address",
-                            //  telephone: {
+                             telephone: {
                             //    required: "Please provide a valid mobile number",
-                            //     minlength: "Your mobile number must be 10 characters long",
-                            //   maxlength: "Your mobile number must be 10 characters long"
-                            //},
+                                 minlength: "Your mobile number must be 10 characters long",
+                              maxlength: "Your mobile number must be 10 characters long"
+                            },
                     age: "Please provide a valid age",
                     appointmentDate: "Please provide a valid Date",
                             fee: "Please provide a valid Amount"

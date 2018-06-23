@@ -46,6 +46,9 @@ $profile_menu="0";
                                     </div>
 
                                     <?php */ ?>
+                                            <div style="float:right;display:block">
+                                            <button class="btn btn-info waves-effect waves-light" onclick="window.history.back()">Back to Patients List</button>
+                                            </div>
                                             <div class="dropdown">
                                                 <button class="dropbtn"><img src="{{URL::to('/')}}/images/menu.png" width="20"/>Menu</button>
                                                 <div class="dropdown-content">
@@ -62,6 +65,8 @@ $profile_menu="0";
                                                     <a href="{{URL::to('/')}}/lab/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/lab-report-download" title="Lab Report Download"><i class="fa fa-download"></i> Lab Report Download</a>
                                                 </div>
                                             </div>
+
+
 
                                         <div id='DivIdToPrint' style="display:block;">
                                             <h4 class="m-t-0 m-b-30">Patient Lab Receipt Details</h4>
