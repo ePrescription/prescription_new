@@ -22,6 +22,7 @@
 </span>
 </div>
 @endif
+
 <!-- form start -->
 
 @if(count($patientBloodTests)>0)

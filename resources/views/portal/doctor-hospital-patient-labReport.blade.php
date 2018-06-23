@@ -460,7 +460,7 @@ function searchForId($id, $array,$value) {
 
 ?>
 
-
+<br/><br/><br/>
 separate
 <div id="ExaminationInfoPrint1"  class="form-group">
 
@@ -499,9 +499,9 @@ separate
                                     {{$recentTest->examination_name}}
                                 </td>
 
-                                <td style="padding-left: 0px; font-weight: <?php echo searchForId($recentTest->id, $defaultvalues,$recentTest->test_readings)?>">
+                                <td style="padding-left: 130px; <?php echo searchForId($recentTest->id, $defaultvalues,$recentTest->test_readings)?>">
                                     {{$recentTest->test_readings}}{{$recentTest->units}}</td>
-                                <td style="padding-left: 0px;">{{$recentTest->default_normal_values}}</td>
+                                <td style="padding-left: 30px;">{{$recentTest->default_normal_values}}</td>
 
                             </tr>
                     @endforeach
@@ -523,7 +523,7 @@ separate
                     @foreach($patientExaminations['recentMotionExaminations'] as $recentTest)
                         <tr style="font-size: 14px; align-content: center">
                             <td style="width:33%;float:left;">{{$recentTest->examination_name}}</td>
-                            <td style="width:33%;float:left;">{{$recentTest->test_readings}}</td>
+                            <td style="width:50%;float:left;">{{$recentTest->test_readings}}</td>
                             <td style="width:33%;float:left;"></td>
                         </tr>
 
@@ -564,7 +564,7 @@ separate
                                 {{$recentTest->examination_name}}
                             </td>
 
-                            <td style="width:33%;float:left;"> {{$recentTest->test_readings}}</td>
+                            <td style="width:50%;float:left;"> {{$recentTest->test_readings}}</td>
                             <td style="width:33%;float:left;">{{$recentTest->normal_default_values}}</td>
 
                         </tr>

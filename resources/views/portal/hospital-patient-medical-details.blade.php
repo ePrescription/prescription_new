@@ -163,17 +163,17 @@ $profile_menu="0";
                                                 </div>
                                                 <div class="form-group col-sm-12" style="width: 100%;">
                                                     @foreach($patientExaminations['recentComplaints'] as $recentTest)
-                                                        <div class="col-sm-6" style="width:50%;float:left;">
+                                                    <div class="col-sm-6" style="width:80%;float:left;">
 
-                                                           ComplaintType:: {{$recentTest->complaintType}} &nbsp;&nbsp;&nbsp;&nbsp; ComplaintName:: {{$recentTest->complaint_name}}
+                                                           ComplaintType:: {{$recentTest->complaintType}} &nbsp;&nbsp;&nbsp;&nbsp; <br/> ComplaintName:: {{$recentTest->complaint_name}}
                                                             <br/>
-                                                            &nbsp;&nbsp;&nbsp;&nbsp;Notes:: {{$recentTest->complaint_text}}
+                                                           Notes:: {{$recentTest->complaint_text}}
 
                                                         </div>
                                                     @endforeach
                                                 </div>
 
-                                                <br/><br/>
+                                            <br/><br/><br/><br/>
                                             @endif
 
                                             @if(count($patientExaminations['recentGeneralTests'])>0)

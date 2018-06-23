@@ -71,7 +71,8 @@ $profile_menu="0";
                                     <div>
                                         PID ( Patient Identification)
                                     </div>
-                                    <table id="datatable" class="table table-striped table-bordered">
+                                    <div class="table-responsive">
+                                    <table id="datatable" class="table table-responsive table-bordered">
                                         <thead>
                                         <tr>
                                             <th style="display: none;">ID</th>

@@ -242,8 +242,10 @@ $profile_menu="0";
 
                                                     </div>
 
-                                                @if($appointmentDetails['appointmentDetails'][0]->referral_type == "External")
+                                                @if($appointmentDetails['appointmentDetails'][0]->referral_type == "External" ||$appointmentDetails['appointmentDetails'][0]->referral_type ==2)
+                                                        <div class="col-lg-12" style="width:100%;float:left;">
                                                     <h4 class="m-t-0 m-b-30">Referral Details</h4>
+                                                        </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Referral Type</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">

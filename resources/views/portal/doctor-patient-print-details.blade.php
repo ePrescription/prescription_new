@@ -300,11 +300,11 @@ $profile_menu="0";
                                                 </div>
                                                 <div class="form-group col-sm-12" style="width: 100%;">
                                                     @foreach($patientExaminations['recentComplaints'] as $recentTest)
-                                                        <div class="col-sm-6" style="width:50%;float:left;">
+                                                    <div class="col-sm-6" style="width:90%;float:left;">
 
-                                                            ComplaintType:: {{$recentTest->complaintType}} &nbsp;&nbsp;&nbsp;&nbsp; ComplaintName:: {{$recentTest->complaint_name}}
+                                                            ComplaintType:: {{$recentTest->complaintType}}  <br/> ComplaintName:: {{$recentTest->complaint_name}}
                                                             <br/>
-                                                            &nbsp;&nbsp;&nbsp;&nbsp;Notes:: {{$recentTest->complaint_text}}
+                                                            Notes:: {{$recentTest->complaint_text}}
 
                                                         </div>
                                                     @endforeach
@@ -410,7 +410,7 @@ $profile_menu="0";
                                                     @foreach($patientExaminations['recentSymptoms'] as $recentTest)
                                                         <div class="col-sm-12" style="width:100%;float:left;">
 
-                                                            MainSymptom:: {{$recentTest->main_symptom_name}} &nbsp;&nbsp;&nbsp;&nbsp;Sub-Symptom:: {{$recentTest->sub_symptom_name}} &nbsp;&nbsp;&nbsp;&nbsp;Symptom:: {{$recentTest->symptom_name}}
+                                                            MainSymptom:: {{$recentTest->main_symptom_name}}  <br/>Sub-Symptom:: {{$recentTest->sub_symptom_name}}  <br/>Symptom:: {{$recentTest->symptom_name}}
 
                                                         </div>
                                                     @endforeach
@@ -427,7 +427,7 @@ $profile_menu="0";
                                                 </div>
                                                 <div class="form-group col-sm-12">
                                                     @foreach($patientExaminations['recentDrugHistory'] as $recentTest)
-                                                        <div class="col-sm-6" style="width:50%;float:left;">
+                                                    <div class="col-sm-6" style="width:80%;float:left;">
 
                                                             DrugName:: {{$recentTest->drug_name}}  &nbsp;&nbsp;&nbsp;&nbsp;Drug Dosage::  {{$recentTest->dosage}}  &nbsp;&nbsp;&nbsp;&nbsp;Drug Timing:: {{$recentTest->timings}}
 
@@ -446,8 +446,8 @@ $profile_menu="0";
                                                 </div>
                                                 <div class="form-group col-sm-12" style="width: 100%;">
                                                     @foreach($patientExaminations['recentSurgeryHistory'] as $recentTest)
-                                                        <div class="col-sm-6" style="width:50%;float:left;">
-                                                            Past Surgery:: {{$recentTest->patient_surgeries==" " ? " ":$recentTest->patient_surgeries}} &nbsp;&nbsp;&nbsp;&nbsp; Surgery Date:: {{$recentTest->surgery_input_date=="0000-00-00"? " " :$recentTest->surgery_input_date }}
+                                                    <div class="col-sm-6" style="width:80%;float:left;">
+                                                            Past Surgery:: {{$recentTest->patient_surgeries==" " ? " ":$recentTest->patient_surgeries}} <br/> Surgery Date:: {{$recentTest->surgery_input_date=="0000-00-00"? " " :$recentTest->surgery_input_date }}
                                                         </div>
                                                     @endforeach
                                                 </div>
