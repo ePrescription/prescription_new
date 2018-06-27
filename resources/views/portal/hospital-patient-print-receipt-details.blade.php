@@ -113,42 +113,42 @@ $profile_menu = "0";
 
 
 
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label"
                                                                style="width:30%;float:left;">PID</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->pid}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label"
                                                                style="width:30%;float:left;">Name</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->name}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label"
                                                                style="width:30%;float:left;">Number</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->telephone}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label"
                                                                style="width:30%;float:left;">E-Mail</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->email}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label"
                                                                style="width:30%;float:left;">Age</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->age}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label"
                                                                style="width:30%;float:left;">Gender</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
@@ -156,7 +156,7 @@ $profile_menu = "0";
                                                         </div>
                                                     </div>
                                                     <div class="hidden form-group col-md-4"
-                                                         style="width:33%;float:left;">
+                                                         style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label"
                                                                style="width:30%;float:left;">Relationship</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
@@ -164,16 +164,17 @@ $profile_menu = "0";
                                                         </div>
                                                     </div>
                                                     <div class="hidden form-group col-md-4"
-                                                         style="width:33%;float:left;">
-                                                        <label class="col-sm-6 control-label"
+                                                         style="width:50%;float:left;">
+                                                        <label class="col-sm-3 control-label"
                                                                style="width:30%;float:left;">Relation Name</label>
-                                                        <div class="col-sm-6" style="width:70%;float:left;">
+                                                        <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->spouseName}}
                                                         </div>
                                                     </div>
 
                                                 </div>
                                             </div>
+                                            <br/>
 
                                             <div class="container">
 
@@ -539,22 +540,7 @@ $profile_menu = "0";
                                                                 </table>
                                                             </div>
 
-                                                                <div class="form-group">
-                                                                    <div class="col-sm-4"></div>
-                                                                    <div class="col-sm-6">
-                                                                        <input style="float:left;" type="submit" name="addreceipt" value="Print Receipt"
-                                                                               class="btn btn-success" onclick="javascript:printDiv();"/>
 
-
-                                                                        <div style="float:left;margin:0px 20px;">
-                                                                            <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/labreceipts">
-                                                                                <button type="button" class="btn btn-warning waves-effect waves-light">Cancel</button>
-                                                                            </a>
-                                                                        </div>
-                                                                        <input type="button" id="payment" class="btn btn-warning" onclick="view()" value="View Payment History">
-
-                                                                    </div>
-                                                                </div>
                                                         </div> <!-- panel-body -->
                                                     </div> <!-- panel -->
                                                 </div> <!-- col -->
@@ -566,9 +552,28 @@ $profile_menu = "0";
                                     </div>
 
 
-                                </div> <!-- panel-body -->
-                            </div> <!-- panel -->
-                        </div> <!-- col -->
+                               <!-- panel-body -->
+                            <!-- panel -->
+
+                            <div class="form-group">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-6">
+                                    <input style="float:left;" type="submit" name="addreceipt" value="Print Receipt"
+                                           class="btn btn-success" onclick="javascript:printDiv();"/>
+
+
+                                    <div style="float:left;margin:0px 20px;">
+                                        <a href="{{URL::to('/')}}/fronthospital/rest/api/{{Auth::user()->id}}/patient/{{$patientDetails[0]->patient_id}}/labreceipts">
+                                            <button type="button" class="btn btn-warning waves-effect waves-light">Cancel</button>
+                                        </a>
+                                    </div>
+                                    <input type="button" id="payment" class="btn btn-warning" onclick="view()" value="View Payment History">
+
+                                </div>
+                            </div>
+                                    </div>
+                                </div>  <!-- col -->
+                            </div>
                     </div> <!-- End row -->
 
                 </div><!-- container -->
@@ -664,6 +669,7 @@ $profile_menu = "0";
         function printDiv() {
             var divToPrint = document.getElementById('DivIdToPrint');
             var newWin = window.open('', 'Print-Window');
+            document.getElementById("divprint").style.display="block";
             newWin.document.open();
             newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
             newWin.document.close();

@@ -42,11 +42,11 @@
                 <i class="fa fa-pencil-square-o"></i> <span>Prescriptions</span>
             </a>
         </li>
-        <li class="@if($patient_menu==1) active @endif treeview">
-            <a href="{{URL::to('/')}}/pharmacy/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">
-                <i class="fa fa-users"></i> <span>Patients</span>
-            </a>
-        </li>
+        {{--<li class="@if($patient_menu==1) active @endif treeview">--}}
+            {{--<a href="{{URL::to('/')}}/pharmacy/rest/api/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients">--}}
+                {{--<i class="fa fa-users"></i> <span>Patients</span>--}}
+            {{--</a>--}}
+        {{--</li>--}}
         </ul>
         </div>
 

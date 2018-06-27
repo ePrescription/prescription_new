@@ -73,9 +73,9 @@ $profile_menu="0";
                                             <table id="datatable" class="table table-striped table-bordered">
                                             <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th>Appointment ID</th>
                                                 <th>Patient ID</th>
-                                                <th>Name in Full</th>
+                                                <th>Patient Name</th>
                                                 <th>Mobile No</th>
                                                 <th>Age</th>
                                                 <th>Gender</th>
