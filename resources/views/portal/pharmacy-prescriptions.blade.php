@@ -72,11 +72,11 @@ $profile_menu="0";
                                     <table id="datatable" class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>PRID</th>
-                                    <th>PID</th>
-                                    <th>PATIENT</th>
-                                    <th>DATE</th>
+                                    <th>Appointment ID</th>
+                                    <th>Prescription ID</th>
+                                    <th>Patient ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Date</th>
                                     <th></th>
                                 </tr>
                                 </thead>

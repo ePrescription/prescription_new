@@ -88,49 +88,49 @@ $profile_menu="0";
                                                 <div class="col-lg-10">
 
 
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">PID</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->pid}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Name</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->name}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Number</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->telephone}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">E-Mail</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->email}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Age</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->age}}
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Gender</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             @if($patientDetails[0]->gender==1) Male @else Female @endif
                                                         </div>
                                                     </div>
-                                                    <div class="hidden form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="hidden form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Relationship</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->relationship}}
                                                         </div>
                                                     </div>
-                                                    <div class="hidden form-group col-md-4" style="width:33%;float:left;">
+                                                    <div class="hidden form-group col-md-4" style="width:50%;float:left;">
                                                         <label class="col-sm-6 control-label" style="width:30%;float:left;">Relation Name</label>
                                                         <div class="col-sm-6" style="width:70%;float:left;">
                                                             {{$patientDetails[0]->spouseName}}
@@ -160,7 +160,7 @@ $profile_menu="0";
                                                                         <?php $i=0; ?>
                                                                         <h4 class="m-t-0 m-b-30">Blood Test</h4>
                                                                         <div class="table-responsive">
-                                                                            <table class="table">
+                                                                            <table class="table table-bordered">
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th>TEST NAME</th>
@@ -382,7 +382,7 @@ $profile_menu="0";
                                                                         <?php $i=0; ?>
                                                                         <h4 class="m-t-0 m-b-30">X-Ray Test</h4>
                                                                         <div class="table-responsive">
-                                                                            <table class="table" style="width: 50%;">
+                                                                            <table class="table">
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th>TEST NAME</th>
@@ -487,15 +487,16 @@ $profile_menu="0";
             });
         });
 
-        function printDiv()
-        {
+        function printDiv() {
             var divToPrint=document.getElementById('DivIdToPrint');
             var newWin=window.open('','Print-Window');
+           // document.getElementById("divprint").style.display="block";
             newWin.document.open();
             newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
             newWin.document.close();
-            setTimeout(function(){newWin.close();},10);
+            setTimeout(function () {
+                newWin.close();
+            }, 600);
         }
-
     </script>
 @stop

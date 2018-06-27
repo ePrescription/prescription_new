@@ -57,7 +57,7 @@ $profile_menu="0";
 
             <table   style='border-collapse: collapse;width:400px;height:180px;border-color:black;' >
                 <tr bgcolor='#063751' style='color:white;font-size:10px; border-bottom: dotted 1px #000;'>
-                    <th colspan='7'><center>Patient Lable<span></span></center> </th>
+                    <th colspan='7'><center>Patient Label<span></span></center> </th>
                 </tr>
 
                 <tr class="b" style='font-size:10px;  border-bottom: dotted 1px #000''>
@@ -115,7 +115,7 @@ $profile_menu="0";
             <table   style='border-collapse: collapse;width:400px;height:180px;border-color:black;' >
                 <tr bgcolor='#063751' style='color:white;font-size:10px'>
                     <th colspan='7' >
-                        <center>Attendant Lable<span></span></center>
+                        <center>Attendant Label<span></span></center>
                     </th>
                 </tr>
                 <tr style='font-size:10px; border-bottom: dotted 1px #000'>

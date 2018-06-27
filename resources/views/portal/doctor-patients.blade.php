@@ -77,7 +77,7 @@ $profile_menu="0";
                                                 <thead>
                                                 <tr>
                                                     <th style="display: none;">ID</th>
-                                                    <th>PID</th>
+                                                    <th>Patient ID</th>
                                                     <th>Patient Name</th>
                                                     <th>Mobile No</th>
                                                     <th>Age</th>

@@ -164,16 +164,20 @@ $profile_menu="0";
                                                     <label class="col-sm-12 control-label" style="width: 100%;font-weight: bolder">Complaints - {{$patientExaminations['recentComplaints'][0]->complaint_date}}</label>
                                                 </div>
                                                 <div class="form-group col-sm-12" style="width: 100%;">
+                                                    <?php $Same="";?>
                                                     @foreach($patientExaminations['recentComplaints'] as $recentTest)
                                                         <div class="col-sm-6" style="width:50%;float:left;">
 
                                                            ComplaintType:: {{$recentTest->complaintType}}
                                                             <br/> ComplaintName:: {{$recentTest->complaint_name}}
                                                             <br/>
-                                                            Notes:: {{$recentTest->complaint_text}}
 
+                                                            @if($Same=="" || $Same==$recentTest->complaint_text)
+                                                                <?php $Same=$recentTest->complaint_text ;?>
+                                                            @endif
                                                         </div>
                                                     @endforeach
+                                                        Notes:: {{$Same}}
                                                 </div>
 
                                                 <br/><br/>
