@@ -242,9 +242,11 @@ interface HospitalInterface {
     /* Function to get the doctor appointments for the next two days from current date. This is for doctors in case of offline*/
 
     public function getApiTwoDaysDoctorAppointments($hospitalId, $doctorId);
+    public function uploadPatientPrescriptionApiAttachments(PatientPrescriptionAttachmentViewModel $prescriptionAttachVM);
+    public function getPatientPrescriptionApiAttachments($hospitalId, $patientId);
+    public function downloadPatientPrescriptionAttachments($attachmentId);
 
     //Added by Baskar - End
 
-    public function uploadPatientPrescriptionApiAttachments(PatientPrescriptionAttachmentViewModel $prescriptionAttachVM);
 
 }
