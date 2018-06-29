@@ -3,7 +3,11 @@
 @section('title', 'ePrescription and Lab Tests Application')
 
 @section('styles')
-    <style>.tab-pane { min-height: 300px; }</style>
+    <style>.tab-pane { min-height: 300px; }
+    .table{
+        width: 110%;
+    }
+    </style>
 @stop
 <?php
 $dashboard_menu="0";
@@ -266,7 +270,7 @@ $profile_menu="0";
 
 
 
-                                                                    <table class="table" id="POITable">
+                                                                    <table class="table table-striped" id="POITable" style="max-width: 120%;">
                                                         <thead>
                                                         <tr>
                                                                     <th>TRADE</th>
@@ -283,7 +287,7 @@ $profile_menu="0";
 
                                                             <tr>
 
-                                                                      <td style="width:20%;">
+                                                                      <td style="width:40%;">
 
                                                                           <input type="text" class="form-control tradeName" onselect="changeValues(this,0);" onchange="changeValues(this,0);" name=""  list="result"   id="trade0" onkeyup="load(this)" required="required" style="width:100%;" />
 
@@ -294,13 +298,13 @@ $profile_menu="0";
                                                                                 <option value="">--CHOOSE PATIENT--</option>
                                                                             </select>-->
                                                                         </td>
-                                                                        <td style="width:20%;"> <input type="text" class="form-control formulation" name="drugs[0][fomulationId]" list="result" id="formulation0" onselect="changeValues1(this,0)" onchange="changeValues1(this,0)"   onkeyup="load(this)" required="required" readonly="readonly" style="width:100%; text-transform: uppercase;" /></td>
+                                                                        <td style="width:40%;"> <input type="text" class="form-control formulation" name="drugs[0][fomulationId]" list="result" id="formulation0" onselect="changeValues1(this,0)" onchange="changeValues1(this,0)"   onkeyup="load(this)" required="required" readonly="readonly" style="width:100%; text-transform: uppercase;" /></td>
                                                                         <datalist style="display: none" id="result" data-size="1" ></datalist>
 
-                                                                        <td style="width:10%;"><input type="text"  value="WEB" name="drugs[0][intakeForm]" id="type0"  readonly style="width:100%;" ></td>
-                                                                        <td style="width:10%;"><input type="text"  name="drugs[0][dosage]" id="dosage0" style="width:100%;" ></td>
-                                                                        <td style="width:10%;"><input type="number"  name="drugs[0][noOfDays]" id="days0" style="width:100%;"  min="0" required></td>
-                                                                        <td style="width:20%;"><input type="checkbox" class="form-controlx"  id="morningId0" name="drugs[0][morning]" value="1"   />M
+                                                                        <td style="width:10%;"><input type="text"  value="WEB" name="drugs[0][intakeForm]" id="type0"  readonly style="width:110%;" ></td>
+                                                                        <td style="width:10%;"><input type="text"  name="drugs[0][dosage]" id="dosage0" style="width:110%;" ></td>
+                                                                        <td style="width:10%;"><input type="number"  name="drugs[0][noOfDays]" id="days0" style="width:150%;"  min="0" required></td>
+                                                                        <td style="width:20%; padding: 15px 5px;"><input type="checkbox" class="form-controlx"  id="morningId0" name="drugs[0][morning]" value="1"   />M
 
                                                                             <input type="checkbox" class="form-controlx"  id="afternoonId0" name="drugs[0][afternoon]" value="1" />A
 
@@ -342,11 +346,11 @@ $profile_menu="0";
                                                                             <td style="width:20%;" ><input type="text" onselect="changeValues(this,0)" onchange="changeValues(this,0)" class="form-control tradeName" name="trade" style="width:100%;" list="result" required="required"  id="trade"  onkeyup="load(this)" />
 
                                                                             </td>
-                                                                            <td style="width:20%;"><input type="text" class="form-control formulation" name="formulation" onselect="changeValues1(this,0)" onchange="changeValues1(this,0)"  list="result"  style="width:100%;" id="formulation" onkeyup="load(this)"   required="required"/></td>
-                                                                            <td style="width:10%;"><input type="text"  value="" name="type" id="type" style="width:100%;" readonly ></td>
+                                                                            <td style="width:30%;"><input type="text" class="form-control formulation" name="formulation" onselect="changeValues1(this,0)" onchange="changeValues1(this,0)"  list="result"  style="width:100%;" id="formulation" onkeyup="load(this)"   required="required"/></td>
+                                                                            <td style="width:30%;"><input type="text"  value="" name="type" id="type" style="width:100%;" readonly ></td>
                                                                             <td style="width:10%;"><input type="text"  name="dosage" id="dosage" style="width:100%;" ></td>
-                                                                            <td style="width:10%;"><input type="number" id="days"  name="days" style="width:100%;"  min="0" required></td>
-                                                                            <td style="width:20%;">
+                                                                            <td style="width:10%;"><input type="number" id="days"  name="days" style="width:150%;"  min="0" required></td>
+                                                                            <td style="width:20%; padding: 15px 5px;">
                                                                                 <input type="checkbox" class="form-controlx"  id="morningId" name="morning" value="1"  />M
                                                                                 <input type="checkbox" class="form-controlx" id="afternoonId" name="afternoon" value="1"   />A
                                                                                 <input type="checkbox" class="form-controlx"  id="nightId" name="night" value="1" />N
@@ -496,11 +500,14 @@ $profile_menu="0";
                                        // Set the value using the item in the JSON array.
                                         option.value = element['tradeId'];
                                      //  alert(element['tradeName']);
-                                       option.text = element['tradeName'];
+
+                                       var p=element['tradeName']+"-"+element['formulationName']+"-"+element['dosage_amount']+""+ element['quantity']+"-"+element['dispensing_form'];
+
+                                       option.text =p;
                                        option.brandId = element['tradeId'];
                                        option.drugId = element['formulationId'];
                                        option.dispensing_form = element['dispensing_form'];
-                                       option.dosage_amount = element['dosage_amount'] + " " + element['quantity'];
+                                       option.dosage_amount = element['dosage_amount'];
                                        option.formulationName = element['formulationName'];
                                        dataList.append(option);
 
@@ -520,7 +527,7 @@ $profile_menu="0";
                        type: 'GET',
                        //url: '/vistara/ajax-chosen-master/data.json',
                        ///url: '/treatin-web-app/public/ajaxGetCountry',
-                       url: '{{ URL::to('/') }}/hospital/rest/api/formulations',
+                       url: '{{ URL::to('/') }}/hospital/rest/api/brands',
                        dataType: 'json',
                        data: {formulations: key.value},
 
@@ -537,11 +544,11 @@ $profile_menu="0";
                                           var option = document.createElement('option');
                                        // Set the value using the item in the JSON array.
                                        option.value = element['tradeId'];
-                                       option.text = element['formulationName'];
+                                       option.text =element['tradeName']+"-"+element['formulationName']+"-"+element['dosage_amount']+""+ element['quantity']+"-"+element['dispensing_form'];
                                        option.brandId = element['tradeId'];
                                        option.drugId = element['formulationId'];
                                        option.dispensing_form = element['dispensing_form'];
-                                       option.dosage_amount = element['dosage_amount'] + " " + element['quantity'];
+                                       option.dosage_amount = element['dosage_amount'];
                                        option.formulationName = element['formulationName'];
                                        dataList.append(option);
                                    });
@@ -574,8 +581,10 @@ $profile_menu="0";
                   // alert(options[i].value+"=="+key.value);
                    if (options[i].brandId == input.value)
                    {
+                       var a=options[i].text.split("-");
+                       //alert(a);
 
-                       $("#trade"+indx).val(options[i].text);
+                       $("#trade"+indx).val(a[0]);
                        $("#drug"+indx).val(options[i].drugId);
                        $("#formulation"+indx).val(options[i].formulationName);
                        $("#type"+indx).val(options[i].dispensing_form);
@@ -600,7 +609,10 @@ $profile_menu="0";
                    if (options[i].brandId == input.value)
                    {
 
-                       $("#trade"+indx).val(options[i].text);
+                       var a=options[i].text.split("-");
+                      //alert(a);
+
+                       $("#trade"+indx).val(a[0]);
                        $("#drug"+indx).val(options[i].drugId);
                        $("#formulation"+indx).val(options[i].formulationName);
                        $("#type"+indx).val(options[i].dispensing_form);

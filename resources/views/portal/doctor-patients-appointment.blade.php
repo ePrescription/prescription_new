@@ -76,7 +76,7 @@ $profile_menu="0";
                                         <thead>
                                         <tr>
                                             <th style="display: none;">ID</th>
-                                            <th>AppointmentID with Token Number</th>
+                                            <th>AppointmentID-TokenID</th>
                                             <th>Patient ID</th>
                                             <th>Patient Name</th>
                                             <th>Mobile No</th>
