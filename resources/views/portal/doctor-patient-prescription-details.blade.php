@@ -287,7 +287,7 @@ $profile_menu="0";
 
                                                                           <input type="text" class="form-control tradeName" onselect="changeValues(this,0);" onchange="changeValues(this,0);" name=""  list="result"   id="trade0" onkeyup="load(this)" required="required" style="width:100%;" />
 
-                                                                          <datalist style="display: none" id="result" data-size="1" ></datalist>
+                                                                          <datalist style="display: none; font-size: 1.5em;" id="result" data-size="1" ></datalist>
                                                                     <!--     <td style="width:20%;">
 
                                                                             <select id="trade0" name="trade0" class="form-control " onkeyup="load(this)" style="display: block;">

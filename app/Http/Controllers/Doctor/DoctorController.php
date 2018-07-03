@@ -3322,7 +3322,7 @@ class DoctorController extends Controller
 
                     for ($i = 0; $i < $eVdiff; $i++) {
 
-                        $time_array[date('H:i:s', $Evftime + (300 * $i))] = date('h:i a', $Evttime + (300 * $i));
+                        $time_array[date('H:i:s', $Evttime + (300 * $i))] = date('h:i a', $Evftime + (300 * $i));
 
                         //dd($time_array);
                     }

@@ -749,7 +749,7 @@ $time_array=array(
                         success: function (data) {
                             var terms = '<option value="" data-doctor="" data-hospital="" data-location="">--Choose Doctor--</option>';
                             $.each(data.result, function (i, val) {
-                                terms += '<option value="'+val.id+'" data-doctor="'+val.doctor_name+'" data-hospital="'+val.hospital_name+'" data-location="'+val.location+'">'+val.doctor_name+'</option>';
+                                terms += '<option value="'+val.doctor_name+'" data-doctor="'+val.doctor_name+'" data-hospital="'+val.hospital_name+'" data-location="'+val.location+'">'+val.doctor_name+'</option>';
                             });
                             $("#referralDoctor").html(terms);
 
