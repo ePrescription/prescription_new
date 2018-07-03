@@ -10322,9 +10322,9 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
 
         try
         {
-            $prescriptionAttachVM = PatientProfileMapper::setPatientPrescriptionAttachments($prescriptionRequest);
-            $status = $this->hospitalService->uploadPatientPrescriptionAttachments($prescriptionAttachVM);
-            dd('Attachments saved');
+            $prescriptionAttachVM = PatientProfileMapper::setPatientPrescriptionApiAttachments($prescriptionRequest);
+            $status = $this->hospitalService->uploadPatientPrescriptionApiAttachments($prescriptionAttachVM);
+            //dd('Attachments saved');
 
             /*if($status)
             {

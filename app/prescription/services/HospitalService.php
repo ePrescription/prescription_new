@@ -3957,4 +3957,60 @@ class HospitalService {
         //return $filePath;
         return $status;
     }
+
+    /**
+     * Get patient prescription attachments
+     * @param $hospitalId, $patientId
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Baskar
+     */
+
+    public function getPatientPrescriptionApiAttachments($hospitalId, $patientId)
+    {
+        $prescriptionAttachments = null;
+
+        try
+        {
+            $prescriptionAttachments = $this->hospitalRepo->getPatientPrescriptionApiAttachments($hospitalId, $patientId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_LIST_ERROR, $exc);
+        }
+
+        return $prescriptionAttachments;
+    }
+
+    /**
+     * Download patient prescription attachments
+     * @param $attachmentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientPrescriptionAttachments($attachmentId)
+    {
+        $attachment = null;
+
+        try
+        {
+            $attachment = $this->hospitalRepo->downloadPatientPrescriptionAttachments($attachmentId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_DOWNLOAD_ERROR, $exc);
+        }
+
+        return $attachment;
+    }
 }

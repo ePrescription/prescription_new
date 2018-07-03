@@ -382,4 +382,11 @@
         "909" => "Unable to upload patient prescription attachmentss",
         "910" => "Successfully uploaded patient prescription attachments",
 
+        "911" => "Sorry, unable to get patient prescription attachments",
+        "912" => "Successfully retrieved patient prescription attachments",
+        "913" => "No patient prescription attachments available for the patient",
+
+        "914" => "Unable to download patient prescription attachments",
+        "915" => "Successfully downloaded patient prescription attachments",
+
     ];

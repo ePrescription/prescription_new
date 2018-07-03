@@ -4026,4 +4026,108 @@ class DoctorApiController extends Controller
 
         return $responseJson;
     }
+
+    /**
+     * Get patient prescription attachments
+     * @param $hospitalId, $patientId
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Baskar
+     */
+
+    public function getPatientPrescriptionApiAttachments($hospitalId, $patientId)
+    {
+        $prescriptionAttachments = null;
+        $responseJson = null;
+        //$jsonResponse = null;
+
+        try
+        {
+            //$prescriptionDetails = HospitalServiceFacade::getPrescriptionDetails($prescriptionId);
+            $prescriptionAttachments = $this->hospitalService->getPatientPrescriptionApiAttachments($hospitalId, $patientId);
+
+            if(!empty($prescriptionAttachments))
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_LIST_SUCCESS));
+                $responseJson->setCount(sizeof($prescriptionAttachments));
+            }
+            else
+            {
+                $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_NO_PRESCRIPTION_ATTACHMENT_LIST));
+            }
+
+            $responseJson->setObj($prescriptionAttachments);
+            $responseJson->sendSuccessResponse();
+
+            /*$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::PRESCRIPTION_DETAILS_SUCCESS));
+            $jsonResponse->setObj($prescriptionDetails);*/
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_LIST_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_LIST_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        //return $jsonResponse;
+        return $responseJson;
+    }
+
+    /**
+     * Download patient prescription attachments
+     * @param $attachmentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientPrescriptionAttachments($attachmentId)
+    {
+        $attachment = null;
+        $contents = null;
+        $filePath = null;
+        $path =  Config::get('constants.STORAGE_BASE_PATH');
+        //$path =  'http://localhost:8082/prescription_new/storage/app/';
+        $diskStorage = env('DISK_STORAGE');
+
+        try
+        {
+            $attachment = $this->hospitalService->downloadPatientPrescriptionAttachments($attachmentId);
+            //dd($attachment->document_path);
+            //dd($filePath);
+
+            if(!is_null($attachment))
+            {
+                $filePath = $path.$attachment->document_path;
+                //dd($filePath);
+                //$file = Storage::disk($diskStorage)->get($document->document_path);
+                $contents = Crypt::decrypt(Storage::disk($diskStorage)->get($attachment->document_path));
+
+                //$file = Storage::disk('s3')->get($entry->document_upload_path);
+                //$contents = Crypt::decrypt($file);
+
+                //return response()->download()
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.$hospitalExc->getUserErrorCode()));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_DOWNLOAD_ERROR));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return response()->make($contents, 200, array(
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . pathinfo($filePath, PATHINFO_BASENAME) . '"'
+        ));
+    }
 }

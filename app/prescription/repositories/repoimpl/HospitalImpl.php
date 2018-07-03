@@ -12115,7 +12115,7 @@ class HospitalImpl implements HospitalInterface
 
     /**
      * Gets Latest Patient token_Id based on doctor and hospital
-     * @param $hospitalId ,$doctorId
+     * @param $hospitalId ,$doctorId, $date, $appointmentCategory
      * @throws $hospitalException
      * @return $patientTokenId
      * @author Prasanth
@@ -12623,7 +12623,8 @@ class HospitalImpl implements HospitalInterface
 
                     $randomName = $this->generateUniqueFileName();
 
-                    $documentPath = 'medical_document/' . 'patient_prescription_' . $patientId . '/' . 'patient_prescription_' . $patientId . '_' . $randomName . '.' . $extension;
+                    //$documentPath = 'medical_document/' . 'patient_prescription_' . $patientId . '/' . 'patient_prescription_' . $patientId . '_' . $randomName . '.' . $extension;
+                    $documentPath = 'medical_document/' . 'patient_prescription_' . $patientId . '/' . $filename;
                     Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($attachment)));
                     //Storage::disk($diskStorage)->put($documentPath, file_get_contents($attachment));
 
@@ -12664,5 +12665,76 @@ class HospitalImpl implements HospitalInterface
         }
 
         return $status;
+    }
+
+    /**
+     * Get patient prescription attachments
+     * @param $hospitalId, $patientId
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Baskar
+     */
+
+    public function getPatientPrescriptionApiAttachments($hospitalId, $patientId)
+    {
+        $prescriptionAttachments = null;
+
+        try
+        {
+            $query = DB::table('patient_prescription_attachment_items as ppai')
+                ->join('patient_prescription_attachment as ppa', 'ppa.id', '=', 'ppai.patient_prescription_attachment_id');
+            $query->where('ppa.patient_id', '=', $patientId);
+            $query->where('ppa.hospital_id', '=', $hospitalId);
+            $query->select('ppai.id as attachment_id', 'ppa.hospital_id', 'ppa.patient_id', 'ppai.document_filename', 'ppa.prescription_upload_date');
+
+            //dd($query->toSql());
+
+            $prescriptionAttachments = $query->get();
+
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_LIST_ERROR, $exc);
+        }
+
+        return $prescriptionAttachments;
+    }
+
+    /**
+     * Download patient prescription attachments
+     * @param $attachmentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientPrescriptionAttachments($attachmentId)
+    {
+        $attachment = null;
+
+        try
+        {
+            $query = DB::table('patient_prescription_attachment_items as ppai')->where('ppai.id', '=', $attachmentId);
+            $query->select('ppai.id', 'ppai.document_path', 'ppai.document_filename');
+
+            $attachment = $query->first();
+            //dd($document);
+        }
+        catch (QueryException $queryEx)
+        {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_DOWNLOAD_ERROR, $queryEx);
+        }
+        catch (Exception $exc)
+        {
+            //dd($exc);
+            throw new HospitalException(null, ErrorEnum::PATIENT_PRESCRIPTION_ATTACHMENT_DOWNLOAD_ERROR, $exc);
+        }
+
+        return $attachment;
     }
 }
