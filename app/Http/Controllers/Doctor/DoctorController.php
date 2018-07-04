@@ -45,6 +45,10 @@ use Illuminate\Support\Facades\DB;
 
 use Mail;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Config;
+
+use File;
+use Storage;
 
 use App\Http\ViewModels\PatientPrescriptionViewModel;
 
@@ -10345,12 +10349,99 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
         }
         catch(Exception $exc)
         {
-            dd($exc);
+            //dd($exc);
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
             //return redirect('exception')->with('message',trans('messages.SupportTeam'));
         }
 
+    }
+
+    /**
+     * Get patient prescription attachments
+     * @param $hospitalId, $patientId
+     * @throws $hospitalException
+     * @return Array|null
+     * @author Baskar
+     */
+
+    public function getPatientPrescriptionApiAttachments($hospitalId, $patientId)
+    {
+        $prescriptionAttachments = null;
+        //$jsonResponse = null;
+
+        try
+        {
+            //$prescriptionDetails = HospitalServiceFacade::getPrescriptionDetails($prescriptionId);
+            $prescriptionAttachments = $this->hospitalService->getPatientPrescriptionApiAttachments($hospitalId, $patientId);
+
+        }
+        catch(HospitalException $profileExc)
+        {
+            //dd($userExc);
+            $errorMsg = $profileExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($profileExc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',$errorMsg." ".trans('messages.SupportTeam'));
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+            //return redirect('exception')->with('message',trans('messages.SupportTeam'));
+        }
+
+        //return view('portal.doctor-fee-details',compact('feeReceiptDetails','receiptId'));
+    }
+
+    /**
+     * Download patient prescription attachments
+     * @param $attachmentId
+     * @throws $hospitalException
+     * @return true | false
+     * @author Baskar
+     */
+
+    public function downloadPatientPrescriptionAttachments($attachmentId)
+    {
+        $attachment = null;
+        $contents = null;
+        $filePath = null;
+        $path =  Config::get('constants.STORAGE_BASE_PATH');
+        //$path =  'http://localhost:8082/prescription_new/storage/app/';
+        $diskStorage = env('DISK_STORAGE');
+
+        try
+        {
+            $attachment = $this->hospitalService->downloadPatientPrescriptionAttachments($attachmentId);
+            //dd($attachment->document_path);
+            //dd($filePath);
+
+            if(!is_null($attachment))
+            {
+                $filePath = $path.$attachment->document_path;
+                //dd($filePath);
+                //$file = Storage::disk($diskStorage)->get($document->document_path);
+                $contents = Crypt::decrypt(Storage::disk($diskStorage)->get($attachment->document_path));
+            }
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $errorMsg = $hospitalExc->getMessageForCode();
+            $msg = AppendMessage::appendMessage($hospitalExc);
+            Log::error($msg);
+        }
+        catch(Exception $exc)
+        {
+            $msg = AppendMessage::appendGeneralException($exc);
+            Log::error($msg);
+        }
+
+        return response()->make($contents, 200, array(
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . pathinfo($filePath, PATHINFO_BASENAME) . '"'
+        ));
     }
 
 }

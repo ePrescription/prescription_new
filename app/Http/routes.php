@@ -732,7 +732,10 @@ Route::group(['prefix' => 'doctor'], function()
         Route::post('rest/prescriptionattachments', array('as' => 'patient.saveprescriptionattachments', 'uses' => 'DoctorController@uploadPatientPrescriptionApiAttachments'));
 
         Route::get('rest/api/hospital/{hospitalId}/patient/{patientId}/prescriptionattachments', array('as' => 'patient.prescriptionattachments', 'uses' => 'DoctorApiController@getPatientPrescriptionApiAttachments'));
+        Route::get('rest/hospital/{hospitalId}/patient/{patientId}/prescriptionattachments', array('as' => 'patient.prescriptionattachments', 'uses' => 'DoctorController@getPatientPrescriptionApiAttachments'));
+
         Route::get('rest/api/attachment/{attachmentId}/download', array('as' => 'patient.attachmentdownload', 'uses' => 'DoctorApiController@downloadPatientPrescriptionAttachments'));
+        Route::get('rest/attachment/{attachmentId}/download', array('as' => 'patient.attachmentdownload', 'uses' => 'DoctorController@downloadPatientPrescriptionAttachments'));
 
     });
 
