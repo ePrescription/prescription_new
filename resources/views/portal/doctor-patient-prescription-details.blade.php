@@ -205,11 +205,40 @@ $profile_menu="0";
 
                                             <div class="tab-content">
                                                 <div class="tab-pane" id="addfile">
-                                                    <form action="#">
-                                                    <h5>Add Attachment</h5><input type="file" class="form-control" id="prescriptionFile" name="prescriptionFile"/>
+                                                    <form action="{{URL::to('/')}}/doctor/rest/prescriptionattachments" method="post" enctype="multipart/form-data">
+                                                    <h5>Add Attachment</h5>
+                                                       <input id="patientId" name="patientId" type="hidden" value="{{$patientDetails[0]->patient_id}}">
+                                                        <input id="doctorId" name="doctorId" value="{{Auth::user()->id}}" type="hidden">
+                                                        <input id="hospitalId" name="hospitalId" value="{{Session::get('LoginUserHospital')}}" type="hidden">
+
+
+                                                        <input type="file"  multiple="multiple" size="3" class="form-control" id="prescription_attachments" name="prescription_attachments"/>
                                                      <br>
-                                                        <button type="button" class="btn btn-success">Save</button>
+                                                        <button type="submit" class="btn btn-success">Upload Prescription</button>
                                                     </form>
+
+                                                    @if(count($prescriptionAttachments)>0)
+                                                    <h3>Patient Prescription Documents</h3>
+                                                    <div class="container">
+                                                      <table class="table table-bordered">
+                                                          <tr>
+                                                              <th>Upload Date</th>
+                                                              <th>Attachment Name</th>
+                                                              <th>Download</th>
+                                                          </tr>
+                                                          @foreach($prescriptionAttachments as $prescription)
+                                                          <tr>
+                                                              <td>{{$prescription->prescription_upload_date}}</td>
+                                                              <td>{{$prescription->document_path}}</td>
+                                                              <td><a href="/doctor/rest/api/attachment/{{$prescription->attachment_id}}/download"> {{$prescription->document_filename}}</a></td>
+                                                          </tr>
+                                                              @endforeach
+                                                      </table>
+
+                                                    </div>
+                                                        @endif
+
+
                                                 </div>
 
 

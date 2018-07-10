@@ -7968,17 +7968,19 @@ class DoctorController extends Controller
         $patientDetails = null;
         $patientPrescriptions = null;
         $labTests = null;
+        $prescriptionAttachments=null;
         //$jsonResponse = null;
         //dd('Inside patient details');
         try
         {
             //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
+            $prescriptionAttachments = $this->hospitalService->getPatientPrescriptionApiAttachments($hid, $patientId);
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
             $labTests = HospitalServiceFacade::getLabTestsByPatient($patientId);
             //$patientAppointment = HospitalServiceFacade::getPatientAppointments($patientId);
             $patientAppointment = HospitalServiceFacade::getPatientAppointmentsByHospital($patientId, $hid);
-            //dd($patientAppointment);
+
         }
         catch(HospitalException $hospitalExc)
         {
@@ -7995,8 +7997,9 @@ class DoctorController extends Controller
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
         }
+       // dd($prescriptionAttachments);
 
-        return view('portal.doctor-patient-prescription-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+        return view('portal.doctor-patient-prescription-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment','prescriptionAttachments'));
 
     }
 
@@ -10323,21 +10326,20 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
         $status = true;
         $prescriptionAttachVM = null;
         //dd('Inside prescription attachments method');
-
         try
         {
             $prescriptionAttachVM = PatientProfileMapper::setPatientPrescriptionApiAttachments($prescriptionRequest);
             $status = $this->hospitalService->uploadPatientPrescriptionApiAttachments($prescriptionAttachVM);
             //dd('Attachments saved');
 
-            /*if($status)
+            if($status)
             {
-                return redirect('lab/'.$uploadRequest->lab_id.'/hospital/'.$uploadRequest->hospital_id.'/patient/'.$uploadRequest->patient_id.'/lab-report-upload')->with('success','Lab Report Upload Successfully');
+                return redirect('doctor/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$prescriptionRequest->patientId.'/prescription-details')->with('success','Patient Prescription Upload Successfully');
             }
             else
             {
-                return redirect('lab/'.$uploadRequest->lab_id.'/hospital/'.$uploadRequest->hospital_id.'/patient/'.$uploadRequest->patient_id.'/lab-report-upload')->with('message','Lab Report Upload Issues');
-            }*/
+                return redirect('doctor/'.Auth::user()->id.'/hospital/'.Session::get('LoginUserHospital').'/patient/'.$prescriptionRequest->patientId.'/prescription-details')->with('success','Error While Uploading');
+            }
         }
         catch(HospitalException $profileExc)
         {
@@ -10374,7 +10376,7 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
         {
             //$prescriptionDetails = HospitalServiceFacade::getPrescriptionDetails($prescriptionId);
             $prescriptionAttachments = $this->hospitalService->getPatientPrescriptionApiAttachments($hospitalId, $patientId);
-
+//dd($prescriptionAttachments);
         }
         catch(HospitalException $profileExc)
         {

@@ -12685,9 +12685,9 @@ class HospitalImpl implements HospitalInterface
                 ->join('patient_prescription_attachment as ppa', 'ppa.id', '=', 'ppai.patient_prescription_attachment_id');
             $query->where('ppa.patient_id', '=', $patientId);
             $query->where('ppa.hospital_id', '=', $hospitalId);
-            $query->select('ppai.id as attachment_id', 'ppa.hospital_id', 'ppa.patient_id', 'ppai.document_filename', 'ppa.prescription_upload_date');
+            $query->select('ppai.id as attachment_id', 'ppa.hospital_id', 'ppa.patient_id', 'ppai.document_filename','ppai.document_path', 'ppa.prescription_upload_date');
 
-            //dd($query->toSql());
+         // dd($query->toSql());
 
             $prescriptionAttachments = $query->get();
 
