@@ -116,14 +116,24 @@ class PatientProfileMapper
         $labDocumentsVM = new PatientLabDocumentsViewModel();
 
         $userName = 'Admin';
-        $files = $uploadRequest->allFiles();
+        //$files = $uploadRequest->allFiles();
+        $attachments = $uploadRequest->file('photo');
 
-        //dd($files);
+        //dd($attachments);
+
+        //$labDocumentsVM->setDoctorUploads($files);
+        //$labDocumentsVM->setDocumentName($uploadRequest['document_name']);
+
+        if(!empty($attachments))
+        {
+            foreach ($attachments as $attachment)
+            {
+                $labDocumentsVM->setPatientLabDocuments($attachment);
+            }
+        }
 
         $resultsObj = (object) $uploadRequest->all();
 
-        $labDocumentsVM->setDoctorUploads($files);
-        //$labDocumentsVM->setDocumentName($uploadRequest['document_name']);
         $labDocumentsVM->setPatientId($resultsObj->patientId);
         $labDocumentsVM->setLabId($resultsObj->providerId);
         $labDocumentsVM->setDocumentUploadDate(date("Y-m-d"));

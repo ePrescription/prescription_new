@@ -69,6 +69,7 @@ use App\prescription\model\entities\PatientXRayExaminationItems;
 use App\prescription\model\entities\PrescriptionDetails;
 use App\prescription\repositories\repointerface\HospitalInterface;
 use App\prescription\utilities\AppointmentType;
+use App\prescription\utilities\DoctorFeepaymentStatus;
 use App\prescription\utilities\ErrorEnum\ErrorEnum;
 use App\prescription\utilities\Exception\HospitalException;
 use App\prescription\utilities\Exception\UserNotFoundException;
@@ -3144,7 +3145,8 @@ class HospitalImpl implements HospitalInterface
                 $query->orderBy('dp.created_at', 'DESC');
                 $query->select('dp.id as receiptId', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as PID',
                     'p.relationship', 'p.patient_spouse_name as spouseName',
-                    'p.telephone as contactNumber', 'd.name as doctorName', 'dp.fee', 'dp.payment_type', 'p.payment_status', 'dp.doctor_id', 'dp.created_at', 'dp.updated_at');
+                    'p.telephone as contactNumber', 'd.name as doctorName', 'dp.fee',
+                    'dp.payment_type', 'dp.payment_status', 'dp.doctor_id', 'dp.created_at', 'dp.updated_at');
                 //dd($query->toSql());
                 $feeReceipts = $query->get();
                 // dd($feeReceipts);
@@ -3392,6 +3394,7 @@ class HospitalImpl implements HospitalInterface
                 if(!is_null($doctorAppointment))
                 {
                     $doctorAppointment->fee = $feeReceiptVM->getFees();
+                    $doctorAppointment->payment_status = DoctorFeepaymentStatus::DOCTOR_FEE_PAID_STATUS;
                     $doctorAppointment->modified_by = $patientUser->name;
                     $doctorAppointment->updated_at = $feeReceiptVM->getUpdatedAt();
 
@@ -11512,16 +11515,17 @@ class HospitalImpl implements HospitalInterface
                 $labDocument->save();
 
                 foreach ($labDocuments as $document) {
-                    $uploadPath = $document['document_upload_path'];
-                    $documentContents = File::get($uploadPath);
+                    /*$uploadPath = $document['document_upload_path'];
+                    $documentContents = File::get($uploadPath);*/
 
-                    $filename = $uploadPath->getClientOriginalName();
-                    $extension = $uploadPath->getClientOriginalExtension();
+                    $filename = $document->getClientOriginalName();
+                    $extension = $document->getClientOriginalExtension();
 
                     $randomName = $this->generateUniqueFileName();
 
-                    $documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . 'patient_document_' . $patientId . '_' . $randomName . '.' . $extension;
-                    Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($documentContents)));
+                    //$documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . 'patient_document_' . $patientId . '_' . $randomName . '.' . $extension;
+                    $documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . $filename;
+                    Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($document)));
 
                     $labDocumentItems = new PatientDocumentItems();
 
@@ -11581,10 +11585,10 @@ class HospitalImpl implements HospitalInterface
 
             $app_path = storage_path('app');
             //dd($app_path);
-            //$labDocuments = $labDocumentsVM->getPatientLabDocuments();
+            $labDocuments = $labDocumentsVM->getPatientLabDocuments();
             //dd($labDocuments);
 
-            $labDocuments = $labDocumentsVM->getDoctorUploads();
+            //$labDocuments = $labDocumentsVM->getDoctorUploads();
             $diskStorage = env('DISK_STORAGE');
             $storageBasePath = env('STORAGE_BASE_PATH');
             $i = 0;
@@ -11611,7 +11615,8 @@ class HospitalImpl implements HospitalInterface
 
 
                     //$documentPath = 'medical_document/' . 'patient_document_'.$filename . '.' . $extension;
-                    $documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . time() . '_' . $filename;
+                    //$documentPath = 'medical_document/' . 'patient_document_' . $patientId . '/' . time() . '_' . $filename;
+                    $documentPath = 'medical_document/' . 'patient_prescription_' . $patientId . '/' . $filename;
 
                     //Storage::disk($diskStorage)->put($documentPath, file_get_contents($value));
                     Storage::disk($diskStorage)->put($documentPath, Crypt::encrypt(file_get_contents($value)));
