@@ -178,7 +178,7 @@ class ResponsePrescription extends JsonResponse
         $data = array(
             'isSuccess' => $this->result,
             'message' => $this->getMessage(),
-            'status' => parent::HTTP_INTERNAL_SERVER_ERROR,
+            'status' => parent::HTTP_OK,
             'result' => $this->obj
         );
 
@@ -188,7 +188,7 @@ class ResponsePrescription extends JsonResponse
         $msg = AppendMessage::appendMessage($exc);
         Log::error($msg);
 
-        parent::__construct($data, parent::HTTP_INTERNAL_SERVER_ERROR);
+        parent::__construct($data, parent::HTTP_OK);
 
     }
 

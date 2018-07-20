@@ -837,8 +837,11 @@ class PatientProfileMapper
         //$files = $prescriptionRequest->allFiles();
         //$attachments = $prescriptionRequest->allFiles();
 
+        $attachments = $prescriptionRequest->file('prescription_attachments');
+
         //dd($prescriptionRequest->file('prescription_attachments'));
-        $attachments = $prescriptionRequest->allFiles('prescription_attachments');
+        //$attachments = $prescriptionRequest->allFiles('prescription_attachments');
+
        // dd($attachments);
         //return json_decode($prescriptionRequest);
         //dd($attachments);
