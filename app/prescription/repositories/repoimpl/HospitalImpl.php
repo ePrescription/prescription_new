@@ -2733,6 +2733,16 @@ class HospitalImpl implements HospitalInterface
         $doctorAppointment->referral_hospital_location = $patientProfileVM->getHospitalLocation();
         $doctorAppointment->fee = $patientProfileVM->getAmount();
         $doctorAppointment->payment_type = $patientProfileVM->getPaymentType();
+
+        if($patientProfileVM->getPaymentStatus() == "Paid")
+        {
+            $doctorAppointment->payment_status = DoctorFeepaymentStatus::DOCTOR_FEE_PAID_STATUS;
+        }
+        else
+        {
+            $doctorAppointment->payment_status = DoctorFeepaymentStatus::DOCTOR_FEE_UNPAID_STATUS;
+        }
+
         //$doctorAppointment->doctor_id = $doctorUser->doctor_id;
         /*$doctorAppointment->brief_history = $appointment->briefHistory;
         $doctorAppointment->appointment_date = $appointment->appointmentDate;
@@ -3261,7 +3271,7 @@ class HospitalImpl implements HospitalInterface
             $feeDetailsQuery->join('patient as p', 'p.patient_id', '=', 'dp.patient_id');
 
             $feeDetailsQuery->select('dp.id as receiptId', 'dp.patient_id as patientId', 'dp.doctor_id as doctorId',
-                'dp.hospital_id as hospitalId', 'dp.fee', 'p.payment_status');
+                'dp.hospital_id as hospitalId', 'dp.fee', 'dp.payment_status');
 
             //dd($feeDetailsQuery->toSql());
 
