@@ -3961,7 +3961,7 @@ class DoctorController extends Controller
         try
         {
             $feeReceipts = $this->hospitalService->getFeeReceipts($hospitalId, $doctorId);
-           // dd($feeReceipts);
+        // dd($feeReceipts);
             /*
             if(!empty($feeReceipts))
             {
