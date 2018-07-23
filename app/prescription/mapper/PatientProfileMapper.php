@@ -66,7 +66,7 @@ class PatientProfileMapper
         $profileVM->setGender(property_exists($profile, 'gender') ? $profile->gender : null);
         //$profileVM->setGender($profile->gender);
         /*For Marital Status*/
-        $profileVM->setMaritalStatus(property_exists($profile, 'married') ? $profile->married : null);
+        $profileVM->setMaritalStatus(property_exists($profile, 'maritalStatus') ? $profile->maritalStatus : null);
 
         $profileVM->setHospitalId(property_exists($profile, 'hospitalId') ? $profile->hospitalId : null);
         $profileVM->setDoctorId(property_exists($profile, 'doctorId') ? $profile->doctorId : null);

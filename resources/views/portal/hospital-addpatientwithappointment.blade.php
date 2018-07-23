@@ -768,7 +768,7 @@ $time_array=array(
 
                                     document.getElementById("married2").checked = true;
                                 } else {
-                                    document.getElementById("married2").value = "";
+                                    document.getElementById("married2").value = "2";
                                 }
                             }else if(x.indexOf('M') > -1){
                                 var te=x.split("M");
@@ -788,7 +788,7 @@ $time_array=array(
 
                                     document.getElementById("married2").checked = true;
                                 } else {
-                                    document.getElementById("married2").value = "";
+                                    document.getElementById("married2").value = "2";
                                 }
                             }else if(x.indexOf('Y')>-1){
                                 var te=x.split("Y");
@@ -809,7 +809,7 @@ $time_array=array(
 
                                     document.getElementById("married2").checked = true;
                                 } else {
-                                    document.getElementById("married2").value = "";
+                                    document.getElementById("married2").value = "2";
                                 }
                             }else{
                                 alert("Please Use Letters D or M or Y followed by Age");
@@ -1226,7 +1226,7 @@ $time_array=array(
 
                         document.getElementById("married2").checked = true;
                     } else {
-                        document.getElementById("married2").value = "";
+                        document.getElementById("married2").value = "2";
                     }
                     $("#age").val(age).prop('readOnly', false);
                     // $("input#married1").attr('checked', 'checked');
