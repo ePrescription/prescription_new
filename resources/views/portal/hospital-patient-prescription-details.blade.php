@@ -145,14 +145,15 @@ $profile_menu="0";
                                                         <span class="hidden-xs">Prescription</span>
                                                     </a>
                                                 </li>
-
-                                                <?php /* ?>
                                                 <li class="">
-                                                    <a href="#home" data-toggle="tab" aria-expanded="true">
+                                                    <a href="#attachment" data-toggle="tab" aria-expanded="true">
                                                         <span class="visible-xs"><i class="fa fa-home"></i></span>
-                                                        <span class="hidden-xs">Info</span>
+                                                        <span class="hidden-xs">View Attachments</span>
                                                     </a>
                                                 </li>
+
+                                                <?php /* ?>
+
 
                                                 <li class="">
                                                     <a href="#profile" data-toggle="tab" aria-expanded="false">
@@ -173,9 +174,7 @@ $profile_menu="0";
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="messages">
                                                     <p>
-                                                    <div>
-                                                        PRID ( Prescription Identification) - PID ( Patient Identification)
-                                                    </div>
+
                                                     <table id="example2" class="table table-bordered table-hover">
                                                         <thead>
                                                         <tr>
@@ -203,6 +202,34 @@ $profile_menu="0";
                                                         </tbody>
 
                                                     </table>
+
+                                                    </p>
+                                                </div>
+                                                <div class="tab-pane" id="attachment">
+                                                    <p>
+                                                    <div>
+                                                        PRID ( Prescription Identification) - PID ( Patient Identification)
+                                                    </div>
+                                                    @if(count($prescriptionAttachments)>0)
+                                                        <h3>Patient Prescription Documents</h3>
+                                                        <div class="container">
+                                                            <table class="table table-bordered">
+                                                                <tr>
+                                                                    <th>Upload Date</th>
+                                                                    <th>Attachment Name</th>
+                                                                    <th>Download</th>
+                                                                </tr>
+                                                                @foreach($prescriptionAttachments as $prescription)
+                                                                    <tr>
+                                                                        <td>{{$prescription->prescription_upload_date}}</td>
+                                                                        <td>{{$prescription->document_path}}</td>
+                                                                        <td><a href="/doctor/rest/api/attachment/{{$prescription->attachment_id}}/download"> {{$prescription->document_filename}}</a></td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </table>
+
+                                                        </div>
+                                                        @endif
 
                                                     </p>
                                                 </div>

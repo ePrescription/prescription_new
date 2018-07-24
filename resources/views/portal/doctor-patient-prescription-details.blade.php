@@ -212,7 +212,7 @@ $profile_menu="0";
                                                         <input id="hospitalId" name="hospitalId" value="{{Session::get('LoginUserHospital')}}" type="hidden">
 
 
-                                                        <input type="file"  multiple="multiple" size="3" class="form-control" id="prescription_attachments" name="prescription_attachments"/>
+                                                        <input type="file"  multiple="multiple" size="3" class="form-control" id="prescription_attachments" name="prescription_attachments" required="required"/>
                                                      <br>
                                                         <button type="submit" class="btn btn-success">Upload Prescription</button>
                                                     </form>

@@ -132,13 +132,13 @@ $profile_menu="0";
                                                     <div class="form-group col-md-6">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Email</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
-                                                            {{$appointmentDetails['patientProfile'][0]->email=="" ? "-":$appointmentDetails['patientProfile'][0]->email}}
+                                                            {{$appointmentDetails['doctorProfile'][0]->email=="" ? "-":$appointmentDetails['doctorProfile'][0]->email}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label class="col-sm-3 control-label" style="width:30%;float:left;">Phone</label>
                                                         <div class="col-sm-9" style="width:70%;float:left;">
-                                                            {{$appointmentDetails['patientProfile'][0]->telephone=="" ? "-":$appointmentDetails['patientProfile'][0]->telephone}}
+                                                            {{$appointmentDetails['doctorProfile'][0]->telephone=="" ? "-":$appointmentDetails['doctorProfile'][0]->telephone}}
                                                         </div>
                                                     </div>
 

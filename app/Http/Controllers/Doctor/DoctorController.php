@@ -3066,11 +3066,13 @@ class DoctorController extends Controller
     {
         $patientDetails = null;
         $patientPrescriptions = null;
+        $prescriptionAttachments=null;
         $labTests = null;
         //$jsonResponse = null;
         //dd('Inside patient details');
         try
         {
+            $prescriptionAttachments = $this->hospitalService->getPatientPrescriptionApiAttachments($hid, $patientId);
             //$patientDetails = HospitalServiceFacade::getPatientDetailsById($patientId);
             $patientDetails = HospitalServiceFacade::getPatientProfile($patientId);
             $patientPrescriptions = HospitalServiceFacade::getPrescriptionByPatient($patientId);
@@ -3094,8 +3096,8 @@ class DoctorController extends Controller
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
         }
-        //dd($patientDetails);
-        return view('portal.hospital-patient-prescription-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment'));
+        //dd($prescriptionAttachments);
+       return view('portal.hospital-patient-prescription-details',compact('patientDetails','patientPrescriptions','labTests','patientAppointment','prescriptionAttachments'));
 
     }
 
@@ -3326,7 +3328,7 @@ class DoctorController extends Controller
 
                     for ($i = 0; $i < $eVdiff; $i++) {
 
-                        $time_array[date('H:i:s', $Evttime + (300 * $i))] = date('h:i a', $Evftime + (300 * $i));
+                        $time_array[date('H:i:s', $Evftime + (300 * $i))] = date('h:i a', $Evttime + (300 * $i));
 
                         //dd($time_array);
                     }
@@ -3961,7 +3963,7 @@ class DoctorController extends Controller
         try
         {
             $feeReceipts = $this->hospitalService->getFeeReceipts($hospitalId, $doctorId);
-        // dd($feeReceipts);
+       // dd($feeReceipts);
             /*
             if(!empty($feeReceipts))
             {

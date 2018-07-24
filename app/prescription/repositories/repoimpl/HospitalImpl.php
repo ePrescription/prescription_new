@@ -2450,7 +2450,8 @@ class HospitalImpl implements HospitalInterface
 
     public function savePatientProfile(PatientProfileViewModel $patientProfileVM)
     {
-        //dd('Inside save profile');
+       // dd($patientProfileVM);
+       //dd('Inside save profile');
         $status = null;
         $user = null;
         $patientId = null;
@@ -2548,6 +2549,7 @@ class HospitalImpl implements HospitalInterface
                 $patient->created_at = $patientProfileVM->getCreatedAt();
                 $patient->updated_by = $patientProfileVM->getUpdatedBy();
                 $patient->updated_at = $patientProfileVM->getUpdatedAt();
+
 
                 $user->patient()->save($patient);
 
@@ -2661,18 +2663,18 @@ class HospitalImpl implements HospitalInterface
                 $patient->name = $patientProfileVM->getName();
                 $patient->address = $patientProfileVM->getAddress();
                 $patient->careof = $patientProfileVM->getCareOf();
-                $patient->city = $patientProfileVM->getCity();
-                $patient->country = $patientProfileVM->getCountry();
+               // $patient->city = $patientProfileVM->getCity();
+                //$patient->country = $patientProfileVM->getCountry();
                 $patient->telephone = $patientProfileVM->getTelephone();
                 $patient->email = $patientProfileVM->getEmail();
                 $patient->relationship = $patientProfileVM->getRelationship();
                 $patient->patient_spouse_name = $patientProfileVM->getSpouseName();
-                $patient->patient_photo = $patientProfileVM->getPatientPhoto();
-                $patient->dob = $patientProfileVM->getDob();
+                //$patient->patient_photo = $patientProfileVM->getPatientPhoto();
+               // $patient->dob = $patientProfileVM->getDob();
                 $patient->age = $patientProfileVM->getAge();
-                $patient->nationality = $patientProfileVM->getNationality();
+               // $patient->nationality = $patientProfileVM->getNationality();
                 $patient->gender = $patientProfileVM->getGender();
-                $patient->married = $patientProfileVM->getMaritalStatus();
+               // $patient->married = $patientProfileVM->getMaritalStatus();
 
                 $patient->created_by = $patientProfileVM->getCreatedBy();
                 $patient->created_at = $patientProfileVM->getCreatedAt();
@@ -2734,7 +2736,7 @@ class HospitalImpl implements HospitalInterface
         $doctorAppointment->fee = $patientProfileVM->getAmount();
         $doctorAppointment->payment_type = $patientProfileVM->getPaymentType();
 
-        if($patientProfileVM->getPaymentStatus() == "Paid")
+        if($patientProfileVM->getPaymentStatus() ==1)
         {
             $doctorAppointment->payment_status = DoctorFeepaymentStatus::DOCTOR_FEE_PAID_STATUS;
         }
