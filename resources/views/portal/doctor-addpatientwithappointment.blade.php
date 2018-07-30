@@ -304,7 +304,7 @@ $time_array=array(
                                                             <div class="col-sm-9">
                                                                 <input type="radio" class="form-controlx" id="married1" name="maritalStatus" value="1" required="required" />&nbsp;&nbsp;Married
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                                                <input type="radio" class="form-controlx" id="married2" name="maritalStatus" value="2" required="required" />&nbsp;&nbsp;Unmarried
+                                                                <input type="radio" class="form-controlx" id="married2" name="maritalStatus" value="0" required="required" />&nbsp;&nbsp;Unmarried
                                                                 @if ($errors->has('maritalStatus'))<p class="error" style="">{!!$errors->first('maritalStatus')!!}</p>@endif
                                                             </div>
                                                         </div>

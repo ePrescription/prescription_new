@@ -212,7 +212,7 @@ $profile_menu="0";
                                                         <input id="hospitalId" name="hospitalId" value="{{Session::get('LoginUserHospital')}}" type="hidden">
 
 
-                                                        <input type="file"  multiple="multiple" size="3" class="form-control" id="prescription_attachments" name="prescription_attachments" required="required"/>
+                                                        <input type="file"  multiple="multiple" size="3" class="form-control" id="prescription_attachments" name="prescription_attachments[]" required="required"/>
                                                      <br>
                                                         <button type="submit" class="btn btn-success">Upload Prescription</button>
                                                     </form>
@@ -288,7 +288,7 @@ $profile_menu="0";
                                                                 <form action="{{URL::to('/')}}/doctor/rest/api/patient/prescription" method="GET" id="form1" onsubmit="return validateForm('form1')" style="line-height:10px; padding: 0px;">
 
 
-                                                                    <h4>Current Illness:</h4>  <textarea class="form-control" style="width: 750px; height: 50px; resize: none;" name="drugHistory" value="" id="drugHistory" ></textarea>
+                                                                    <h4>Current Illness:</h4>  <textarea placeholder="Enter Current Illness... " class="form-control" style="width: 750px; height: 50px; resize: none;" name="drugHistory" value="" id="drugHistory" ></textarea>
 
                                                                     <br><br><br>
                                                                     <input type="radio" class="form-controlx" onclick="change(1)"  id="bytradeName"  name="status" checked/><b>By Trade Name</b>
@@ -358,7 +358,7 @@ $profile_menu="0";
                                                             </table>
                                                                     <div id="symptomTemplate1"></div>
 
-                                                                    <h4>Description:</h4><textarea  style="width: 750px; height: 50px; resize: none;"  name="notes" id="notes"></textarea>
+                                                                    <h4>Description:</h4><textarea placeholder="Enter Description... "  style="width: 750px; height: 50px; resize: none;"  name="notes" id="notes"></textarea>
 
                                                                     <input type="submit" value="save" class="btn btn-success" style="float: right;padding-left: 30px;padding-right: 30px; padding-top: 10px;padding-bottom: 10px;">
 
@@ -367,18 +367,18 @@ $profile_menu="0";
 
                                                                 <div class="form-group remove-doc-box hide" id="symptomTemplate">
 
-                                                                    <table class="table" id="POITable"  class="table table-boderless">
+                                                                    <table class="table table-striped" id="POITable" style="max-width: 120%;">
 
                                                                         <tbody>
 
                                                                         <tr>
-                                                                            <td style="width:20%;" ><input type="text" onselect="changeValues(this,0)" onchange="changeValues(this,0)" class="form-control tradeName" name="trade" style="width:100%;" list="result" required="required"  id="trade"  onkeyup="load(this)" />
+                                                                            <td style="width:30%;" ><input type="text" onselect="changeValues(this,0)" onchange="changeValues(this,0)" class="form-control tradeName" name="trade" style="width:100%;" list="result" required="required"  id="trade"  onkeyup="load(this)" />
 
                                                                             </td>
                                                                             <td style="width:30%;"><input type="text" class="form-control formulation" name="formulation" onselect="changeValues1(this,0)" onchange="changeValues1(this,0)"  list="result"  style="width:100%;" id="formulation" onkeyup="load(this)"   required="required"/></td>
-                                                                            <td style="width:30%;"><input type="text"  value="" name="type" id="type" style="width:100%;" readonly ></td>
-                                                                            <td style="width:10%;"><input type="text"  name="dosage" id="dosage" style="width:100%;" ></td>
-                                                                            <td style="width:10%;"><input type="number" id="days"  name="days" style="width:150%;"  min="0" required></td>
+                                                                            <td style="width:10%;"><input type="text"  value="" name="type" id="type" style="width:110%;" readonly ></td>
+                                                                            <td style="width:10%;"><input type="text"  name="dosage" id="dosage" style="width:110%;" ></td>
+                                                                            <td style="width:8%;"><input type="number" id="days"  name="days" style="width:110%;"  min="0" required></td>
                                                                             <td style="width:20%; padding: 15px 5px;">
                                                                                 <input type="checkbox" class="form-controlx"  id="morningId" name="morning" value="1"  />M
                                                                                 <input type="checkbox" class="form-controlx" id="afternoonId" name="afternoon" value="1"   />A
@@ -556,7 +556,7 @@ $profile_menu="0";
                        type: 'GET',
                        //url: '/vistara/ajax-chosen-master/data.json',
                        ///url: '/treatin-web-app/public/ajaxGetCountry',
-                       url: '{{ URL::to('/') }}/hospital/rest/api/brands',
+                       url: '{{ URL::to('/') }}/hospital/rest/api/formulations',
                        dataType: 'json',
                        data: {formulations: key.value},
 

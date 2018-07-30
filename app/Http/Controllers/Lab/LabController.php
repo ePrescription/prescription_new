@@ -1658,7 +1658,7 @@ class LabController extends Controller
             Log::error($msg);
         }
 
-        return view('portal.hospital-patient-lab-add-ultrasound',compact('patientUltraSoundTests','patientDetails','hid'));
+        return view('portal.lab-patient-lab-add-ultrasound',compact('patientUltraSoundTests','patientDetails','hid'));
 
     }
 
@@ -1905,7 +1905,7 @@ class LabController extends Controller
 
     public function savePatientUltraSoundTests(Request $examinationRequest)
     {
-        dd($examinationRequest);
+        //dd($examinationRequest);
         $patientUltraSoundVM = null;
         $status = true;
         $responseJson = null;
@@ -1914,7 +1914,7 @@ class LabController extends Controller
         {
             //dd($personalHistoryRequest->all());
             $patientUltraSoundVM = PatientProfileMapper::setPatientUltraSoundExamination($examinationRequest);
-            dd($patientUltraSoundVM);
+           // dd($patientUltraSoundVM);
             $status = HospitalServiceFacade::savePatientUltraSoundTests($patientUltraSoundVM);
 
             if($status)
