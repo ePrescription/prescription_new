@@ -85,6 +85,34 @@ class HospitalService {
     }
 
     /**
+     * Get patient details after login
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getApiPatientDetails($patientId)
+    {
+        $doctorDetails = null;
+
+        try
+        {
+            $doctorDetails = $this->hospitalRepo->getApiPatientDetails($patientId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_DETAILS_ERROR, $exc);
+        }
+
+        return $doctorDetails;
+    }
+
+    /**
      * Get list of hospitals by keyword
      * @param $keyword
      * @throws $hospitalException

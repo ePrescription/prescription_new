@@ -337,12 +337,12 @@ class HospitalImpl implements HospitalInterface
     }
 
     /**
-     * Get doctor details
-     * @param $doctorId
-     * @throws $hospitalException
-     * @return array | null
-     * @author Baskar
-     */
+ * Get doctor details
+ * @param $doctorId
+ * @throws $hospitalException
+ * @return array | null
+ * @author Baskar
+ */
 
     public function getDoctorDetails($doctorId)
     {
@@ -366,6 +366,39 @@ class HospitalImpl implements HospitalInterface
         }
 
         return $doctorDetails;
+    }
+
+    /**
+     * Get patient details after login
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getApiPatientDetails($patientId)
+    {
+        $patientDetails = null;
+
+        try
+        {
+            $query = DB::table('patient as p')->join('users as usr', 'usr.id', '=', 'p.patient_id');
+            $query->where('p.patient_id', '=', $patientId);
+            $query->where('usr.delete_status', '=', 1);
+            $query->select('p.id as id', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as patientUniqueId');
+
+            $patientDetails = $query->get();
+        }
+        catch (QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_DETAILS_ERROR, $queryEx);
+        }
+        catch (Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_DETAILS_ERROR, $exc);
+        }
+
+        return $patientDetails;
     }
 
     //Get Patient List

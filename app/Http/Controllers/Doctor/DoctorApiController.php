@@ -16,8 +16,15 @@ use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use App\Http\Requests\FutureAppointmentApiRequest;
+use App\Http\Requests\PatientLoginRequest;
+use App\Http\Requests\DoctorLoginRequest;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
+use App\prescription\common\UserSession;
+use Illuminate\Support\Facades\Auth;
+use App\prescription\utilities\UserType;
+use App\prescription\facades\HospitalServiceFacade;
 
 use Input;
 use File;
@@ -4129,5 +4136,94 @@ class DoctorApiController extends Controller
             'Content-Type' => 'application/octet-stream',
             'Content-Disposition' => 'attachment; filename="' . pathinfo($filePath, PATHINFO_BASENAME) . '"'
         ));
+    }
+
+    /**
+     * Login using Email, password
+     * @param $loginRequest
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function patientLogin(PatientLoginRequest $loginRequest)
+    {
+        //dd('Test');
+        $loginInfo = $loginRequest->all();
+        $patientDetails = null;
+        $responseJson = null;
+        //$userSession = null;
+
+        try
+        {
+            /* $loginDetails['doctor']['id'] = 1;
+             $loginDetails['doctor']['name'] = 'Baskar';
+
+             $jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::USER_LOGIN_SUCCESS));
+             $jsonResponse->setObj($loginDetails);*/
+
+            //dd($loginInfo['password']);
+
+            if (Auth::attempt(['email' => $loginInfo['email'], 'password' => $loginInfo['password']]))
+            {
+                //dd('Inside attempt');
+                if(( Auth::user()->hasRole('patient')) &&  (Auth::user()->delete_status == 1))
+                {
+                    $userSession = new UserSession();
+                    $userSession->setLoginUserId(Auth::user()->id);
+                    $userSession->setDisplayName(ucfirst(Auth::user()->name));
+                    $userSession->setLoginUserType(UserType::USERTYPE_PATIENT);
+                    $userSession->setAuthDisplayName(ucfirst(Auth::user()->name));
+
+                    Session::put('patientUser', $userSession);
+
+                    $userId = Auth::user()->id;
+                    $userName = ucfirst(Auth::user()->name);
+
+                    //dd($userName);
+
+                    $patientDetails = HospitalServiceFacade::getApiPatientDetails($userId);
+                    //dd($patientDetails);
+
+                    $loginDetails['id'] = $userId;
+                    $loginDetails['name'] = $userName;
+                    $loginDetails['pid'] = $patientDetails[0]->patientUniqueId;
+
+                    //dd($loginDetails);
+
+                    $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::USER_LOGIN_SUCCESS));
+                    $responseJson->setCount(sizeof($patientDetails));
+                    $responseJson->setObj($loginDetails);
+                    $responseJson->sendSuccessResponse();
+
+                    /*$jsonResponse = new ResponseJson(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::USER_LOGIN_SUCCESS));
+                    $jsonResponse->setObj($loginDetails);*/
+
+                }
+            }
+            else
+            {
+                //dd('Inside else');
+                $responseJson = new ResponsePrescription(ErrorEnum::SUCCESS, trans('messages.'.ErrorEnum::DOCTOR_LOGIN_FAILURE));
+                $responseJson->sendSuccessResponse();
+                //$jsonResponse = new ResponseJson(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::DOCTOR_LOGIN_FAILURE));
+                //$msg = "Login Details Incorrect! Try Again.";
+                //return redirect('hospital/login')->with('message',$msg);
+            }
+
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::DOCTOR_LOGIN_FAILURE));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            //dd($exc);
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::DOCTOR_LOGIN_FAILURE));
+            $responseJson->sendUnExpectedExpectionResponse($exc);
+        }
+
+        return $responseJson;
     }
 }

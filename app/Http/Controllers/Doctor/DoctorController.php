@@ -28,6 +28,7 @@ use App\Http\Requests\PatientProfileRequest;
 use App\Http\Requests\EditPatientProfileRequest;
 use App\Http\Requests\PatientProfileWebRequest;
 use App\Http\Requests\FutureAppointmentRequest;
+use App\Http\Requests\PatientLoginRequest;
 use App\Http\Requests\NewAppointmentRequest;
 use App\Http\Requests\FeeReceiptRequest;
 use App\Http\Requests\OnlinePaymentRequest;
@@ -478,6 +479,7 @@ class DoctorController extends Controller
 
             if (Auth::attempt(['email' => $loginInfo['email'], 'password' => $loginInfo['password']]))
             {
+                //dd('Inside attempt');
                 if(( Auth::user()->hasRole('doctor')) &&  (Auth::user()->delete_status == 1))
                 {
                     $userSession = new UserSession();
@@ -539,12 +541,14 @@ class DoctorController extends Controller
         }
         catch(Exception $exc)
         {
+            //dd($exc);
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::DOCTOR_LOGIN_FAILURE));
             $responseJson->sendUnExpectedExpectionResponse($exc);
         }
 
         return $responseJson;
     }
+
 
     /**
      * Get list of hospitals for the doctor
@@ -627,7 +631,7 @@ class DoctorController extends Controller
 
     public function doctorlogin(DoctorLoginRequest $loginRequest)
     {
-        //dd('Test');
+        //dd('Inside doctor dologin');
         $loginInfo = $loginRequest->all();
       // dd('Inside doctor login');
         //dd($loginInfo);
@@ -638,7 +642,7 @@ class DoctorController extends Controller
         {
             if (Auth::attempt(['email' => $loginInfo['email'], 'password' => $loginInfo['password']]))
             {
-                //dd(Auth::user());
+                dd(Auth::user());
 
                 /*
                 $userSession = new UserSession();
