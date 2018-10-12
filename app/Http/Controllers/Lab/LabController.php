@@ -1803,14 +1803,14 @@ class LabController extends Controller
 
         try
         {
-            //dd($personalHistoryRequest->all());
+        //  dd($examinationRequest->all());
             $patientBloodVM = PatientProfileMapper::setPatientBloodExamination($examinationRequest);
 
             //$examinations = $patientBloodVM->getExaminations();
 
             //dd($patientBloodVM);
 
-           // dd($patientMotionVM);
+           // dd($patientBloodVM);
             $status = HospitalServiceFacade::savePatientBloodTests($patientBloodVM);
 
             if($status)

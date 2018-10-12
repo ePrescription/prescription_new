@@ -3369,6 +3369,7 @@ class HospitalImpl implements HospitalInterface
         $status = true;
 
         try {
+
             $receiptId = $feeReceiptVM->getReceiptId();
             $doctorId = $feeReceiptVM->getDoctorId();
             $patientId = $feeReceiptVM->getPatientId();
@@ -3401,16 +3402,28 @@ class HospitalImpl implements HospitalInterface
 
             if (!is_null($doctorUser) && !is_null($hospitalUser) && !is_null($patientUser)) {
 
-                $doctorAppointment = DoctorAppointments::find($receiptId);
-
+                if($receiptId==0){
+                    $doctorAppointment = DoctorAppointments::where('patient_id',$patientId)->get();
+                }else {
+                    $doctorAppointment = DoctorAppointments::find($receiptId);
+                }
+           //  dd(DoctorFeepaymentStatus::DOCTOR_FEE_PAID_STATUS);
                 if(!is_null($doctorAppointment))
                 {
-                    $doctorAppointment->fee = $feeReceiptVM->getFees();
-                    $doctorAppointment->payment_status = DoctorFeepaymentStatus::DOCTOR_FEE_PAID_STATUS;
-                    $doctorAppointment->modified_by = $patientUser->name;
-                    $doctorAppointment->updated_at = $feeReceiptVM->getUpdatedAt();
+                    DB::table('doctor_appointment')
+                        ->where('patient_id', $doctorAppointment[0]->patient_id)
+                        ->update(['fee' =>intval($doctorAppointment[0]->fee+$feeReceiptVM->getFees()),
+                            'payment_status' => DoctorFeepaymentStatus::DOCTOR_FEE_PAID_STATUS,
+                            'modified_by' => $patientUser->name,
+                            'updated_at' => $feeReceiptVM->getUpdatedAt()]);
 
-                    $doctorAppointment->save();
+//                    /*$doctorAppointment->fee =$feeReceiptVM->getFees();
+//                    $doctorAppointment->payment_status = DoctorFeepaymentStatus::DOCTOR_FEE_PAID_STATUS;
+//                    $doctorAppointment->modified_by = $patientUser->name;
+//                    $doctorAppointment->updated_at = $feeReceiptVM->getUpdatedAt();
+//
+//                    $doctorAppointment->save();
+//                    dd($doctorAppointment->save());*/
                 }
 
                 /*$feeReceipt = new FeeReceipt();

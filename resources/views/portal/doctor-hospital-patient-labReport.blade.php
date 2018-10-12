@@ -1,111 +1,3 @@
-
-
-<div id="PatientInfoPrint" class="" style="height:100px; border: 1px solid #000000; padding: 5px; line-height: 18px;">
-    <div class="row" style="text-transform: uppercase" >
-
-        <div class="col-lg-6" style="width:50%;float:left; ">
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Name</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['patientDetails']->name}}
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Age</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['patientDetails']->age}}
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Sex</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{ $patientExaminations['patientDetails']->gender==0 ? "Male" :"Female"}}
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left;font-size: 12px; font-weight: bold; ">City/Town</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['patientDetails']->address==""? "----":$patientExaminations['patientDetails']->address }}
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Ref.DR</label>
-                <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: regular; ">
-                    {{count($patientExaminations['doctorDetails'])>0?$patientExaminations['doctorDetails']->name:"---"}}
-                </div>
-            </div>
-
-
-
-
-
-
-        </div>
-
-        <div class="col-lg-6" style="width:50%; float: left;">
-
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">PID</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{$patientExaminations['patientDetails']->pid}}
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Receipt ID</label>
-                <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: regular; ">
-                    {{count($patientExaminations['recieptId'])>0?$patientExaminations['recieptId']:"---"}}
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Sample No</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{"----"}}
-
-                </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Specimen</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    {{"----"}}
-                </div>
-            </div>
-
-
-            <div class="form-group col-md-12">
-                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 12px; font-weight: bold;">Test Date</label>
-                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
-                    <?php
-                    if(count($patientExaminations['recentBloodTests'])>0){
-
-                     echo $patientExaminations['recentBloodTests'][0]->examination_date;
-
-                    }else if(count($patientExaminations['recentMotionExaminations'])>0){
-                        echo $patientExaminations['recentMotionExaminations'][0]->examination_date;
-
-                    }else if(count($patientExaminations['recentUrineExaminations'])>0){
-                        echo $patientExaminations['recentUrineExaminations'][0]->examination_date;
-
-                    }
-
-
-                    ?>
-                    {{--{{$patientExaminationsnations['recentBloodTests'][0]->examination_date}}--}}
-                </div>
-            </div>
-
-
-
-        </div>
-
-    </div>
-
-</div>
-<br><br>
-
 <?php
 
 $defaultvalues = array(
@@ -460,22 +352,110 @@ function searchForId($id, $array,$value) {
 
 ?>
 
-<br/><br/><br/>
+<div id="PatientInfoPrint" class="" style="height:100px; border: 1px solid #000000; padding: 5px; line-height: 18px;">
+    <div class="row" style="text-transform: uppercase;" >
+
+        <div class="col-lg-5" style="width:50%;float:left; line-height: 18px;">
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Name</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{$patientExaminations['patientDetails']->name}}
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Age</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{count($patientExaminations['patientDetails']->age)>0 ? $patientExaminations['patientDetails']->age: "-" }}
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Sex</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{ $patientExaminations['patientDetails']->gender==0 ? "Male" :"Female"}}
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left;font-size: 10px; font-weight: bold; ">City/Town</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{$patientExaminations['patientDetails']->address==""? "----":$patientExaminations['patientDetails']->address }}
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Ref.DR</label>
+                <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: regular; ">
+                    {{count($patientExaminations['doctorDetails'])>0?$patientExaminations['doctorDetails']->name:"---"}}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-7" style="width:50%; float: left; line-height: 15px;">
+
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">PID</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{$patientExaminations['patientDetails']->pid}}
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Receipt ID</label>
+                <div class="col-sm-9" style="width:70%;float:left;font-size: 11px;font-weight: regular; ">
+                    {{count($patientExaminations['recieptId'])>0?$patientExaminations['recieptId']:"---"}}
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Sample No</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{"----"}}
+
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Specimen</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{"Blood"}}
+                </div>
+            </div>
+
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:30%;float:left; font-size: 10px; font-weight: bold;">Test Date</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                     {{"----"}}
+                </div>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label class="col-sm-3 control-label" style="width:20%;float:left; font-size: 10px; font-weight: bold;">Reciept Date&Time</label>
+                <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
+                    {{count($patientExaminations['recieptDetails'])>0?$patientExaminations['recieptDetails']->created_at:"---"}}
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<br/><br/><br/><br/>
 separate
 <div id="ExaminationInfoPrint1"  class="form-group">
-
-    @if(count($patientExaminations['recentBloodTests'])>0)
-
-
         <div class="form-group" style="font-family:traditional">
             <div class="col-sm-4" style="width:100%;float:left;">
                 <table style="width:100%;">
-                    <tr><th style="padding-right: 80px;">Test Name</th><th style="padding-right: 80px;" >Test Report</th><th style="padding-right: 50px;"  >Normal Value</th></tr>
+                    <tr><th style="padding-right: 40px;">Test Name</th><th style="padding-left: 55px;" >Test Report</th><th style="padding-left: 30px;"  >Normal Value</th></tr>
+                    @if(count($patientExaminations['recentBloodTests'])>0)
+
                     <tr><th colspan="3"> <div class="form-group" style="color: black;">
-                    <hr/>
-                    <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Blood Test
-                        {{$patientExaminations['recentBloodTests'][0]->examination_date}}</label>
-            </div></th></tr>
+                                <hr/>
+                                <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Blood Test
+                                    {{$patientExaminations['recentBloodTests'][0]->examination_date}}</label>
+                            </div></th></tr>
                     <div class="form-group" style="background-color: #ffff99; color: black;">
 
                         <?php $parentCheck = "";?>
@@ -483,7 +463,7 @@ separate
                             @if($recentTest->is_parent==0 && ($parentCheck=="" || $parentCheck!=$recentTest->parent_examination_name))
                                 <?php $parentCheck = $recentTest->parent_examination_name; ?>
                                 <tr style="font-size: 14px;  align-content: center">
-                                    <td colspan="3"> <b>{{$recentTest->parent_examination_name}}</b> </td>
+                                    <td colspan="3" style="font-weight: bold"> <b>{{$recentTest->parent_examination_name}}</b> </td>
                                 </tr>
 
                             @endif
@@ -499,8 +479,15 @@ separate
                                     {{$recentTest->examination_name}}
                                 </td>
 
-                                <td style="padding-left: 130px; <?php echo searchForId($recentTest->id, $defaultvalues,$recentTest->test_readings)?>">
-                                    {{$recentTest->test_readings}}{{$recentTest->units}}</td>
+                                <td style="padding-left: 130px;font-weight: <?php echo searchForId($recentTest->id, $defaultvalues,$recentTest->test_readings)?>">
+
+                                    @if($recentTest->units=="gms")
+                                       <?php $valu=$recentTest->test_readings*7?>
+                                           {{$recentTest->test_readings}}  {{$recentTest->units}} &nbsp;&nbsp; {{$valu}}{{"%"}}
+                                    @else
+                                        {{$recentTest->test_readings}} {{$recentTest->units}}
+                                    @endif
+                                </td>
                                 <td style="padding-left: 30px;">{{$recentTest->default_normal_values}}</td>
 
                             </tr>
@@ -508,23 +495,23 @@ separate
                 </table>
             </div>
 
-        </div>
-    @endif
 
+    @endif
     @if(count($patientExaminations['recentMotionExaminations'])>0)
 
-        <div class="form-group" style="color: black;">
-            <label class="col-sm-12 control-label" style=" font-size: 14px;font-weight: bold; align-content: center">Motion Test
-                - {{$patientExaminations['recentMotionExaminations'][0]->examination_date}}</label>
-        </div>
+                <tr><th colspan="3"> <div class="form-group" style="color: black;">
+                            <hr/>
+                            <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Motion Test
+                                {{$patientExaminations['recentMotionExaminations'][0]->examination_date}}</label>
+                        </div></th></tr>
         <div class="form-group ">
             <div class="col-sm-4" style="width:100%;float:left;">
                 <table style="width:100%;float:left;">
                     @foreach($patientExaminations['recentMotionExaminations'] as $recentTest)
                         <tr style="font-size: 14px; align-content: center">
-                            <td style="width:33%;float:left;">{{$recentTest->examination_name}}</td>
-                            <td style="width:50%;float:left;">{{$recentTest->test_readings}}</td>
-                            <td style="width:33%;float:left;"></td>
+                            <td style="width:40%;float:left;">{{$recentTest->examination_name}}</td>
+                            <td style="width:30%;float:left;">{{$recentTest->test_readings}}</td>
+                            <td style="width:25%;float:left;"></td>
                         </tr>
 
 
@@ -535,13 +522,12 @@ separate
 
         </div>
     @endif
-
     @if(count($patientExaminations['recentUrineExaminations'])>0)
-
-        <div class="form-group" style="color: black;">
-            <label class="col-sm-12 control-label" style=" font-size: 14px;font-weight: bold; align-content: center">Urine Test
-                - {{$patientExaminations['recentUrineExaminations'][0]->examination_date}}</label>
-        </div>
+                <tr><th colspan="3"> <div class="form-group" style="color: black;">
+                            <hr/>
+                            <label class="col-sm-12 control-label" style=" float: left; font-size: 14px;font-weight: bold; align-content: center">Urine Test
+                                {{$patientExaminations['recentUrineExaminations'][0]->examination_date}}</label>
+                        </div></th></tr>
         <div class="form-group ">
             <div class="col-sm-4" style="width:100%;float:left;">
                 <table style="width:100%;float:left;">
@@ -551,21 +537,21 @@ separate
                         @if($recentTest->is_parent==0 && ($parentCheck=="" || $parentCheck!=$recentTest->parent_examination_name))
                             <?php $parentCheck = $recentTest->parent_examination_name; ?>
                             <tr style=" font-size: 14px;font-weight: bold; align-content: center">
-                                <td colspan="3"> <b>{{$recentTest->parent_examination_name}}</b> </td>
+                                <td colspan="3" style="font-weight: bold"> <b>{{$recentTest->parent_examination_name}}</b> </td>
                             </tr>
 
                         @endif
                         <tr style="font-size: 14px;font-weight: normal; align-content: center">
 
-                            <td style="width:33%;float:left;">
+                            <td style="width:40%;float:left;">
                                 @if($recentTest->is_parent==0)
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 @endif
                                 {{$recentTest->examination_name}}
                             </td>
 
-                            <td style="width:50%;float:left;"> {{$recentTest->test_readings}}</td>
-                            <td style="width:33%;float:left;">{{$recentTest->normal_default_values}}</td>
+                            <td style="width:30%;float:left;"> {{$recentTest->test_readings}}</td>
+                            <td style="width:25%;float:left;">{{$recentTest->normal_default_values}}</td>
 
                         </tr>
 

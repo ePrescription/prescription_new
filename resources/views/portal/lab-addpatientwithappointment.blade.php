@@ -245,17 +245,24 @@ $time_array=array(
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-sm-3 control-label">DOB</label>
-                                                    <div class="col-sm-9">
-                                                        <input type="date" class="form-control" name="dob" id="dob" value="" onblur="calculateAge(this.value)" />
-                                                        @if ($errors->has('dob'))<p class="error" style="">{!!$errors->first('dob')!!}</p>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
                                                     <label class="col-sm-3 control-label">Age <span class="red">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="number" min="0" class="form-control" id="age" name="age" value="" required="required" />
-                                                        @if ($errors->has('age'))<p class="error" style="">{!!$errors->first('age')!!}</p>@endif
+                                                        <input type="text"  class="form-control"
+                                                               id="age" name="age" value="" style='text-transform:uppercase';  onpaste="return false"
+                                                               required="required"/>
+                                                        @if ($errors->has('age'))<p class="error"
+                                                                                    style="">{!!$errors->first('age')!!}</p>@endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-sm-3 control-label">DOB</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="date" class="form-control" name="dob"
+                                                               id="dob"
+                                                               onblur="calculateAge(this.value)"/>
+                                                        @if ($errors->has('dob'))<p class="error"
+                                                                                    style="">{!!$errors->first('dob')!!}</p>@endif
                                                     </div>
                                                 </div>
 
@@ -592,6 +599,88 @@ $time_array=array(
                 });
 
                 return terms;
+            });
+        });
+
+        $(function(){
+            $('#age').change(function(e){
+
+                var x= $('#age').val().toUpperCase();
+                // allowed char: 1 , 2 , 3, 4, 5,6,7,8,9, D, M,Y
+                var allow_char = [8,48,49,50,51,52,53,54,55,56,57,100,109,121,32];
+
+                if(x.length<5){
+                    if(x.indexOf('D') > -1){
+                        // alert();
+                        var te=x.split("D");
+                        var r=te[0];
+                        var t=r.trim();
+                        var shortenedString = t;
+                        var numOfYears =shortenedString;
+                        var expireDate = new Date();
+                        expireDate.setDate(expireDate.getDate() - parseInt(numOfYears));
+                        var day = ("0" + expireDate.getDate()).slice(-2);
+                        var month = ("0" + (expireDate.getMonth() + 1)).slice(-2);
+                        var today = expireDate.getFullYear()+"-"+(month)+"-"+(day) ;
+                        $("#dob").val(today);
+                        var age = getAge(new Date(expireDate.getFullYear(), expireDate.getMonth(), expireDate.getDay()));
+                        $("#age").val(age);
+                        if (age < 18) {
+
+                            document.getElementById("married2").checked = true;
+                        } else {
+                            document.getElementById("married2").value = "2";
+                        }
+                    }else if(x.indexOf('M') > -1){
+                        var te=x.split("M");
+                        var r=te[0];
+                        var t=r.trim();
+                        var shortenedString = t;
+                        var numOfYears =shortenedString;
+                        var expireDate = new Date();
+                        expireDate.setMonth(expireDate.getMonth() - parseInt(numOfYears));
+                        var day = ("0" + expireDate.getDate()).slice(-2);
+                        var month = ("0" + (expireDate.getMonth() + 1)).slice(-2);
+                        var today = expireDate.getFullYear()+"-"+(month)+"-"+(day) ;
+                        $("#dob").val(today);
+                        var age = getAge(new Date(expireDate.getFullYear(), expireDate.getMonth(), expireDate.getDay()));
+                        $("#age").val(age);
+                        if (age < 18) {
+
+                            document.getElementById("married2").checked = true;
+                        } else {
+                            document.getElementById("married2").value = "2";
+                        }
+                    }else if(x.indexOf('Y')>-1){
+                        var te=x.split("Y");
+                        var r=te[0];
+                        var t=r.trim();
+                        var shortenedString = t;
+                        var numOfYears =shortenedString;
+                        var expireDate = new Date();
+                        expireDate.setFullYear(expireDate.getFullYear() - numOfYears);
+                        // expireDate.setDate(expireDate.getDate() -1);
+                        var day = ("0" + expireDate.getDate()).slice(-2);
+                        var month = ("0" + (expireDate.getMonth() + 1)).slice(-2);
+                        var today = expireDate.getFullYear()+"-"+(month)+"-"+(day) ;
+                        $("#dob").val(today);
+                        var age = getAge(new Date(expireDate.getFullYear(), expireDate.getMonth(), expireDate.getDay()));
+                        $("#age").val(age);
+                        if (age < 18) {
+
+                            document.getElementById("married2").checked = true;
+                        } else {
+                            document.getElementById("married2").value = "2";
+                        }
+                    }else{
+                        alert("Please Use Letters D or M or Y followed by Age");
+                    }
+
+                }
+
+                var patt1 ="[0-9](D|M|Y)";
+
+
             });
         });
     </script>

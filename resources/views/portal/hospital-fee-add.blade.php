@@ -172,6 +172,7 @@ $profile_menu="0";
 
                                                             <div class="col-md-12">
                                                                 <div class="form-group col-md-12">
+                                                                    <input type="hidden" name="receiptId" value="0" class="form-control"/>
                                                                     <input type="hidden" name="hospitalId" value="{{Auth::user()->id}}" class="form-control"/>
                                                                     <input type="submit" name="addfee" value="SUBMIT FEE" class="btn btn-success"/>
                                                                 </div>
