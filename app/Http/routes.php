@@ -24,6 +24,8 @@ Route::post('/dologin', array('as' => 'user.dologin', 'uses' => 'Doctor\DoctorCo
 Route::any('doctor/login', array('as' => 'doctor.doctorloginform', 'uses' => 'Doctor\DoctorController@doctorloginform'));
 Route::post('doctor/dologin', array('as' => 'doctor.dologin', 'uses' => 'Doctor\DoctorController@doctorlogin'));
 
+//Route::post('patient/api/login', array('as' => 'patient.login', 'uses' => 'Doctor\DoctorApiController@patientLogin'));
+
 Route::get('/dashboard', function () {
     return view('portal.index');
 });
@@ -63,6 +65,11 @@ Route::group(array('prefix' => 'patient'), function()
 {
     Route::get('{id}/dashboard', function () {
         return view('portal.patient-dashboard');
+    });
+
+    Route::group(['namespace' => 'Doctor'], function()
+    {
+        Route::post('rest/api/login', array('as' => 'patient.login', 'uses' => 'DoctorApiController@patientLogin'));
     });
 
     Route::group(['namespace' => 'Common'], function()

@@ -337,12 +337,12 @@ class HospitalImpl implements HospitalInterface
     }
 
     /**
-     * Get doctor details
-     * @param $doctorId
-     * @throws $hospitalException
-     * @return array | null
-     * @author Baskar
-     */
+ * Get doctor details
+ * @param $doctorId
+ * @throws $hospitalException
+ * @return array | null
+ * @author Baskar
+ */
 
     public function getDoctorDetails($doctorId)
     {
@@ -366,6 +366,39 @@ class HospitalImpl implements HospitalInterface
         }
 
         return $doctorDetails;
+    }
+
+    /**
+     * Get patient details after login
+     * @param $patientId
+     * @throws $hospitalException
+     * @return array | null
+     * @author Baskar
+     */
+
+    public function getApiPatientDetails($patientId)
+    {
+        $patientDetails = null;
+
+        try
+        {
+            $query = DB::table('patient as p')->join('users as usr', 'usr.id', '=', 'p.patient_id');
+            $query->where('p.patient_id', '=', $patientId);
+            $query->where('usr.delete_status', '=', 1);
+            $query->select('p.id as id', 'p.patient_id as patientId', 'p.name as patientName', 'p.pid as patientUniqueId');
+
+            $patientDetails = $query->get();
+        }
+        catch (QueryException $queryEx)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_DETAILS_ERROR, $queryEx);
+        }
+        catch (Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::PATIENT_DETAILS_ERROR, $exc);
+        }
+
+        return $patientDetails;
     }
 
     //Get Patient List
@@ -479,9 +512,11 @@ class HospitalImpl implements HospitalInterface
             $query = DB::table('patient as p')->select('p.id', 'p.patient_id', 'p.name as name', 'p.address', 'p.pid', 'c.city_name',
                 'co.name as country', 'p.telephone', 'p.email', 'p.relationship', 'p.patient_spouse_name as spouseName',
                 'p.dob', 'p.age', 'p.place_of_birth', 'p.nationality', 'p.gender'
-                , 'da.appointment_date', 'da.appointment_time', 'da.brief_history', 'da.fee',
+                , 'da.appointment_date', 'da.appointment_time', 'da.brief_history', 'da.fee', 'da.referral_doctor',
+                'da.referral_type', 'da.referral_hospital',
                 'p.patient_photo', 'p.married', 'p.occupation');
-            $query->leftJoin('doctor_appointment as da', 'da.patient_id', '=', 'p.patient_id');
+            //$query->leftJoin('doctor_appointment as da', 'da.patient_id', '=', 'p.patient_id');
+            $query->join('doctor_appointment as da', 'da.patient_id', '=', 'p.patient_id');
             $query->leftJoin('cities as c', 'c.id', '=', 'p.city');
             $query->leftJoin('countries as co', 'co.id', '=', 'p.country');
             $query->where('p.patient_id', $patientId);
