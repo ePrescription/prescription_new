@@ -164,6 +164,10 @@ Route::group(array('prefix' => 'fronthospital', 'namespace' => 'Doctor'), functi
     Route::get('rest/api/transferappointment', array('as' => 'patient.transferappointment', 'uses' => 'DoctorController@transferAppointmentForFront'));
 
 
+    //Online Details
+    Route::get('rest/{hospitalId}/patients/onlinedetails', array('as' => 'patient.onlinedetails', 'uses' => 'DoctorController@getOnlineDetails'));
+
+
     Route::get('rest/api/{hospitalId}/patientnames', array('as' => 'hospital.searchnames', 'uses' => 'DoctorController@getPatientNamesForHospital'));
     Route::get('rest/api/{patientId}/details', array('as' => 'hospital.details', 'uses' => 'DoctorController@getPatientDetailsById'));
 

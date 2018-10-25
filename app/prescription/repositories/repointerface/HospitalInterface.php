@@ -250,4 +250,8 @@ interface HospitalInterface {
     //Added by Baskar - End
 
 
+    public function getAskQuestionList($hospitalId);
+    public function getSecondOpinionList($hospitalId);
+
+
 }

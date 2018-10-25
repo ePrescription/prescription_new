@@ -104,6 +104,12 @@
         "315" => "Successfully retrieved patient appointments",
         "316" => "No appointments found for the selected date",
 
+        "317" => "Unable to list the ask question",
+        "318" => "Successfully retrieved ask a question list",
+        "319" => "Unable to list the second opinion",
+        "320" => "Successfully retrieved second opinion list",
+
+
         "403" => "Unable to upload patient photo",
         "404" => "Successfully uploaded patient photo",
 

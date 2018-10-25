@@ -10452,4 +10452,36 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
         ));
     }
 
+
+    public function getOnlineDetails($hospitalId)
+    {
+        $askquestions = null;
+        $secondopinion = null;
+        /* $categoryType = $appointmentRequest->get('appointmentCategory');
+        $fromDate = $appointmentRequest->get('fromDate');
+        $toDate = $appointmentRequest->get('toDate');
+        $status = $appointmentRequest->get('statusId'); */
+
+        try
+        {
+            $askquestions = $this->hospitalService->getAskQuestionList($hospitalId);
+            $secondOpinion = $this->hospitalService->getSecondOpinionList($hospitalId);
+            //dd($secondOpinion);
+            //$doctors = $this->hospitalService->getDoctorsByHospitalId($hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return view('portal.hospital-patients-online-details',compact('askquestions','secondOpinion'));
+        //return $responseJson;
+    }
+
 }

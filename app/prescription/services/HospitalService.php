@@ -4041,4 +4041,40 @@ class HospitalService {
 
         return $attachment;
     }
+
+    public function getAskQuestionList($hospitalId){
+        $askquestions = null;
+
+        try
+        {
+            $askquestions = $this->hospitalRepo->getAskQuestionList($hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::ASK_QUESTION_LIST_ERROR, $exc);
+        }
+        return $askquestions;
+    }
+
+    public function getSecondOpinionList($hospitalId){
+        $secondOpinion = null;
+
+        try
+        {
+            $secondOpinion = $this->hospitalRepo->getSecondOpinionList($hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::SECOND_OPINION_LIST_ERROR, $exc);
+        }
+        return $secondOpinion;
+    }
 }

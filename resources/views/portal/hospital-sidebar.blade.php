@@ -65,6 +65,12 @@
                         </a>
                     </li>
 
+                    <li class="@if($appointment_menu==1) active @endif treeview">
+                        <a href="{{URL::to('/')}}/fronthospital/rest/{{Auth::user()->id}}/patients/onlinedetails">
+                            <i class="fa fa-stethoscope"></i> <span>Online Details</span>
+                        </a>
+                    </li>
+
                     <li class="@if($profile_menu==1) active @endif has_sub treeview hidden">
                         <a href="javascript:void(0);">
                             <i class="fa fa-book"></i> <span>My Account</span>

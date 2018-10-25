@@ -1512,8 +1512,8 @@ class HospitalImpl implements HospitalInterface
             $query->whereDate('da.appointment_date', '=', $currentDate);
             $query->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_OPEN);
             $query->whereNotNull('da.appointment_date');
-            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
-            $query->groupBy('da.appointment_category');
+            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category', 'da.is_from_patient_portal');
+            $query->groupBy('da.appointment_category','da.is_from_patient_portal');
 
             $openAppointments = $query->get();
 
@@ -1522,7 +1522,7 @@ class HospitalImpl implements HospitalInterface
             $visitedQuery->whereDate('da.appointment_date', '=', $currentDate);
             $visitedQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_VISITED);
             $visitedQuery->whereNotNull('da.appointment_date');
-            $visitedQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $visitedQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category', 'da.is_from_patient_portal');
             $visitedQuery->groupBy('da.appointment_category');
 
             $visitedAppointments = $visitedQuery->get();
@@ -1532,7 +1532,7 @@ class HospitalImpl implements HospitalInterface
             $transferredQuery->whereDate('da.appointment_date', '=', $currentDate);
             $transferredQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_TRANSFERRED);
             $transferredQuery->whereNotNull('da.appointment_date');
-            $transferredQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $transferredQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category', 'da.is_from_patient_portal');
             $transferredQuery->groupBy('da.appointment_category');
 
             $transferredAppointments = $transferredQuery->get();
@@ -1544,37 +1544,25 @@ class HospitalImpl implements HospitalInterface
             $cancelledQuery->whereDate('da.appointment_date', '=', $currentDate);
             $cancelledQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_CANCELLED);
             $cancelledQuery->whereNotNull('da.appointment_date');
-            $cancelledQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $cancelledQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category', 'da.is_from_patient_portal');
             $cancelledQuery->groupBy('da.appointment_category');
 
             $cancelledAppointments = $cancelledQuery->get();
-
-            //$query1 = DB::getQueryLog();
-            //$lastQuery = end($query);
-            //dd($query1);
-            //dd($cancelledAppointments);
 
             $postponedQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $postponedQuery->join('appointment_status as aps', 'aps.id', '=', 'da.appointment_status_id');
             $postponedQuery->whereDate('da.appointment_date', '=', $currentDate);
             $postponedQuery->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_POSTPONED);
             $postponedQuery->whereNotNull('da.appointment_date');
-            $postponedQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
+            $postponedQuery->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category', 'da.is_from_patient_portal');
             $postponedQuery->groupBy('da.appointment_category');
 
             $postponedAppointments = $postponedQuery->get();
 
             //dd($query->toSql());
-
-            //DB::connection()->enableQueryLog();
-            //$appointments = $query->get();
+           //DB::connection()->enableQueryLog();
             //$query = DB::getQueryLog();
             //$lastQuery = end($query);
-            //dd($query);
-
-            //dd($query->toSql());
-
-            //$appointments = $query->get();
 
             $dashBoardQuery = DB::table('doctor_appointment as da')->where('da.hospital_id', '=', $hospitalId);
             $dashBoardQuery->whereDate('da.appointment_date', '=', $currentDate);
@@ -1587,8 +1575,6 @@ class HospitalImpl implements HospitalInterface
             //dd($dashBoardQuery->toSql());
             $appFees = $dashBoardQuery->get();
             $appTotalFees = $appFees[0]->appAmount;
-
-            //dd($totalFees);
 
             /*$hospitalQuery->join('hospital as h', function($join) {
                 $join->on('h.hospital_id', '=', 'users.id');
@@ -1604,11 +1590,9 @@ class HospitalImpl implements HospitalInterface
             });
 
             $bloodExamQuery->select(DB::raw("SUM(pbei.fees) as bloodTestAmount"));
-            //dd($bloodExamQuery->toSql());
 
             $bloodTestFees = $bloodExamQuery->get();
             $bloodTotalFees = $bloodTestFees[0]->bloodTestAmount;
-            //dd($bloodTestFees);
 
             $motionExamQuery = DB::table('patient_motion_examination as pme')->where('pme.hospital_id', '=', $hospitalId);
             $motionExamQuery->join('patient_motion_examination_item as pmei', 'pmei.patient_motion_examination_id', '=', 'pme.id');
@@ -1619,7 +1603,6 @@ class HospitalImpl implements HospitalInterface
             });
 
             $motionExamQuery->select(DB::raw("SUM(pmei.fees) as motionTestAmount"));
-            //dd($bloodExamQuery->toSql());
             $motionTestFees = $motionExamQuery->get();
             $motionTotalFees = $motionTestFees[0]->motionTestAmount;
 
@@ -1633,7 +1616,6 @@ class HospitalImpl implements HospitalInterface
             });
 
             $urineExamQuery->select(DB::raw("SUM(puei.fees) as urineTestAmount"));
-            //dd($bloodExamQuery->toSql());
             $urineTestFees = $urineExamQuery->get();
             $urineTotalFees = $urineTestFees[0]->urineTestAmount;
 
@@ -1690,9 +1672,6 @@ class HospitalImpl implements HospitalInterface
 
             $xRayFees = $xrayExamQuery->get();
             $xRayTotalFees = $xRayFees[0]->xrayTestAmount;
-
-            //$query = DB::getQueryLog();
-            //dd($query);
 
             /*SELECT * FROM doctor_appointment da
             WHERE da.`hospital_id` = 1
@@ -12802,4 +12781,59 @@ class HospitalImpl implements HospitalInterface
 
         return $attachment;
     }
+
+    public function getAskQuestionList($hospitalId)
+    {
+        $askquestions = null;
+
+        try {
+            $askquestions=DB::table('patient_ask_question as paq')
+                 ->join('patient as p', 'p.patient_id', '=', 'paq.patient_id')
+                ->join('users as usr', 'usr.id', '=', 'p.patient_id')
+                ->join('doctor as d','d.doctor_id','=','paq.doctor_id')
+                ->join('hospital as h','h.hospital_id','=','paq.hospital_id')
+                ->join('patient_ask_question_documents as paqi','paqi.patient_ask_question_id','=','paq.id')
+                ->where('paq.hospital_id','=',$hospitalId)
+                ->where('usr.delete_status', '=', 1)
+                ->select('p.patient_id', 'p.name as patient_name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
+                    'd.name','d.specialty','paq.created_at as appointment_date','paq.detailed_description as brief_history','paqi.document_path as reports','paq.subject')
+                ->get();
+           //dd($askquestions);
+        } catch (QueryException $queryEx) {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::ASK_QUESTION_LIST_ERROR, $queryEx);
+        } catch (Exception $ex) {
+            throw new HospitalException(null, ErrorEnum::ASK_QUESTION_LIST_ERROR, $ex);
+        }
+
+        return $askquestions;
+    }
+
+    public function getSecondOpinionList($hospitalId)
+    {
+        $secondOpinion = null;
+
+        try {
+            $secondOpinion=DB::table('patient_second_opinion as pso')
+                ->join('patient as p', 'p.patient_id', '=', 'pso.patient_id')
+                ->join('users as usr', 'usr.id', '=', 'p.patient_id')
+                ->join('doctor as d','d.doctor_id','=','pso.doctor_id')
+                ->join('hospital as h','h.hospital_id','=','pso.hospital_id')
+                ->join('patient_second_opinion_documents as psoi','psoi.patient_second_opinion_id','=','pso.id')
+                ->where('pso.hospital_id','=',$hospitalId)
+                ->where('usr.delete_status', '=', 1)
+                ->select('p.patient_id', 'p.name as patient_name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
+                    'd.name','d.specialty','pso.created_at as appointment_date', 'pso.detailed_description as brief_history','psoi.document_path as reports','pso.subject', 'pso.id')
+                ->get();
+            //dd($askquestions);
+        } catch (QueryException $queryEx) {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::SECOND_OPINION_LIST_ERROR, $queryEx);
+        } catch (Exception $ex) {
+            throw new HospitalException(null, ErrorEnum::SECOND_OPINION_LIST_ERROR, $ex);
+        }
+
+        return $secondOpinion;
+    }
+
 }
