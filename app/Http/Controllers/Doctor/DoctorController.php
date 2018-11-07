@@ -642,7 +642,7 @@ class DoctorController extends Controller
         {
             if (Auth::attempt(['email' => $loginInfo['email'], 'password' => $loginInfo['password']]))
             {
-                dd(Auth::user());
+                //dd(Auth::user());
 
                 /*
                 $userSession = new UserSession();
