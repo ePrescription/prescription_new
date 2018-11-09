@@ -482,6 +482,8 @@ Route::group(['prefix' => 'pharmacy'], function()
 
     Route::group(['namespace' => 'Pharmacy'], function()
     {
+        Route::get('rest/api/{pharmacyId}/hospital/{hospitalId}/onlinedetails', array('as' => 'pharmacy.onlinedetails', 'uses' => 'PharmacyController@getOnlineDetailsForPharmacy'));
+
         Route::get('rest/api/{pharmacyId}/profile', array('as' => 'pharmacy.viewprofile', 'uses' => 'PharmacyController@getProfile'));
         Route::get('rest/api/{pharmacyId}/hospital/{hospitalId}/patients', array('as' => 'pharmacy.patients', 'uses' => 'PharmacyController@getPatientListForPharmacy'));
         Route::get('rest/api/{pharmacyId}/hospital/{hospitalId}/prescriptions', array('as' => 'pharmacy.prescriptions', 'uses' => 'PharmacyController@getPrescriptionListForPharmacy'));
@@ -527,6 +529,7 @@ Route::group(['prefix' => 'doctor'], function()
 
     Route::group(['namespace' => 'Doctor'], function()
     {
+        Route::get('{doctorId}/hospital/{hospitalId}/patients/onlinedetails', array('as' => 'doctor.onlinedetails', 'uses' => 'DoctorController@getOnlineDetailsForDoctor'));
 
         Route::get('{doctorId}/hospital/{hospitalId}/dashboard', array('as' => 'doctor.dashboard', 'uses' => 'DoctorApiController@getDashboardDetailsForDoctor'));
         Route::get('{doctorId}/hospital/{hospitalId}/futureappointments', array('as' => 'doctor.futureappointments', 'uses' => 'DoctorApiController@getFutureAppointmentsForDashboard'));

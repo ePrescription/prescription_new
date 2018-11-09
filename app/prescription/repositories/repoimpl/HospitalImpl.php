@@ -12836,4 +12836,60 @@ class HospitalImpl implements HospitalInterface
         return $secondOpinion;
     }
 
+    public function getAskQuestionListForDoctor($doctorId, $hospitalId)
+    {
+        $askquestions = null;
+
+        try {
+            $askquestions=DB::table('patient_ask_question as paq')
+                ->join('patient as p', 'p.patient_id', '=', 'paq.patient_id')
+                ->join('users as usr', 'usr.id', '=', 'p.patient_id')
+                ->join('doctor as d','d.doctor_id','=','paq.doctor_id')
+                ->join('hospital as h','h.hospital_id','=','paq.hospital_id')
+                ->join('patient_ask_question_documents as paqi','paqi.patient_ask_question_id','=','paq.id')
+                ->where('paq.doctor_id','=',$doctorId)
+                ->where('paq.hospital_id','=',$hospitalId)
+                ->where('usr.delete_status', '=', 1)
+                ->select('p.patient_id', 'p.name as patient_name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
+                    'h.hospital_name','d.specialty','paq.created_at as appointment_date','paq.detailed_description as brief_history','paqi.document_path as reports','paq.subject')
+                ->get();
+            //dd($askquestions);
+        } catch (QueryException $queryEx) {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::ASK_QUESTION_LIST_ERROR, $queryEx);
+        } catch (Exception $ex) {
+            throw new HospitalException(null, ErrorEnum::ASK_QUESTION_LIST_ERROR, $ex);
+        }
+
+        return $askquestions;
+    }
+
+    public function getSecondOpinionListForDoctor($doctorId, $hospitalId)
+    {
+        $secondOpinion = null;
+
+        try {
+            $secondOpinion=DB::table('patient_second_opinion as pso')
+                ->join('patient as p', 'p.patient_id', '=', 'pso.patient_id')
+                ->join('users as usr', 'usr.id', '=', 'p.patient_id')
+                ->join('doctor as d','d.doctor_id','=','pso.doctor_id')
+                ->join('hospital as h','h.hospital_id','=','pso.hospital_id')
+                ->join('patient_second_opinion_documents as psoi','psoi.patient_second_opinion_id','=','pso.id')
+                ->where('pso.doctor_id','=',$doctorId)
+                ->where('pso.hospital_id','=',$hospitalId)
+                ->where('usr.delete_status', '=', 1)
+                ->select('p.patient_id', 'p.name as patient_name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
+                    'h.hospital_name','d.specialty','pso.created_at as appointment_date', 'pso.detailed_description as brief_history','psoi.document_path as reports','pso.subject', 'pso.id')
+                ->get();
+            //dd($askquestions);
+        } catch (QueryException $queryEx) {
+            //dd($queryEx);
+            throw new HospitalException(null, ErrorEnum::SECOND_OPINION_LIST_ERROR, $queryEx);
+        } catch (Exception $ex) {
+            throw new HospitalException(null, ErrorEnum::SECOND_OPINION_LIST_ERROR, $ex);
+        }
+
+        return $secondOpinion;
+    }
+
 }

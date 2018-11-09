@@ -4077,4 +4077,40 @@ class HospitalService {
         }
         return $secondOpinion;
     }
+
+    public function getAskQuestionListForDoctor($doctorId,$hospitalId){
+        $askquestions = null;
+
+        try
+        {
+            $askquestions = $this->hospitalRepo->getAskQuestionListForDoctor($doctorId,$hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::ASK_QUESTION_LIST_ERROR, $exc);
+        }
+        return $askquestions;
+    }
+
+    public function getSecondOpinionListForDoctor($doctorId,$hospitalId){
+        $secondOpinion = null;
+
+        try
+        {
+            $secondOpinion = $this->hospitalRepo->getSecondOpinionListForDoctor($doctorId,$hospitalId);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            throw $hospitalExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new HospitalException(null, ErrorEnum::SECOND_OPINION_LIST_ERROR, $exc);
+        }
+        return $secondOpinion;
+    }
 }

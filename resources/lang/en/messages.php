@@ -108,6 +108,8 @@
         "318" => "Successfully retrieved ask a question list",
         "319" => "Unable to list the second opinion",
         "320" => "Successfully retrieved second opinion list",
+        "321" => "Unable to list the pharmacy pickup",
+        "322" => "Successfully retrieved pharmacy pickup list",
 
 
         "403" => "Unable to upload patient photo",

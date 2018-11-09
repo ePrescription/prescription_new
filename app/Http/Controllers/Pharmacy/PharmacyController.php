@@ -721,4 +721,26 @@ class PharmacyController extends Controller
         //return $prescriptionDetails;
     }
 
+    public function getOnlineDetailsForPharmacy($pharmacyId, $hospitalId)
+    {
+        $pharmacypickup = null;
+
+        try
+        {
+            $pharmacypickup = $this->pharmacyService->getOnlineDetailsForPharmacy($pharmacyId, $hospitalId);
+            //dd($pharmacypickup);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PHARMACY_PICKUP_LIST_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PHARMACY_PICKUP_LIST_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return view('portal.pharmacy-online-details',compact('pharmacypickup'));
+    }
 }

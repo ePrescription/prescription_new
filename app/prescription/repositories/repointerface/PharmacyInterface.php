@@ -24,4 +24,6 @@ interface PharmacyInterface
 
     public function getPrescriptionListForDoctor($doctorId, $hospitalId);
 
+    public function getOnlineDetailsForPharmacy($pharmacyId, $hospitalId);
+
 }

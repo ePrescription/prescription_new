@@ -215,5 +215,23 @@ class PharmacyService
 
         return $prescriptions;
     }
+
+    public function getOnlineDetailsForPharmacy($pharmacyId,$hospitalId){
+        $pharmacypickup = null;
+
+        try
+        {
+            $pharmacypickup = $this->pharmacyRepo->getOnlineDetailsForPharmacy($pharmacyId,$hospitalId);
+        }
+        catch(PharmacyException $profileExc)
+        {
+            throw $profileExc;
+        }
+        catch(Exception $exc)
+        {
+            throw new PharmacyException(null, ErrorEnum::PHARMACY_PICKUP_LIST_ERROR, $exc);
+        }
+        return $pharmacypickup;
+    }
 }
 

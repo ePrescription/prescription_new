@@ -253,5 +253,7 @@ interface HospitalInterface {
     public function getAskQuestionList($hospitalId);
     public function getSecondOpinionList($hospitalId);
 
+    public function getAskQuestionListForDoctor($doctorId, $hospitalId);
+    public function getSecondOpinionListForDoctor($doctorId, $hospitalId);
 
 }

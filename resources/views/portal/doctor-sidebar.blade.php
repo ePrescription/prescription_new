@@ -63,6 +63,12 @@
                             <i class="fa fa-users"></i> <span>Doctor Fee</span>
                         </a>
                     </li>
+
+                    <li class="@if($appointment_menu==1) active @endif treeview">
+                        <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patients/onlinedetails">
+                            <i class="fa fa-stethoscope"></i> <span>Onlne Details</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 

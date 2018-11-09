@@ -10484,4 +10484,31 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
         //return $responseJson;
     }
 
+    public function getOnlineDetailsForDoctor($doctorId,$hospitalId)
+    {
+        //dd($doctorId);
+        $askquestions = null;
+        $secondopinion = null;
+
+        try
+        {
+            $askquestions = $this->hospitalService->getAskQuestionListForDoctor($doctorId, $hospitalId);
+            $secondOpinion = $this->hospitalService->getSecondOpinionListForDoctor($doctorId, $hospitalId);
+            //dd($secondOpinion);
+        }
+        catch(HospitalException $hospitalExc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($hospitalExc);
+        }
+        catch(Exception $exc)
+        {
+            $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
+            $responseJson->sendErrorResponse($exc);
+        }
+
+        return view('portal.doctor-patients-online-details',compact('askquestions','secondOpinion'));
+        //return $responseJson;
+    }
+
 }

@@ -301,4 +301,36 @@ class PharmacyImpl implements PharmacyInterface
 
         return $prescriptions;
     }
+
+    public function getOnlineDetailsForPharmacy($pharmacyId, $hospitalId)
+    {
+        $pharmacypickup = null;
+
+        try
+        {
+            $pharmacypickup=DB::table('pharmacy_pickup as phar')
+                ->join('patient as p', 'p.patient_id', '=', 'phar.patient_id')
+                ->join('users as usr', 'usr.id', '=', 'p.patient_id')
+                ->join('pharmacy as ph','ph.pharmacy_id','=','phar.pharmacy_id')
+                ->join('hospital as h','h.hospital_id','=','phar.hospital_id')
+                ->join('pharmacy_pickup_documents as doc','doc.pharmacy_pickup_id','=','phar.id')
+                ->where('phar.pharmacy_id','=',$pharmacyId)
+                ->where('phar.hospital_id','=',$hospitalId)
+                ->where('usr.delete_status', '=', 1)
+                ->select('p.patient_id', 'p.name as patient_name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship', 'h.hospital_name',
+                    'ph.name as pharmacy_name','phar.pickup_date as appointment_date', 'phar.brief_notes as brief_history','doc.document_path as reports', 'doc.document_extension','phar.id')
+                ->get();
+        }
+        catch(QueryException $queryEx)
+        {
+            throw new PharmacyException(null, ErrorEnum::PRESCRIPTION_LIST_ERROR, $queryEx);
+        }
+        catch(Exception $exc)
+        {
+            throw new PharmacyException(null, ErrorEnum::PRESCRIPTION_LIST_ERROR, $exc);
+        }
+
+
+        return $pharmacypickup;
+    }
 }
