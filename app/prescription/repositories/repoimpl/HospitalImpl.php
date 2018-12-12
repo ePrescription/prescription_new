@@ -1694,7 +1694,7 @@ class HospitalImpl implements HospitalInterface
             $dashboardDetails["totalLabFees"] = $labAmount;
             $dashboardDetails["consultingFees"] = $appTotalFees;
 
-            //dd($dashboardDetails);
+           // dd($dashboardDetails);
         } catch (QueryException $queryEx) {
             //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $queryEx);
@@ -1737,10 +1737,10 @@ class HospitalImpl implements HospitalInterface
             $query->whereDate('da.appointment_date', '=', $currentDate);
             $query->where('da.appointment_status_id', '=', AppointmentType::APPOINTMENT_OPEN);
             $query->whereNotNull('da.appointment_date');
-            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category');
-            $query->groupBy('da.appointment_category');
+            $query->select(DB::raw("COUNT(*) as noAppointments"), 'da.appointment_category', 'da.is_from_patient_portal');
+            $query->groupBy('da.appointment_category','da.is_from_patient_portal');
 
-            //dd($query->toSql());
+            // dd($query->toSql());
 
             //DB::connection()->enableQueryLog();
             //$appointments = $query->get();
@@ -1965,7 +1965,7 @@ class HospitalImpl implements HospitalInterface
             $dashboardDetails["totalLabFees"] = $labAmount;
             $dashboardDetails["consultingFees"] = $appTotalFees;
 
-            //dd($dashboardDetails);
+         //   dd($dashboardDetails);
         } catch (QueryException $queryEx) {
             //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_COUNT_ERROR, $queryEx);
@@ -2167,7 +2167,8 @@ class HospitalImpl implements HospitalInterface
     public function getPatientsByAppointmentCategory($hospitalId, $categoryType, $doctorId = null, $fromDate = null, $toDate = null, $status = null)
     {
         $patients = null;
-        // dd($doctorId."--");
+        $status=1;
+      // dd($categoryType."--".$status.'==');
         try {
             //DB::connection()->enableQueryLog();
 
@@ -2177,10 +2178,23 @@ class HospitalImpl implements HospitalInterface
             $query->join('doctor as d','d.doctor_id','=','da.doctor_id');
             $query->join('appointment_status as as','as.id','=','da.appointment_status_id');
             $query->where('usr.delete_status', '=', 1);
+
+
+
+
+           if ($categoryType ==1) {
+              //  $query->where('da.appointment_category', '=', $categoryType);
+               $categoryType="Online";
+              // dd('Inside');
+            }
+            if ($categoryType == "Online") {
+                $query->where('da.is_from_patient_portal', '=', 1);
+                $categoryType="";
+            }
             if ($categoryType != "") {
                 $query->where('da.appointment_category', '=', $categoryType);
             }
-
+          // dd($categoryType);
             /*else
             {
                 $query->where('da.appointment_date', '=', date('Y-m-d'));
@@ -2205,13 +2219,13 @@ class HospitalImpl implements HospitalInterface
             $query->select('p.patient_id', 'p.name as name', 'p.address', 'p.pid', 'p.telephone', 'p.email', 'p.relationship',
                 'da.id', 'da.id as appointment_id', 'da.appointment_category', 'da.appointment_date', 'da.appointment_time','da.doctor_id','d.name as dname','as.appointment_name','da.token_id');
 
-            //dd($query->toSql());
+       // dd($query->toSql());
 
             $patients = $query->get();
 
             //$query1 = DB::getQueryLog();
             //dd($query1);
-            //dd($patients);
+         //dd($patients);
         } catch (QueryException $queryEx) {
             //dd($queryEx);
             throw new HospitalException(null, ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR, $queryEx);
@@ -11860,8 +11874,9 @@ class HospitalImpl implements HospitalInterface
             if ($doctor_id != null) {
                 $doctorinfo = Doctor::find($doctor_id);
 
-                //  dd($doctorinfo);
+
             }
+        //    dd($doctor_id);
             $receiptStatus = "notpaid";
             if ($receiptID != null) {
                 $LabDetails = LabFeeReceipt::find($receiptID);
@@ -11871,8 +11886,8 @@ class HospitalImpl implements HospitalInterface
                 //dd($LabDetails);
             }
 
-            // dd($doctorinfo);
-            //$examinationDates['recieptDetails'] = $LabDetails;
+          //   dd($LabDetails);
+           // $examinationDates['recieptDetails'] = $LabDetails;
             $examinationDates['recieptId'] = $receiptID;
             $examinationDates['recieptStatus'] = $receiptStatus;
             $examinationDates['patientDetails'] = $patientDetails;

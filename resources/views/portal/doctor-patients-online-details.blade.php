@@ -148,6 +148,9 @@ $profile_menu="0";
                                     </button>
                                     <button class="tablinks" onclick="openCity(event, 'askquestion')"><label for="tab4"><i class="fa fa-question" data-toggle="tooltip" title="Answered Questions"></i><span>Answered Questions</span></label>
                                     </button>
+                                    <button class="tablinks" onclick="openCity(event, 'online')"><label for="tab4"><i class="fa fa-stethoscope" data-toggle="tooltip" title="Answered Questions"></i><span>Online Appointments</span></label>
+                                    </button>
+
                                 </div>
 
                                 <div id="Opinion" class="tabcontent">
@@ -233,6 +236,39 @@ $profile_menu="0";
                                                                 @endforeach
                                                             @endif
                                                         </td>
+                                                    </tr>
+                                                @endforeach
+                                            </table>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div id="online" class="tabcontent" style="display: none;">
+                                    <div class="container">
+                                        <h4>Online Appointments</h4>
+                                        @if(count($patients)>0)
+                                            <table class="table table-bordred table-striped" id="datatable">
+                                                <thead>
+                                                <th>PID</th>
+                                                <th>Patient Name</th>
+                                                <th>Mobile No</th>
+                                                <th>Doctor Name</th>
+                                                <th>Appointment Date&Time </th>
+                                                <th>Appointment Status </th>
+                                                <th>Appointment Category </th>
+                                                <th>Token Id </th>
+                                                <th class="hidden">Records</th>
+                                                </thead>
+                                                @foreach ($patients as $patient)
+                                                    <tr>
+                                                        <td>{{ $patient->pid }} </td>
+                                                        <td>{{ $patient->name }}</td>
+                                                        <td>{{ $patient->telephone }}</td>
+                                                        <td>{{ $patient->dname }} </td>
+                                                        <td>{{ $patient->appointment_date }}&nbsp; {{ $patient->appointment_time }}</td>
+                                                        <td>{{ $patient->appointment_name }}</td>
+                                                        <td>{{ $patient->appointment_category }}</td>
+                                                        <td>{{ $patient->token_id }}</td>
+
                                                     </tr>
                                                 @endforeach
                                             </table>

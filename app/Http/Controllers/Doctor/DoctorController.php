@@ -7624,7 +7624,10 @@ class DoctorController extends Controller
             $responseJson->sendErrorResponse($exc);
         }
 
+       // dd($dashboardDetails);
+
         //dd($dashboardDetails);
+
         return view('portal.hospital-dashboard',compact('dashboardDetails'));
         //return $responseJson;
     }
@@ -7658,7 +7661,7 @@ class DoctorController extends Controller
             Log::error($msg);
         }
 
-        //dd($dashboardDetails);
+       // dd($dashboardDetails);
         return view('portal.doctor-hospital-dashboard',compact('dashboardDetails'));
         //return $responseJson;
     }
@@ -9731,7 +9734,7 @@ class DoctorController extends Controller
             $msg = AppendMessage::appendGeneralException($exc);
             Log::error($msg);
         }
-
+//dd($patientExaminations);
         return view('portal.doctor-hospital-patient-labReport', compact('patientExaminations', 'patientDetails'));
 
     }
@@ -10464,6 +10467,9 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
 
         try
         {
+
+
+            $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId,"Online",null,null,1);
             $askquestions = $this->hospitalService->getAskQuestionList($hospitalId);
             $secondOpinion = $this->hospitalService->getSecondOpinionList($hospitalId);
             //dd($secondOpinion);
@@ -10479,8 +10485,8 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
             $responseJson = new ResponsePrescription(ErrorEnum::FAILURE, trans('messages.'.ErrorEnum::PATIENT_APPOINTMENT_LIST_BY_CATEGORY_ERROR));
             $responseJson->sendErrorResponse($exc);
         }
-
-        return view('portal.hospital-patients-online-details',compact('askquestions','secondOpinion'));
+     //dd($patients);
+        return view('portal.hospital-patients-online-details',compact('askquestions','secondOpinion','patients'));
         //return $responseJson;
     }
 
@@ -10492,6 +10498,7 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
 
         try
         {
+            $patients = $this->hospitalService->getPatientsByAppointmentCategory($hospitalId,"Online",$doctorId,null,1);
             $askquestions = $this->hospitalService->getAskQuestionListForDoctor($doctorId, $hospitalId);
             $secondOpinion = $this->hospitalService->getSecondOpinionListForDoctor($doctorId, $hospitalId);
             //dd($secondOpinion);
@@ -10507,7 +10514,7 @@ public function UpdateDoctorLeaves(Request $updateRequest,$id){
             $responseJson->sendErrorResponse($exc);
         }
 
-        return view('portal.doctor-patients-online-details',compact('askquestions','secondOpinion'));
+        return view('portal.doctor-patients-online-details',compact('askquestions','secondOpinion','patients'));
         //return $responseJson;
     }
 

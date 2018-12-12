@@ -27,7 +27,7 @@ $profile_menu="0";
 
                 <div class="">
                     <div class="page-header-title">
-                        <h4 class="page-title">Add Patient Symptoms</h4>
+                        <h4 class="page-title">Add Patient Complaints</h4>
                     </div>
                 </div>
 
@@ -40,7 +40,7 @@ $profile_menu="0";
                                 <div class="panel panel-primary">
                                     <div class="panel-body">
                                         <a href="{{URL::to('/')}}/doctor/{{Auth::user()->id}}/hospital/{{Session::get('LoginUserHospital')}}/patient/{{$patientDetails[0]->patient_id}}/medical-details" style="float:right;margin: 16px;"><button type="submit" class="btn btn-success"><i class="fa fa-edit"></i><b> Back to Details </b></button></a>
-                                        <h4 class="m-t-0 m-b-30">Add Symptoms</h4>
+                                        <h4 class="m-t-0 m-b-30">Add Complaints</h4>
 
 
                                         @if (session()->has('message'))

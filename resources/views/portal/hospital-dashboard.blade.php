@@ -56,11 +56,11 @@ $profile_menu="0";
                                         Open
                                     </td>
                                     <td>
-
+<?php $indx=0; ?>
                                     <?php
                                         $openAppointments = $dashboardDetails['openAppointments'];
                                         $selected_value = "Normal";
-
+                                        $noAppointments=0;
                                         $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
 
                                             if($e->appointment_category == $selected_value)
@@ -72,8 +72,15 @@ $profile_menu="0";
 
                                         if(count($openAppointments_values))
                                         {
-                                        $openAppointments_values_key = key($openAppointments_values);
-                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                            for($x=0;$x<count($openAppointments);$x++) {
+                                                // $openAppointments_values_key = key($openAppointments_values);
+                                                if($openAppointments[$x]->appointment_category==$selected_value){
+                                                    $noAppointments= $noAppointments+$openAppointments[$x]->noAppointments;
+
+                                                }
+                                            }
+                                       // $openAppointments_values_key = key($openAppointments_values);
+                                        //$noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
                                         }
                                         else
                                         {
@@ -89,8 +96,12 @@ $profile_menu="0";
 
                                         <?php
                                         $openAppointments = $dashboardDetails['openAppointments'];
-                                        $selected_value = "Special";
 
+
+
+
+                                        $selected_value = "Special";
+                                        $noAppointments=0;
                                         $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
 
                                         if($e->appointment_category == $selected_value)
@@ -102,12 +113,19 @@ $profile_menu="0";
 
                                         if(count($openAppointments_values))
                                         {
-                                        $openAppointments_values_key = key($openAppointments_values);
-                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                            for($x=0;$x<count($openAppointments);$x++) {
+                                                // $openAppointments_values_key = key($openAppointments_values);
+                                                if($openAppointments[$x]->appointment_category==$selected_value){
+                                                    $noAppointments= $noAppointments+$openAppointments[$x]->noAppointments;
+
+                                                }
+                                            }
+                                            // $openAppointments_values_key = key($openAppointments_values);
+                                            //$noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
                                         }
                                         else
                                         {
-                                        $noAppointments = "0";
+                                            $noAppointments = "0";
                                         }
 
                                         ?>
@@ -134,12 +152,19 @@ $profile_menu="0";
 
                                         if(count($openAppointments_values))
                                         {
-                                        $openAppointments_values_key = key($openAppointments_values);
-                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                            for($x=0;$x<count($openAppointments);$x++) {
+                                                // $openAppointments_values_key = key($openAppointments_values);
+                                                if($openAppointments[$x]->appointment_category==$selected_value){
+                                                    $noAppointments= $noAppointments+$openAppointments[$x]->noAppointments;
+
+                                                }
+                                            }
+                                            // $openAppointments_values_key = key($openAppointments_values);
+                                            //$noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
                                         }
                                         else
                                         {
-                                        $noAppointments = "0";
+                                            $noAppointments = "0";
                                         }
 
                                         ?>
@@ -152,11 +177,11 @@ $profile_menu="0";
 
                                         <?php
                                         $openAppointments = $dashboardDetails['openAppointments'];
-                                        $selected_value = "Online";
+                                        $selected_value = "1";
 
                                         $openAppointments_values = array_filter($openAppointments, function($e) use ($selected_value){
 
-                                        if($e->appointment_category == $selected_value)
+                                        if($e->is_from_patient_portal == $selected_value)
                                         { return true; }
                                         else
                                         { return false; }
@@ -165,12 +190,19 @@ $profile_menu="0";
 
                                         if(count($openAppointments_values))
                                         {
-                                        $openAppointments_values_key = key($openAppointments_values);
-                                        $noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
+                                            for($x=0;$x<count($openAppointments);$x++) {
+                                                // $openAppointments_values_key = key($openAppointments_values);
+                                                if($openAppointments[$x]->is_from_patient_portal==$selected_value){
+                                                    $noAppointments= $noAppointments+$openAppointments[$x]->noAppointments;
+
+                                                }
+                                            }
+                                            // $openAppointments_values_key = key($openAppointments_values);
+                                            //$noAppointments = $openAppointments_values[$openAppointments_values_key]->noAppointments;
                                         }
                                         else
                                         {
-                                        $noAppointments = "0";
+                                            $noAppointments = "0";
                                         }
 
                                         ?>

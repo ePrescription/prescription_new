@@ -429,13 +429,13 @@ function searchForId($id, $array,$value) {
                 </div>
             </div>
 
-            <div class="form-group col-md-12">
+            {{--<div class="form-group col-md-12">
                 <label class="col-sm-3 control-label" style="width:20%;float:left; font-size: 10px; font-weight: bold;">Reciept Date&Time</label>
                 <div class="col-sm-9" style="width:70%;float:left; font-size: 11px; font-weight: regular;">
                     {{count($patientExaminations['recieptDetails'])>0?$patientExaminations['recieptDetails']->created_at:"---"}}
 
                 </div>
-            </div>
+            </div>--}}
 
         </div>
 
